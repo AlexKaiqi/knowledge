@@ -3,6 +3,7 @@ type: Capability
 title: 读取小红书社区规则接口面
 description: 通过只读浏览器渲染和确定性归一化返回小红书社区公约的当前结构与选定义务。
 tags: [xiaohongshu, official-rules, query, hybrid]
+outcomes: [content-publishing, product-research]
 generated: { by: connector:xiaohongshu-community-rules-browser, at: 2026-08-26T16:56:02Z }
 verified:
   - { by: probe:xiaohongshu-community-rules-live-20260826, at: 2026-08-26T16:56:02Z }

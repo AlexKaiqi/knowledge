@@ -3,6 +3,7 @@ type: Capability
 title: 读取小红书账号 API 接口面
 description: 从小红书官方公开参考页返回经过语义校验的账号 API 结构化目录。
 tags: [xiaohongshu, query, official-document]
+outcomes: [content-publishing, product-research]
 generated: { by: connector:xiaohongshu-account-docs, at: 2026-08-26T16:35:24Z }
 verified:
   - { by: probe:xiaohongshu-account-api-live-20260826, at: 2026-08-26T16:35:24Z }

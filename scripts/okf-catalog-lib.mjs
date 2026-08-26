@@ -209,6 +209,15 @@ export async function validateKnowledgeBundle({ root, now = new Date(), contract
     for (const document of capabilities) {
       const errorsBeforeCapability = errors.length
       const frontmatter = document.frontmatter
+      const outcomeField = policy.valueAlignment.capabilityOutcomeField
+      const outcomes = frontmatter[outcomeField]
+      const acceptedOutcomes = new Set(policy.valueAlignment.acceptedOutcomeDomains)
+      if (!Array.isArray(outcomes) || outcomes.length === 0) {
+        addError('capability.outcome-missing', document.relativePath, `canonical capability must declare at least one ${outcomeField} value`)
+      } else {
+        const invalidOutcomes = outcomes.filter((outcome) => !acceptedOutcomes.has(outcome))
+        if (invalidOutcomes.length > 0) addError('capability.outcome-invalid', document.relativePath, `unsupported outcome domains: ${invalidOutcomes.join(', ')}`)
+      }
       const profile = { capability: frontmatter.capability, access: frontmatter.access, verification: frontmatter.verification }
       if (!validateCapability(profile)) {
         addError('capability.profile-invalid', document.relativePath, schemaErrors(validateCapability).join('; '))

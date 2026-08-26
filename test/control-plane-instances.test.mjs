@@ -40,20 +40,6 @@ test('control-plane instances match their schemas', async () => {
     ['../spec/connector-definition.schema.json', '../connectors/hugging-face-public-model-revision/connector.json'],
     ['../spec/collector-definition.schema.json', '../collectors/hugging-face-public-model-revision-maintainer/collector.json'],
     ['../spec/probe-definition.schema.json', '../probes/definitions/hugging-face-public-model-revision-live.json'],
-    ['../spec/connector-definition.schema.json', '../connectors/docker-hub-public-image-manifest/connector.json'],
-    ['../spec/collector-definition.schema.json', '../collectors/docker-hub-public-image-manifest-maintainer/collector.json'],
-    ['../spec/ecosystem-project-catalog.schema.json', '../collectors/docker-hub-public-image-manifest-maintainer/projects.json'],
-    ['../spec/probe-definition.schema.json', '../probes/definitions/docker-hub-public-image-manifest-live.json'],
-    ['../spec/connector-definition.schema.json', '../connectors/maven-central-public-jar-release/connector.json'],
-    ['../spec/collector-definition.schema.json', '../collectors/maven-central-public-jar-release-maintainer/collector.json'],
-    ['../spec/source-watch-list.schema.json', '../collectors/maven-central-public-jar-release-maintainer/sources.json'],
-    ['../spec/ecosystem-project-catalog.schema.json', '../collectors/maven-central-public-jar-release-maintainer/projects.json'],
-    ['../spec/probe-definition.schema.json', '../probes/definitions/maven-central-public-jar-release-live.json'],
-    ['../spec/connector-definition.schema.json', '../connectors/nuget-org-public-package-version/connector.json'],
-    ['../spec/collector-definition.schema.json', '../collectors/nuget-org-public-package-version-maintainer/collector.json'],
-    ['../spec/source-watch-list.schema.json', '../collectors/nuget-org-public-package-version-maintainer/sources.json'],
-    ['../spec/ecosystem-project-catalog.schema.json', '../collectors/nuget-org-public-package-version-maintainer/projects.json'],
-    ['../spec/probe-definition.schema.json', '../probes/definitions/nuget-org-public-package-version-live.json'],
     ['../spec/connector-definition.schema.json', '../connectors/github-public-repository-search/connector.json'],
     ['../spec/collector-definition.schema.json', '../collectors/github-public-repository-search-maintainer/collector.json'],
     ['../spec/probe-definition.schema.json', '../probes/definitions/github-public-repository-search-live.json'],
@@ -66,21 +52,6 @@ test('control-plane instances match their schemas', async () => {
     ['../spec/connector-definition.schema.json', '../connectors/github-public-repository-release/connector.json'],
     ['../spec/collector-definition.schema.json', '../collectors/github-public-repository-release-maintainer/collector.json'],
     ['../spec/probe-definition.schema.json', '../probes/definitions/github-public-repository-release-live.json'],
-    ['../spec/connector-definition.schema.json', '../connectors/npm-public-package-version/connector.json'],
-    ['../spec/collector-definition.schema.json', '../collectors/npm-public-package-version-maintainer/collector.json'],
-    ['../spec/probe-definition.schema.json', '../probes/definitions/npm-public-package-version-live.json'],
-    ['../spec/connector-definition.schema.json', '../connectors/pypi-public-project-release/connector.json'],
-    ['../spec/collector-definition.schema.json', '../collectors/pypi-public-project-release-maintainer/collector.json'],
-    ['../spec/probe-definition.schema.json', '../probes/definitions/pypi-public-project-release-live.json'],
-    ['../spec/connector-definition.schema.json', '../connectors/go-public-module-version/connector.json'],
-    ['../spec/collector-definition.schema.json', '../collectors/go-public-module-version-maintainer/collector.json'],
-    ['../spec/probe-definition.schema.json', '../probes/definitions/go-public-module-version-live.json'],
-    ['../spec/connector-definition.schema.json', '../connectors/crates-io-public-crate-version/connector.json'],
-    ['../spec/collector-definition.schema.json', '../collectors/crates-io-public-crate-version-maintainer/collector.json'],
-    ['../spec/probe-definition.schema.json', '../probes/definitions/crates-io-public-crate-version-live.json'],
-    ['../spec/connector-definition.schema.json', '../connectors/osv-public-advisory/connector.json'],
-    ['../spec/collector-definition.schema.json', '../collectors/osv-public-advisory-maintainer/collector.json'],
-    ['../spec/probe-definition.schema.json', '../probes/definitions/osv-public-advisory-live.json'],
   ]
   for (const [schemaPath, instancePath] of cases) {
     const validate = await validator(schemaPath)
@@ -107,20 +78,11 @@ test('Connector configuration schemas compile', async () => {
     '../connectors/douyin-open-platform-docs/config.schema.json',
     '../connectors/douyin-public-video-embed/config.schema.json',
     '../connectors/hugging-face-public-model-revision/config.schema.json',
-    '../connectors/docker-hub-public-image-manifest/config.schema.json',
-    '../connectors/maven-central-public-jar-release/config.schema.json',
-    '../connectors/nuget-org-public-package-version/config.schema.json',
     '../connectors/github-public-repository-search/config.schema.json',
     '../connectors/github-public-repository-file/config.schema.json',
     '../connectors/github-public-repository-tags/config.schema.json',
     '../connectors/github-public-repository-release/config.schema.json',
     '../connectors/github-public-repository-work-item-changes/config.schema.json',
-    '../connectors/npm-public-package-version/config.schema.json',
-    '../connectors/pypi-public-project-release/config.schema.json',
-    '../connectors/go-public-module-version/config.schema.json',
-    '../connectors/crates-io-public-crate-version/config.schema.json',
-    '../connectors/osv-public-advisory/config.schema.json',
-    '../connectors/web-feed-reader/config.schema.json',
   ]) {
     const schema = JSON.parse(await readFile(new URL(schemaPath, import.meta.url), 'utf8'))
     const ajv = new Ajv2020({ allErrors: true, strict: false })
@@ -157,41 +119,6 @@ test('GitHub public repository release live snapshot matches its product output 
   assert.equal(validate(payload), true, JSON.stringify(validate.errors))
 })
 
-test('npm public package version live snapshot matches its product output schema', async () => {
-  const validate = await validator('../knowledge/schemas/npm/read-public-package-version-output.schema.json')
-  const snapshot = JSON.parse(await readFile(new URL('../knowledge/verifications/npm/public-package-version/snapshot.json', import.meta.url), 'utf8'))
-  const { schemaVersion: _schemaVersion, fixture: _fixture, ...payload } = snapshot
-  assert.equal(validate(payload), true, JSON.stringify(validate.errors))
-})
-
-test('PyPI public project release live snapshot matches its product output schema', async () => {
-  const validate = await validator('../knowledge/schemas/pypi/read-public-project-release-output.schema.json')
-  const snapshot = JSON.parse(await readFile(new URL('../knowledge/verifications/pypi/public-project-release/snapshot.json', import.meta.url), 'utf8'))
-  const { schemaVersion: _schemaVersion, fixture: _fixture, ...payload } = snapshot
-  assert.equal(validate(payload), true, JSON.stringify(validate.errors))
-})
-
-test('Go public module version live snapshot matches its product output schema', async () => {
-  const validate = await validator('../knowledge/schemas/go/read-authenticated-public-module-version-output.schema.json')
-  const snapshot = JSON.parse(await readFile(new URL('../knowledge/verifications/go/public-module-version/snapshot.json', import.meta.url), 'utf8'))
-  const { schemaVersion: _schemaVersion, fixture: _fixture, ...payload } = snapshot
-  assert.equal(validate(payload), true, JSON.stringify(validate.errors))
-})
-
-test('crates.io public crate version live snapshot matches its product output schema', async () => {
-  const validate = await validator('../knowledge/schemas/crates-io/read-public-crate-version-output.schema.json')
-  const snapshot = JSON.parse(await readFile(new URL('../knowledge/verifications/crates-io/public-crate-version/snapshot.json', import.meta.url), 'utf8'))
-  const { schemaVersion: _schemaVersion, fixture: _fixture, ...payload } = snapshot
-  assert.equal(validate(payload), true, JSON.stringify(validate.errors))
-})
-
-test('OSV public advisory live snapshot matches its product output schema', async () => {
-  const validate = await validator('../knowledge/schemas/osv/read-public-advisory-output.schema.json')
-  const snapshot = JSON.parse(await readFile(new URL('../knowledge/verifications/osv/public-advisory/snapshot.json', import.meta.url), 'utf8'))
-  const { schemaVersion: _schemaVersion, fixture: _fixture, ...payload } = snapshot
-  assert.equal(validate(payload), true, JSON.stringify(validate.errors))
-})
-
 test('Douyin public video embed live snapshot matches its product output schema', async () => {
   const validate = await validator('../knowledge/schemas/douyin/read-public-video-embed-output.schema.json')
   const snapshot = JSON.parse(await readFile(new URL('../knowledge/verifications/douyin/public-video-embed/snapshot.json', import.meta.url), 'utf8'))
@@ -202,34 +129,6 @@ test('Douyin public video embed live snapshot matches its product output schema'
 test('Hugging Face public model revision live snapshot matches its product output schema', async () => {
   const validate = await validator('../knowledge/schemas/hugging-face/read-public-model-revision-manifest-output.schema.json')
   const snapshot = JSON.parse(await readFile(new URL('../knowledge/verifications/hugging-face/public-model-revision/snapshot.json', import.meta.url), 'utf8'))
-  const { schemaVersion: _schemaVersion, fixture: _fixture, ...payload } = snapshot
-  assert.equal(validate(payload), true, JSON.stringify(validate.errors))
-})
-
-test('Docker Hub public image manifest live snapshot matches its product output schema', async () => {
-  const validate = await validator('../knowledge/schemas/docker-hub/read-public-image-manifest-by-digest-output.schema.json')
-  const snapshot = JSON.parse(await readFile(new URL('../knowledge/verifications/docker-hub/public-image-manifest/snapshot.json', import.meta.url), 'utf8'))
-  const { schemaVersion: _schemaVersion, fixture: _fixture, ...payload } = snapshot
-  assert.equal(validate(payload), true, JSON.stringify(validate.errors))
-})
-
-test('Maven Central public JAR release live snapshot matches its product output schema', async () => {
-  const validate = await validator('../knowledge/schemas/maven-central/read-public-jar-release-evidence-output.schema.json')
-  const snapshot = JSON.parse(await readFile(new URL('../knowledge/verifications/maven-central/public-jar-release/snapshot.json', import.meta.url), 'utf8'))
-  const { schemaVersion: _schemaVersion, fixture: _fixture, ...payload } = snapshot
-  assert.equal(validate(payload), true, JSON.stringify(validate.errors))
-})
-
-test('NuGet.org public package version live snapshot matches its product output schema', async () => {
-  const validate = await validator('../knowledge/schemas/nuget-org/read-public-package-version-evidence-output.schema.json')
-  const snapshot = JSON.parse(await readFile(new URL('../knowledge/verifications/nuget-org/public-package-version/snapshot.json', import.meta.url), 'utf8'))
-  const { schemaVersion: _schemaVersion, fixture: _fixture, ...payload } = snapshot
-  assert.equal(validate(payload), true, JSON.stringify(validate.errors))
-})
-
-test('registered public Web Feed live snapshot matches its product output schema', async () => {
-  const validate = await validator('../knowledge/schemas/web-feeds/read-registered-public-feed-output.schema.json')
-  const snapshot = JSON.parse(await readFile(new URL('../knowledge/verifications/web-feeds/nodejs-releases/snapshot.json', import.meta.url), 'utf8'))
   const { schemaVersion: _schemaVersion, fixture: _fixture, ...payload } = snapshot
   assert.equal(validate(payload), true, JSON.stringify(validate.errors))
 })

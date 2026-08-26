@@ -1,26 +1,15 @@
 # 验证
 
-保存通过且脱敏的 VerificationReport。原始 trace、credential ref 和 probe identity 不属于公开知识。
+当前：11 份通过的 live report。
 
-当前：20 份通过的 live report。
-
-- [OSV 公共公告 live report](osv/public-advisory/report.json)
-- [crates.io 公共 crate 精确版本 live report](crates-io/public-crate-version/report.json)
-- [抖音开放平台官方文档 live report](douyin/open-platform/report.json)
-- [抖音公开视频嵌入描述 live report](douyin/public-video-embed/report.json)
-- [Docker Hub 公共镜像 Manifest live report](docker-hub/public-image-manifest/report.json)
-- [GitHub 公共仓库文件 live report](github/public-repository-file/report.json)
-- [GitHub 公共仓库 Release live report](github/public-repository-release/report.json)
-- [GitHub 公共仓库 Tag 集合 live report](github/public-repository-tags/report.json)
-- [GitHub 公共仓库搜索 live report](github/public-repository-search/report.json)
-- [GitHub 公共仓库 Work Item 变更 live report](github/public-repository-work-item-changes/report.json)
-- [Go 公共模块精确版本 live report](go/public-module-version/report.json)
-- [Hugging Face 公共模型 Revision live report](hugging-face/public-model-revision/report.json)
-- [Maven Central 公共 JAR Release live report](maven-central/public-jar-release/report.json)
-- [npm 公共包精确版本元数据 live report](npm/public-package-version/report.json)
-- [NuGet.org 公共包精确版本证据 live report](nuget-org/public-package-version/report.json)
-- [PyPI 公共项目精确 Release live report](pypi/public-project-release/report.json)
-- [小红书账号 API 接口面 live report](xiaohongshu/account-api/report.json)
-- [小红书本人笔记列表 live report](xiaohongshu/owned-notes/report.json)
-- [小红书社区规则接口面 live report](xiaohongshu/community-rules/report.json)
-- [Node.js Release Feed live report](web-feeds/nodejs-releases/report.json)
+- [抖音开放平台文档](douyin/open-platform/report.json)
+- [抖音公开视频描述](douyin/public-video-embed/report.json)
+- [GitHub 仓库搜索](github/public-repository-search/report.json)
+- [GitHub 仓库文件](github/public-repository-file/report.json)
+- [GitHub Tag 集合](github/public-repository-tags/report.json)
+- [GitHub Release](github/public-repository-release/report.json)
+- [GitHub Work Item 变更](github/public-repository-work-item-changes/report.json)
+- [Hugging Face 模型 Revision](hugging-face/public-model-revision/report.json)
+- [小红书账号 API](xiaohongshu/account-api/report.json)
+- [小红书社区规则](xiaohongshu/community-rules/report.json)
+- [小红书本人笔记](xiaohongshu/owned-notes/report.json)

@@ -3,6 +3,7 @@ type: Capability
 title: 读取 GitHub 公共仓库文件
 description: 通过 GitHub 官方 REST API，在完整不可变 commit ID 下读取一个有界 UTF-8 公共仓库文件并返回内容完整性证据。
 tags: [github, query, repository-file, immutable-revision, official-api]
+outcomes: [product-research]
 generated: { by: connector:github-public-repository-file, at: 2026-08-26T17:54:29Z }
 verified:
   - { by: probe:github-public-repository-file-live-20260826, at: 2026-08-26T17:54:29Z }

@@ -3,6 +3,7 @@ type: Capability
 title: 读取抖音公开视频嵌入描述
 description: 按明确 VideoID 调用无需申请权限的官方接口，返回经过约束的标题、画面尺寸和官方播放器 URL。
 tags: [douyin, query, public-video, official-api, embed]
+outcomes: [product-research, distribution]
 generated: { by: connector:douyin-public-video-embed, at: 2026-08-26T20:56:39Z }
 verified:
   - { by: probe:douyin-public-video-embed-live-20260826, at: 2026-08-26T20:56:39Z }

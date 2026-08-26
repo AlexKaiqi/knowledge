@@ -3,6 +3,7 @@ type: Capability
 title: 读取 Hugging Face 公共模型 Revision 清单
 description: 按 namespace/name 和完整 commit SHA 读取公开非 gated 模型的有界完整文件清单与完整性标识。
 tags: [hugging-face, query, public-model, exact-revision, manifest]
+outcomes: [product-research]
 generated: { by: connector:hugging-face-public-model-revision, at: 2026-08-26T21:09:16Z }
 verified:
   - { by: probe:hugging-face-public-model-revision-live-20260826, at: 2026-08-26T21:09:16Z }

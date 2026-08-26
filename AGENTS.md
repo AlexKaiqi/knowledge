@@ -12,6 +12,8 @@
 
 ## 准入
 
+- live/sandbox 可验证只是必要条件，不是价值证明。新增知识必须直接服务 `docs/PRODUCT_SCOPE.md` 定义的需求发现、产品研究、内容/App 发布、分发、反馈或影响力结果域。
+- 模型或现有工具已经能可靠完成的通用开发基础设施操作，最多作为隐藏 Collector 手段；不要为包、镜像、制品、依赖或漏洞元数据建立公共百科。
 - 一次变更只准入一个 Capability 及其最小必要 Subject、Concept、Schema、Connector 和 Verification。
 - 没有真实执行、新鲜通过报告和可核验来源的 Capability 不得进入 canonical `knowledge/`。
 - Platform、Information Source、Dataset、Service、Protocol 至少需要 sandbox 或 live probe。

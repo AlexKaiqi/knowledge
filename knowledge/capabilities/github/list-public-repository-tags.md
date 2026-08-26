@@ -3,6 +3,7 @@ type: Capability
 title: 读取 GitHub 公共仓库 Tag 集合
 description: 通过 GitHub 官方 REST API 串行分页，返回最多 500 个 tag 的有界快照和显式完整性边界。
 tags: [github, repository, git-tag, official-api]
+outcomes: [product-research]
 generated: { by: connector:github-public-repository-tags, at: 2026-08-26T19:04:40Z }
 verified:
   - { by: probe:github-public-repository-tags-live-20260826, at: 2026-08-26T19:04:40Z }

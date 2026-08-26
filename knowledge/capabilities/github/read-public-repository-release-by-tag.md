@@ -3,6 +3,7 @@ type: Capability
 title: 按精确 Tag 读取 GitHub 公共仓库 Release
 description: 通过 GitHub 官方 REST API 读取一个公共、非草稿 release 的有界最小化元数据和资产完整性信号。
 tags: [github, repository, release, asset, official-api]
+outcomes: [product-research]
 generated: { by: connector:github-public-repository-release, at: 2026-08-26T20:05:12Z }
 verified:
   - { by: probe:github-public-repository-release-live-20260826, at: 2026-08-26T20:05:12Z }

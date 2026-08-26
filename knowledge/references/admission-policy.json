@@ -6,6 +6,19 @@
   "requireSources": true,
   "requireVerified": true,
   "rejectOrphans": true,
+  "valueAlignment": {
+    "capabilityOutcomeField": "outcomes",
+    "acceptedOutcomeDomains": [
+      "demand-discovery",
+      "product-research",
+      "content-publishing",
+      "app-publishing",
+      "distribution",
+      "feedback-collection",
+      "influence-measurement"
+    ],
+    "rejectGenericInfrastructure": true
+  },
   "subjectTypes": {
     "Tool": { "acceptedVerificationLevels": ["local", "sandbox", "live"] },
     "Platform": { "acceptedVerificationLevels": ["sandbox", "live"] },

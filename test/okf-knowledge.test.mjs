@@ -16,7 +16,7 @@ const verificationTime = new Date('2026-08-26T12:00:00Z')
 test('canonical OKF bundle contains only probe-backed admitted knowledge', async () => {
   const result = await validateKnowledgeBundle({ root: knowledgeRoot, contractRoot, now: verificationTime })
   assert.equal(result.valid, true, JSON.stringify(result.errors, null, 2))
-  assert.deepEqual(result.summary, { documents: 69, capabilities: 20, admittedSubjects: 16 })
+  assert.deepEqual(result.summary, { documents: 42, capabilities: 11, admittedSubjects: 7 })
 })
 
 test('admission rejects unverified subject knowledge', async (context) => {
@@ -39,6 +39,18 @@ test('admission rejects stale canonical knowledge', async () => {
   })
   assert.equal(result.valid, false)
   assert.equal(result.errors.some((error) => error.code === 'knowledge.stale'), true)
+})
+
+test('admission rejects a verified capability without product outcome alignment', async (context) => {
+  const temporaryRoot = await mkdtemp(path.join(os.tmpdir(), 'dsh-okf-outcome-'))
+  context.after(() => rm(temporaryRoot, { recursive: true, force: true }))
+  await cp(knowledgeRoot, temporaryRoot, { recursive: true })
+  const capabilityPath = path.join(temporaryRoot, 'capabilities/github/search-public-repositories.md')
+  const source = await readFile(capabilityPath, 'utf8')
+  await writeFile(capabilityPath, source.replace(/^outcomes:.*\n/m, ''))
+  const result = await validateKnowledgeBundle({ root: temporaryRoot, contractRoot, now: verificationTime })
+  assert.equal(result.valid, false)
+  assert.equal(result.errors.some((error) => error.code === 'capability.outcome-missing'), true)
 })
 
 test('admission rejects identity-required verification without identity bindings', async (context) => {

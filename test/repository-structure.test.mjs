@@ -39,13 +39,11 @@ async function markdownInstances(directory, prefix = '') {
 }
 
 test('canonical knowledge contains only probe-admitted subject and capability files', async () => {
-  assert.deepEqual(await markdownInstances('knowledge/platforms/'), ['crates-io.md', 'docker-hub.md', 'douyin.md', 'github.md', 'hugging-face-hub.md', 'maven-central.md', 'npm-public-registry.md', 'nuget-org.md', 'pypi.md', 'xiaohongshu.md'])
-  assert.deepEqual(await markdownInstances('knowledge/services/'), ['go-module-services.md'])
-  assert.deepEqual(await markdownInstances('knowledge/sources/'), ['douyin-open-platform.md', 'osv.md', 'xiaohongshu-account-api.md', 'xiaohongshu-community-rules.md'])
-  assert.deepEqual(await markdownInstances('knowledge/tools/'), ['web-feed-reader.md'])
+  assert.deepEqual(await markdownInstances('knowledge/platforms/'), ['douyin.md', 'github.md', 'hugging-face-hub.md', 'xiaohongshu.md'])
+  assert.deepEqual(await markdownInstances('knowledge/services/'), [])
+  assert.deepEqual(await markdownInstances('knowledge/sources/'), ['douyin-open-platform.md', 'xiaohongshu-account-api.md', 'xiaohongshu-community-rules.md'])
+  assert.deepEqual(await markdownInstances('knowledge/tools/'), [])
   assert.deepEqual(await markdownInstances('knowledge/capabilities/'), [
-    'crates-io/read-public-crate-version.md',
-    'docker-hub/read-public-image-manifest-by-digest.md',
     'douyin/read-open-platform-surface.md',
     'douyin/read-public-video-embed.md',
     'github/list-public-repository-tags.md',
@@ -53,14 +51,7 @@ test('canonical knowledge contains only probe-admitted subject and capability fi
     'github/read-public-repository-file.md',
     'github/read-public-repository-release-by-tag.md',
     'github/search-public-repositories.md',
-    'go/read-authenticated-public-module-version.md',
     'hugging-face/read-public-model-revision-manifest.md',
-    'maven-central/read-public-jar-release-evidence.md',
-    'npm/read-public-package-version.md',
-    'nuget-org/read-public-package-version-evidence.md',
-    'osv/read-public-advisory.md',
-    'pypi/read-public-project-release.md',
-    'web-feeds/read-registered-public-feed.md',
     'xiaohongshu/list-owned-notes.md',
     'xiaohongshu/read-account-api-surface.md',
     'xiaohongshu/read-community-rule-surface.md',

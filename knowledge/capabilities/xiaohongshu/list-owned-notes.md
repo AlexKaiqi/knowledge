@@ -3,6 +3,7 @@ type: Capability
 title: 读取小红书本人笔记
 description: 通过明确授权的自有账号会话返回本人主页当前可见的最小笔记摘要列表。
 tags: [xiaohongshu, owned-account, query]
+outcomes: [content-publishing, influence-measurement]
 generated: { by: connector:xiaohongshu-browser, at: 2026-08-26T16:43:43Z }
 verified:
   - { by: probe:xiaohongshu-owned-notes-live-20260826, at: 2026-08-26T16:43:43Z }

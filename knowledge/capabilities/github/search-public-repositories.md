@@ -3,6 +3,7 @@ type: Capability
 title: 搜索 GitHub 公共仓库
 description: 通过 GitHub 官方 REST API 返回有界、覆盖边界显式的公共仓库排序分页。
 tags: [github, query, repository-search, official-api]
+outcomes: [demand-discovery, product-research]
 generated: { by: connector:github-public-repository-search, at: 2026-08-26T17:13:25Z }
 verified:
   - { by: probe:github-public-repository-search-live-20260826, at: 2026-08-26T17:13:25Z }

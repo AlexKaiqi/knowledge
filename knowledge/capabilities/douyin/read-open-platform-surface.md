@@ -3,6 +3,7 @@ type: Capability
 title: 读取抖音开放平台官方能力接口面
 description: 从抖音官方公开文档返回经过语义校验的能力族、安全要求和访问边界。
 tags: [douyin, query, official-document]
+outcomes: [content-publishing, product-research]
 generated: { by: connector:douyin-open-platform-docs, at: 2026-08-26T17:05:32Z }
 verified:
   - { by: probe:douyin-open-platform-docs-live-20260826, at: 2026-08-26T17:05:32Z }

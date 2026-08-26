@@ -3,6 +3,7 @@ type: Capability
 title: 读取 GitHub 公共仓库 Work Item 变更
 description: 通过官方 REST API 列出一个公共仓库在复合 checkpoint 之后的有界 issue 与 pull-request 变化。
 tags: [github, issue, pull-request, incremental, checkpoint, official-api]
+outcomes: [demand-discovery, feedback-collection]
 generated: { by: connector:github-public-repository-work-item-changes, at: 2026-08-26T23:06:42Z }
 verified:
   - { by: probe:github-public-repository-work-item-changes-live-20260826, at: 2026-08-26T23:06:42Z }
