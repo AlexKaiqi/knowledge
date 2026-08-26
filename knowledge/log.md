@@ -62,3 +62,6 @@ title: Knowledge bundle history
 - 通过 production-public live probe 准入 Hugging Face Hub Platform 与“读取公共模型 Revision 清单”Capability；匿名官方 API 在固定 `openai-community/gpt2` commit 下实际返回完整 26 文件、5,632,417,295-byte 声明总量和 Git/LFS 完整性标识。
 - Connector 只接受 `namespace/name` 与完整小写 40 位 commit，固定 `blobs=true`、4 MiB/1,024 文件上限、不跟随重定向或重试，并显式关闭凭据面；输出排除作者、下载量、点赞、Spaces、widget/card data、请求 ID 和 raw payload，且不下载或执行模型文件。
 - 新增 proposal-only Collector 持续观察模型公开/gated/disabled 状态、分类、完整文件摘要、官方 `api` RateLimit 契约、fixture 消失和验证过期。完整闭环更新为 15（Information Source 4；Platform 10；Service 1），Subject 12，Capability 15。
+- 通过 production-public live probe 准入 Docker Hub Platform 与“读取公共镜像 Manifest”Capability；匿名 Registry V2 在固定 `library/alpine@sha256:48b030…` 下实际返回 9,218-byte OCI index、16 个 descriptors、8 个 Linux 平台 manifest 和 8 个关联 attestation manifest。
+- Connector 内部执行匿名 pull token exchange，只接受精确 digest，独立重算响应 SHA-256 并核对 canonical digest header；限制 4 MiB/256 descriptors、不跟随重定向或重试，不下载 config/layer/attestation blob，输出排除 token、source IP、tag、annotations 和 raw payload。
+- 新增 proposal-only Collector 持续检查固定 manifest、pull 限流契约、验证过期，以及 Docker Docs、Distribution、OCI Distribution Spec、OCI Image Spec 四个开源上游 HEAD；变化不自动升级契约。完整闭环更新为 16（Information Source 4；Platform 11；Service 1），Subject 13，Capability 16。

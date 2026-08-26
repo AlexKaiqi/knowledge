@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "docker-hub-public-image-manifest-live",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/docker-hub/read-public-image-manifest-by-digest.md",
+  "connectorId": "docker-hub-public-image-manifest",
+  "environment": "production-public",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "exchange-anonymous-pull-token", "operation": "requestAnonymousPullToken" },
+    { "id": "read-known-public-image-index-by-digest", "operation": "readPublicImageManifestByDigest" },
+    { "id": "verify-local-digest-and-descriptors", "operation": "normalizeDockerHubManifestResponse" }
+  ],
+  "assertions": [
+    "Docker Hub issues an anonymous pull-scoped bearer token without an account, stored credential, refresh token, or offline token.",
+    "Registry V2 returns library/alpine at the exact reviewed sha256 digest and the response bytes independently hash to that digest.",
+    "The OCI index exposes the reviewed 16 descriptors: eight runnable Linux platform manifests and eight linked attestation manifests.",
+    "The Connector makes exactly one token GET and one manifest GET, follows no redirects, performs no retries, downloads no config or layer blob, and exposes no bearer token or source IP."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 30, "maxCost": 0, "currency": "CNY" }
+}

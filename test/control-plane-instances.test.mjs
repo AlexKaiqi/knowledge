@@ -40,6 +40,10 @@ test('control-plane instances match their schemas', async () => {
     ['../spec/connector-definition.schema.json', '../connectors/hugging-face-public-model-revision/connector.json'],
     ['../spec/collector-definition.schema.json', '../collectors/hugging-face-public-model-revision-maintainer/collector.json'],
     ['../spec/probe-definition.schema.json', '../probes/definitions/hugging-face-public-model-revision-live.json'],
+    ['../spec/connector-definition.schema.json', '../connectors/docker-hub-public-image-manifest/connector.json'],
+    ['../spec/collector-definition.schema.json', '../collectors/docker-hub-public-image-manifest-maintainer/collector.json'],
+    ['../spec/ecosystem-project-catalog.schema.json', '../collectors/docker-hub-public-image-manifest-maintainer/projects.json'],
+    ['../spec/probe-definition.schema.json', '../probes/definitions/docker-hub-public-image-manifest-live.json'],
     ['../spec/connector-definition.schema.json', '../connectors/github-public-repository-search/connector.json'],
     ['../spec/collector-definition.schema.json', '../collectors/github-public-repository-search-maintainer/collector.json'],
     ['../spec/probe-definition.schema.json', '../probes/definitions/github-public-repository-search-live.json'],
@@ -93,6 +97,7 @@ test('Connector configuration schemas compile', async () => {
     '../connectors/douyin-open-platform-docs/config.schema.json',
     '../connectors/douyin-public-video-embed/config.schema.json',
     '../connectors/hugging-face-public-model-revision/config.schema.json',
+    '../connectors/docker-hub-public-image-manifest/config.schema.json',
     '../connectors/github-public-repository-search/config.schema.json',
     '../connectors/github-public-repository-file/config.schema.json',
     '../connectors/github-public-repository-tags/config.schema.json',
@@ -183,6 +188,13 @@ test('Douyin public video embed live snapshot matches its product output schema'
 test('Hugging Face public model revision live snapshot matches its product output schema', async () => {
   const validate = await validator('../knowledge/schemas/hugging-face/read-public-model-revision-manifest-output.schema.json')
   const snapshot = JSON.parse(await readFile(new URL('../knowledge/verifications/hugging-face/public-model-revision/snapshot.json', import.meta.url), 'utf8'))
+  const { schemaVersion: _schemaVersion, fixture: _fixture, ...payload } = snapshot
+  assert.equal(validate(payload), true, JSON.stringify(validate.errors))
+})
+
+test('Docker Hub public image manifest live snapshot matches its product output schema', async () => {
+  const validate = await validator('../knowledge/schemas/docker-hub/read-public-image-manifest-by-digest-output.schema.json')
+  const snapshot = JSON.parse(await readFile(new URL('../knowledge/verifications/docker-hub/public-image-manifest/snapshot.json', import.meta.url), 'utf8'))
   const { schemaVersion: _schemaVersion, fixture: _fixture, ...payload } = snapshot
   assert.equal(validate(payload), true, JSON.stringify(validate.errors))
 })

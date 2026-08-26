@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/docker-hub/read-public-image-manifest-by-digest-input.schema.json",
+  "title": "ReadDockerHubPublicImageManifestByDigestInput",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["repository", "manifestDigest"],
+  "properties": {
+    "repository": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 255,
+      "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*/[a-z0-9]+(?:[._-][a-z0-9]+)*$"
+    },
+    "manifestDigest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    }
+  }
+}

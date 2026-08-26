@@ -2,12 +2,13 @@
 
 保存通过且脱敏的 VerificationReport。原始 trace、credential ref 和 probe identity 不属于公开知识。
 
-当前：15 份通过的 live report。
+当前：16 份通过的 live report。
 
 - [OSV 公共公告 live report](osv/public-advisory/report.json)
 - [crates.io 公共 crate 精确版本 live report](crates-io/public-crate-version/report.json)
 - [抖音开放平台官方文档 live report](douyin/open-platform/report.json)
 - [抖音公开视频嵌入描述 live report](douyin/public-video-embed/report.json)
+- [Docker Hub 公共镜像 Manifest live report](docker-hub/public-image-manifest/report.json)
 - [GitHub 公共仓库文件 live report](github/public-repository-file/report.json)
 - [GitHub 公共仓库 Release live report](github/public-repository-release/report.json)
 - [GitHub 公共仓库 Tag 集合 live report](github/public-repository-tags/report.json)

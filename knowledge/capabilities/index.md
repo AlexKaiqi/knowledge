@@ -2,12 +2,13 @@
 
 保存外部可发现、可调用的 Capability 契约。每项能力必须声明 Subject、输入输出 Schema、访问方式、副作用和新鲜验证报告。
 
-当前：15。
+当前：16。
 
 - [读取公共 OSV 漏洞公告](osv/read-public-advisory.md)
 - [读取 crates.io 公共 crate 精确版本元数据](crates-io/read-public-crate-version.md)
 - [读取抖音开放平台官方能力接口面](douyin/read-open-platform-surface.md)
 - [读取抖音公开视频嵌入描述](douyin/read-public-video-embed.md)
+- [读取 Docker Hub 公共镜像 Manifest](docker-hub/read-public-image-manifest-by-digest.md)
 - [读取并认证公共 Go 模块精确版本](go/read-authenticated-public-module-version.md)
 - [读取 GitHub 公共仓库文件](github/read-public-repository-file.md)
 - [按精确 Tag 读取 GitHub 公共仓库 Release](github/read-public-repository-release-by-tag.md)
