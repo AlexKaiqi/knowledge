@@ -6,6 +6,14 @@ import { collectXiaohongshuMaintenance, discoverEcosystemProjects, evaluateRende
 
 const projectCatalog = JSON.parse(await readFile(new URL('../projects.json', import.meta.url), 'utf8'))
 
+test('project catalog keeps research useful and non-admitting', () => {
+  assert.match(projectCatalog.selectionPolicy.purpose, /Connector, Collector, probe, identity pool, conformance test or failure-domain decision/)
+  assert.match(projectCatalog.selectionPolicy.admissionBoundary, /cannot create an OKF capability/)
+  assert.ok(projectCatalog.selectionPolicy.requiredEvidence.includes('license-state'))
+  assert.equal(projectCatalog.projects.find((project) => project.id === 'bzlrj-java-xiaohongshu-mcp').license.dependencyUse, 'allowed')
+  assert.equal(projectCatalog.projects.find((project) => project.id === 'vmxmy-xiaohongshu-mcp').license.dependencyUse, 'blocked')
+})
+
 const pinnedRouteHeads = {
   'https://github.com/xpzouying/xiaohongshu-mcp.git': '6fb866a7db4e3dcce8dc00a0dde07370f3b12946',
   'https://github.com/CNQQC/xhs-mcp.git': '4915580ece0b2c65c5fc777225e2945a67e300d3',
@@ -39,20 +47,20 @@ test('project review cadence is independent of upstream HEAD drift', () => {
   assert.equal(isProjectReviewDue(project, new Date('2026-08-08T00:00:00Z')), true)
 })
 
-test('discovery rotation covers all ten queries in five UTC days', () => {
-  const queries = Array.from({ length: 10 }, (_, index) => `query-${index}`)
+test('discovery rotation covers all twenty queries in five UTC days', () => {
+  const queries = Array.from({ length: 20 }, (_, index) => `query-${index}`)
   const selected = new Set()
   for (let day = 0; day < 5; day += 1) {
     for (const query of selectDiscoveryQueries(queries, new Date(Date.UTC(2026, 7, 20 + day)))) selected.add(query)
   }
-  assert.deepEqual([...selected].sort(), queries)
+  assert.deepEqual([...selected].sort(), [...queries].sort())
 })
 
-test('release watch rotation covers all eligible projects in five UTC days', () => {
+test('release watch rotation covers all eligible projects in six UTC days', () => {
   const declared = projectCatalog.projects.filter((project) => project.watch.reviewOn.includes('release')).map((project) => project.id)
   assert.deepEqual(Object.keys(projectCatalog.releaseTagBaselines).sort(), declared.sort())
   const selected = new Set()
-  for (let day = 0; day < 5; day += 1) {
+  for (let day = 0; day < 6; day += 1) {
     for (const project of selectReleaseWatchProjects(projectCatalog, new Date(Date.UTC(2026, 7, 20 + day)))) selected.add(project.id)
   }
   assert.deepEqual([...selected].sort(), Object.keys(projectCatalog.releaseTagBaselines).sort())
@@ -159,8 +167,8 @@ test('maintainer is proposal-only and cannot promote an unverified connector', a
   assert.ok(report.blockers.includes('capability-not-admitted'))
   assert.equal(report.accessRoutes.automaticEligible.length, 0)
   assert.equal(report.accessRoutes.upstreams.length, 7)
-  assert.equal(report.ecosystemProjects.total, 24)
-  assert.equal(report.ecosystemProjects.discovery.queries.length, 2)
+  assert.equal(report.ecosystemProjects.total, 31)
+  assert.equal(report.ecosystemProjects.discovery.queries.length, 4)
   assert.equal(report.ecosystemProjects.discovery.fullCycleDays, 5)
   assert.equal(report.ecosystemProjects.discovery.newCandidates.length, 0)
   assert.ok(report.ecosystemProjects.dependencyBlocked.includes('jackwener-xiaohongshu-cli'))

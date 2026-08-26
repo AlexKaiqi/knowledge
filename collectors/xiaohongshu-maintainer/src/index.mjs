@@ -15,7 +15,7 @@ const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url))
 
 const sourceWatchList = JSON.parse(await readFile(path.join(repositoryRoot, 'collectors/xiaohongshu-maintainer/sources.json'), 'utf8'))
 export const officialSources = sourceWatchList.sources
-export const DISCOVERY_QUERIES_PER_RUN = 2
+export const DISCOVERY_QUERIES_PER_RUN = 4
 export const RELEASE_TAG_PROJECTS_PER_RUN = 4
 const DISCOVERY_RESULTS_PER_QUERY = 10
 const DISCOVERY_CANDIDATES_PER_QUERY = 5
