@@ -1,15 +1,33 @@
 {
   "schemaVersion": "dsh.access-route-catalog/v1",
-  "id": "douyin-candidate-access-routes",
+  "id": "douyin-access-routes",
   "subjectRef": "/platforms/douyin.md",
   "capabilityRefs": [
     "/capabilities/douyin/prepare-video-draft.md",
     "/capabilities/douyin/publish-video-and-reconcile.md",
     "/capabilities/douyin/search-public-content.md",
     "/capabilities/douyin/read-owned-creator-analytics.md",
-    "/capabilities/douyin/read-public-video-metadata.md"
+    "/capabilities/douyin/read-public-video-embed.md"
   ],
   "routes": [
+    {
+      "id": "official-public-video-iframe",
+      "lifecycle": "verified",
+      "contractLevel": "full",
+      "accessMethod": "official-api",
+      "automaticSelectionEligible": true,
+      "priority": 5,
+      "connectorId": "douyin-public-video-embed",
+      "implementationRef": "repo:/connectors/douyin-public-video-embed/src/index.mjs",
+      "probeReportRef": "/verifications/douyin/public-video-embed/report.json",
+      "capabilityCoverage": [
+        { "capabilityRef": "/capabilities/douyin/read-public-video-embed.md", "phases": ["observe"], "gaps": [] }
+      ],
+      "failureDomains": ["douyin-open-platform", "public-iframe-api", "public-video-availability"],
+      "sourceRefs": ["https://developer.open-douyin.com/docs/resource/zh-CN/dop/develop/openapi/video-management/douyin/iframe-player/get-iframe-by-video"],
+      "maintenance": { "owner": "douyin-public-video-embed-maintainer", "reviewOn": ["source-change", "probe-failure", "contract-gap-change", "manual"] },
+      "notes": "Verified no-identity, no-effect official route. It returns a minimized descriptor and never exposes the upstream iframe HTML directly."
+    },
     {
       "id": "official-open-platform",
       "lifecycle": "researching",
@@ -144,19 +162,19 @@
     },
     {
       "id": "public-share-page-yzfly",
-      "lifecycle": "researching",
+      "lifecycle": "retired",
       "contractLevel": "component",
       "accessMethod": "browser-assisted",
       "automaticSelectionEligible": false,
       "priority": 80,
       "capabilityCoverage": [
-        { "capabilityRef": "/capabilities/douyin/read-public-video-metadata.md", "phases": ["observe"], "gaps": ["Archived upstream and undocumented window._ROUTER_DATA HTML shape; no compliant live fixture has been established."] }
+        { "capabilityRef": "/capabilities/douyin/read-public-video-embed.md", "phases": ["observe"], "gaps": ["The legacy iesdouyin share URL now redirects to the anti-bot-protected www.douyin.com video page; the archived window._ROUTER_DATA parser no longer forms a working route."] }
       ],
       "failureDomains": ["iesdouyin-share-page", "public-html-contract", "archived-upstream"],
       "sourceRefs": ["https://github.com/yzfly/douyin-mcp-server", "https://github.com/yzfly/douyin-mcp-server/blob/main/douyin_mcp_server/server.py"],
       "upstream": { "repository": "https://github.com/yzfly/douyin-mcp-server.git", "branch": "main", "observedRevision": "b0bb8b1fbe4f514bf28099b1471928ebb3716ad2" },
       "maintenance": { "owner": "douyin-maintainer", "reviewOn": ["upstream-change", "source-change", "probe-failure", "contract-gap-change", "manual"] },
-      "notes": "Research reference for a metadata-only route; media download and transcription are deliberately outside this candidate contract."
+      "notes": "Retained only as negative lineage evidence. The verified official iframe API replaces it without inheriting its HTML parser or media-download surface."
     },
     {
       "id": "creator-center-manual",

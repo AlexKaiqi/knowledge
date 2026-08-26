@@ -30,6 +30,8 @@
     "xhs:community-rules:maintain": "node collectors/xiaohongshu-community-rules-maintainer/src/index.mjs",
     "douyin:open-platform:probe": "node scripts/probe-douyin-open-platform-docs.mjs",
     "douyin:open-platform:maintain": "node collectors/douyin-open-platform-docs-maintainer/src/index.mjs",
+    "douyin:public-video-embed:probe": "node scripts/probe-douyin-public-video-embed.mjs",
+    "douyin:public-video-embed:maintain": "node collectors/douyin-public-video-embed-maintainer/src/index.mjs",
     "douyin:maintain": "node collectors/douyin-maintainer/src/index.mjs",
     "github:repositories:probe": "node scripts/probe-github-public-repository-search.mjs",
     "github:repositories:maintain": "node collectors/github-public-repository-search-maintainer/src/index.mjs",

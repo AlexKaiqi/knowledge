@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "dsh.douyin-public-video-embed-snapshot/v1",
+  "fixture": {
+    "expected": {
+      "title": "#中国机器人突破感知极限  #中国造机器人连微风都摸得出来了  #新质生产力中国行",
+      "width": 1080,
+      "height": 1920,
+      "playerUrl": "https://open.douyin.com/player/video?vid=7601036371859459343&autoplay=0"
+    }
+  },
+  "source": {
+    "id": "douyin-public-video-embed",
+    "apiOrigin": "https://open.douyin.com",
+    "endpointTemplate": "https://open.douyin.com/api/douyin/v1/video/get_iframe_by_video?video_id={videoId}",
+    "accessClass": "official-public-no-permission"
+  },
+  "request": {
+    "videoId": "7601036371859459343"
+  },
+  "videoEmbed": {
+    "videoId": "7601036371859459343",
+    "title": "#中国机器人突破感知极限  #中国造机器人连微风都摸得出来了  #新质生产力中国行",
+    "width": 1080,
+    "height": 1920,
+    "playerUrl": "https://open.douyin.com/player/video?vid=7601036371859459343&autoplay=0"
+  },
+  "observedAt": "2026-08-26T20:56:39.938Z",
+  "resultDigest": "c5e62e2eccaa69275fb5f35ecb119ddf729ef786c337e436ea81770d51cd3136",
+  "conformance": {
+    "status": "passed",
+    "assertions": [
+      { "id": "exact-video-identity", "passed": true },
+      { "id": "official-player-origin", "passed": true },
+      { "id": "bounded-public-fields", "passed": true },
+      { "id": "unsafe-embed-html-excluded", "passed": true },
+      { "id": "identity-and-metrics-excluded", "passed": true }
+    ]
+  }
+}

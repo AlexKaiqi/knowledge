@@ -70,20 +70,20 @@ Subject knowledge
 ## 当前状态
 
 ```text
-完整可用闭环：13（Information Source 4；Platform 8；Service 1）
-已准入 Subject：10
-已准入 Capability：13
-Connector：12 个已验证；xiaohongshu-browser 为 mixed（读取已验证、发布候选）
-维护 Collector：14
+完整可用闭环：14（Information Source 4；Platform 9；Service 1）
+已准入 Subject：11
+已准入 Capability：14
+Connector：13 个已验证；xiaohongshu-browser 为 mixed（读取已验证、发布候选）
+维护 Collector：15
 ```
 
 小红书已有三个真实闭环：官方账号 API 参考、浏览器渲染的社区公约信息源，以及通过自有账号会话读取本人笔记列表的平台能力。后者 live probe 实际返回可用的空列表。笔记发布、详情反查与反馈采集仍是候选能力，尚未完成真实私密发布闭环。仓库不创建空的平台、Connector 或 Collector 占位。
 
 小红书维护 Collector 还管理 40 个已审计开源项目，并消费已验证的 GitHub 搜索 Connector 做关键词轮换发现：每次串行查询 4 个关键词、5 天覆盖 20 个查询，显式覆盖 MCP、CLI、Playwright、浏览器扩展、多账号发布、数据采集、普通评论、直播评论、私信与创作者分析。项目必须能改变 Connector、Collector、probe、身份池、conformance 或 failure-domain 决策；只有关键词命中、没有具体平台路径或没有新增维护决策的仓库不进入目录。已人工排除的命中只保留最小 `discoveryDecision`（仓库、当时的 `pushedAt` 和理由码），相同 revision 不重复制造 proposal，仓库一旦更新就自动重新进入审阅。对其中 29 个声明关注 release 的项目，另消费已验证的 GitHub Tag Connector，每次串行观察 4 个、8 天覆盖一轮，并比较规范化的 tag→commit 摘要；不再让 Collector 自己理解 Git wire 输出。发现新项目或 tag 变化都只生成去重审阅 proposal，不自动安装、升级、路由或接受第三方许可证。当前已为 `DeliciousBuding/xiaohongshu-skill` 建立固定 commit、固定补丁与固定 runtime diff 的本地 JSON CLI adapter；它能在离线契约中强制私密可见性、隔离 profile，并对不确定写入禁重试，但在真实 probe 前仍不是可用路线。`xhs-analytics` 的自有创作者指标截获面已进入高优先级 Collector 调研；CreatorHub 的持久任务队列、身份/出口风控和私信唤醒，oba-live-tool 的千帆/蒲公英直播评论 WebSocket，以及 rednote-extract 的被动网络观测只作为维护与 schema 参考，尚不是可用能力。
 
-抖音已有一个真实闭环：无需身份读取并语义校验官方开放平台文档。它只是一条 Information Source 能力；应用审核、scope、用户授权和真实业务调用尚未验证，所以抖音 Platform 能力仍为 0。
+抖音已有两个真实闭环：一条无需身份读取并语义校验官方开放平台文档的 Information Source 能力；一条按明确 VideoID 调用官方免权限接口、读取公开视频标题/宽高/受约束播放器 URL 的 Platform 能力。后者不暴露原始 iframe HTML，也不使用账号、Cookie、token、内部签名或爬虫身份伪装。应用审核、scope、用户授权、搜索、创作者数据和写操作仍未验证。
 
-抖音维护 Collector 当前管理 24 个固定提交的开源项目和 10 条访问路线，区分官方 OpenAPI、创作者中心发布、草稿准备、公开 Web 研究、自有创作者数据与人工恢复。每次串行查询 2 个关键词、5 天覆盖 10 个查询；同时观察项目和路线 HEAD。对 15 个声明关注 release 的项目，另消费已验证的 GitHub Tag Connector，每次串行观察 4 个、4 天覆盖一轮。所有路线仍为 `researching`/`degraded`，自动选择数为 0。MediaCrawler 的受限许可证、`social-media-copilot` 的许可证冲突、无许可证项目和“点击即成功”实现都被显式阻断，Collector 不会自动安装、登录、接受许可证或升级路线。
+抖音维护 Collector 当前管理 24 个固定提交的开源项目和 11 条访问路线，区分官方 OpenAPI、创作者中心发布、草稿准备、公开读取、公开 Web 研究、自有创作者数据与人工恢复。每次串行查询 2 个关键词、5 天覆盖 10 个查询；同时观察项目和路线 HEAD。对 15 个声明关注 release 的项目，另消费已验证的 GitHub Tag Connector，每次串行观察 4 个、4 天覆盖一轮。当前只有官方公开视频 iframe API 是 `verified/full` 且可自动选择；已归档 `yzfly/douyin-mcp-server` 的旧分享页解析路线因 `iesdouyin` 重定向和 HTML 契约失效而退休。其余路线仍为 `researching`/`degraded`。MediaCrawler 的受限许可证、`social-media-copilot` 的许可证冲突、无许可证项目和“点击即成功”实现都被显式阻断，Collector 不会自动安装、登录、接受许可证或升级路线。
 
 GitHub 已有四个真实 Platform 闭环：通过官方 REST API、无需身份搜索公共仓库；串行分页读取最多 500 个 tag 名称与目标 commit SHA；按精确 tag 读取一个非草稿 release 的有界说明和最多 64 个内嵌资产；以及在完整不可变 commit ID 下读取一个不超过 256 KiB 的 UTF-8 公共仓库文件。它们可以发现候选、观察 tag/release 面，并核验固定 revision 的 README、LICENSE、manifest 和实现证据；仍不能证明生态完整、许可证有效、tag 不会移动、资产集合完整、资产安全或项目能力可执行。
 

@@ -56,3 +56,6 @@ title: Knowledge bundle history
 - Connector 固定按 ID 官方 API，限制 2 MiB；details 与版本清单有界并带完整 hash/coverage，排除 credits 和 database/ecosystem-specific raw 扩展。完整闭环更新为 12（Information Source 4；Platform 7；Service 1），Subject 10，Capability 12。
 - 通过 production-public live probe 准入“按精确 Tag 读取 GitHub 公共仓库 Release”Capability；`JoeanAmier/XHS-Downloader` 的 `2.7` release 身份、说明摘要及 4 个资产名称、大小和 GitHub 提供的 SHA-256 均命中固定证据。
 - Connector 固定官方 release-by-tag API，单次响应最多 2 MiB、内嵌资产最多 64 个，不跟随重定向或重试；输出排除 author、uploader、头像、下载计数和源码归档链接。首次 live 结果因说明正文包含合法的 `Cookie` 文字触发了错误的值级最小化断言；修正为字段级断言后，对同一 live 快照离线复核通过，未重复发起网络请求。完整闭环更新为 13（Information Source 4；Platform 8；Service 1），Subject 10，Capability 13。
+- 通过 production-public live probe 准入抖音 Platform 与“读取公开视频嵌入描述”Capability；官方免权限接口实际返回固定 VideoID 的公开标题、1080×1920 画面尺寸和官方播放器 URL。
+- Connector 固定 `open.douyin.com` 单一 endpoint，不跟随重定向或重试，限制 64 KiB JSON；解析并验证 iframe 后只重建 `autoplay=0` 播放器 URL，排除原始 HTML、日志、作者、互动指标、评论、媒体直链与 raw payload。
+- 新增 proposal-only Collector 观察接口契约、固定公开视频可用性、最小描述漂移与验证过期；旧 `iesdouyin` 分享页 `_ROUTER_DATA` 路线因当前重定向和反爬页面失效而退休。完整闭环更新为 14（Information Source 4；Platform 9；Service 1），Subject 11，Capability 14。

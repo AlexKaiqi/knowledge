@@ -163,7 +163,7 @@ export async function collectDouyinMaintenance({
   const observedAtDate = now()
   const observedAt = observedAtDate.toISOString()
   const projectCatalog = await readJson(path.join(repositoryRoot, 'collectors/douyin-maintainer/projects.json'))
-  const routeCatalog = await readJson(path.join(repositoryRoot, 'connectors/douyin-candidate-routes/routes.json'))
+  const routeCatalog = await readJson(path.join(repositoryRoot, 'connectors/douyin-access-routes/routes.json'))
   const discoveryQueries = selectDiscoveryQueries(projectCatalog.searchQueries, observedAtDate)
   const releaseWatchProjects = selectReleaseWatchProjects(projectCatalog, observedAtDate, RELEASE_TAG_PROJECTS_PER_RUN)
 
@@ -240,7 +240,8 @@ export async function collectDouyinMaintenance({
       catalogId: routeCatalog.id,
       automaticEligible: routeCatalog.routes.filter((route) => route.automaticSelectionEligible).map((route) => route.id),
       fullWriteCandidates: routeCatalog.routes.filter((route) => route.contractLevel === 'full' && route.capabilityCoverage.some((coverage) => coverage.capabilityRef.endsWith('/publish-video-and-reconcile.md'))).map((route) => route.id),
-      componentCandidates: routeCatalog.routes.filter((route) => route.contractLevel === 'component').map((route) => route.id),
+      componentCandidates: routeCatalog.routes.filter((route) => route.contractLevel === 'component' && !['retired', 'suspended'].includes(route.lifecycle)).map((route) => route.id),
+      retired: routeCatalog.routes.filter((route) => route.lifecycle === 'retired').map((route) => route.id),
       upstreams: routeUpstreams,
       researched: routeCatalog.routes.map((route) => ({ id: route.id, lifecycle: route.lifecycle, contractLevel: route.contractLevel, automaticSelectionEligible: route.automaticSelectionEligible, failureDomains: route.failureDomains })),
     },

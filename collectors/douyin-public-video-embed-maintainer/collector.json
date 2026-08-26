@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "dsh.collector-definition/v1",
+  "id": "douyin-public-video-embed-maintainer",
+  "version": "1.0.0",
+  "scope": {
+    "knowledgeGlobs": [
+      "knowledge/platforms/douyin.md",
+      "knowledge/concepts/douyin/public-video-embed-descriptor.md",
+      "knowledge/capabilities/douyin/read-public-video-embed.md",
+      "knowledge/schemas/douyin/read-public-video-embed-*.schema.json",
+      "knowledge/verifications/douyin/public-video-embed/*.json"
+    ],
+    "connectorIds": ["douyin-public-video-embed"],
+    "capabilityRefs": ["/capabilities/douyin/read-public-video-embed.md"]
+  },
+  "triggers": [
+    { "kind": "schedule", "schedule": "10 6 * * *" },
+    { "kind": "source-change" },
+    { "kind": "schema-change" },
+    { "kind": "connector-change" },
+    { "kind": "failed-execution" },
+    { "kind": "manual" }
+  ],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "collectors/douyin-public-video-embed-maintainer/src/index.mjs"
+  },
+  "outputs": ["knowledge-proposal", "connector-change-proposal", "verification-report"],
+  "writePolicy": { "mode": "proposal-only", "requiresApprovalFor": ["knowledge", "connector", "live-probe"] },
+  "probePolicy": { "allowedEnvironments": ["production-public"], "identityPoolRefs": [], "maximumEffect": "none" },
+  "budgets": { "maxRunsPerDay": 4, "maxCostPerDay": 0, "currency": "CNY" }
+}

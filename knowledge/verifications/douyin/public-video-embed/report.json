@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "dsh.probe-report/v1",
+  "id": "douyin-public-video-embed-live-20260826",
+  "capabilityRef": "/capabilities/douyin/read-public-video-embed.md",
+  "connectorId": "douyin-public-video-embed",
+  "probeDefinitionRef": "repo:/probes/definitions/douyin-public-video-embed-live.json",
+  "environment": "production-public",
+  "level": "live",
+  "outcome": "passed",
+  "startedAt": "2026-08-26T20:56:39.573Z",
+  "finishedAt": "2026-08-26T20:56:39.939Z",
+  "expiresAt": "2026-09-02T20:56:39.939Z",
+  "checks": [
+    { "id": "exact-video-identity", "status": "passed" },
+    { "id": "official-player-origin", "status": "passed" },
+    { "id": "bounded-public-fields", "status": "passed" },
+    { "id": "unsafe-embed-html-excluded", "status": "passed" },
+    { "id": "identity-and-metrics-excluded", "status": "passed" },
+    { "id": "fixture-identity", "status": "passed" },
+    { "id": "fixture-descriptor", "status": "passed" },
+    { "id": "data-minimization", "status": "passed" }
+  ],
+  "evidence": [
+    {
+      "kind": "snapshot",
+      "ref": "repo:/knowledge/verifications/douyin/public-video-embed/snapshot.json",
+      "sha256": "11c73ec19f97b5c79af70462f48efbd3f7d90f248f2fb7f6b31b3f63424e03da"
+    }
+  ],
+  "sideEffects": [{ "effect": "none", "status": "none" }]
+}

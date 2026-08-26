@@ -91,7 +91,7 @@ test('ecosystem discovery is serial, bounded and deduplicates unseen repositorie
   assert.deepEqual(result.newCandidates[0].matchedQueries, ['douyin mcp', '抖音 自动发布'])
 })
 
-test('maintainer keeps every route non-automatic until a real capability probe passes', async () => {
+test('maintainer exposes only the live-probed official read route for automatic selection', async () => {
   const report = await collectDouyinMaintenance({
     now: () => new Date('2026-08-27T09:00:00Z'),
     officialReader: officialCurrent,
@@ -107,13 +107,15 @@ test('maintainer keeps every route non-automatic until a real capability probe p
   assert.equal(report.ecosystemProjects.releaseWatch.eligibleProjects, 15)
   assert.equal(report.ecosystemProjects.releaseWatch.observations.length, 4)
   assert.equal(report.ecosystemProjects.releaseWatch.fullCycleDays, 4)
-  assert.deepEqual(report.accessRoutes.automaticEligible, [])
+  assert.deepEqual(report.accessRoutes.automaticEligible, ['official-public-video-iframe'])
+  assert.equal(report.accessRoutes.componentCandidates.includes('public-share-page-yzfly'), false)
+  assert.deepEqual(report.accessRoutes.retired, ['public-share-page-yzfly'])
   assert.ok(report.accessRoutes.fullWriteCandidates.includes('official-open-platform'))
   assert.ok(report.accessRoutes.fullWriteCandidates.includes('creator-browser-broadcast-kit'))
   assert.ok(report.accessRoutes.fullWriteCandidates.includes('creator-browser-humanized-publisher'))
   assert.ok(report.ecosystemProjects.falseSuccessBlocked.includes('wjz-douyin-upload-mcp-skill'))
   assert.ok(report.ecosystemProjects.falseSuccessBlocked.includes('dabao-douyin-image-publisher'))
-  assert.ok(report.blockers.includes('no-verified-full-route'))
+  assert.equal(report.blockers.includes('no-verified-full-route'), false)
   assert.equal(report.nextRequiredGate, 'implement-and-live-probe-selected-route')
 })
 
@@ -141,7 +143,7 @@ test('maintainer turns official semantic drift into a knowledge proposal', async
   assert.deepEqual(report.proposals, [{ kind: 'knowledge-proposal', action: 'review-official-douyin-semantic-change', failures: ['security-requirements'] }])
 })
 
-test('maintainer turns release tag drift into a proposal without promoting a route', async () => {
+test('maintainer turns release tag drift into a proposal without promoting another route', async () => {
   const observedAt = new Date('2026-08-27T09:00:00Z')
   const changedProject = selectReleaseWatchProjects(projectCatalog, observedAt, 4)[0]
   const report = await collectDouyinMaintenance({
@@ -155,5 +157,5 @@ test('maintainer turns release tag drift into a proposal without promoting a rou
   })
   assert.ok(report.blockers.includes('ecosystem-release-tags-changed'))
   assert.ok(report.proposals.some((proposal) => proposal.projectId === changedProject.id && proposal.action === 'review-project-release-tags'))
-  assert.deepEqual(report.accessRoutes.automaticEligible, [])
+  assert.deepEqual(report.accessRoutes.automaticEligible, ['official-public-video-iframe'])
 })

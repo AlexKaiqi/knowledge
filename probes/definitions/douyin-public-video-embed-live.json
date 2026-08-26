@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "douyin-public-video-embed-live",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/douyin/read-public-video-embed.md",
+  "connectorId": "douyin-public-video-embed",
+  "environment": "production-public",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "read-known-public-video-embed", "operation": "readPublicVideoEmbed" },
+    { "id": "verify-official-player-and-minimized-output", "operation": "normalizePublicVideoEmbedResponse" }
+  ],
+  "assertions": [
+    "The documented official GET /api/douyin/v1/video/get_iframe_by_video endpoint returns a known public VideoID without an account, credential or requested permission.",
+    "The returned title, width, height and official player URL preserve the exact requested VideoID and match the reviewed public fixture.",
+    "The Connector uses one fixed open.douyin.com endpoint, a contactable application User-Agent, no redirect, no retry and a 64 KiB response limit.",
+    "The normalized output excludes raw iframe HTML, platform log IDs, author identity, interaction metrics, comments, media URLs, tokens, cookies and raw payloads."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 30, "maxCost": 0, "currency": "CNY" }
+}

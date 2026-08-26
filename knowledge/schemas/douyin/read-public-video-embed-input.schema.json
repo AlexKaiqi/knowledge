@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/douyin/read-public-video-embed-input.schema.json",
+  "title": "ReadDouyinPublicVideoEmbedInput",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["videoId"],
+  "properties": {
+    "videoId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 19,
+      "pattern": "^[1-9][0-9]{0,18}$",
+      "description": "A positive decimal VideoID within signed int64 range; the Connector also enforces the numeric upper bound."
+    }
+  }
+}

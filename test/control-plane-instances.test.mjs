@@ -31,7 +31,10 @@ test('control-plane instances match their schemas', async () => {
     ['../spec/connector-definition.schema.json', '../connectors/douyin-open-platform-docs/connector.json'],
     ['../spec/collector-definition.schema.json', '../collectors/douyin-open-platform-docs-maintainer/collector.json'],
     ['../spec/probe-definition.schema.json', '../probes/definitions/douyin-open-platform-docs-live.json'],
-    ['../spec/access-route-catalog.schema.json', '../connectors/douyin-candidate-routes/routes.json'],
+    ['../spec/connector-definition.schema.json', '../connectors/douyin-public-video-embed/connector.json'],
+    ['../spec/collector-definition.schema.json', '../collectors/douyin-public-video-embed-maintainer/collector.json'],
+    ['../spec/probe-definition.schema.json', '../probes/definitions/douyin-public-video-embed-live.json'],
+    ['../spec/access-route-catalog.schema.json', '../connectors/douyin-access-routes/routes.json'],
     ['../spec/collector-definition.schema.json', '../collectors/douyin-maintainer/collector.json'],
     ['../spec/ecosystem-project-catalog.schema.json', '../collectors/douyin-maintainer/projects.json'],
     ['../spec/connector-definition.schema.json', '../connectors/github-public-repository-search/connector.json'],
@@ -85,6 +88,7 @@ test('Connector configuration schemas compile', async () => {
     '../connectors/xiaohongshu-account-docs/config.schema.json',
     '../connectors/xiaohongshu-community-rules-browser/config.schema.json',
     '../connectors/douyin-open-platform-docs/config.schema.json',
+    '../connectors/douyin-public-video-embed/config.schema.json',
     '../connectors/github-public-repository-search/config.schema.json',
     '../connectors/github-public-repository-file/config.schema.json',
     '../connectors/github-public-repository-tags/config.schema.json',
@@ -161,6 +165,13 @@ test('crates.io public crate version live snapshot matches its product output sc
 test('OSV public advisory live snapshot matches its product output schema', async () => {
   const validate = await validator('../knowledge/schemas/osv/read-public-advisory-output.schema.json')
   const snapshot = JSON.parse(await readFile(new URL('../knowledge/verifications/osv/public-advisory/snapshot.json', import.meta.url), 'utf8'))
+  const { schemaVersion: _schemaVersion, fixture: _fixture, ...payload } = snapshot
+  assert.equal(validate(payload), true, JSON.stringify(validate.errors))
+})
+
+test('Douyin public video embed live snapshot matches its product output schema', async () => {
+  const validate = await validator('../knowledge/schemas/douyin/read-public-video-embed-output.schema.json')
+  const snapshot = JSON.parse(await readFile(new URL('../knowledge/verifications/douyin/public-video-embed/snapshot.json', import.meta.url), 'utf8'))
   const { schemaVersion: _schemaVersion, fixture: _fixture, ...payload } = snapshot
   assert.equal(validate(payload), true, JSON.stringify(validate.errors))
 })
