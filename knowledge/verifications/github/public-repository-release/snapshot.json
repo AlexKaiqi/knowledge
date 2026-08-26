@@ -1,0 +1,168 @@
+{
+  "schemaVersion": "dsh.github-public-repository-release-snapshot/v1",
+  "fixture": {
+    "expectedRelease": {
+      "targetCommitish": "master",
+      "name": "XHS-Downloader V2.7",
+      "prerelease": false,
+      "immutable": false,
+      "createdAt": "2026-02-09T06:35:57.000Z",
+      "publishedAt": "2026-02-09T06:40:22.000Z",
+      "url": "https://github.com/JoeanAmier/XHS-Downloader/releases/tag/2.7"
+    },
+    "expectedAssets": [
+      [
+        "XHS-Downloader_V2.7_macOS_ARM64.zip",
+        39976593,
+        "a434b04d5871fae5952d89ee5c2296d64d1ca9997592b4ddde6caba80539432f"
+      ],
+      [
+        "XHS-Downloader_V2.7_macOS_X64.zip",
+        41370295,
+        "a6be90092c1b4f84df9962b88793eef77050a5a1104d218da6ac52d4d6f0f531"
+      ],
+      [
+        "XHS-Downloader_V2.7_Windows_ARM64.zip",
+        12442504,
+        "af260a35e1ae5071d52cbcc53cbfe0740bdc612beb2089f0734448ca07a0006c"
+      ],
+      [
+        "XHS-Downloader_V2.7_Windows_X64.zip",
+        41013054,
+        "ff5e7b6355895d5d18232f5db69d5b08c7237720c2c8c57b1d9b5bde8fa40c99"
+      ]
+    ]
+  },
+  "source": {
+    "id": "github-public-repository-release",
+    "endpointTemplate": "https://api.github.com/repos/{owner}/{repository}/releases/tags/{tag}",
+    "apiVersion": "2026-03-10"
+  },
+  "request": {
+    "owner": "JoeanAmier",
+    "repository": "XHS-Downloader",
+    "tagName": "2.7"
+  },
+  "repositoryUrl": "https://github.com/JoeanAmier/XHS-Downloader",
+  "release": {
+    "tagName": "2.7",
+    "targetCommitish": "master",
+    "name": "XHS-Downloader V2.7",
+    "prerelease": false,
+    "immutable": false,
+    "createdAt": "2026-02-09T06:35:57.000Z",
+    "publishedAt": "2026-02-09T06:40:22.000Z",
+    "url": "https://github.com/JoeanAmier/XHS-Downloader/releases/tag/2.7",
+    "notes": {
+      "characterCount": 373,
+      "sha256": "1a4dbd14e7df83a420f00369e6571f4e3be42e9031a798052ba48d917efae950",
+      "excerpt": "**项目更新内容：**\n\n1. 修复 MCP 模式无法下载文件的问题\n2. 新增 `script_server` 配置参数\n3. 移除 `从浏览器读取 Cookie` 功能\n4. 新增连接用户脚本下载作品功能\n5. 优化 Cookie 处理逻辑\n6. 修复视频作品下载功能\n7. 新增视频下载偏好设置\n8. 新增作品处理统计功能\n9. 重构数据处理逻辑\n10. 调整内置延时机制\n\n*****\n\n**用户脚本更新内容：**\n\n**版本号：2.3.1**\n\n1. 新增链接提取/图片下载选择模式开关\n2. 修复合辑作品链接提取失败的问题\n3. 链接提取选择界面添加序号显示\n4. 新增推送下载任务至服务器功能\n5. 新增图文作品文件下载格式设置\n6. 修复视频作品下载功能\n7. 优化用户脚本兼容性\n8. 新增英语语言支持\n9. 重构数据处理逻辑\n",
+      "truncated": false
+    },
+    "assetCoverage": {
+      "representation": "embedded-release-assets",
+      "returnedCount": 4,
+      "maximumAssets": 64,
+      "completeness": "not-asserted",
+      "sha256Count": 4
+    },
+    "assets": [
+      {
+        "name": "XHS-Downloader_V2.7_macOS_ARM64.zip",
+        "label": null,
+        "state": "uploaded",
+        "contentType": "application/zip",
+        "sizeBytes": 39976593,
+        "sha256": "a434b04d5871fae5952d89ee5c2296d64d1ca9997592b4ddde6caba80539432f",
+        "downloadUrl": "https://github.com/JoeanAmier/XHS-Downloader/releases/download/2.7/XHS-Downloader_V2.7_macOS_ARM64.zip",
+        "createdAt": "2026-02-09T06:41:44.000Z",
+        "updatedAt": "2026-02-09T06:41:46.000Z"
+      },
+      {
+        "name": "XHS-Downloader_V2.7_macOS_X64.zip",
+        "label": null,
+        "state": "uploaded",
+        "contentType": "application/zip",
+        "sizeBytes": 41370295,
+        "sha256": "a6be90092c1b4f84df9962b88793eef77050a5a1104d218da6ac52d4d6f0f531",
+        "downloadUrl": "https://github.com/JoeanAmier/XHS-Downloader/releases/download/2.7/XHS-Downloader_V2.7_macOS_X64.zip",
+        "createdAt": "2026-02-09T06:42:44.000Z",
+        "updatedAt": "2026-02-09T06:42:46.000Z"
+      },
+      {
+        "name": "XHS-Downloader_V2.7_Windows_ARM64.zip",
+        "label": null,
+        "state": "uploaded",
+        "contentType": "application/zip",
+        "sizeBytes": 12442504,
+        "sha256": "af260a35e1ae5071d52cbcc53cbfe0740bdc612beb2089f0734448ca07a0006c",
+        "downloadUrl": "https://github.com/JoeanAmier/XHS-Downloader/releases/download/2.7/XHS-Downloader_V2.7_Windows_ARM64.zip",
+        "createdAt": "2026-02-09T06:42:10.000Z",
+        "updatedAt": "2026-02-09T06:42:11.000Z"
+      },
+      {
+        "name": "XHS-Downloader_V2.7_Windows_X64.zip",
+        "label": null,
+        "state": "uploaded",
+        "contentType": "application/zip",
+        "sizeBytes": 41013054,
+        "sha256": "ff5e7b6355895d5d18232f5db69d5b08c7237720c2c8c57b1d9b5bde8fa40c99",
+        "downloadUrl": "https://github.com/JoeanAmier/XHS-Downloader/releases/download/2.7/XHS-Downloader_V2.7_Windows_X64.zip",
+        "createdAt": "2026-02-09T06:42:32.000Z",
+        "updatedAt": "2026-02-09T06:42:34.000Z"
+      }
+    ]
+  },
+  "registryState": {
+    "etag": "W/\"1aa5562d89698bf96fd88cb1596c8eec217b3dfae3b089e6593248a88a1b3fd9\"",
+    "rateLimit": {
+      "resource": "core",
+      "limit": 60,
+      "remaining": 47,
+      "resetAt": "2026-08-26T20:54:57.000Z"
+    }
+  },
+  "observedAt": "2026-08-26T20:05:12.623Z",
+  "resultDigest": "41bcb31bd0b7e2938a10fddb91ffdc294092f26e7bbe4100a588675e7a0bfc39",
+  "conformance": {
+    "status": "passed",
+    "assertions": [
+      {
+        "id": "exact-release-tag",
+        "passed": true
+      },
+      {
+        "id": "public-non-draft",
+        "passed": true
+      },
+      {
+        "id": "api-version",
+        "passed": true
+      },
+      {
+        "id": "core-rate-bucket",
+        "passed": true
+      },
+      {
+        "id": "etag-present",
+        "passed": true
+      },
+      {
+        "id": "bounded-assets",
+        "passed": true
+      },
+      {
+        "id": "uploaded-assets",
+        "passed": true
+      },
+      {
+        "id": "personal-fields-excluded",
+        "passed": true
+      },
+      {
+        "id": "archive-links-excluded",
+        "passed": true
+      }
+    ]
+  }
+}

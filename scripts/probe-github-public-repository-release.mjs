@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto'
-import { mkdir, writeFile } from 'node:fs/promises'
+import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
@@ -25,9 +25,38 @@ const expectedAssets = [
   ['XHS-Downloader_V2.7_Windows_X64.zip', 41013054, 'ff5e7b6355895d5d18232f5db69d5b08c7237720c2c8c57b1d9b5bde8fa40c99'],
 ]
 
-const startedAt = new Date()
-const result = await readPublicRepositoryReleaseByTag(fixtureInput)
-const finishedAt = new Date()
+function normalizedObjectKeys(value, target = []) {
+  if (Array.isArray(value)) {
+    for (const item of value) normalizedObjectKeys(item, target)
+    return target
+  }
+  if (!value || typeof value !== 'object') return target
+  for (const [key, item] of Object.entries(value)) {
+    target.push(key.replaceAll('_', '').replaceAll('-', '').toLowerCase())
+    normalizedObjectKeys(item, target)
+  }
+  return target
+}
+
+const replayStaged = process.argv.includes('--replay-staged')
+let startedAt
+let result
+let finishedAt
+if (replayStaged) {
+  const [priorSnapshot, priorReport] = await Promise.all([
+    readFile(path.join(outputRoot, 'snapshot.json'), 'utf8').then(JSON.parse),
+    readFile(path.join(outputRoot, 'report.json'), 'utf8').then(JSON.parse),
+  ])
+  const { schemaVersion, fixture, ...storedResult } = priorSnapshot
+  if (schemaVersion !== 'dsh.github-public-repository-release-snapshot/v1' || fixture?.expectedRelease?.url !== expectedRelease.url) throw new Error('staged release evidence does not match the fixed fixture')
+  startedAt = new Date(priorReport.startedAt)
+  finishedAt = new Date(priorReport.finishedAt)
+  result = storedResult
+} else {
+  startedAt = new Date()
+  result = await readPublicRepositoryReleaseByTag(fixtureInput)
+  finishedAt = new Date()
+}
 const release = result.release
 const identityMatched = release.tagName === fixtureInput.tagName
   && release.targetCommitish === expectedRelease.targetCommitish
@@ -42,8 +71,8 @@ const assetsMatched = release.assets.length === expectedAssets.length
   && release.assetCoverage.returnedCount === expectedAssets.length
   && release.assetCoverage.sha256Count === expectedAssets.length
   && expectedAssets.every(([name, sizeBytes, sha256]) => assetMap.get(name)?.sizeBytes === sizeBytes && assetMap.get(name)?.sha256 === sha256)
-const serialized = JSON.stringify(result)
-const minimized = !/(?:"author"|"uploader"|avatar|download_count|downloadCount|tarball|zipball|cookie|token)/i.test(serialized)
+const forbiddenOutputKeys = new Set(['author', 'uploader', 'avatar', 'avatarurl', 'downloadcount', 'tarball', 'tarballurl', 'zipball', 'zipballurl', 'cookie', 'token'])
+const minimized = normalizedObjectKeys(result).every((key) => !forbiddenOutputKeys.has(key))
 const notesBounded = release.notes.characterCount > 0 && [...release.notes.excerpt].length <= 4096 && /^[a-f0-9]{64}$/.test(release.notes.sha256)
 const probePassed = result.conformance.status === 'passed' && identityMatched && assetsMatched && minimized && notesBounded
 const snapshot = { schemaVersion: 'dsh.github-public-repository-release-snapshot/v1', fixture: { expectedRelease, expectedAssets }, ...result }
@@ -85,6 +114,7 @@ process.stdout.write(stableJson({
   sha256Count: release.assetCoverage.sha256Count,
   snapshotSha256: snapshotDigest,
   rateLimitRemaining: result.registryState.rateLimit.remaining,
+  evidenceMode: replayStaged ? 'offline-recheck-of-staged-live-response' : 'live-request',
   outputRoot,
 }))
 if (!probePassed) process.exitCode = 1

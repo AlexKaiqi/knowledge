@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/github/read-public-repository-release-by-tag-input.schema.json",
+  "title": "ReadGitHubPublicRepositoryReleaseByTagInput",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["owner", "repository", "tagName"],
+  "properties": {
+    "owner": { "type": "string", "pattern": "^[A-Za-z0-9](?:[A-Za-z0-9-]{0,98}[A-Za-z0-9])?$" },
+    "repository": { "type": "string", "minLength": 1, "maxLength": 100, "pattern": "^[A-Za-z0-9._-]+$" },
+    "tagName": { "type": "string", "minLength": 1, "maxLength": 255 }
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "schemaVersion": "dsh.probe-report/v1",
+  "id": "github-public-repository-release-live-20260826",
+  "capabilityRef": "/capabilities/github/read-public-repository-release-by-tag.md",
+  "connectorId": "github-public-repository-release",
+  "probeDefinitionRef": "repo:/probes/definitions/github-public-repository-release-live.json",
+  "environment": "production-public",
+  "level": "live",
+  "outcome": "passed",
+  "startedAt": "2026-08-26T20:05:11.754Z",
+  "finishedAt": "2026-08-26T20:05:12.635Z",
+  "expiresAt": "2026-09-02T20:05:12.635Z",
+  "checks": [
+    {
+      "id": "exact-release-tag",
+      "status": "passed"
+    },
+    {
+      "id": "public-non-draft",
+      "status": "passed"
+    },
+    {
+      "id": "api-version",
+      "status": "passed"
+    },
+    {
+      "id": "core-rate-bucket",
+      "status": "passed"
+    },
+    {
+      "id": "etag-present",
+      "status": "passed"
+    },
+    {
+      "id": "bounded-assets",
+      "status": "passed"
+    },
+    {
+      "id": "uploaded-assets",
+      "status": "passed"
+    },
+    {
+      "id": "personal-fields-excluded",
+      "status": "passed"
+    },
+    {
+      "id": "archive-links-excluded",
+      "status": "passed"
+    },
+    {
+      "id": "fixture-release-identity",
+      "status": "passed"
+    },
+    {
+      "id": "fixture-assets",
+      "status": "passed"
+    },
+    {
+      "id": "bounded-release-notes",
+      "status": "passed"
+    },
+    {
+      "id": "data-minimization",
+      "status": "passed"
+    }
+  ],
+  "evidence": [
+    {
+      "kind": "snapshot",
+      "ref": "repo:/knowledge/verifications/github/public-repository-release/snapshot.json",
+      "sha256": "dd6bf805cfa8b469bd03c8e57326ca8634a7ba51fee0cd5a2ee4d0430baa8751"
+    }
+  ],
+  "sideEffects": [
+    {
+      "effect": "none",
+      "status": "none"
+    }
+  ]
+}

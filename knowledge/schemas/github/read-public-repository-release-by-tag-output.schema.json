@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/github/read-public-repository-release-by-tag-output.schema.json",
+  "title": "ReadGitHubPublicRepositoryReleaseByTagOutput",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["source", "request", "repositoryUrl", "release", "registryState", "observedAt", "resultDigest", "conformance"],
+  "properties": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "endpointTemplate", "apiVersion"],
+      "properties": {
+        "id": { "const": "github-public-repository-release" },
+        "endpointTemplate": { "const": "https://api.github.com/repos/{owner}/{repository}/releases/tags/{tag}" },
+        "apiVersion": { "const": "2026-03-10" }
+      }
+    },
+    "request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["owner", "repository", "tagName"],
+      "properties": {
+        "owner": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "repository": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "tagName": { "type": "string", "minLength": 1, "maxLength": 255 }
+      }
+    },
+    "repositoryUrl": { "type": "string", "format": "uri", "pattern": "^https://github\\.com/" },
+    "release": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tagName", "targetCommitish", "name", "prerelease", "immutable", "createdAt", "publishedAt", "url", "notes", "assetCoverage", "assets"],
+      "properties": {
+        "tagName": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "targetCommitish": { "type": ["string", "null"], "maxLength": 255 },
+        "name": { "type": ["string", "null"], "maxLength": 1024 },
+        "prerelease": { "type": "boolean" },
+        "immutable": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "publishedAt": { "type": ["string", "null"], "format": "date-time" },
+        "url": { "type": "string", "format": "uri", "pattern": "^https://github\\.com/" },
+        "notes": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["characterCount", "sha256", "excerpt", "truncated"],
+          "properties": {
+            "characterCount": { "type": "integer", "minimum": 0 },
+            "sha256": { "type": ["string", "null"], "pattern": "^[a-f0-9]{64}$" },
+            "excerpt": { "type": ["string", "null"], "maxLength": 4096 },
+            "truncated": { "type": "boolean" }
+          }
+        },
+        "assetCoverage": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["representation", "returnedCount", "maximumAssets", "completeness", "sha256Count"],
+          "properties": {
+            "representation": { "const": "embedded-release-assets" },
+            "returnedCount": { "type": "integer", "minimum": 0, "maximum": 64 },
+            "maximumAssets": { "const": 64 },
+            "completeness": { "const": "not-asserted" },
+            "sha256Count": { "type": "integer", "minimum": 0, "maximum": 64 }
+          }
+        },
+        "assets": {
+          "type": "array",
+          "maxItems": 64,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "label", "state", "contentType", "sizeBytes", "sha256", "downloadUrl", "createdAt", "updatedAt"],
+            "properties": {
+              "name": { "type": "string", "minLength": 1, "maxLength": 255 },
+              "label": { "type": ["string", "null"], "maxLength": 512 },
+              "state": { "type": "string", "minLength": 1, "maxLength": 32 },
+              "contentType": { "type": "string", "minLength": 1, "maxLength": 255 },
+              "sizeBytes": { "type": "integer", "minimum": 0 },
+              "sha256": { "type": ["string", "null"], "pattern": "^[a-f0-9]{64}$" },
+              "downloadUrl": { "type": "string", "format": "uri", "pattern": "^https://github\\.com/" },
+              "createdAt": { "type": "string", "format": "date-time" },
+              "updatedAt": { "type": "string", "format": "date-time" }
+            }
+          }
+        }
+      }
+    },
+    "registryState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["etag", "rateLimit"],
+      "properties": {
+        "etag": { "type": "string", "minLength": 1 },
+        "rateLimit": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["resource", "limit", "remaining", "resetAt"],
+          "properties": {
+            "resource": { "const": "core" },
+            "limit": { "type": ["integer", "null"], "minimum": 0 },
+            "remaining": { "type": ["integer", "null"], "minimum": 0 },
+            "resetAt": { "type": ["string", "null"], "format": "date-time" }
+          }
+        }
+      }
+    },
+    "observedAt": { "type": "string", "format": "date-time" },
+    "resultDigest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "conformance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "assertions"],
+      "properties": {
+        "status": { "enum": ["passed", "review-required"] },
+        "assertions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "passed"],
+            "properties": { "id": { "type": "string", "minLength": 1 }, "passed": { "type": "boolean" } }
+          }
+        }
+      }
+    }
+  }
+}

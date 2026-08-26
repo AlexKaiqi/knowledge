@@ -123,6 +123,13 @@ test('GitHub public repository tags live snapshot matches its product output sch
   assert.equal(validate(payload), true, JSON.stringify(validate.errors))
 })
 
+test('GitHub public repository release live snapshot matches its product output schema', async () => {
+  const validate = await validator('../knowledge/schemas/github/read-public-repository-release-by-tag-output.schema.json')
+  const snapshot = JSON.parse(await readFile(new URL('../knowledge/verifications/github/public-repository-release/snapshot.json', import.meta.url), 'utf8'))
+  const { schemaVersion: _schemaVersion, fixture: _fixture, ...payload } = snapshot
+  assert.equal(validate(payload), true, JSON.stringify(validate.errors))
+})
+
 test('npm public package version live snapshot matches its product output schema', async () => {
   const validate = await validator('../knowledge/schemas/npm/read-public-package-version-output.schema.json')
   const snapshot = JSON.parse(await readFile(new URL('../knowledge/verifications/npm/public-package-version/snapshot.json', import.meta.url), 'utf8'))

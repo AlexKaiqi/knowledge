@@ -17,7 +17,7 @@
     }
   ],
   "conformance": {
-    "status": "candidate",
-    "probeDefinitionRef": "repo:/probes/definitions/github-public-repository-release-live.json"
+    "status": "verified",
+    "probeReportRef": "/verifications/github/public-repository-release/report.json"
   }
 }

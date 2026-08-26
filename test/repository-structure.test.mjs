@@ -47,6 +47,7 @@ test('canonical knowledge contains only probe-admitted platform and capability f
     'douyin/read-open-platform-surface.md',
     'github/list-public-repository-tags.md',
     'github/read-public-repository-file.md',
+    'github/read-public-repository-release-by-tag.md',
     'github/search-public-repositories.md',
     'go/read-authenticated-public-module-version.md',
     'npm/read-public-package-version.md',

@@ -54,3 +54,5 @@ title: Knowledge bundle history
 - 新增 proposal-only Collector 观察发行摘要、yank/许可证/MSRV/edition/链接变化、API policy block、验证过期和访问失败；完整可用闭环更新为 11（Information Source 3；Platform 7；Service 1），Subject 更新为 9，Capability 更新为 11。
 - 通过 production-public live probe 准入 OSV.dev Information Source 与“读取公共 OSV 漏洞公告”Capability；固定公告的精确身份、poppler Git introduced/fixed 边界和 REPORT reference 均命中。
 - Connector 固定按 ID 官方 API，限制 2 MiB；details 与版本清单有界并带完整 hash/coverage，排除 credits 和 database/ecosystem-specific raw 扩展。完整闭环更新为 12（Information Source 4；Platform 7；Service 1），Subject 10，Capability 12。
+- 通过 production-public live probe 准入“按精确 Tag 读取 GitHub 公共仓库 Release”Capability；`JoeanAmier/XHS-Downloader` 的 `2.7` release 身份、说明摘要及 4 个资产名称、大小和 GitHub 提供的 SHA-256 均命中固定证据。
+- Connector 固定官方 release-by-tag API，单次响应最多 2 MiB、内嵌资产最多 64 个，不跟随重定向或重试；输出排除 author、uploader、头像、下载计数和源码归档链接。首次 live 结果因说明正文包含合法的 `Cookie` 文字触发了错误的值级最小化断言；修正为字段级断言后，对同一 live 快照离线复核通过，未重复发起网络请求。完整闭环更新为 13（Information Source 4；Platform 8；Service 1），Subject 10，Capability 13。
