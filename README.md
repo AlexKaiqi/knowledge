@@ -76,6 +76,14 @@ Subject knowledge
 
 因此当前不会创建空的平台、Connector 或 Collector 占位。
 
+## 规范
+
+- [仓库与命名约定](docs/REPOSITORY_CONVENTIONS.md)
+- [单项能力准入流程](docs/ADMISSION_WORKFLOW.md)
+- [Probe 身份与安全规则](docs/SECURITY_AND_IDENTITIES.md)
+- [版本化控制面 Schema](spec/README.md)
+- [完整架构推导](docs/ARCHITECTURE.md)
+
 ## 验证
 
 `package.json` 只是仓库本地工具清单，不代表插件或发布包。
