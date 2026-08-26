@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "nuget-org-public-package-version",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/nuget-org/read-public-package-version-evidence.md"],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "connectors/nuget-org-public-package-version/src/index.mjs"
+  },
+  "configSchema": "repo:/connectors/nuget-org-public-package-version/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [
+    {
+      "capabilityRef": "/capabilities/nuget-org/read-public-package-version-evidence.md",
+      "operation": "readPublicPackageVersionEvidence"
+    }
+  ],
+  "conformance": {
+    "status": "verified",
+    "probeReportRef": "/verifications/nuget-org/public-package-version/report.json"
+  }
+}

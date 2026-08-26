@@ -49,6 +49,11 @@ test('control-plane instances match their schemas', async () => {
     ['../spec/source-watch-list.schema.json', '../collectors/maven-central-public-jar-release-maintainer/sources.json'],
     ['../spec/ecosystem-project-catalog.schema.json', '../collectors/maven-central-public-jar-release-maintainer/projects.json'],
     ['../spec/probe-definition.schema.json', '../probes/definitions/maven-central-public-jar-release-live.json'],
+    ['../spec/connector-definition.schema.json', '../connectors/nuget-org-public-package-version/connector.json'],
+    ['../spec/collector-definition.schema.json', '../collectors/nuget-org-public-package-version-maintainer/collector.json'],
+    ['../spec/source-watch-list.schema.json', '../collectors/nuget-org-public-package-version-maintainer/sources.json'],
+    ['../spec/ecosystem-project-catalog.schema.json', '../collectors/nuget-org-public-package-version-maintainer/projects.json'],
+    ['../spec/probe-definition.schema.json', '../probes/definitions/nuget-org-public-package-version-live.json'],
     ['../spec/connector-definition.schema.json', '../connectors/github-public-repository-search/connector.json'],
     ['../spec/collector-definition.schema.json', '../collectors/github-public-repository-search-maintainer/collector.json'],
     ['../spec/probe-definition.schema.json', '../probes/definitions/github-public-repository-search-live.json'],
@@ -104,6 +109,7 @@ test('Connector configuration schemas compile', async () => {
     '../connectors/hugging-face-public-model-revision/config.schema.json',
     '../connectors/docker-hub-public-image-manifest/config.schema.json',
     '../connectors/maven-central-public-jar-release/config.schema.json',
+    '../connectors/nuget-org-public-package-version/config.schema.json',
     '../connectors/github-public-repository-search/config.schema.json',
     '../connectors/github-public-repository-file/config.schema.json',
     '../connectors/github-public-repository-tags/config.schema.json',
@@ -208,6 +214,13 @@ test('Docker Hub public image manifest live snapshot matches its product output 
 test('Maven Central public JAR release live snapshot matches its product output schema', async () => {
   const validate = await validator('../knowledge/schemas/maven-central/read-public-jar-release-evidence-output.schema.json')
   const snapshot = JSON.parse(await readFile(new URL('../knowledge/verifications/maven-central/public-jar-release/snapshot.json', import.meta.url), 'utf8'))
+  const { schemaVersion: _schemaVersion, fixture: _fixture, ...payload } = snapshot
+  assert.equal(validate(payload), true, JSON.stringify(validate.errors))
+})
+
+test('NuGet.org public package version live snapshot matches its product output schema', async () => {
+  const validate = await validator('../knowledge/schemas/nuget-org/read-public-package-version-evidence-output.schema.json')
+  const snapshot = JSON.parse(await readFile(new URL('../knowledge/verifications/nuget-org/public-package-version/snapshot.json', import.meta.url), 'utf8'))
   const { schemaVersion: _schemaVersion, fixture: _fixture, ...payload } = snapshot
   assert.equal(validate(payload), true, JSON.stringify(validate.errors))
 })

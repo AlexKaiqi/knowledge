@@ -2,7 +2,7 @@
 
 保存外部可发现、可调用的 Capability 契约。每项能力必须声明 Subject、输入输出 Schema、访问方式、副作用和新鲜验证报告。
 
-当前：17。
+当前：18。
 
 - [读取公共 OSV 漏洞公告](osv/read-public-advisory.md)
 - [读取 crates.io 公共 crate 精确版本元数据](crates-io/read-public-crate-version.md)
@@ -17,6 +17,7 @@
 - [读取 Maven Central 公共 JAR Release 证据](maven-central/read-public-jar-release-evidence.md)
 - [搜索 GitHub 公共仓库](github/search-public-repositories.md)
 - [读取 npm 公共包精确版本元数据](npm/read-public-package-version.md)
+- [读取 NuGet.org 公共包精确版本证据](nuget-org/read-public-package-version-evidence.md)
 - [读取 PyPI 公共项目精确 Release 元数据](pypi/read-public-project-release.md)
 - [读取小红书账号 API 接口面](xiaohongshu/read-account-api-surface.md)
 - [读取小红书本人笔记](xiaohongshu/list-owned-notes.md)

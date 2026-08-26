@@ -16,7 +16,7 @@ const verificationTime = new Date('2026-08-26T12:00:00Z')
 test('canonical OKF bundle contains only probe-backed admitted knowledge', async () => {
   const result = await validateKnowledgeBundle({ root: knowledgeRoot, contractRoot, now: verificationTime })
   assert.equal(result.valid, true, JSON.stringify(result.errors, null, 2))
-  assert.deepEqual(result.summary, { documents: 61, capabilities: 17, admittedSubjects: 14 })
+  assert.deepEqual(result.summary, { documents: 64, capabilities: 18, admittedSubjects: 15 })
 })
 
 test('admission rejects unverified subject knowledge', async (context) => {

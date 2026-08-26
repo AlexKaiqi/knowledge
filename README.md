@@ -70,11 +70,11 @@ Subject knowledge
 ## 当前状态
 
 ```text
-完整可用闭环：17（Information Source 4；Platform 12；Service 1）
-已准入 Subject：14
-已准入 Capability：17
-Connector：16 个已验证；xiaohongshu-browser 为 mixed（读取已验证、发布候选）
-维护 Collector：18
+完整可用闭环：18（Information Source 4；Platform 13；Service 1）
+已准入 Subject：15
+已准入 Capability：18
+Connector：17 个已验证；xiaohongshu-browser 为 mixed（读取已验证、发布候选）
+维护 Collector：19
 ```
 
 小红书已有三个真实闭环：官方账号 API 参考、浏览器渲染的社区公约信息源，以及通过自有账号会话读取本人笔记列表的平台能力。后者 live probe 实际返回可用的空列表。笔记发布、详情反查与反馈采集仍是候选能力，尚未完成真实私密发布闭环。仓库不创建空的平台、Connector 或 Collector 占位。
@@ -92,6 +92,8 @@ Hugging Face Hub 已有一个真实 Platform 闭环：无需身份按 `namespace
 Docker Hub 已有一个真实 Platform 闭环：无需 Docker ID，Connector 内部交换只含目标公开仓库 `pull` scope 的匿名短期 token，再按精确 `sha256` digest 读取 OCI/Docker schema 2 image index 或 image manifest。响应字节在本地重算摘要，并与请求和 `Docker-Content-Digest` 三方核对；输出保留有界 descriptor 次序、平台选择字段和已识别 attestation 引用，但不接受 tag，不下载 config/layer/attestation blob，不执行镜像，也不把 descriptor 或 annotation 冒充签名、provenance、安全或许可证结论。维护 Collector 同时观察 Docker Docs、Distribution 实现、OCI Distribution Spec 与 OCI Image Spec 四个开源上游；变化只生成 proposal。
 
 Maven Central 已有一个真实 Platform 闭环：无需身份按精确非 SNAPSHOT GAV，从 Maven 官方 Central endpoint 完整读取 POM、主 JAR、两份强制 SHA-1 sidecar 和 JAR PGP sidecar。Connector 验证 POM 有效坐标/`jar` packaging、POM/JAR 的本地 SHA-1、sidecar 与 Central checksum header，并自行计算 SHA-256；不读取 Maven settings/`~/.m2`，不使用 mirror，不解析依赖，不安装或执行 JAR。PGP sidecar 只证明存在和字节稳定，未完成 key/trust/密码学验签。维护 Collector 同时语义观察三份官网契约和 Apache Maven、Maven Resolver、Maven Site 三个开源上游，变化只生成 proposal。
+
+NuGet.org 已有一个真实 Platform 闭环：无需身份按精确 Package ID 和规范化版本，经官方 V3 service index 发现 Registration 与 Package Content 资源，读取最小元数据并完整下载不超过 32 MiB 的 `.nupkg`。Connector 本地计算 SHA-256/SHA-512、扫描有界 ZIP 中央目录，并确认根级 `.nuspec` 与 `.signature.p7s`；当前中国区 `api.nuget.org → nuget.azure.cn` 302 只作为一跳同路径传输路由接受。签名 entry 只证明存在，未完成 CMS、证书链、时间戳或 repository trust 验证；依赖不解析，包不解压、安装或执行。Collector 语义观察五组官网契约，并检查 NuGet.Client、NuGetGallery 与 NuGet Docs 三个官方开源上游。
 
 npm Public Registry 已有一个真实 Platform 闭环：无需身份按精确 package name 和精确 semver 读取最小化公共版本元数据。输出保留 license/deprecation/repository/engines 声明和 tarball 的 SHA-512 SRI、SHA-1 shasum、固定 Registry URL，同时排除 author、maintainers、contributors 和邮箱。它可用于依赖证据核验，但不下载或执行包，也不把 license 字段冒充独立授权结论。
 

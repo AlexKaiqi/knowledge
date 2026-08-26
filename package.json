@@ -39,6 +39,8 @@
     "docker-hub:image-manifest:maintain": "node collectors/docker-hub-public-image-manifest-maintainer/src/index.mjs",
     "maven-central:jar-release:probe": "node scripts/probe-maven-central-public-jar-release.mjs",
     "maven-central:jar-release:maintain": "node collectors/maven-central-public-jar-release-maintainer/src/index.mjs",
+    "nuget-org:package-version:probe": "node scripts/probe-nuget-org-public-package-version.mjs",
+    "nuget-org:package-version:maintain": "node collectors/nuget-org-public-package-version-maintainer/src/index.mjs",
     "github:repositories:probe": "node scripts/probe-github-public-repository-search.mjs",
     "github:repositories:maintain": "node collectors/github-public-repository-search-maintainer/src/index.mjs",
     "github:file:probe": "node scripts/probe-github-public-repository-file.mjs",

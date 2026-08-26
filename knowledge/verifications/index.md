@@ -2,7 +2,7 @@
 
 保存通过且脱敏的 VerificationReport。原始 trace、credential ref 和 probe identity 不属于公开知识。
 
-当前：17 份通过的 live report。
+当前：18 份通过的 live report。
 
 - [OSV 公共公告 live report](osv/public-advisory/report.json)
 - [crates.io 公共 crate 精确版本 live report](crates-io/public-crate-version/report.json)
@@ -17,6 +17,7 @@
 - [Hugging Face 公共模型 Revision live report](hugging-face/public-model-revision/report.json)
 - [Maven Central 公共 JAR Release live report](maven-central/public-jar-release/report.json)
 - [npm 公共包精确版本元数据 live report](npm/public-package-version/report.json)
+- [NuGet.org 公共包精确版本证据 live report](nuget-org/public-package-version/report.json)
 - [PyPI 公共项目精确 Release live report](pypi/public-project-release/report.json)
 - [小红书账号 API 接口面 live report](xiaohongshu/account-api/report.json)
 - [小红书本人笔记列表 live report](xiaohongshu/owned-notes/report.json)

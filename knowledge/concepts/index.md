@@ -2,7 +2,7 @@
 
 保存跨平台、跨工具复用的业务与数据概念。Concept 只有在被已准入 Capability 的输入或结果引用时才进入知识图。
 
-当前：17。
+当前：18。
 
 - [OSV 公共漏洞公告](osv/public-advisory.md)
 - [crates.io 公共 crate 版本元数据](crates-io/public-crate-version-metadata.md)
@@ -17,6 +17,7 @@
 - [Hugging Face 公共模型 Revision 清单](hugging-face/public-model-revision-manifest.md)
 - [Maven Central 公共 JAR Release 证据](maven-central/public-jar-release-evidence.md)
 - [npm 公共包版本元数据](npm/public-package-version-metadata.md)
+- [NuGet.org 公共包精确版本证据](nuget-org/public-package-version-evidence.md)
 - [PyPI 公共项目 Release 元数据](pypi/public-project-release-metadata.md)
 - [小红书账号 API 接口面](xiaohongshu/account-api-surface.md)
 - [小红书本人笔记摘要](xiaohongshu/owned-note-summary.md)
