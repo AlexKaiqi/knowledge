@@ -79,6 +79,38 @@
       "notes": "Current implemented route. Upstream publish success is not a receipt; the outer connector must rediscover and verify the note."
     },
     {
+      "id": "creator-web-xiaohongshu-skill",
+      "lifecycle": "researching",
+      "contractLevel": "full",
+      "accessMethod": "browser-assisted",
+      "automaticSelectionEligible": false,
+      "priority": 12,
+      "capabilityCoverage": [
+        {
+          "capabilityRef": "/capabilities/xiaohongshu/publish-private-note-and-observe.md",
+          "phases": ["authorize", "prepare", "submit", "observe"],
+          "gaps": ["No local adapter or live private-note probe exists; confirmed and submitted_unconfirmed outcomes are not yet reconciled to an owned-note receipt, and probe cleanup is unverified."]
+        }
+      ],
+      "failureDomains": ["xiaohongshu-creator-center", "creator-center-dom", "playwright-python-runtime", "cookie-session", "identity-state", "selector-contract", "platform-write"],
+      "sourceRefs": [
+        "https://github.com/DeliciousBuding/xiaohongshu-skill",
+        "https://github.com/DeliciousBuding/xiaohongshu-skill/blob/main/docs/ARCHITECTURE.md",
+        "https://github.com/DeliciousBuding/xiaohongshu-skill/blob/main/scripts/publish.py",
+        "https://github.com/DeliciousBuding/xiaohongshu-skill/blob/main/scripts/profiles.py"
+      ],
+      "upstream": {
+        "repository": "https://github.com/DeliciousBuding/xiaohongshu-skill.git",
+        "branch": "main",
+        "observedRevision": "afa96802d3e61cdd5e7bd7b37ec59182bbe07d37"
+      },
+      "maintenance": {
+        "owner": "xiaohongshu-maintainer",
+        "reviewOn": ["upstream-change", "source-change", "probe-failure", "contract-gap-change", "manual"]
+      },
+      "notes": "Highest-priority alternative route to adapt and probe: it exposes self-only visibility, explicit write confirmation, JSON output contracts, isolated profiles and fail-closed publish outcome states."
+    },
+    {
       "id": "creator-web-cnqqc-xhs-mcp",
       "lifecycle": "researching",
       "contractLevel": "full",

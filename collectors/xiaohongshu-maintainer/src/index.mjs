@@ -89,6 +89,7 @@ export function isRelevantDiscoveryCandidate(repository) {
 
 export async function discoverEcosystemProjects({ queries, repositorySearch, projectCatalog }) {
   const known = new Set(projectCatalog.projects.map((project) => canonicalRepositoryUrl(project.repository)))
+  const reviewedExclusions = new Map((projectCatalog.discoveryDecisions ?? []).map((decision) => [canonicalRepositoryUrl(decision.repository), decision]))
   const observations = []
   const candidates = new Map()
   for (const query of queries) {
@@ -105,6 +106,8 @@ export async function discoverEcosystemProjects({ queries, repositorySearch, pro
         if (!isRelevantDiscoveryCandidate(repository)) continue
         const repositoryKey = canonicalRepositoryUrl(repository.url)
         if (known.has(repositoryKey)) continue
+        const reviewedExclusion = reviewedExclusions.get(repositoryKey)
+        if (reviewedExclusion?.observedPushedAt === repository.pushedAt) continue
         const existing = candidates.get(repositoryKey)
         if (existing) {
           existing.matchedQueries.push(query)
@@ -169,7 +172,12 @@ async function defaultSourceCheck(source, fetchImpl, renderedObservation) {
 
 async function defaultUpstreamHead(repository, branch = 'main') {
   const result = await exec('git', ['ls-remote', repository, `refs/heads/${branch}`], { maxBuffer: 1024 * 1024 })
-  return result.stdout.trim().split(/\s+/)[0] ?? ''
+  return requireGitCommitId(result.stdout.trim().split(/\s+/)[0])
+}
+
+function requireGitCommitId(value) {
+  if (!/^[a-f0-9]{40}$/.test(value ?? '')) throw new Error('git-head-observation-invalid')
+  return value
 }
 
 async function defaultArtifactCheck(runtimeRoot) {
@@ -216,7 +224,7 @@ export async function collectXiaohongshuMaintenance({
     Promise.all(officialSources.map((source) => sourceCheck(source, fetchImpl, renderedSourceObservations[source.id]))),
     Promise.all(upstreamRoutes.map(async (route) => {
       try {
-        const currentHead = await readRouteHead(route.upstream.repository, route.upstream.branch)
+        const currentHead = requireGitCommitId(await readRouteHead(route.upstream.repository, route.upstream.branch))
         return {
           routeId: route.id,
           lifecycle: route.lifecycle,
@@ -245,7 +253,7 @@ export async function collectXiaohongshuMaintenance({
     Promise.all(projectCatalog.projects.map(async (project) => {
       const reviewDue = isProjectReviewDue(project, observedAtDate)
       try {
-        const currentHead = await projectHead(project.repository, project.branch, project)
+        const currentHead = requireGitCommitId(await projectHead(project.repository, project.branch, project))
         return {
           id: project.id,
           status: project.status,

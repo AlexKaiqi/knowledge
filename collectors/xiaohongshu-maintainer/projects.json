@@ -31,6 +31,11 @@
     "xhs comments",
     "rednote cli"
   ],
+  "discoveryDecisions": [
+    { "repository": "https://github.com/luyike221/xiaohongshu-mcp-python", "observedPushedAt": "2026-05-13T15:04:20Z", "decision": "duplicate-or-inherited-route", "reviewedAt": "2026-08-26T20:30:00Z" },
+    { "repository": "https://github.com/proerror77/xhs_mcp_agent", "observedPushedAt": "2025-04-25T07:43:54Z", "decision": "incomplete-or-non-runnable", "reviewedAt": "2026-08-26T20:30:00Z" },
+    { "repository": "https://github.com/op7418/guizang-social-card-skill", "observedPushedAt": "2026-07-01T16:39:11Z", "decision": "content-generation-only", "reviewedAt": "2026-08-26T20:30:00Z" }
+  ],
   "releaseTagBaselines": {
     "xpzouying-xiaohongshu-mcp": { "tagCount": 131, "digest": "ad80bdfcd84435d1e1a0fec7282c849f7ac73811395361018076f6b2ebe8c579" },
     "cnqqc-xhs-mcp": { "tagCount": 0, "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" },
@@ -53,7 +58,14 @@
     "bzlrj-java-xiaohongshu-mcp": { "tagCount": 0, "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" },
     "jogholy-xhs-publisher": { "tagCount": 0, "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" },
     "madsmmfu-xhs-autoposter": { "tagCount": 0, "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" },
-    "qjt0111-xiaohongshu-mcp-python": { "tagCount": 0, "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" }
+    "qjt0111-xiaohongshu-mcp-python": { "tagCount": 0, "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" },
+    "3441293738-creatorhub": { "tagCount": 0, "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" },
+    "autoclaw-cc-xiaohongshu-mcp-skills": { "tagCount": 0, "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" },
+    "betastreetomnis-xhs-ai-publisher": { "tagCount": 2, "digest": "706931dbddb0ad79497d862d036f3085f67f26d72014dc7d765fdead74ade245" },
+    "deliciousbuding-xiaohongshu-skill": { "tagCount": 4, "digest": "d18576f38004c1bcd03c2714a6cbec08ac0aaa612a6b9d7e7342a3511f542d05" },
+    "elanzuo-rednote-extract": { "tagCount": 0, "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" },
+    "nodite-rednote-mcp": { "tagCount": 4, "digest": "0f74694f6c352b440cbb92eaa28abdb4da0dc8a0ee9f8a1e7757e108c5fd1226" },
+    "qiutongxue-oba-live-tool": { "tagCount": 63, "digest": "ecc2d5936e30632fe9898ac803d50d5a8b9641d8299703912797d5eb4d63e366" }
   },
   "projects": [
     {
@@ -471,7 +483,7 @@
     {
       "id": "bzlrj-java-xiaohongshu-mcp",
       "repository": "https://github.com/bzlrj/java-xiaohongshu-mcp.git",
-      "branch": "main",
+      "branch": "master",
       "observedRevision": "d8d9e4dbbd988a79d9bbfc72b942cd1aa60b770a",
       "status": "researching",
       "roles": ["connector-candidate", "collector-candidate", "reference-implementation"],
@@ -480,7 +492,7 @@
       "capabilitySignals": ["authorize", "publish-image", "publish-video", "search", "note-detail", "comments", "user-profile"],
       "failureDomains": ["xiaohongshu-creator-center", "xiaohongshu-web-dom", "creator-center-dom", "playwright-java-runtime", "cookie-session", "api-contract"],
       "license": { "status": "verified", "spdx": "MIT", "dependencyUse": "allowed" },
-      "evidenceRefs": ["https://github.com/bzlrj/java-xiaohongshu-mcp", "https://github.com/bzlrj/java-xiaohongshu-mcp/blob/main/src/main/java/com/lv/xhsmcp/service/PublishService.java", "https://github.com/bzlrj/java-xiaohongshu-mcp/blob/main/src/main/java/com/lv/xhsmcp/service/SearchService.java", "https://github.com/bzlrj/java-xiaohongshu-mcp/blob/main/LICENSE"],
+      "evidenceRefs": ["https://github.com/bzlrj/java-xiaohongshu-mcp", "https://github.com/bzlrj/java-xiaohongshu-mcp/blob/master/src/main/java/com/lv/xhsmcp/service/PublishService.java", "https://github.com/bzlrj/java-xiaohongshu-mcp/blob/master/src/main/java/com/lv/xhsmcp/service/SearchService.java", "https://github.com/bzlrj/java-xiaohongshu-mcp/blob/master/LICENSE"],
       "gaps": ["The independent Java runtime is useful failure diversity, but it still shares Xiaohongshu DOM and intercepted web-API failure domains.", "Private visibility, a durable publication receipt, owned-note reconciliation, bounded pagination and local live conformance remain unverified."],
       "watch": { "priority": "high", "lastReviewedAt": "2026-08-26T19:50:00Z", "reviewCadenceDays": 7, "reviewOn": ["head-change", "release", "issue-change", "license-change", "archive", "cadence"] }
     },
@@ -563,6 +575,119 @@
       "evidenceRefs": ["https://github.com/Panniantong/Agent-Reach", "https://github.com/Panniantong/Agent-Reach/blob/main/agent_reach/channels/xiaohongshu.py", "https://github.com/Panniantong/Agent-Reach/blob/main/agent_reach/skill/references/social.md", "https://github.com/Panniantong/Agent-Reach/blob/main/LICENSE"],
       "gaps": ["This is an orchestrator over OpenCLI, xiaohongshu-mcp and xhs-cli, not a new independent platform route.", "Its read-only doctor correctly refuses to claim a route is usable without a live login/capability check; that negative-evidence pattern should inform the local Collector.", "Backend fallthrough must remain capability-specific and cannot retry ambiguous platform writes."],
       "watch": { "priority": "high", "lastReviewedAt": "2026-08-26T19:50:00Z", "reviewCadenceDays": 7, "reviewOn": ["head-change", "issue-change", "license-change", "archive", "cadence"] }
+    },
+    {
+      "id": "3441293738-creatorhub",
+      "repository": "https://github.com/3441293738/creatorhub.git",
+      "branch": "main",
+      "observedRevision": "ae4efb9b8fdac12cd885b54d4c4263a1bf398840",
+      "status": "blocked",
+      "roles": ["connector-candidate", "collector-candidate", "identity-pool-reference", "reference-implementation"],
+      "platformScope": "cross-platform",
+      "accessMechanisms": ["creator-center-dom", "public-web-dom", "creator-signed-api", "browser-cdp", "browser-playwright", "passive-network-observation", "multi-backend-routing"],
+      "capabilitySignals": ["authorize", "publish-image", "publish-video", "list-owned-notes", "comments", "direct-messages", "user-profile", "creator-analytics", "notifications", "schedule-publish", "publish-reconcile", "multi-account", "route-health", "media-download", "passive-capture"],
+      "failureDomains": ["xiaohongshu-creator-center", "xiaohongshu-web-dom", "creator-center-dom", "browser-cdp", "patchright-runtime", "cookie-session", "identity-state", "proxy-network", "platform-write", "persistent-task-queue"],
+      "license": { "status": "absent", "dependencyUse": "blocked", "constraint": "No root license was present at the observed revision; do not install, copy, vendor or execute it as a dependency without permission." },
+      "evidenceRefs": ["https://github.com/3441293738/creatorhub", "https://github.com/3441293738/creatorhub/blob/main/README.md", "https://github.com/3441293738/creatorhub/blob/main/app/engine/dm_automation.py", "https://github.com/3441293738/creatorhub/blob/main/app/risk.py"],
+      "gaps": ["Its per-account persistent profiles, exit-group serialization, risk cooldown and restart-safe task queue are valuable identity and maintenance references, but missing license blocks dependency use.", "A native WebSocket event only wakes a bounded private-message poll; message content, account identities and browser state require privacy-minimized schemas and credential references before any Connector can expose them.", "Publish and reply paths explicitly preserve ambiguous outcomes, but no local capability-specific live probe or OKF receipt contract exists."],
+      "watch": { "priority": "high", "lastReviewedAt": "2026-08-26T20:30:00Z", "reviewCadenceDays": 7, "reviewOn": ["head-change", "release", "issue-change", "license-change", "archive", "cadence"] }
+    },
+    {
+      "id": "autoclaw-cc-xiaohongshu-mcp-skills",
+      "repository": "https://github.com/autoclaw-cc/xiaohongshu-mcp-skills.git",
+      "branch": "main",
+      "observedRevision": "c79206ce4191fdb5f4c72d62155ed8ac49e7d0ae",
+      "status": "reference",
+      "roles": ["orchestration-reference", "evaluation-source"],
+      "platformScope": "xiaohongshu.com",
+      "accessMechanisms": ["local-mcp", "multi-backend-routing"],
+      "capabilitySignals": ["authorize", "publish-image", "publish-video", "search", "note-detail", "comments", "user-profile", "route-health"],
+      "failureDomains": ["xpzouying-code-lineage", "local-mcp", "browser-session", "tool-discovery", "agent-routing"],
+      "license": { "status": "verified", "spdx": "MIT", "dependencyUse": "allowed" },
+      "evidenceRefs": ["https://github.com/autoclaw-cc/xiaohongshu-mcp-skills", "https://github.com/autoclaw-cc/xiaohongshu-mcp-skills/blob/main/SKILL.md", "https://github.com/autoclaw-cc/xiaohongshu-mcp-skills/blob/main/skills/setup-xhs-mcp/SKILL.md", "https://github.com/autoclaw-cc/xiaohongshu-mcp-skills/blob/main/LICENSE"],
+      "gaps": ["This project adds Agent-facing setup, intent routing, confirmation and MCP-availability checks, but it delegates platform execution to xpzouying and is not an independent route.", "Tool presence and login status are useful preflight evidence but do not prove a capability-specific live contract or current publication receipt."],
+      "watch": { "priority": "medium", "lastReviewedAt": "2026-08-26T20:30:00Z", "reviewCadenceDays": 14, "reviewOn": ["head-change", "release", "issue-change", "license-change", "archive", "cadence"] }
+    },
+    {
+      "id": "betastreetomnis-xhs-ai-publisher",
+      "repository": "https://github.com/BetaStreetOmnis/xhs_ai_publisher.git",
+      "branch": "main",
+      "observedRevision": "cae58834688fb64fe72a99afb7bd14a56d442f8c",
+      "status": "researching",
+      "roles": ["connector-candidate", "identity-pool-reference", "reference-implementation"],
+      "platformScope": "xiaohongshu.com",
+      "accessMechanisms": ["creator-center-dom", "browser-playwright"],
+      "capabilitySignals": ["authorize", "publish-image", "draft-prepare", "schedule-publish", "publish-reconcile", "multi-account", "route-health"],
+      "failureDomains": ["xiaohongshu-creator-center", "creator-center-dom", "playwright-python-runtime", "local-browser-session", "persistent-task-queue", "platform-write"],
+      "license": { "status": "verified", "spdx": "Apache-2.0", "dependencyUse": "allowed" },
+      "evidenceRefs": ["https://github.com/BetaStreetOmnis/xhs_ai_publisher", "https://github.com/BetaStreetOmnis/xhs_ai_publisher/blob/main/src/core/write_xiaohongshu.py", "https://github.com/BetaStreetOmnis/xhs_ai_publisher/blob/main/src/core/scheduler/schedule_manager.py", "https://github.com/BetaStreetOmnis/xhs_ai_publisher/blob/main/LICENSE"],
+      "gaps": ["The publisher waits for visible success text or a safe page transition and fails closed when the result is uncertain; this is stronger than click-equals-success but still not a durable note receipt or owned-note reconciliation.", "Unattended scheduled writes need explicit approval lifetime, idempotency and account-specific limits before use.", "Private visibility and local live conformance are not established."],
+      "watch": { "priority": "high", "lastReviewedAt": "2026-08-26T20:30:00Z", "reviewCadenceDays": 7, "reviewOn": ["head-change", "release", "issue-change", "license-change", "archive", "cadence"] }
+    },
+    {
+      "id": "deliciousbuding-xiaohongshu-skill",
+      "repository": "https://github.com/DeliciousBuding/xiaohongshu-skill.git",
+      "branch": "main",
+      "observedRevision": "afa96802d3e61cdd5e7bd7b37ec59182bbe07d37",
+      "status": "candidate",
+      "roles": ["connector-candidate", "collector-candidate", "identity-pool-reference", "evaluation-source"],
+      "platformScope": "xiaohongshu.com",
+      "accessMechanisms": ["creator-center-dom", "public-web-dom", "browser-playwright"],
+      "capabilitySignals": ["authorize", "publish-image", "publish-video", "publish-private", "search", "note-detail", "comments", "user-profile", "draft-prepare", "schedule-publish", "publish-reconcile", "multi-account", "route-health"],
+      "failureDomains": ["xiaohongshu-creator-center", "xiaohongshu-web-dom", "creator-center-dom", "playwright-python-runtime", "cookie-session", "identity-state", "selector-contract", "platform-write"],
+      "license": { "status": "verified", "spdx": "Apache-2.0", "dependencyUse": "allowed" },
+      "evidenceRefs": ["https://github.com/DeliciousBuding/xiaohongshu-skill", "https://github.com/DeliciousBuding/xiaohongshu-skill/blob/main/docs/ARCHITECTURE.md", "https://github.com/DeliciousBuding/xiaohongshu-skill/blob/main/scripts/publish.py", "https://github.com/DeliciousBuding/xiaohongshu-skill/blob/main/scripts/profiles.py", "https://github.com/DeliciousBuding/xiaohongshu-skill/blob/main/LICENSE"],
+      "gaps": ["Its ready, confirmed, submitted_unconfirmed and failed result model plus explicit write confirmation are the best current candidate contract, but no local live probe has bound those states to the OKF capability.", "Self-only visibility is implemented but must be live-verified with a dedicated probe identity and then reconciled through an owned-note observation before automatic routing.", "Per-profile browser state must remain behind credential references; raw cookies and session files cannot enter reports or Git."],
+      "watch": { "priority": "high", "lastReviewedAt": "2026-08-26T20:30:00Z", "reviewCadenceDays": 7, "reviewOn": ["head-change", "release", "issue-change", "license-change", "archive", "cadence"] },
+      "notes": "Highest-priority alternative connector and probe candidate because it combines private visibility, fail-closed publish states, selector contracts, JSON outputs and isolated account profiles. It is not an automatic route until a local live probe passes."
+    },
+    {
+      "id": "elanzuo-rednote-extract",
+      "repository": "https://github.com/elanzuo/rednote-extract.git",
+      "branch": "main",
+      "observedRevision": "3d63bcb2d98770222b8de625bf9b86761aa38183",
+      "status": "reference",
+      "roles": ["collector-candidate", "reference-implementation"],
+      "platformScope": "xiaohongshu.com",
+      "accessMechanisms": ["public-web-dom", "in-page-api", "browser-extension", "passive-network-observation"],
+      "capabilitySignals": ["note-detail", "comments", "media-download", "passive-capture"],
+      "failureDomains": ["xiaohongshu-web-dom", "xiaohongshu-internal-api", "browser-extension", "interactive-browser-session", "page-injection", "download-storage"],
+      "license": { "status": "verified", "spdx": "GPL-3.0", "dependencyUse": "research-only", "constraint": "GPL-3.0 obligations apply; comment identity, IP-region data and media download require separate privacy, rights, retention and platform-policy review." },
+      "evidenceRefs": ["https://github.com/elanzuo/rednote-extract", "https://github.com/elanzuo/rednote-extract/blob/main/entrypoints/content.ts", "https://github.com/elanzuo/rednote-extract/blob/main/public/injected.js", "https://github.com/elanzuo/rednote-extract/blob/main/LICENSE"],
+      "gaps": ["Feed-response interception followed by direct API and DOM fallback is a useful passive Collector pattern, but the extension exposes no bounded, provenance-bearing service contract.", "Exported comments include author and IP-region fields that must be removed from any canonical research schema unless explicitly justified.", "Media extraction and storage are outside the current metadata-only boundary."],
+      "watch": { "priority": "medium", "lastReviewedAt": "2026-08-26T20:30:00Z", "reviewCadenceDays": 14, "reviewOn": ["head-change", "release", "issue-change", "license-change", "archive", "cadence"] }
+    },
+    {
+      "id": "nodite-rednote-mcp",
+      "repository": "https://github.com/nodite/RedNote-MCP.git",
+      "branch": "main",
+      "observedRevision": "60c09634caa7ea52ef80db6fffef28a860121eb4",
+      "status": "researching",
+      "roles": ["collector-candidate", "upstream-variant", "reference-implementation"],
+      "platformScope": "xiaohongshu.com",
+      "accessMechanisms": ["public-web-dom", "browser-playwright", "local-mcp"],
+      "capabilitySignals": ["authorize", "search", "note-detail", "comments", "route-health"],
+      "failureDomains": ["xiaohongshu-web-dom", "rebrowser-playwright-runtime", "cookie-session", "local-browser-session", "ifuryst-code-lineage"],
+      "license": { "status": "verified", "spdx": "MIT", "dependencyUse": "allowed" },
+      "evidenceRefs": ["https://github.com/nodite/RedNote-MCP", "https://github.com/nodite/RedNote-MCP/blob/main/src/tools/rednoteTools.ts", "https://github.com/nodite/RedNote-MCP/blob/main/src/browser/browserFactory.ts", "https://github.com/nodite/RedNote-MCP/blob/main/LICENSE"],
+      "gaps": ["This is a maintained iFurySt fork with completed comment retrieval and pinned rebrowser-playwright compatibility, not an independent platform failure domain.", "Raw cookie persistence must be replaced by an isolated credential reference, and search/detail/comment pagination and minimization are not OKF-bound.", "No local live conformance probe has been run."],
+      "watch": { "priority": "high", "lastReviewedAt": "2026-08-26T20:30:00Z", "reviewCadenceDays": 7, "reviewOn": ["head-change", "release", "issue-change", "license-change", "archive", "cadence"] }
+    },
+    {
+      "id": "qiutongxue-oba-live-tool",
+      "repository": "https://github.com/qiutongxue/oba-live-tool.git",
+      "branch": "main",
+      "observedRevision": "f5baa7bfa8e12d63ff4bfd65fbe09316f11a57b3",
+      "status": "researching",
+      "roles": ["connector-candidate", "collector-candidate", "identity-pool-reference", "reference-implementation"],
+      "platformScope": "cross-platform",
+      "accessMechanisms": ["creator-center-dom", "browser-playwright", "passive-network-observation", "multi-backend-routing"],
+      "capabilitySignals": ["authorize", "live-comments", "notifications", "multi-account", "route-health", "passive-capture"],
+      "failureDomains": ["xiaohongshu-live-console", "pugongying-live-console", "creator-center-dom", "playwright-runtime", "websocket-contract", "local-browser-session", "platform-comment-write"],
+      "license": { "status": "verified", "spdx": "MIT", "dependencyUse": "allowed" },
+      "evidenceRefs": ["https://github.com/qiutongxue/oba-live-tool", "https://github.com/qiutongxue/oba-live-tool/blob/main/electron/main/platforms/xiaohongshu/commentListener.ts", "https://github.com/qiutongxue/oba-live-tool/blob/main/electron/main/platforms/xiaohongshu-pgy/index.ts", "https://github.com/qiutongxue/oba-live-tool/blob/main/LICENSE"],
+      "gaps": ["This is the clearest source for Xiaohongshu Qianfan and Pugongying live-comment observation through the authenticated live console and WebSocket frames, a distinct surface from ordinary note comments.", "Automated live replies are account writes and need explicit approval, bounded rate controls, dedupe keys and receipt semantics before exposure.", "No local live identity, privacy-minimized event schema or conformance probe exists."],
+      "watch": { "priority": "high", "lastReviewedAt": "2026-08-26T20:30:00Z", "reviewCadenceDays": 7, "reviewOn": ["head-change", "release", "issue-change", "license-change", "archive", "cadence"] }
     }
   ]
 }

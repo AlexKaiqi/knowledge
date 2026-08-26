@@ -16,6 +16,7 @@ test('project catalog keeps research useful and non-admitting', () => {
 
 const pinnedRouteHeads = {
   'https://github.com/xpzouying/xiaohongshu-mcp.git': '6fb866a7db4e3dcce8dc00a0dde07370f3b12946',
+  'https://github.com/DeliciousBuding/xiaohongshu-skill.git': 'afa96802d3e61cdd5e7bd7b37ec59182bbe07d37',
   'https://github.com/CNQQC/xhs-mcp.git': '4915580ece0b2c65c5fc777225e2945a67e300d3',
   'https://github.com/dreammis/social-auto-upload.git': '1c66b7db4b30585bbb40c58eb0aa572ffa3cce97',
   'https://github.com/white0dew/XiaohongshuSkills.git': 'ba485253e51fabe6a99916f0d378fa97884b0b75',
@@ -56,11 +57,12 @@ test('discovery rotation covers all twenty queries in five UTC days', () => {
   assert.deepEqual([...selected].sort(), [...queries].sort())
 })
 
-test('release watch rotation covers all eligible projects in six UTC days', () => {
+test('release watch rotation covers all eligible projects in one full cycle', () => {
   const declared = projectCatalog.projects.filter((project) => project.watch.reviewOn.includes('release')).map((project) => project.id)
   assert.deepEqual(Object.keys(projectCatalog.releaseTagBaselines).sort(), declared.sort())
   const selected = new Set()
-  for (let day = 0; day < 6; day += 1) {
+  const fullCycleDays = Math.ceil(declared.length / 4)
+  for (let day = 0; day < fullCycleDays; day += 1) {
     for (const project of selectReleaseWatchProjects(projectCatalog, new Date(Date.UTC(2026, 7, 20 + day)))) selected.add(project.id)
   }
   assert.deepEqual([...selected].sort(), Object.keys(projectCatalog.releaseTagBaselines).sort())
@@ -145,6 +147,25 @@ test('ecosystem discovery is serial, bounded and deduplicates unseen repositorie
   assert.deepEqual(result.newCandidates[0].matchedQueries, ['xiaohongshu', 'xhs'])
 })
 
+test('discovery suppresses a reviewed exclusion only until the repository changes', async () => {
+  const repository = { fullName: 'example/xhs-renderer', url: 'https://github.com/example/xhs-renderer', description: 'xiaohongshu card tool', defaultBranch: 'main', licenseSpdx: 'MIT', archived: false, disabled: false, pushedAt: '2026-08-26T00:00:00Z' }
+  const projectCatalog = {
+    projects: [],
+    discoveryDecisions: [{ repository: repository.url, observedPushedAt: repository.pushedAt, decision: 'content-generation-only', reviewedAt: '2026-08-26T01:00:00Z' }],
+  }
+  const repositorySearch = async () => ({
+    coverage: { representation: 'ranked-page', ecosystemComplete: false },
+    rateLimit: { resource: 'search', remaining: 8 },
+    repositories: [repository],
+    conformance: { status: 'passed', assertions: [] },
+  })
+  const current = await discoverEcosystemProjects({ queries: ['xiaohongshu'], repositorySearch, projectCatalog })
+  assert.deepEqual(current.newCandidates, [])
+  repository.pushedAt = '2026-08-27T00:00:00Z'
+  const changed = await discoverEcosystemProjects({ queries: ['xiaohongshu'], repositorySearch, projectCatalog })
+  assert.equal(changed.newCandidates[0].fullName, repository.fullName)
+})
+
 test('maintainer is proposal-only and cannot promote an unverified connector', async () => {
   const routeHeadCalls = new Map()
   const report = await collectXiaohongshuMaintenance({
@@ -171,9 +192,9 @@ test('maintainer is proposal-only and cannot promote an unverified connector', a
   assert.ok(report.blockers.includes('capability-not-admitted:publishPrivateNoteAndObserve'))
   assert.equal(report.blockers.some((blocker) => blocker.endsWith(':listOwnedNotes')), false)
   assert.deepEqual(report.accessRoutes.automaticEligible, ['owned-notes-xiaohongshu-mcp'])
-  assert.equal(report.accessRoutes.upstreams.length, 8)
+  assert.equal(report.accessRoutes.upstreams.length, 9)
   assert.equal(routeHeadCalls.get('https://github.com/xpzouying/xiaohongshu-mcp.git'), 1)
-  assert.equal(report.ecosystemProjects.total, 31)
+  assert.equal(report.ecosystemProjects.total, 38)
   assert.equal(report.ecosystemProjects.discovery.queries.length, 4)
   assert.equal(report.ecosystemProjects.discovery.fullCycleDays, 5)
   assert.equal(report.ecosystemProjects.discovery.newCandidates.length, 0)
@@ -206,7 +227,7 @@ test('maintainer reports upstream drift for review without repinning', async () 
     artifactCheck: async () => [],
   })
   assert.equal(report.upstream.status, 'review-required')
-  assert.equal(report.proposals.length, 8)
+  assert.equal(report.proposals.length, 9)
   assert.deepEqual(report.proposals.slice(0, 2).map((proposal) => proposal.routeId), [
     'owned-notes-xiaohongshu-mcp',
     'creator-web-xiaohongshu-mcp',
@@ -273,6 +294,26 @@ test('maintainer keeps project drift separate from live route health', async () 
     kind: 'connector-change-proposal',
     projectId: 'jackwener-xiaohongshu-cli',
     action: 'review-research-project-update',
+  }])
+})
+
+test('maintainer treats an empty project HEAD observation as unreachable instead of drift', async () => {
+  const report = await collectXiaohongshuMaintenance({
+    repositorySearch: currentDiscovery,
+    releaseTags: currentReleaseTags,
+    sourceCheck: async (source) => ({ ...source, status: 'reachable', httpStatus: 200 }),
+    upstreamHead: currentRouteHead,
+    projectHead: async (_repository, _branch, project) => project.id === 'bzlrj-java-xiaohongshu-mcp' ? '' : project.observedRevision,
+    artifactCheck: async () => [],
+    now: () => new Date('2026-08-27T01:00:00Z'),
+  })
+  const observation = report.ecosystemProjects.observations.find((project) => project.id === 'bzlrj-java-xiaohongshu-mcp')
+  assert.equal(observation.headStatus, 'unreachable')
+  assert.equal(observation.currentHead, null)
+  assert.deepEqual(report.proposals, [{
+    kind: 'connector-change-proposal',
+    projectId: 'bzlrj-java-xiaohongshu-mcp',
+    action: 'restore-project-observation',
   }])
 })
 

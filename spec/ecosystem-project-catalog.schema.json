@@ -27,6 +27,21 @@
       "uniqueItems": true,
       "items": { "type": "string", "minLength": 1 }
     },
+    "discoveryDecisions": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["repository", "observedPushedAt", "decision", "reviewedAt"],
+        "properties": {
+          "repository": { "type": "string", "format": "uri" },
+          "observedPushedAt": { "type": "string", "format": "date-time" },
+          "decision": { "enum": ["content-generation-only", "duplicate-or-inherited-route", "incomplete-or-non-runnable", "no-concrete-platform-path", "no-new-maintenance-decision"] },
+          "reviewedAt": { "type": "string", "format": "date-time" }
+        }
+      }
+    },
     "releaseTagBaselines": {
       "type": "object",
       "propertyNames": { "$ref": "#/$defs/id" },
@@ -74,7 +89,7 @@
         "capabilitySignals": {
           "type": "array",
           "uniqueItems": true,
-          "items": { "enum": ["authorize", "publish-image", "publish-video", "publish-private", "list-owned-notes", "list-owned-videos", "note-detail", "public-video-metadata", "comments", "search", "user-profile", "creator-analytics", "notifications", "draft-prepare", "schedule-publish", "attach-product", "publish-reconcile", "multi-account", "route-health", "media-download", "transcript-extraction", "passive-capture", "benchmark"] }
+          "items": { "enum": ["authorize", "publish-image", "publish-video", "publish-private", "list-owned-notes", "list-owned-videos", "note-detail", "public-video-metadata", "comments", "live-comments", "direct-messages", "search", "user-profile", "creator-analytics", "notifications", "draft-prepare", "schedule-publish", "attach-product", "publish-reconcile", "multi-account", "route-health", "media-download", "transcript-extraction", "passive-capture", "benchmark"] }
         },
         "failureDomains": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/id" } },
         "license": {
