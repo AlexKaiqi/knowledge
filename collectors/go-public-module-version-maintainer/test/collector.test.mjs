@@ -9,7 +9,7 @@ const stableResult = {
     goMod: { moduleDirective: 'rsc.io/quote', content: 'module rsc.io/quote\n', sizeBytes: 20, sha256: 'abc', h1: 'h1:mod=' },
   },
   authentication: { status: 'authenticated', method: 'go-command-sumdb', verifier: 'go1.24.2', checksumDatabase: 'sum.golang.org' },
-  transfer: { archiveSizeBytes: 2987, archiveExecuted: false, cacheRemoved: true },
+  transfer: { archiveSizeBytes: 2987, delivery: 'direct', archiveExecuted: false, cacheRemoved: true },
   conformance: { status: 'passed', assertions: [{ id: 'authenticated', passed: true }] },
 }
 const acceptedState = { snapshot: stableResult, report: { expiresAt: '2099-01-01T00:00:00Z' } }

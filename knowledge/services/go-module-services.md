@@ -3,11 +3,11 @@ type: Service
 title: Go Module Mirror 与 Checksum Database
 description: Go 官方团队提供、由 Google 运行的公共模块镜像与可审计 checksum database；当前只准入精确公共模块版本的有界下载与完整性认证。
 tags: [go, module, proxy, checksum-database, transparency-log, public-service]
-generated: { by: connector:go-public-module-version, at: 2026-08-26T18:36:54Z }
+generated: { by: connector:go-public-module-version, at: 2026-08-26T18:44:39Z }
 verified:
-  - { by: probe:go-public-module-version-live-20260826, at: 2026-08-26T18:36:54Z }
+  - { by: probe:go-public-module-version-live-20260826, at: 2026-08-26T18:44:39Z }
 status: stable
-stale_after: 2026-09-02T18:36:54Z
+stale_after: 2026-09-02T18:44:39Z
 sources:
   - id: services
     resource: https://proxy.golang.org/
@@ -31,7 +31,7 @@ sources:
 
 Go 团队提供 `proxy.golang.org` 公共模块镜像和 `sum.golang.org` checksum database。镜像实现 GOPROXY 协议；checksum database 是带签名树头的透明日志，用于认证公开模块的 `go.sum` 行。当前 catalog 只验证了一个精确公共 module path/version 的读取闭环。
 
-已验证范围：固定 public proxy、固定 public checksum database、模块归档 HEAD 大小检查、精确版本 `.info`、`go.mod` 内容、模块文件树 h1、`go.mod` h1、官方 Go 客户端对签名树与证明的认证，以及临时 cache 清理。归档最多 32 MiB，实际下载但不执行；原始源码、zip、本地 cache 路径和透明日志原始响应不进入结果。
+已验证范围：固定 public proxy、固定 public checksum database、模块归档 HEAD 大小检查、官方签名存储单跳转、精确版本 `.info`、`go.mod` 内容、模块文件树 h1、`go.mod` h1、官方 Go 客户端对签名树与证明的认证，以及临时 cache 清理。归档最多 32 MiB，实际下载但不执行；签名 URL、原始源码、zip、本地 cache 路径和透明日志原始响应不进入结果。
 
 `.info` 的版本时间只受 HTTPS 传输保护，并不在 checksum database 的认证范围内。经认证的是模块文件树和 `go.mod` 内容对应的 h1。删除源仓库或 tag 不保证镜像立即删除已有版本；checksums 可能继续长期保留。
 

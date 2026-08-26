@@ -3,11 +3,11 @@ type: Capability
 title: 读取并认证公共 Go 模块精确版本
 description: 通过 Go 官方公共 Module Proxy 与 Checksum Database，读取精确公共模块版本并认证模块文件树和 go.mod 完整性。
 tags: [go, module, exact-version, go-mod, checksum, sumdb, integrity]
-generated: { by: connector:go-public-module-version, at: 2026-08-26T18:36:54Z }
+generated: { by: connector:go-public-module-version, at: 2026-08-26T18:44:39Z }
 verified:
-  - { by: probe:go-public-module-version-live-20260826, at: 2026-08-26T18:36:54Z }
+  - { by: probe:go-public-module-version-live-20260826, at: 2026-08-26T18:44:39Z }
 status: stable
-stale_after: 2026-09-02T18:36:54Z
+stale_after: 2026-09-02T18:44:39Z
 sources:
   - id: subject
     resource: ../../services/go-module-services.md
@@ -59,7 +59,7 @@ verification:
 
 # 读取并认证公共 Go 模块精确版本
 
-输入只接受 domain-like public module path、精确规范版本，以及固定为 `true` 的 `publicModuleAcknowledged`。Connector 固定使用 `https://proxy.golang.org` 与 `sum.golang.org`，拒绝 latest、branch、range、alternate proxy、direct/VCS fallback、凭据和未确认公开性的路径。
+输入只接受 domain-like public module path、精确规范版本，以及固定为 `true` 的 `publicModuleAcknowledged`。Connector 固定使用 `https://proxy.golang.org` 与 `sum.golang.org`，拒绝 latest、branch、range、alternate proxy、direct/VCS fallback、凭据和未确认公开性的路径。归档只允许直接返回，或单次跳转到 `storage.googleapis.com/proxy-golang-org-prod/` 的官方签名 URL；签名 URL 不进入结果。
 
 执行先对精确 `.zip` 做 HEAD 预检，缺失 `Content-Length` 或超过 32 MiB 就失败。随后在全新临时 cache 中用官方 Go command 下载该版本，并强制通过 SumDB 认证模块文件树和 `go.mod`。成功前递归恢复 Go 只读 cache 权限并删除整个 cache；归档只下载、不执行。
 

@@ -7,6 +7,7 @@ import { promisify } from 'node:util'
 
 export const GO_PROXY_BASE_URL = 'https://proxy.golang.org'
 export const GO_CHECKSUM_DATABASE = 'sum.golang.org'
+export const GO_PROXY_STORAGE_HOST = 'storage.googleapis.com'
 export const MAX_ARCHIVE_BYTES = 32 * 1024 * 1024
 export const MAX_GO_MOD_BYTES = 256 * 1024
 export const MAX_INFO_BYTES = 64 * 1024
@@ -63,12 +64,35 @@ async function preflightPublicModuleArchive(input, { fetchImpl, timeoutMs, userA
   const encodedModule = escapeGoProxyElement(input.modulePath).split('/').map(encodeURIComponent).join('/')
   const encodedVersion = encodeURIComponent(escapeGoProxyElement(input.version))
   const url = new URL(`/${encodedModule}/@v/${encodedVersion}.zip`, GO_PROXY_BASE_URL)
-  const response = await fetchImpl(url, {
+  let response = await fetchImpl(url, {
     method: 'HEAD',
     headers: { accept: 'application/zip', 'user-agent': userAgent },
-    redirect: 'error',
+    redirect: 'manual',
     signal: AbortSignal.timeout(timeoutMs),
   })
+  let delivery = 'direct'
+  if (response.status === 302) {
+    const location = response.headers.get('location')
+    let storageUrl
+    try { storageUrl = new URL(location) } catch { throw new Error('Go module proxy returned an invalid archive redirect') }
+    const signedQuery = ['Expires', 'GoogleAccessId', 'Signature'].every((key) => storageUrl.searchParams.has(key))
+    if (storageUrl.protocol !== 'https:'
+      || storageUrl.hostname !== GO_PROXY_STORAGE_HOST
+      || !storageUrl.pathname.startsWith('/proxy-golang-org-prod/')
+      || storageUrl.username
+      || storageUrl.password
+      || storageUrl.hash
+      || !signedQuery) {
+      throw new Error('Go module proxy archive redirect escaped the official signed storage origin')
+    }
+    response = await fetchImpl(storageUrl, {
+      method: 'HEAD',
+      headers: { accept: 'application/zip', 'user-agent': userAgent },
+      redirect: 'error',
+      signal: AbortSignal.timeout(timeoutMs),
+    })
+    delivery = 'official-storage-redirect'
+  }
   if (!response.ok) {
     const retry = retryMetadata(response.headers, now())
     throw new GoPublicModuleVersionError(
@@ -86,6 +110,7 @@ async function preflightPublicModuleArchive(input, { fetchImpl, timeoutMs, userA
   }
   return {
     archiveSizeBytes,
+    delivery,
     archiveEtag: response.headers.get('etag'),
     cacheControl: response.headers.get('cache-control'),
   }
@@ -263,6 +288,7 @@ export function normalizeGoPublicModuleVersion(raw, { input, preflight, observed
     },
     transfer: {
       archiveSizeBytes: preflight.archiveSizeBytes,
+      delivery: preflight.delivery ?? 'direct',
       archiveDownloaded: true,
       archiveExecuted: false,
       cacheScope: 'ephemeral',

@@ -31,6 +31,7 @@ function stableEvidence(result) {
     },
     transfer: {
       archiveSizeBytes: result.transfer.archiveSizeBytes,
+      delivery: result.transfer.delivery,
       archiveExecuted: result.transfer.archiveExecuted,
       cacheRemoved: result.transfer.cacheRemoved,
     },

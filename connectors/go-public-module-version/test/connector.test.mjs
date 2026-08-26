@@ -18,7 +18,7 @@ function raw(overrides = {}) {
   }
 }
 
-const preflight = { archiveSizeBytes: 2987, archiveEtag: '"fixture"', cacheControl: 'public, max-age=10800' }
+const preflight = { archiveSizeBytes: 2987, delivery: 'direct', archiveEtag: '"fixture"', cacheControl: 'public, max-age=10800' }
 
 test('normalizes authenticated module and go.mod evidence without local cache paths', () => {
   const result = normalizeGoPublicModuleVersion(raw(), { input, preflight, observedAt: '2026-08-27T00:00:00Z' })
@@ -54,6 +54,33 @@ test('uses Go case encoding and performs one bounded HEAD before the authenticat
   assert.match(requestedUrl, /rsc\.io\/quote\/@v\/v1\.5\.2\.zip$/)
   assert.equal(downloads, 1)
   assert.equal(result.transfer.archiveSizeBytes, 2987)
+  assert.equal(result.transfer.delivery, 'direct')
+})
+
+test('allows one official signed storage redirect without exposing its URL', async () => {
+  const calls = []
+  const storageUrl = 'https://storage.googleapis.com/proxy-golang-org-prod/archive.zip?Expires=1&GoogleAccessId=proxy%40example&Signature=signed'
+  const fetchImpl = async (url, options) => {
+    calls.push({ url: String(url), redirect: options.redirect })
+    if (calls.length === 1) return new Response(null, { status: 302, headers: { location: storageUrl } })
+    return new Response(null, { status: 200, headers: { 'content-type': 'application/zip', 'content-length': '2987' } })
+  }
+  const result = await readAuthenticatedPublicModuleVersion(input, { fetchImpl, downloadImpl: async () => raw() })
+  assert.equal(calls.length, 2)
+  assert.equal(calls[0].redirect, 'manual')
+  assert.equal(calls[1].redirect, 'error')
+  assert.equal(result.transfer.delivery, 'official-storage-redirect')
+  assert.doesNotMatch(JSON.stringify(result), /GoogleAccessId|Signature=signed/)
+})
+
+test('rejects redirects outside the official signed Go proxy storage origin', async () => {
+  let calls = 0
+  const fetchImpl = async () => {
+    calls += 1
+    return new Response(null, { status: 302, headers: { location: 'https://evil.example/archive.zip?Expires=1&GoogleAccessId=x&Signature=y' } })
+  }
+  await assert.rejects(() => readAuthenticatedPublicModuleVersion(input, { fetchImpl, downloadImpl: async () => raw() }), /escaped the official signed storage origin/)
+  assert.equal(calls, 1)
 })
 
 test('rejects missing or oversized archive lengths without downloading', async () => {

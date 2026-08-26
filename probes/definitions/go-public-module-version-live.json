@@ -9,15 +9,17 @@
   "effect": "local-write",
   "steps": [
     { "id": "preflight-known-module-archive", "operation": "readAuthenticatedPublicModuleVersion" },
+    { "id": "follow-allowlisted-official-storage-redirect", "operation": "readAuthenticatedPublicModuleVersion" },
     { "id": "authenticate-module-and-go-mod", "operation": "downloadAuthenticatedPublicModule" },
     { "id": "remove-isolated-module-cache", "operation": "cleanup" }
   ],
   "assertions": [
     "The official proxy serves the exact rsc.io/quote v1.5.2 module archive within the 32 MiB transfer budget.",
+    "The official proxy storage redirect used by k8s.io/kubernetes v1.34.0 is allowlisted by HTTPS host, path and signed query, limited to one hop, and not exposed in output.",
     "A fresh isolated Go module cache authenticates both module-tree and go.mod h1 values against sum.golang.org.",
     "The requested identity, version timestamp, module directive, go.mod SHA-256 and both authenticated h1 values match the reviewed fixture.",
     "The downloaded public archive is never executed, all cache paths and raw source files are excluded from output, and the isolated cache is removed before success."
   ],
   "cleanup": ["remove isolated Go module and build caches"],
-  "budget": { "timeoutSeconds": 45, "maxCost": 0, "currency": "CNY" }
+  "budget": { "timeoutSeconds": 75, "maxCost": 0, "currency": "CNY" }
 }
