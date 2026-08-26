@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "github-public-repository-search",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/github/search-public-repositories.md"],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "connectors/github-public-repository-search/src/index.mjs"
+  },
+  "configSchema": "repo:/connectors/github-public-repository-search/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [
+    { "capabilityRef": "/capabilities/github/search-public-repositories.md", "operation": "searchPublicRepositories" }
+  ],
+  "conformance": {
+    "status": "verified",
+    "probeReportRef": "/verifications/github/public-repository-search/report.json"
+  }
+}

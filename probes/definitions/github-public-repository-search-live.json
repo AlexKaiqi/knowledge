@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "github-public-repository-search-live",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/github/search-public-repositories.md",
+  "connectorId": "github-public-repository-search",
+  "environment": "production-public",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "search-known-public-repository", "operation": "searchPublicRepositories" },
+    { "id": "normalize-ranked-page", "operation": "normalizeRepositorySearchResponse" }
+  ],
+  "assertions": [
+    "The official GET /search/repositories endpoint accepts an unauthenticated public query using the pinned API version.",
+    "The result is not incomplete and contains xpzouying/xiaohongshu-mcp as a public repository.",
+    "The output exposes search rate-limit state, the 1,000-result window, ranked-page representation, and ecosystemComplete=false.",
+    "No token, credential, raw response, or private repository data is retained."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 30, "maxCost": 0, "currency": "CNY" }
+}

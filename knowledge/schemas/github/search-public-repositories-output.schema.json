@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/github/search-public-repositories-output.schema.json",
+  "title": "GitHubPublicRepositorySearchResult",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["source", "query", "coverage", "repositories", "rateLimit", "observedAt", "resultDigest", "conformance"],
+  "properties": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "endpoint", "apiVersion"],
+      "properties": {
+        "id": { "const": "github-public-repository-search" },
+        "endpoint": { "const": "https://api.github.com/search/repositories" },
+        "apiVersion": { "const": "2026-03-10" }
+      }
+    },
+    "query": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["query", "sort", "order", "page", "perPage"],
+      "properties": {
+        "query": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "sort": { "enum": ["best-match", "stars", "forks", "help-wanted-issues", "updated"] },
+        "order": { "enum": ["desc", "asc"] },
+        "page": { "type": "integer", "minimum": 1, "maximum": 10 },
+        "perPage": { "type": "integer", "minimum": 1, "maximum": 25 }
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["representation", "totalCount", "returnedCount", "incompleteResults", "accessibleResultCount", "resultWindowLimit", "pageExhausted", "ecosystemComplete"],
+      "properties": {
+        "representation": { "const": "ranked-page" },
+        "totalCount": { "type": "integer", "minimum": 0 },
+        "returnedCount": { "type": "integer", "minimum": 0, "maximum": 25 },
+        "incompleteResults": { "type": "boolean" },
+        "accessibleResultCount": { "type": ["integer", "null"], "minimum": 0, "maximum": 1000 },
+        "resultWindowLimit": { "const": 1000 },
+        "pageExhausted": { "type": "boolean" },
+        "ecosystemComplete": { "const": false }
+      }
+    },
+    "repositories": {
+      "type": "array",
+      "maxItems": 25,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "fullName", "url", "description", "defaultBranch", "fork", "archived", "disabled", "visibility", "licenseSpdx", "topics", "updatedAt", "pushedAt"],
+        "properties": {
+          "id": { "type": "integer", "minimum": 1 },
+          "fullName": { "type": "string", "pattern": "^[^/]+/[^/]+$" },
+          "url": { "type": "string", "format": "uri", "pattern": "^https://github\\.com/" },
+          "description": { "type": ["string", "null"] },
+          "defaultBranch": { "type": "string", "minLength": 1 },
+          "fork": { "type": "boolean" },
+          "archived": { "type": "boolean" },
+          "disabled": { "type": "boolean" },
+          "visibility": { "const": "public" },
+          "licenseSpdx": { "type": ["string", "null"] },
+          "topics": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+          "updatedAt": { "type": "string", "format": "date-time" },
+          "pushedAt": { "type": ["string", "null"], "format": "date-time" }
+        }
+      }
+    },
+    "rateLimit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["resource", "limit", "remaining", "resetAt"],
+      "properties": {
+        "resource": { "type": ["string", "null"] },
+        "limit": { "type": ["integer", "null"], "minimum": 0 },
+        "remaining": { "type": ["integer", "null"], "minimum": 0 },
+        "resetAt": { "type": ["string", "null"], "format": "date-time" }
+      }
+    },
+    "observedAt": { "type": "string", "format": "date-time" },
+    "resultDigest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "conformance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "assertions"],
+      "properties": {
+        "status": { "enum": ["passed", "review-required"] },
+        "assertions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "passed"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+              "passed": { "type": "boolean" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

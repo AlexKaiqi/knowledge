@@ -31,6 +31,9 @@ test('control-plane instances match their schemas', async () => {
     ['../spec/connector-definition.schema.json', '../connectors/douyin-open-platform-docs/connector.json'],
     ['../spec/collector-definition.schema.json', '../collectors/douyin-open-platform-docs-maintainer/collector.json'],
     ['../spec/probe-definition.schema.json', '../probes/definitions/douyin-open-platform-docs-live.json'],
+    ['../spec/connector-definition.schema.json', '../connectors/github-public-repository-search/connector.json'],
+    ['../spec/collector-definition.schema.json', '../collectors/github-public-repository-search-maintainer/collector.json'],
+    ['../spec/probe-definition.schema.json', '../probes/definitions/github-public-repository-search-live.json'],
   ]
   for (const [schemaPath, instancePath] of cases) {
     const validate = await validator(schemaPath)
@@ -55,10 +58,18 @@ test('Connector configuration schemas compile', async () => {
     '../connectors/xiaohongshu-account-docs/config.schema.json',
     '../connectors/xiaohongshu-community-rules-browser/config.schema.json',
     '../connectors/douyin-open-platform-docs/config.schema.json',
+    '../connectors/github-public-repository-search/config.schema.json',
   ]) {
     const schema = JSON.parse(await readFile(new URL(schemaPath, import.meta.url), 'utf8'))
     const ajv = new Ajv2020({ allErrors: true, strict: false })
     addFormats(ajv)
     assert.doesNotThrow(() => ajv.compile(schema))
   }
+})
+
+test('GitHub live snapshot payload matches its product output schema', async () => {
+  const validate = await validator('../knowledge/schemas/github/search-public-repositories-output.schema.json')
+  const snapshot = JSON.parse(await readFile(new URL('../knowledge/verifications/github/public-repository-search/snapshot.json', import.meta.url), 'utf8'))
+  const { schemaVersion: _schemaVersion, fixture: _fixture, ...payload } = snapshot
+  assert.equal(validate(payload), true, JSON.stringify(validate.errors))
 })

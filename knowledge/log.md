@@ -26,3 +26,7 @@ title: Knowledge bundle history
 - 通过公开 live probe 准入“抖音开放平台官方文档”Information Source 与能力接口面 Capability；5 个官方页面、7 类文档能力和 2 项安全要求均通过确定性语义校验。
 - 明确“文档存在”不等于“当前应用可调用”；抖音应用审核、scope、用户授权和业务操作仍未形成 Platform 闭环。
 - 完整可用闭环、已准入 Subject 和已准入 Capability 均更新为 4。
+- 通过公开 live probe 准入 GitHub Platform 与“搜索公共仓库”Capability；官方 REST API `2026-03-10` 版本实际命中已知小红书项目。
+- 搜索输出固定为有界 `ranked-page`，显式保留 Search 限流、`incomplete_results` 和 1,000 条窗口，并将 `ecosystemComplete` 固定为 false。
+- 增加 proposal-only Collector，持续检查 API conformance、验证过期，以及 fixture 的归档、禁用、许可、可见性和默认分支变化。
+- 完整可用闭环、已准入 Subject 和已准入 Capability 均更新为 5。

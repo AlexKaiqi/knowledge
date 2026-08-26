@@ -1,0 +1,101 @@
+{
+  "schemaVersion": "dsh.github-public-repository-search-snapshot/v1",
+  "fixture": {
+    "expectedRepository": "xpzouying/xiaohongshu-mcp"
+  },
+  "source": {
+    "id": "github-public-repository-search",
+    "endpoint": "https://api.github.com/search/repositories",
+    "apiVersion": "2026-03-10"
+  },
+  "query": {
+    "query": "xiaohongshu-mcp in:name user:xpzouying",
+    "sort": "best-match",
+    "order": "desc",
+    "page": 1,
+    "perPage": 5
+  },
+  "coverage": {
+    "representation": "ranked-page",
+    "totalCount": 2,
+    "returnedCount": 2,
+    "incompleteResults": false,
+    "accessibleResultCount": 2,
+    "resultWindowLimit": 1000,
+    "pageExhausted": true,
+    "ecosystemComplete": false
+  },
+  "repositories": [
+    {
+      "id": 1031215137,
+      "fullName": "xpzouying/xiaohongshu-mcp",
+      "url": "https://github.com/xpzouying/xiaohongshu-mcp",
+      "description": "MCP for xiaohongshu.com",
+      "defaultBranch": "main",
+      "fork": false,
+      "archived": false,
+      "disabled": false,
+      "visibility": "public",
+      "licenseSpdx": "Apache-2.0",
+      "topics": [
+        "mcp",
+        "mcp-server",
+        "xiaohongshu-mcp"
+      ],
+      "updatedAt": "2026-08-26T17:11:55Z",
+      "pushedAt": "2026-08-24T05:12:40Z"
+    },
+    {
+      "id": 1056207238,
+      "fullName": "xpzouying/xiaohongshu-mcp-showcase",
+      "url": "https://github.com/xpzouying/xiaohongshu-mcp-showcase",
+      "description": null,
+      "defaultBranch": "main",
+      "fork": false,
+      "archived": false,
+      "disabled": false,
+      "visibility": "public",
+      "licenseSpdx": null,
+      "topics": [],
+      "updatedAt": "2025-09-13T16:01:41Z",
+      "pushedAt": "2025-09-13T16:01:38Z"
+    }
+  ],
+  "rateLimit": {
+    "resource": "search",
+    "limit": 10,
+    "remaining": 9,
+    "resetAt": "2026-08-26T17:14:24.000Z"
+  },
+  "observedAt": "2026-08-26T17:13:25.251Z",
+  "resultDigest": "a70d5b60bc4e48a150344bee034fd4520b3e049eb6042994b60e2e2879343d3f",
+  "conformance": {
+    "status": "passed",
+    "assertions": [
+      {
+        "id": "response-shape",
+        "passed": true
+      },
+      {
+        "id": "api-version",
+        "passed": true
+      },
+      {
+        "id": "search-rate-bucket",
+        "passed": true
+      },
+      {
+        "id": "page-bound",
+        "passed": true
+      },
+      {
+        "id": "public-repositories-only",
+        "passed": true
+      },
+      {
+        "id": "complete-response",
+        "passed": true
+      }
+    ]
+  }
+}

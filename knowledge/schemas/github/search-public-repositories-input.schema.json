@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/github/search-public-repositories-input.schema.json",
+  "title": "SearchGitHubPublicRepositoriesInput",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["query"],
+  "properties": {
+    "query": { "type": "string", "minLength": 1, "maxLength": 256, "pattern": "^[^\\r\\n]+$" },
+    "sort": { "enum": ["best-match", "stars", "forks", "help-wanted-issues", "updated"], "default": "best-match" },
+    "order": { "enum": ["desc", "asc"], "default": "desc" },
+    "page": { "type": "integer", "minimum": 1, "maximum": 10, "default": 1 },
+    "perPage": { "type": "integer", "minimum": 1, "maximum": 25, "default": 10 }
+  }
+}

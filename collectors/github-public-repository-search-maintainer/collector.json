@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "dsh.collector-definition/v1",
+  "id": "github-public-repository-search-maintainer",
+  "version": "1.0.0",
+  "scope": {
+    "knowledgeGlobs": [
+      "knowledge/platforms/github.md",
+      "knowledge/concepts/github/public-repository-search-result.md",
+      "knowledge/capabilities/github/search-public-repositories.md",
+      "knowledge/schemas/github/search-public-repositories-*.schema.json",
+      "knowledge/verifications/github/public-repository-search/*.json"
+    ],
+    "connectorIds": ["github-public-repository-search"],
+    "capabilityRefs": ["/capabilities/github/search-public-repositories.md"]
+  },
+  "triggers": [
+    { "kind": "schedule", "schedule": "15 6 * * *" },
+    { "kind": "source-change" },
+    { "kind": "connector-change" },
+    { "kind": "failed-execution" },
+    { "kind": "manual" }
+  ],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "collectors/github-public-repository-search-maintainer/src/index.mjs"
+  },
+  "outputs": ["knowledge-proposal", "connector-change-proposal", "verification-report"],
+  "writePolicy": { "mode": "proposal-only", "requiresApprovalFor": ["knowledge", "connector", "live-probe"] },
+  "probePolicy": { "allowedEnvironments": ["production-public"], "identityPoolRefs": [], "maximumEffect": "none" },
+  "budgets": { "maxRunsPerDay": 4, "maxCostPerDay": 0, "currency": "CNY" }
+}
