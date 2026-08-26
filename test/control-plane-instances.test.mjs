@@ -44,6 +44,11 @@ test('control-plane instances match their schemas', async () => {
     ['../spec/collector-definition.schema.json', '../collectors/docker-hub-public-image-manifest-maintainer/collector.json'],
     ['../spec/ecosystem-project-catalog.schema.json', '../collectors/docker-hub-public-image-manifest-maintainer/projects.json'],
     ['../spec/probe-definition.schema.json', '../probes/definitions/docker-hub-public-image-manifest-live.json'],
+    ['../spec/connector-definition.schema.json', '../connectors/maven-central-public-jar-release/connector.json'],
+    ['../spec/collector-definition.schema.json', '../collectors/maven-central-public-jar-release-maintainer/collector.json'],
+    ['../spec/source-watch-list.schema.json', '../collectors/maven-central-public-jar-release-maintainer/sources.json'],
+    ['../spec/ecosystem-project-catalog.schema.json', '../collectors/maven-central-public-jar-release-maintainer/projects.json'],
+    ['../spec/probe-definition.schema.json', '../probes/definitions/maven-central-public-jar-release-live.json'],
     ['../spec/connector-definition.schema.json', '../connectors/github-public-repository-search/connector.json'],
     ['../spec/collector-definition.schema.json', '../collectors/github-public-repository-search-maintainer/collector.json'],
     ['../spec/probe-definition.schema.json', '../probes/definitions/github-public-repository-search-live.json'],
@@ -98,6 +103,7 @@ test('Connector configuration schemas compile', async () => {
     '../connectors/douyin-public-video-embed/config.schema.json',
     '../connectors/hugging-face-public-model-revision/config.schema.json',
     '../connectors/docker-hub-public-image-manifest/config.schema.json',
+    '../connectors/maven-central-public-jar-release/config.schema.json',
     '../connectors/github-public-repository-search/config.schema.json',
     '../connectors/github-public-repository-file/config.schema.json',
     '../connectors/github-public-repository-tags/config.schema.json',
@@ -195,6 +201,13 @@ test('Hugging Face public model revision live snapshot matches its product outpu
 test('Docker Hub public image manifest live snapshot matches its product output schema', async () => {
   const validate = await validator('../knowledge/schemas/docker-hub/read-public-image-manifest-by-digest-output.schema.json')
   const snapshot = JSON.parse(await readFile(new URL('../knowledge/verifications/docker-hub/public-image-manifest/snapshot.json', import.meta.url), 'utf8'))
+  const { schemaVersion: _schemaVersion, fixture: _fixture, ...payload } = snapshot
+  assert.equal(validate(payload), true, JSON.stringify(validate.errors))
+})
+
+test('Maven Central public JAR release live snapshot matches its product output schema', async () => {
+  const validate = await validator('../knowledge/schemas/maven-central/read-public-jar-release-evidence-output.schema.json')
+  const snapshot = JSON.parse(await readFile(new URL('../knowledge/verifications/maven-central/public-jar-release/snapshot.json', import.meta.url), 'utf8'))
   const { schemaVersion: _schemaVersion, fixture: _fixture, ...payload } = snapshot
   assert.equal(validate(payload), true, JSON.stringify(validate.errors))
 })

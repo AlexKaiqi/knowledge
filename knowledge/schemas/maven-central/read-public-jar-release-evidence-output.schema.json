@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/maven-central/read-public-jar-release-evidence-output.schema.json",
+  "title": "ReadMavenCentralPublicJarReleaseEvidenceOutput",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["source", "request", "release", "access", "observedAt", "resultDigest", "conformance"],
+  "properties": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "repositoryOrigin", "repositoryRoot", "endpointTemplate"],
+      "properties": {
+        "id": { "const": "maven-central-public-jar-release" },
+        "repositoryOrigin": { "const": "https://repo.maven.apache.org" },
+        "repositoryRoot": { "const": "https://repo.maven.apache.org/maven2" },
+        "endpointTemplate": { "const": "https://repo.maven.apache.org/maven2/{groupPath}/{artifactId}/{version}/{fileName}" }
+      }
+    },
+    "request": { "$ref": "#/$defs/request" },
+    "release": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["gav", "groupId", "artifactId", "version", "packaging", "repositoryPath", "pomModelVersion", "pomCoordinatesVerified", "fileCount", "totalPayloadBytes", "files", "signaturePresent", "signatureCryptographicallyVerified"],
+      "properties": {
+        "gav": { "type": "string", "minLength": 5, "maxLength": 515 },
+        "groupId": { "$ref": "#/$defs/groupId" },
+        "artifactId": { "$ref": "#/$defs/artifactId" },
+        "version": { "$ref": "#/$defs/version" },
+        "packaging": { "const": "jar" },
+        "repositoryPath": { "type": "string", "minLength": 3, "maxLength": 515, "pattern": "^[A-Za-z0-9_./+-]+$" },
+        "pomModelVersion": { "const": "4.0.0" },
+        "pomCoordinatesVerified": { "const": true },
+        "fileCount": { "const": 3 },
+        "totalPayloadBytes": { "type": "integer", "minimum": 1, "maximum": 34865152 },
+        "files": { "type": "array", "minItems": 3, "maxItems": 3, "items": { "$ref": "#/$defs/file" } },
+        "signaturePresent": { "const": true },
+        "signatureCryptographicallyVerified": { "const": false }
+      }
+    },
+    "access": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["authentication", "httpGetCount", "checksumSidecarCount", "downloadedJarBytes", "filesExecuted"],
+      "properties": {
+        "authentication": { "const": "none" },
+        "httpGetCount": { "const": 5 },
+        "checksumSidecarCount": { "const": 2 },
+        "downloadedJarBytes": { "type": "integer", "minimum": 1, "maximum": 33554432 },
+        "filesExecuted": { "const": false }
+      }
+    },
+    "observedAt": { "type": "string", "format": "date-time" },
+    "resultDigest": { "$ref": "#/$defs/sha256" },
+    "conformance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "assertions"],
+      "properties": {
+        "status": { "enum": ["passed", "review-required"] },
+        "assertions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "passed"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+              "passed": { "type": "boolean" }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "groupId": { "type": "string", "minLength": 1, "maxLength": 255, "pattern": "^[A-Za-z0-9_]+(?:[.-][A-Za-z0-9_]+)*$" },
+    "artifactId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[A-Za-z0-9_](?:[A-Za-z0-9_.+-]*[A-Za-z0-9_])?$" },
+    "version": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^(?!(?:[Ll][Aa][Tt][Ee][Ss][Tt]|[Rr][Ee][Ll][Ee][Aa][Ss][Ee])$)(?!.*(?:^|[-.])[Ss][Nn][Aa][Pp][Ss][Hh][Oo][Tt]$)[A-Za-z0-9](?:[A-Za-z0-9._+-]*[A-Za-z0-9])?$" },
+    "sha1": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["groupId", "artifactId", "version"],
+      "properties": {
+        "groupId": { "$ref": "#/$defs/groupId" },
+        "artifactId": { "$ref": "#/$defs/artifactId" },
+        "version": { "$ref": "#/$defs/version" }
+      }
+    },
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["role", "fileName", "url", "sizeBytes", "sha1", "sha256", "checksumSource"],
+      "properties": {
+        "role": { "enum": ["pom", "jar", "jar-signature"] },
+        "fileName": { "type": "string", "minLength": 5, "maxLength": 300, "pattern": "^[A-Za-z0-9_.+-]+$" },
+        "url": { "type": "string", "format": "uri", "pattern": "^https://repo\\.maven\\.apache\\.org/maven2/" },
+        "sizeBytes": { "type": "integer", "minimum": 1, "maximum": 33554432 },
+        "sha1": { "$ref": "#/$defs/sha1" },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "checksumSource": { "enum": ["central-sidecar-verified", "local-only"] }
+      }
+    }
+  }
+}

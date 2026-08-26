@@ -70,11 +70,11 @@ Subject knowledge
 ## 当前状态
 
 ```text
-完整可用闭环：16（Information Source 4；Platform 11；Service 1）
-已准入 Subject：13
-已准入 Capability：16
-Connector：15 个已验证；xiaohongshu-browser 为 mixed（读取已验证、发布候选）
-维护 Collector：17
+完整可用闭环：17（Information Source 4；Platform 12；Service 1）
+已准入 Subject：14
+已准入 Capability：17
+Connector：16 个已验证；xiaohongshu-browser 为 mixed（读取已验证、发布候选）
+维护 Collector：18
 ```
 
 小红书已有三个真实闭环：官方账号 API 参考、浏览器渲染的社区公约信息源，以及通过自有账号会话读取本人笔记列表的平台能力。后者 live probe 实际返回可用的空列表。笔记发布、详情反查与反馈采集仍是候选能力，尚未完成真实私密发布闭环。仓库不创建空的平台、Connector 或 Collector 占位。
@@ -90,6 +90,8 @@ GitHub 已有四个真实 Platform 闭环：通过官方 REST API、无需身份
 Hugging Face Hub 已有一个真实 Platform 闭环：无需身份按 `namespace/name` 和完整 40 位 commit 读取公开、非 gated、未禁用模型的有界完整文件清单。输出包含 pipeline/library/tags、文件路径和声明大小、Git blob SHA-1 及可用的 LFS SHA-256/Xet hash，并显式返回官方 5 分钟 `api` RateLimit 观测；不读取本机 HF token，不接受 `main`/tag，不下载或执行模型文件，也不把模型卡的 `license:*` tag 当作许可证审计。
 
 Docker Hub 已有一个真实 Platform 闭环：无需 Docker ID，Connector 内部交换只含目标公开仓库 `pull` scope 的匿名短期 token，再按精确 `sha256` digest 读取 OCI/Docker schema 2 image index 或 image manifest。响应字节在本地重算摘要，并与请求和 `Docker-Content-Digest` 三方核对；输出保留有界 descriptor 次序、平台选择字段和已识别 attestation 引用，但不接受 tag，不下载 config/layer/attestation blob，不执行镜像，也不把 descriptor 或 annotation 冒充签名、provenance、安全或许可证结论。维护 Collector 同时观察 Docker Docs、Distribution 实现、OCI Distribution Spec 与 OCI Image Spec 四个开源上游；变化只生成 proposal。
+
+Maven Central 已有一个真实 Platform 闭环：无需身份按精确非 SNAPSHOT GAV，从 Maven 官方 Central endpoint 完整读取 POM、主 JAR、两份强制 SHA-1 sidecar 和 JAR PGP sidecar。Connector 验证 POM 有效坐标/`jar` packaging、POM/JAR 的本地 SHA-1、sidecar 与 Central checksum header，并自行计算 SHA-256；不读取 Maven settings/`~/.m2`，不使用 mirror，不解析依赖，不安装或执行 JAR。PGP sidecar 只证明存在和字节稳定，未完成 key/trust/密码学验签。维护 Collector 同时语义观察三份官网契约和 Apache Maven、Maven Resolver、Maven Site 三个开源上游，变化只生成 proposal。
 
 npm Public Registry 已有一个真实 Platform 闭环：无需身份按精确 package name 和精确 semver 读取最小化公共版本元数据。输出保留 license/deprecation/repository/engines 声明和 tarball 的 SHA-512 SRI、SHA-1 shasum、固定 Registry URL，同时排除 author、maintainers、contributors 和邮箱。它可用于依赖证据核验，但不下载或执行包，也不把 license 字段冒充独立授权结论。
 

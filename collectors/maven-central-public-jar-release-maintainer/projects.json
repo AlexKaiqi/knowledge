@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "dsh.ecosystem-project-catalog/v1",
+  "id": "maven-central-upstreams",
+  "subject": "maven-central",
+  "selectionPolicy": {
+    "purpose": "Observe only Apache Maven projects that define Central repository defaults, artifact resolution/checksum behavior, or the repository-layout documentation consumed by the Connector.",
+    "requiredEvidence": ["public-repository", "exact-reviewed-revision", "contract-relevance"],
+    "includeWhenAny": ["defines-central-default", "implements-checksum-policy", "defines-repository-layout"],
+    "excludeWhenAll": ["client-only", "no-contract-impact"],
+    "admissionBoundary": "HEAD changes create proposals only; they never alter coordinates, accepted checksums, schemas, or Connector behavior automatically."
+  },
+  "searchQueries": ["Maven Central repository layout checksum resolver"],
+  "projects": [
+    {
+      "id": "apache-maven",
+      "repository": "https://github.com/apache/maven.git",
+      "branch": "master",
+      "observedRevision": "79f7ee41cd24e46f4527fc5db71b333d9b255fa6",
+      "status": "reference",
+      "roles": ["reference-implementation", "evaluation-source"],
+      "platformScope": "cross-platform",
+      "accessMechanisms": ["manual-evaluation"],
+      "capabilitySignals": [],
+      "failureDomains": ["central-default-url", "repository-session", "checksum-policy"],
+      "license": { "status": "verified", "spdx": "Apache-2.0", "dependencyUse": "allowed" },
+      "evidenceRefs": ["https://github.com/apache/maven", "https://maven.apache.org/pom.html"],
+      "gaps": ["Maven client behavior does not prove the live Central repository bytes or Sonatype policy."],
+      "watch": { "priority": "high", "lastReviewedAt": "2026-08-26T21:48:30Z", "reviewCadenceDays": 7, "reviewOn": ["head-change", "release", "license-change", "cadence"] },
+      "notes": "The previous reviewed HEAD cee6a96ccfbf186e0913e8612436bd557cdf1efa advanced to this revision with Maven-version-range profile activation and reactor test changes only; Central URL, repository layout, checksum, transport and retry contracts were unaffected."
+    },
+    {
+      "id": "apache-maven-resolver",
+      "repository": "https://github.com/apache/maven-resolver.git",
+      "branch": "master",
+      "observedRevision": "91f1b9ac3e6417f859e82ec54ca52796883231d8",
+      "status": "reference",
+      "roles": ["reference-implementation", "evaluation-source"],
+      "platformScope": "cross-platform",
+      "accessMechanisms": ["manual-evaluation"],
+      "capabilitySignals": [],
+      "failureDomains": ["artifact-transport", "checksum-policy", "retry-behavior"],
+      "license": { "status": "verified", "spdx": "Apache-2.0", "dependencyUse": "allowed" },
+      "evidenceRefs": ["https://github.com/apache/maven-resolver"],
+      "gaps": ["The Connector intentionally does not inherit Maven Resolver retries, mirrors, local cache, dependency graph resolution, or trusted-checksum configuration."],
+      "watch": { "priority": "high", "lastReviewedAt": "2026-08-27T00:00:00Z", "reviewCadenceDays": 7, "reviewOn": ["head-change", "release", "license-change", "cadence"] }
+    },
+    {
+      "id": "apache-maven-site",
+      "repository": "https://github.com/apache/maven-site.git",
+      "branch": "master",
+      "observedRevision": "191831d9e572c0accf5242fd94f528d67cfa72ee",
+      "status": "reference",
+      "roles": ["evaluation-source"],
+      "platformScope": "cross-platform",
+      "accessMechanisms": ["manual-evaluation"],
+      "capabilitySignals": [],
+      "failureDomains": ["repository-layout-documentation", "artifact-coordinate-semantics"],
+      "license": { "status": "verified", "spdx": "Apache-2.0", "dependencyUse": "allowed" },
+      "evidenceRefs": ["https://github.com/apache/maven-site", "https://maven.apache.org/repository/layout.html"],
+      "gaps": ["Documentation changes require human review before the path constructor or product contract changes."],
+      "watch": { "priority": "high", "lastReviewedAt": "2026-08-27T00:00:00Z", "reviewCadenceDays": 14, "reviewOn": ["head-change", "release", "license-change", "cadence"] }
+    }
+  ]
+}

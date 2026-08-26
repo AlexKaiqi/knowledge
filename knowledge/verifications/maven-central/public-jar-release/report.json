@@ -1,0 +1,80 @@
+{
+  "schemaVersion": "dsh.probe-report/v1",
+  "id": "maven-central-public-jar-release-live-20260826",
+  "capabilityRef": "/capabilities/maven-central/read-public-jar-release-evidence.md",
+  "connectorId": "maven-central-public-jar-release",
+  "probeDefinitionRef": "repo:/probes/definitions/maven-central-public-jar-release-live.json",
+  "environment": "production-public",
+  "level": "live",
+  "outcome": "passed",
+  "startedAt": "2026-08-26T21:44:24.673Z",
+  "finishedAt": "2026-08-26T21:44:25.418Z",
+  "expiresAt": "2026-09-02T21:44:25.418Z",
+  "checks": [
+    {
+      "id": "exact-release-gav",
+      "status": "passed"
+    },
+    {
+      "id": "pom-coordinate-and-packaging",
+      "status": "passed"
+    },
+    {
+      "id": "mandatory-sha1-sidecars-verified",
+      "status": "passed"
+    },
+    {
+      "id": "repository-sha1-headers",
+      "status": "passed"
+    },
+    {
+      "id": "jar-signature-sidecar-present",
+      "status": "passed"
+    },
+    {
+      "id": "bounded-five-get-access",
+      "status": "passed"
+    },
+    {
+      "id": "personal-and-raw-fields-excluded",
+      "status": "passed"
+    },
+    {
+      "id": "artifact-not-executed",
+      "status": "passed"
+    },
+    {
+      "id": "fixture-gav-and-pom",
+      "status": "passed"
+    },
+    {
+      "id": "fixture-file-integrity",
+      "status": "passed"
+    },
+    {
+      "id": "signature-verification-boundary",
+      "status": "passed"
+    },
+    {
+      "id": "data-minimization",
+      "status": "passed"
+    },
+    {
+      "id": "no-install-or-execution",
+      "status": "passed"
+    }
+  ],
+  "evidence": [
+    {
+      "kind": "snapshot",
+      "ref": "repo:/knowledge/verifications/maven-central/public-jar-release/snapshot.json",
+      "sha256": "442a1021bb9ebaf5b4ff17eab2727899eba7c37b74ad02c7fa32bca2d3dea0d8"
+    }
+  ],
+  "sideEffects": [
+    {
+      "effect": "none",
+      "status": "none"
+    }
+  ]
+}

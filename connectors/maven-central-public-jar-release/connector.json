@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "maven-central-public-jar-release",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/maven-central/read-public-jar-release-evidence.md"],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "connectors/maven-central-public-jar-release/src/index.mjs"
+  },
+  "configSchema": "repo:/connectors/maven-central-public-jar-release/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [
+    {
+      "capabilityRef": "/capabilities/maven-central/read-public-jar-release-evidence.md",
+      "operation": "readPublicJarReleaseEvidence"
+    }
+  ],
+  "conformance": {
+    "status": "verified",
+    "probeReportRef": "/verifications/maven-central/public-jar-release/report.json"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "maven-central",
+  "sources": [
+    {
+      "id": "central-publishing-requirements",
+      "url": "https://central.sonatype.org/publish/requirements/",
+      "role": "checksum-and-signature-policy",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "sha1-required", "includes": ".md5 and .sha1 are required" },
+          { "id": "sha256-optional", "includes": ".sha256 and .sha512 are supported but not mandatory" },
+          { "id": "pgp-signature-required", "includes": "Sign Files with GPG/PGP" }
+        ]
+      }
+    },
+    {
+      "id": "central-immutability-policy",
+      "url": "https://central.sonatype.org/publish/requirements/immutability/",
+      "role": "release-immutability-policy",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "no-remove-or-modify", "includes": "we do not remove or modify components once they are publicly available" }
+        ]
+      }
+    },
+    {
+      "id": "maven-repository-layout",
+      "url": "https://maven.apache.org/repository/layout.html",
+      "role": "coordinate-to-path-contract",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "group-path-rule", "includes": "groupId as directory" },
+          { "id": "artifact-filename-rule", "includes": "artifactId}-${version}.${extension" }
+        ]
+      }
+    }
+  ]
+}

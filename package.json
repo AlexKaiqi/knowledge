@@ -37,6 +37,8 @@
     "hugging-face:model-revision:maintain": "node collectors/hugging-face-public-model-revision-maintainer/src/index.mjs",
     "docker-hub:image-manifest:probe": "node scripts/probe-docker-hub-public-image-manifest.mjs",
     "docker-hub:image-manifest:maintain": "node collectors/docker-hub-public-image-manifest-maintainer/src/index.mjs",
+    "maven-central:jar-release:probe": "node scripts/probe-maven-central-public-jar-release.mjs",
+    "maven-central:jar-release:maintain": "node collectors/maven-central-public-jar-release-maintainer/src/index.mjs",
     "github:repositories:probe": "node scripts/probe-github-public-repository-search.mjs",
     "github:repositories:maintain": "node collectors/github-public-repository-search-maintainer/src/index.mjs",
     "github:file:probe": "node scripts/probe-github-public-repository-file.mjs",

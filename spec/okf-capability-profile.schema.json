@@ -42,7 +42,7 @@
           "type": "array",
           "minItems": 1,
           "uniqueItems": true,
-          "items": { "enum": ["official-api", "official-sdk", "web-document", "public-feed", "webhook", "authorized-export", "cli", "mcp", "browser-assisted", "manual-import", "local-file"] }
+          "items": { "enum": ["official-api", "official-sdk", "official-repository", "web-document", "public-feed", "webhook", "authorized-export", "cli", "mcp", "browser-assisted", "manual-import", "local-file"] }
         },
         "accountRequired": { "type": "boolean" },
         "durableRetention": { "enum": ["allowed", "restricted", "prohibited"] },
