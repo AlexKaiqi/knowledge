@@ -1,6 +1,8 @@
-# DSH Knowledge
+# Knowledge Catalog
 
-DSH 对外知识的独立 Git repository。它直接采用 [Open Knowledge Format v0.2](https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md)，保存平台、工具、信息源、Concept、Capability、Schema、访问方式和验证证据。
+独立的知识 Git repository。它直接采用 [Open Knowledge Format v0.2](https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md)，保存平台、工具、信息源、Concept、Capability、Schema、访问方式和验证证据。
+
+它不是插件，也不是可发布的 npm package；`package.json` 只为本仓库的本地校验脚本固定依赖和命令。
 
 ## 产品边界
 

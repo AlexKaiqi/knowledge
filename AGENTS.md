@@ -1,6 +1,6 @@
-# DSH Knowledge 仓库指南
+# Knowledge Catalog 仓库指南
 
-本仓库是独立 Git repository，不是 DSH 插件，也不是 Connector 运行时。它只保存对外可感知、已经通过准入的 OKF 知识与相应的公共契约。
+本仓库是普通的独立 Git repository，不属于 `dsh-plugins`，不是插件、npm 产品包或 Connector 运行时。它只保存对外可感知、已经通过准入的 OKF 知识与相应的公共契约。
 
 ## 边界
 

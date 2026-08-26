@@ -1,9 +1,9 @@
 {
-  "name": "@dsh/knowledge",
+  "name": "knowledge-catalog-tooling",
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Git-backed, OKF-native knowledge catalog for verified DSH platform, tool, source and capability knowledge.",
+  "description": "Private validation tooling for a Git-backed OKF knowledge catalog.",
   "engines": {
     "node": "^22.19.0 || >=24.0.0"
   },
