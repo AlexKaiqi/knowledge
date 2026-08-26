@@ -63,7 +63,7 @@ Collector
 
 ## 2. 直接采用 OKF
 
-本项目是 DSH 唯一的独立知识 Git repository，直接采用 Open Knowledge Format v0.2，不 fork、不建立平行知识格式，也不在各 Connector 项目复制知识库。
+本项目是独立 Git repository，直接采用 Open Knowledge Format v0.2；OKF knowledge、Connector 执行、Collector 维护和 probe 控制面共享同一个 Git revision，但只有 `knowledge/` 是外部产品面。
 
 一个 OKF bundle 只是当前仓库中的一个目录：
 
@@ -667,11 +667,11 @@ Connector 只为优先能力逐个增加。Collector 可以检查候选证据、
 - `knowledge/references/admission-policy.json` 是机器准入规则；
 - `scripts/check-okf-knowledge.mjs` 验证 frontmatter、链接、Schema、orphan、来源、freshness、probe report 和 repo evidence hash；
 - `spec/okf-capability-profile.schema.json` 固定公开 Capability 扩展；
-- `spec/connector-definition.schema.json` 固定隐藏执行定义；`bindings/connectors/` 只保存指向来源项目固定 Git revision 的绑定元数据，不复制 Connector 实现；
+- `spec/connector-definition.schema.json` 固定隐藏执行定义；`connectors/` 保存同仓库内的实现、定义和 conformance tests；
 - `spec/collector-definition.schema.json` 固定隐藏维护定义，但尚未登记一个虚假的 Collector 实例；
 - `spec/probe-identity*.schema.json`、`probe-definition` 与 `probe-report` 固定合规 probe 控制面；
 - validator 是内部准入工具，不是公开 Subject/Capability；当前尚无平台能力完成真实 probe，因此 canonical bundle 暂无业务 Subject/Capability；
-- `.knowledge-staging/` 被 Git 忽略，用于未准入候选；运营身份清单和凭据留在 `$DSH_HOME` / Credentials，不进入仓库。
+- `.staging/` 被 Git 忽略，用于未准入候选；运营身份清单和凭据留在仓库外的 Credentials/runtime store，不进入 Git。
 
 ## 14. 后续最小实现
 

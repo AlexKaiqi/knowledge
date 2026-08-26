@@ -41,20 +41,14 @@ test('admission rejects stale canonical knowledge', async () => {
   assert.equal(result.errors.some((error) => error.code === 'knowledge.stale'), true)
 })
 
-test('hidden connector definition is an implementation binding, not public knowledge', async () => {
+test('co-located connector definition stays hidden from public knowledge', async () => {
   const schema = JSON.parse(await readFile(path.join(contractRoot, 'connector-definition.schema.json'), 'utf8'))
   const definition = {
     schemaVersion: 'dsh.connector-definition/v1',
     id: 'example-hidden-connector',
     version: '1.0.0',
     capabilityRefs: ['/capabilities/example/read.md'],
-    implementation: {
-      project: 'example-provider',
-      revision: '0123456789abcdef0123456789abcdef01234567',
-      entrypoint: 'runtime/src/example.mjs',
-      contentSha256: '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
-    },
-    execution: { kind: 'deterministic', runtime: 'node' },
+    execution: { kind: 'deterministic', runtime: 'node', entrypoint: 'connectors/example-hidden-connector/src/index.mjs' },
     configSchema: 'knowledge/schemas/example/read-input.schema.json',
     credentialSlots: [{ name: 'account', required: true, purpose: 'authorized probe account' }],
     handlers: [{ capabilityRef: '/capabilities/example/read.md', operation: 'read' }],

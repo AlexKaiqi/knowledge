@@ -5,12 +5,11 @@
   "description": "A hidden maintenance controller for OKF knowledge and connector conformance; not a pagination/data-ingestion abstraction.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "id", "version", "implementation", "scope", "triggers", "execution", "outputs", "writePolicy", "probePolicy", "budgets"],
+  "required": ["schemaVersion", "id", "version", "scope", "triggers", "execution", "outputs", "writePolicy", "probePolicy", "budgets"],
   "properties": {
     "schemaVersion": { "const": "dsh.collector-definition/v1" },
     "id": { "$ref": "#/$defs/id" },
     "version": { "type": "string", "minLength": 1 },
-    "implementation": { "$ref": "#/$defs/implementation" },
     "scope": {
       "type": "object",
       "additionalProperties": false,
@@ -37,10 +36,11 @@
     "execution": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["kind", "runtime"],
+      "required": ["kind", "runtime", "entrypoint"],
       "properties": {
         "kind": { "enum": ["deterministic", "agentic", "hybrid"] },
         "runtime": { "type": "string", "minLength": 1 },
+        "entrypoint": { "type": "string", "pattern": "^collectors/[a-z0-9._-]+/[^/].+$" },
         "modelRouteRef": { "type": "string", "minLength": 1 },
         "promptRef": { "type": "string", "minLength": 1 },
         "toolRefs": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
@@ -91,18 +91,6 @@
   },
   "$defs": {
     "id": { "type": "string", "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$" },
-    "localRef": { "type": "string", "pattern": "^/(?!/)(?!.*\\.\\.)[^?#]+$" },
-    "implementation": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["project", "revision", "entrypoint", "contentSha256"],
-      "properties": {
-        "project": { "$ref": "#/$defs/id" },
-        "repository": { "type": "string", "format": "uri" },
-        "revision": { "type": "string", "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$" },
-        "entrypoint": { "type": "string", "minLength": 1 },
-        "contentSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
-      }
-    }
+    "localRef": { "type": "string", "pattern": "^/(?!/)(?!.*\\.\\.)[^?#]+$" }
   }
 }

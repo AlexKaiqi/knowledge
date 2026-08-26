@@ -26,4 +26,4 @@ sources:
 7. Connector 和 Collector 是隐藏实现。Collector 默认只生成 proposal/report，不直接改写 canonical bundle 或 Connector。
 8. probe 身份必须是用户/组织所有、provider sandbox、synthetic test 或合同授权身份。不得批量伪造身份、冒充第三方或规避平台风控。
 
-候选内容保存在被 Git 忽略的 `.knowledge-staging/`，通过验证和评审后才以普通 Git diff 合入。
+候选内容保存在被 Git 忽略的 `.staging/`，通过验证和评审后才以普通 Git diff 合入。

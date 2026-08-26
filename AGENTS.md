@@ -1,26 +1,29 @@
-# Knowledge Catalog 仓库指南
+# Knowledge repository rules
 
-本仓库是普通的独立 Git repository，不属于 `dsh-plugins`，不是插件、npm 产品包或 Connector 运行时。它只保存对外可感知、已经通过准入的 OKF 知识与相应的公共契约。
+本项目是普通独立 Git repository，不属于 `dsh-plugins`，也不是插件。`knowledge/`、`connectors/`、`collectors/` 和 `probes/` 在同一 Git revision 中共同形成可验证闭环。
 
-## 边界
+## 公共与隐藏边界
 
-- `knowledge/` 是 canonical OKF bundle。
-- `spec/` 保存 Capability、Connector、Collector、probe 和身份控制面的版本化 schema。
-- `scripts/` 只负责确定性校验，不作为公开知识或已接入能力统计。
-- Connector/Collector 的实现属于各提供方项目；`bindings/` 只保存固定来源项目、Git revision、入口和内容哈希的隐藏绑定定义及验证报告引用。
-- 研究资料、理论能力和失败/过期 probe 留在 `.knowledge-staging/` 或来源项目，不进入 canonical bundle。
-- 一次准入变更只处理一个平台、工具或信息源的一组紧密相关能力。
+- `knowledge/` 是外部唯一可感知的 OKF 门面。
+- `connectors/` 是隐藏执行逻辑；可以 deterministic、agentic、hybrid 或 manual。
+- `collectors/` 是隐藏维护逻辑；负责知识与 Connector 的发现、检查、proposal 和验证，不是分页采集的同义词。
+- `probes/` 保存定义和无秘密控制面；脱敏验证结论进入 `knowledge/verifications/`。
+- Connector、Collector、prompt、route、credential ref 和内部 trace 不得泄漏到普通 Capability 结果。
 
-## 事实与安全
+## 准入
 
-- 没有真实执行实现、新鲜通过报告和可核验来源的 Capability 不得进入 `knowledge/`。
+- 一次变更只准入一个 Capability 及其最小必要 Subject、Concept、Schema、Connector 和 Verification。
+- 没有真实执行、新鲜通过报告和可核验来源的 Capability 不得进入 canonical `knowledge/`。
 - Platform、Information Source、Dataset、Service、Protocol 至少需要 sandbox 或 live probe。
-- probe 身份只记录 opaque ID 与 credential ref；用户名、邮箱、Cookie、token、密钥及运营身份清单不得进入 Git。
-- 不得创建或维护用于冒充、批量伪造身份、规避风控或违反服务条款的身份池。
+- 候选与失败对象留在被 Git 忽略的 `.staging/`；不要创建空占位目录。
+
+## 身份与安全
+
+- probe identity 只允许 opaque ID、credential ref、授权依据、用途、生命周期、配额和隔离策略。
+- 用户名、邮箱、Cookie、token、密钥和实际运营身份清单不得进入 Git。
+- 不得伪造身份、冒充第三方、规避风控或违反服务条款。
 
 ## 验证
-
-使用 Node 24：
 
 ```sh
 source ~/.nvm/nvm.sh

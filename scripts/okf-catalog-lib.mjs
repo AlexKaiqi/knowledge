@@ -252,7 +252,7 @@ export async function validateKnowledgeBundle({ root, now = new Date(), contract
       if (policy.requirePassedReport && report.outcome !== 'passed') addError('probe.not-passed', normalizeBundleRef(reportReference), `probe outcome is ${report.outcome}`)
       if (policy.requireFreshReport && Date.parse(report.expiresAt) <= now.getTime()) addError('probe.expired', normalizeBundleRef(reportReference), `probe expired at ${report.expiresAt}`)
 
-      const connectorPath = path.join(repositoryRoot, 'bindings/connectors', `${report.connectorId}.connector.json`)
+      const connectorPath = path.join(repositoryRoot, 'connectors', report.connectorId, 'connector.json')
       try {
         const connector = await readJson(connectorPath)
         if (!validateConnector(connector)) {
@@ -260,6 +260,10 @@ export async function validateKnowledgeBundle({ root, now = new Date(), contract
         } else {
           if (!connector.capabilityRefs.includes(capabilityRef)) addError('connector.capability-missing', document.relativePath, `connector ${report.connectorId} does not bind ${capabilityRef}`)
           if (connector.conformance.probeReportRef !== reportReference) addError('connector.report-mismatch', document.relativePath, `connector ${report.connectorId} references a different conformance report`)
+          const entrypoint = path.resolve(repositoryRoot, connector.execution.entrypoint)
+          const relativeEntrypoint = path.relative(repositoryRoot, entrypoint)
+          if (relativeEntrypoint.startsWith('..') || path.isAbsolute(relativeEntrypoint)) addError('connector.entrypoint-outside-repository', document.relativePath, `connector entrypoint escapes repository: ${connector.execution.entrypoint}`)
+          else await readFile(entrypoint)
         }
       } catch (error) {
         addError('connector.definition-unreadable', document.relativePath, `${report.connectorId}: ${error.message}`)

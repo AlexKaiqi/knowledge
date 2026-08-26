@@ -1,25 +1,70 @@
-# Knowledge Catalog
+# Knowledge
 
-独立的知识 Git repository。它直接采用 [Open Knowledge Format v0.2](https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md)，保存平台、工具、信息源、Concept、Capability、Schema、访问方式和验证证据。
-
-它不是插件，也不是可发布的 npm package；`package.json` 只为本仓库的本地校验脚本固定依赖和命令。
-
-## 产品边界
-
-外部接入者只读取：
+一个普通、独立的 Git repository，不是插件。它把三类东西放在同一个版本边界内：
 
 ```text
-OKF Subject / Concept / Capability / Schema
+knowledge/   外部唯一可感知的 OKF 知识与 Capability 契约
+connectors/  Capability 的隐藏执行逻辑
+collectors/  knowledge 与 connectors 的隐藏维护逻辑
 ```
 
-执行和维护复杂度隐藏在来源项目中：
+外部只消费 `knowledge/`。Connector 可以是确定性代码、Agent、人工流程或混合实现；Collector 可以持续检查来源、Schema、条款、probe 结果和 Connector 漂移，但默认只能生成 proposal/report。
+
+## 仓库结构
 
 ```text
-Capability → hidden Connector → Result
-Collector → proposal / verification report → Git review → OKF update
+knowledge/
+├── index.md
+├── platforms/       平台知识，一平台一文件
+├── tools/           工具知识，一工具一文件
+├── sources/         信息源和数据源知识
+├── concepts/        跨平台、跨工具概念
+├── capabilities/    外部可发现、可调用的能力契约
+├── schemas/         Capability 的产品输入输出 Schema
+├── policies/        公开治理、授权和使用政策
+├── verifications/   脱敏后的验证结论与证据摘要
+└── references/      来源、术语和机器可读政策
+
+connectors/
+└── <connector-id>/
+    ├── connector.json
+    ├── src/
+    └── test/
+
+collectors/
+└── <collector-id>/
+    ├── collector.json
+    ├── src/
+    ├── prompts/      仅 Agent/Hybrid Collector 需要
+    └── evals/
+
+probes/
+├── definitions/     可重复 probe 定义
+├── identities/      仅 opaque ID 与 credential ref
+└── pools/           合法身份池的选择、配额和隔离策略
+
+spec/                上述控制面与 OKF Capability 扩展的 JSON Schema
+scripts/             确定性校验和准入工具
+test/                契约与负向测试
+docs/                架构和决策
 ```
 
-本仓库不保存账号秘密、Cookie、token、内部 route、Agent prompt 或运营身份清单。
+目录按职责分层，而不是给每个平台复制一套封闭知识树。Platform、Tool、Source、Concept、Capability、Schema 和 Verification 通过稳定路径与 Markdown links 组成图；Connector/Collector 用 `capabilityRef` 绑定图中的能力。
+
+## 准入规则
+
+一次 Git 变更只准入一个真实 Capability 及其最小闭环：
+
+```text
+Subject knowledge
++ Capability knowledge
++ input/output Schema
++ hidden Connector
++ repeatable ProbeDefinition
++ passed, unexpired VerificationReport
+```
+
+缺少任意一项就留在 `.staging/`，不进入 canonical `knowledge/`。真实用户名、邮箱、Cookie、token、密钥和运营身份清单永远不进 Git。
 
 ## 当前状态
 
@@ -29,29 +74,11 @@ Collector → proposal / verification report → Git review → OKF update
 已准入 Capability：0
 ```
 
-内部 validator 不计入接入对象。抖音、小红书等来源项目中已有的代码、测试或本地装配，必须分别完成真实 probe 后才能逐个进入这里。
+因此当前不会创建空的平台、Connector 或 Collector 占位。
 
-## 目录
+## 验证
 
-```text
-knowledge/       canonical OKF bundle
-bindings/        隐藏 Connector/Collector 的版本化绑定元数据，不包含实现代码
-spec/            公共与控制面 JSON Schema
-scripts/         确定性准入校验
-test/            正向和负向契约测试
-docs/            架构与决策
-.knowledge-staging/  被 Git 忽略的候选区
-```
-
-## 准入一个对象
-
-1. 选择一个平台、工具或信息源的一项真实能力。
-2. 在来源项目实现隐藏 Connector，并固定来源 Git revision、入口和内容哈希。
-3. 使用合法、授权且隔离的 probe 身份运行真实能力。
-4. 保存不含秘密的 ProbeDefinition、通过报告和证据哈希。
-5. 编写最小 Subject、Capability 和产品 Schema。
-6. 运行 `npm run check`。
-7. 以单一对象、可评审的 Git diff 合入。
+`package.json` 只是仓库本地工具清单，不代表插件或发布包。
 
 ```sh
 source ~/.nvm/nvm.sh
@@ -59,5 +86,3 @@ nvm use 24.17.0
 npm install
 npm run check
 ```
-
-详细设计见 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)。

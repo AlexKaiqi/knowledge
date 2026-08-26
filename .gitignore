@@ -1,5 +1,5 @@
 node_modules/
-.knowledge-staging/
+.staging/
 .runtime/
 *.log
 .DS_Store
