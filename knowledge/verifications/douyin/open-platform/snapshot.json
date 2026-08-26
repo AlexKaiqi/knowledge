@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "dsh.douyin-open-platform-snapshot/v1",
+  "source": {
+    "id": "douyin-open-platform-docs",
+    "documents": [
+      { "id": "openapi-list", "title": "OpenAPI 列表", "url": "https://developer.open-douyin.com/docs/resource/zh-CN/dop/develop/openapi/list/" },
+      { "id": "content-publishing", "title": "抖音内容发布接入方案", "url": "https://open.douyin.com/platform/resource/docs/ability/content-management/douyin-publish-solution/" },
+      { "id": "oauth-overview", "title": "总体授权说明", "url": "https://open.douyin.com/platform/resource/docs/develop/permission/overall-permission" },
+      { "id": "access-token", "title": "获取 access_token", "url": "https://developer.open-douyin.com/docs/resource/zh-CN/dop/develop/openapi/account-permission/get-access-token/" },
+      { "id": "create-video", "title": "创建视频", "url": "https://open.douyin.com/platform/resource/docs/openapi/video-management/douyin/create/create-video" }
+    ]
+  },
+  "capabilityFamilies": [
+    { "id": "oauth-authorization", "documented": true },
+    { "id": "user-public-profile", "documented": true },
+    { "id": "content-capabilities", "documented": true },
+    { "id": "search-capabilities", "documented": true },
+    { "id": "data-open-services", "documented": true },
+    { "id": "content-publishing", "documented": true },
+    { "id": "authorized-content-management", "documented": true }
+  ],
+  "securityRequirements": [
+    { "id": "server-side-token-storage", "documented": true },
+    { "id": "user-awareness-for-delegated-publish", "documented": true }
+  ],
+  "accessBoundary": {
+    "approvedApplicationRequired": true,
+    "scopesMayRequireApplication": true,
+    "userAuthorizationMayBeRequired": true,
+    "documentationDoesNotProveCallable": true
+  },
+  "observedAt": "2026-08-26T17:05:32.706Z",
+  "semanticDigest": "14dbdd5ed071fe2ca3f69be182815d5608d7cf82405e123e7f9df01e16c053ef",
+  "conformance": {
+    "status": "passed",
+    "assertions": [
+      { "id": "document-openapi-list", "passed": true },
+      { "id": "document-content-publishing", "passed": true },
+      { "id": "document-oauth-overview", "passed": true },
+      { "id": "document-access-token", "passed": true },
+      { "id": "document-create-video", "passed": true },
+      { "id": "capability-families", "passed": true },
+      { "id": "security-requirements", "passed": true }
+    ]
+  }
+}

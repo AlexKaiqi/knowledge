@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "douyin-open-platform-docs-live",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/douyin/read-open-platform-surface.md",
+  "connectorId": "douyin-open-platform-docs",
+  "environment": "production-public",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "fetch-official-documents", "operation": "readDouyinOpenPlatformSurface" },
+    { "id": "normalize-capability-surface", "operation": "parseDouyinOpenPlatformDocuments" }
+  ],
+  "assertions": [
+    "All configured official HTTPS documents are reachable and return HTML.",
+    "OAuth, public profile, content, search, data service, publishing, and authorized content management families remain documented.",
+    "Application approval, scope, user authorization, server-side token storage, and per-call user-awareness boundaries remain explicit.",
+    "The normalized output contains no token, credential, or raw HTML."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 90, "maxCost": 0, "currency": "CNY" }
+}

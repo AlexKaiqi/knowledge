@@ -69,14 +69,16 @@ Subject knowledge
 ## 当前状态
 
 ```text
-完整可用闭环：3（Information Source 2；Platform 1）
-已准入 Subject：3
-已准入 Capability：3
-Connector：2 个已验证；xiaohongshu-browser 为 mixed（读取已验证、发布候选）
-维护 Collector：3
+完整可用闭环：4（Information Source 3；Platform 1）
+已准入 Subject：4
+已准入 Capability：4
+Connector：3 个已验证；xiaohongshu-browser 为 mixed（读取已验证、发布候选）
+维护 Collector：4
 ```
 
 小红书已有三个真实闭环：官方账号 API 参考、浏览器渲染的社区公约信息源，以及通过自有账号会话读取本人笔记列表的平台能力。后者 live probe 实际返回可用的空列表。笔记发布、详情反查与反馈采集仍是候选能力，尚未完成真实私密发布闭环。仓库不创建空的平台、Connector 或 Collector 占位。
+
+抖音已有一个真实闭环：无需身份读取并语义校验官方开放平台文档。它只是一条 Information Source 能力；应用审核、scope、用户授权和真实业务调用尚未验证，所以抖音 Platform 能力仍为 0。非官方 MediaCrawler 路线受许可证与登录状态约束，未被计为可用闭环。
 
 - [小红书接入调研与第一条能力纵切](docs/research/xiaohongshu-integration.md)
 

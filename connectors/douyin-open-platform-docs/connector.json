@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "douyin-open-platform-docs",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/douyin/read-open-platform-surface.md"],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "connectors/douyin-open-platform-docs/src/index.mjs"
+  },
+  "configSchema": "repo:/connectors/douyin-open-platform-docs/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [
+    { "capabilityRef": "/capabilities/douyin/read-open-platform-surface.md", "operation": "readDouyinOpenPlatformSurface" }
+  ],
+  "conformance": {
+    "status": "verified",
+    "probeReportRef": "/verifications/douyin/open-platform/report.json"
+  }
+}

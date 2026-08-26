@@ -23,3 +23,6 @@ title: Knowledge bundle history
 - 通过真实浏览器渲染准入“小红书社区公约 2.0”Information Source 与社区规则接口面 Capability；静态 SPA 外壳不再被当作有效观测。
 - 增加 Agent 只读浏览器观测 + 确定性语义归一化的 hybrid Connector，以及 proposal-only hybrid Collector。
 - 完整可用闭环、已准入 Subject 和已准入 Capability 均更新为 3。
+- 通过公开 live probe 准入“抖音开放平台官方文档”Information Source 与能力接口面 Capability；5 个官方页面、7 类文档能力和 2 项安全要求均通过确定性语义校验。
+- 明确“文档存在”不等于“当前应用可调用”；抖音应用审核、scope、用户授权和业务操作仍未形成 Platform 闭环。
+- 完整可用闭环、已准入 Subject 和已准入 Capability 均更新为 4。

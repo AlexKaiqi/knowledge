@@ -23,7 +23,9 @@
     "xhs:account-api:maintain": "node collectors/xiaohongshu-account-docs-maintainer/src/index.mjs",
     "xhs:owned-notes:probe": "node scripts/probe-xiaohongshu-owned-notes.mjs",
     "xhs:community-rules:probe": "node scripts/probe-xiaohongshu-community-rules.mjs",
-    "xhs:community-rules:maintain": "node collectors/xiaohongshu-community-rules-maintainer/src/index.mjs"
+    "xhs:community-rules:maintain": "node collectors/xiaohongshu-community-rules-maintainer/src/index.mjs",
+    "douyin:open-platform:probe": "node scripts/probe-douyin-open-platform-docs.mjs",
+    "douyin:open-platform:maintain": "node collectors/douyin-open-platform-docs-maintainer/src/index.mjs"
   },
   "dependencies": {
     "ajv": "^8.20.0",

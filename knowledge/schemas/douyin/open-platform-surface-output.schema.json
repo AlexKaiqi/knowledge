@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/douyin/open-platform-surface-output.schema.json",
+  "title": "DouyinOpenPlatformSurface",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["source", "capabilityFamilies", "securityRequirements", "accessBoundary", "observedAt", "semanticDigest", "conformance"],
+  "properties": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "documents"],
+      "properties": {
+        "id": { "const": "douyin-open-platform-docs" },
+        "documents": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "title", "url"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+              "title": { "type": "string", "minLength": 1 },
+              "url": { "type": "string", "format": "uri", "pattern": "^https://" }
+            }
+          }
+        }
+      }
+    },
+    "capabilityFamilies": { "$ref": "#/$defs/documentedItems" },
+    "securityRequirements": { "$ref": "#/$defs/documentedItems" },
+    "accessBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["approvedApplicationRequired", "scopesMayRequireApplication", "userAuthorizationMayBeRequired", "documentationDoesNotProveCallable"],
+      "properties": {
+        "approvedApplicationRequired": { "const": true },
+        "scopesMayRequireApplication": { "const": true },
+        "userAuthorizationMayBeRequired": { "const": true },
+        "documentationDoesNotProveCallable": { "const": true }
+      }
+    },
+    "observedAt": { "type": "string", "format": "date-time" },
+    "semanticDigest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "conformance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "assertions"],
+      "properties": {
+        "status": { "enum": ["passed", "review-required"] },
+        "assertions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "passed"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+              "passed": { "type": "boolean" }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "documentedItems": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "documented"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+          "documented": { "type": "boolean" }
+        }
+      }
+    }
+  }
+}

@@ -11,7 +11,7 @@ async function validator(schemaPath) {
   return ajv.compile(schema)
 }
 
-test('Xiaohongshu candidate control-plane instances match their schemas', async () => {
+test('control-plane instances match their schemas', async () => {
   const cases = [
     ['../spec/connector-definition.schema.json', '../connectors/xiaohongshu-browser/connector.json'],
     ['../spec/access-route-catalog.schema.json', '../connectors/xiaohongshu-browser/routes.json'],
@@ -28,6 +28,9 @@ test('Xiaohongshu candidate control-plane instances match their schemas', async 
     ['../spec/connector-definition.schema.json', '../connectors/xiaohongshu-community-rules-browser/connector.json'],
     ['../spec/collector-definition.schema.json', '../collectors/xiaohongshu-community-rules-maintainer/collector.json'],
     ['../spec/probe-definition.schema.json', '../probes/definitions/xiaohongshu-community-rules-live.json'],
+    ['../spec/connector-definition.schema.json', '../connectors/douyin-open-platform-docs/connector.json'],
+    ['../spec/collector-definition.schema.json', '../collectors/douyin-open-platform-docs-maintainer/collector.json'],
+    ['../spec/probe-definition.schema.json', '../probes/definitions/douyin-open-platform-docs-live.json'],
   ]
   for (const [schemaPath, instancePath] of cases) {
     const validate = await validator(schemaPath)
@@ -46,11 +49,12 @@ test('Connector handlers can carry capability-specific conformance', async () =>
   assert.equal(listing.conformance.probeReportRef, '/verifications/xiaohongshu/owned-notes/report.json')
 })
 
-test('Xiaohongshu connector configuration schema compiles', async () => {
+test('Connector configuration schemas compile', async () => {
   for (const schemaPath of [
     '../connectors/xiaohongshu-browser/config.schema.json',
     '../connectors/xiaohongshu-account-docs/config.schema.json',
     '../connectors/xiaohongshu-community-rules-browser/config.schema.json',
+    '../connectors/douyin-open-platform-docs/config.schema.json',
   ]) {
     const schema = JSON.parse(await readFile(new URL(schemaPath, import.meta.url), 'utf8'))
     const ajv = new Ajv2020({ allErrors: true, strict: false })

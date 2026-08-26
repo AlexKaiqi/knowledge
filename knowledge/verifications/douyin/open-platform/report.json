@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "dsh.probe-report/v1",
+  "id": "douyin-open-platform-docs-live-20260826",
+  "capabilityRef": "/capabilities/douyin/read-open-platform-surface.md",
+  "connectorId": "douyin-open-platform-docs",
+  "probeDefinitionRef": "repo:/probes/definitions/douyin-open-platform-docs-live.json",
+  "environment": "production-public",
+  "level": "live",
+  "outcome": "passed",
+  "startedAt": "2026-08-26T17:05:32.312Z",
+  "finishedAt": "2026-08-26T17:05:32.710Z",
+  "expiresAt": "2026-09-02T17:05:32.710Z",
+  "checks": [
+    { "id": "document-openapi-list", "status": "passed" },
+    { "id": "document-content-publishing", "status": "passed" },
+    { "id": "document-oauth-overview", "status": "passed" },
+    { "id": "document-access-token", "status": "passed" },
+    { "id": "document-create-video", "status": "passed" },
+    { "id": "capability-families", "status": "passed" },
+    { "id": "security-requirements", "status": "passed" }
+  ],
+  "evidence": [
+    {
+      "kind": "snapshot",
+      "ref": "repo:/knowledge/verifications/douyin/open-platform/snapshot.json",
+      "sha256": "7fa0e8e50d3a730f346e5afd8d80adecf72fbf0a729437c53a277e6bba0c0a87"
+    }
+  ],
+  "sideEffects": [{ "effect": "none", "status": "none" }]
+}

@@ -1,0 +1,7 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/douyin/open-platform-surface-input.schema.json",
+  "title": "ReadDouyinOpenPlatformSurfaceInput",
+  "type": "object",
+  "additionalProperties": false
+}

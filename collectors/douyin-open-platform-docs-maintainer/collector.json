@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "dsh.collector-definition/v1",
+  "id": "douyin-open-platform-docs-maintainer",
+  "version": "1.0.0",
+  "scope": {
+    "knowledgeGlobs": [
+      "knowledge/sources/douyin-open-platform.md",
+      "knowledge/concepts/douyin/open-platform-capability-surface.md",
+      "knowledge/capabilities/douyin/read-open-platform-surface.md",
+      "knowledge/schemas/douyin/open-platform-surface-*.schema.json",
+      "knowledge/verifications/douyin/open-platform/*.json"
+    ],
+    "connectorIds": ["douyin-open-platform-docs"],
+    "capabilityRefs": ["/capabilities/douyin/read-open-platform-surface.md"]
+  },
+  "triggers": [
+    { "kind": "schedule", "schedule": "35 5 * * *" },
+    { "kind": "source-change" },
+    { "kind": "connector-change" },
+    { "kind": "failed-execution" },
+    { "kind": "manual" }
+  ],
+  "execution": { "kind": "deterministic", "runtime": "node >=22.19", "entrypoint": "collectors/douyin-open-platform-docs-maintainer/src/index.mjs" },
+  "outputs": ["knowledge-proposal", "connector-change-proposal", "verification-report"],
+  "writePolicy": { "mode": "proposal-only", "requiresApprovalFor": ["knowledge", "connector", "live-probe"] },
+  "probePolicy": { "allowedEnvironments": ["production-public"], "identityPoolRefs": [], "maximumEffect": "none" },
+  "budgets": { "maxRunsPerDay": 4, "maxCostPerDay": 0, "currency": "CNY" }
+}
