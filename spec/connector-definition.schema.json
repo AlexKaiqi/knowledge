@@ -59,14 +59,41 @@
       }
     },
     "conformance": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["probeReportRef"],
-      "properties": { "probeReportRef": { "$ref": "#/$defs/localRef" } }
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "probeDefinitionRef"],
+          "properties": {
+            "status": { "const": "candidate" },
+            "probeDefinitionRef": { "$ref": "#/$defs/repositoryRef" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "probeReportRef"],
+          "properties": {
+            "status": { "const": "verified" },
+            "probeReportRef": { "$ref": "#/$defs/localRef" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "reason"],
+          "properties": {
+            "status": { "enum": ["suspended", "retired"] },
+            "reason": { "type": "string", "minLength": 1 },
+            "lastProbeReportRef": { "$ref": "#/$defs/localRef" }
+          }
+        }
+      ]
     }
   },
   "$defs": {
     "id": { "type": "string", "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$" },
-    "localRef": { "type": "string", "pattern": "^/(?!/)(?!.*\\.\\.)[^?#]+$" }
+    "localRef": { "type": "string", "pattern": "^/(?!/)(?!.*\\.\\.)[^?#]+$" },
+    "repositoryRef": { "type": "string", "pattern": "^repo:/(?!/)(?!.*\\.\\.)[^?#]+$" }
   }
 }

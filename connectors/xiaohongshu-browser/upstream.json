@@ -1,0 +1,7 @@
+{
+  "repository": "https://github.com/xpzouying/xiaohongshu-mcp.git",
+  "commit": "6fb866a7db4e3dcce8dc00a0dde07370f3b12946",
+  "license": "Apache-2.0",
+  "release": "v2.5.0",
+  "usage": "Loopback-only visible-browser sidecar. Upstream success is never treated as a platform receipt without owned-profile reconciliation."
+}

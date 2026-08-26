@@ -52,7 +52,7 @@ test('co-located connector definition stays hidden from public knowledge', async
     configSchema: 'knowledge/schemas/example/read-input.schema.json',
     credentialSlots: [{ name: 'account', required: true, purpose: 'authorized probe account' }],
     handlers: [{ capabilityRef: '/capabilities/example/read.md', operation: 'read' }],
-    conformance: { probeReportRef: '/references/verification/example.json' },
+    conformance: { status: 'verified', probeReportRef: '/references/verification/example.json' },
   }
   const ajv = new Ajv2020({ allErrors: true })
   addFormats(ajv)

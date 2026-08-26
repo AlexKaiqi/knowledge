@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/connectors/xiaohongshu-browser/config.schema.json",
+  "title": "XiaohongshuBrowserConnectorConfig",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["baseUrl", "stateRoot"],
+  "properties": {
+    "baseUrl": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^http://(?:127\\.0\\.0\\.1|localhost|\\[::1\\])(?::[0-9]+)?/?$"
+    },
+    "stateRoot": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Private, non-Git operation ledger root."
+    },
+    "requestTimeoutMs": { "type": "integer", "minimum": 1000, "maximum": 600000 },
+    "verificationTimeoutMs": { "type": "integer", "minimum": 1000, "maximum": 300000 },
+    "verificationPollMs": { "type": "integer", "minimum": 250, "maximum": 30000 }
+  }
+}

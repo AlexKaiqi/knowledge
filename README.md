@@ -72,9 +72,13 @@ Subject knowledge
 完整可用闭环：0
 已准入 Subject：0
 已准入 Capability：0
+候选 Connector：1（xiaohongshu-browser）
+候选 Collector：1（xiaohongshu-maintainer）
 ```
 
-因此当前不会创建空的平台、Connector 或 Collector 占位。
+小红书候选实现已经通过本地契约测试，但尚未完成自有账号的真实私密发布与反查，因此不会进入公共 `knowledge/`，也不计为可用闭环。仓库不创建空的平台、Connector 或 Collector 占位。
+
+- [小红书接入调研与第一条能力纵切](docs/research/xiaohongshu-integration.md)
 
 ## 规范
 

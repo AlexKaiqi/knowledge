@@ -59,6 +59,7 @@ verification:
 ## 4. 隐藏实现
 
 - Connector 可以实现多个紧密相关 Capability，但每个 handler 都必须显式绑定 `capabilityRef`。
+- `candidate` Connector 是可运行、可测试但尚未通过真实 probe 的候选实现；它可以进入 Git 接受审查，但不会进入运行时路由或公开 knowledge。`verified` 才代表可用。
 - Agent 只能实现已发布契约，不能在运行时扩张 effect 或 Schema。
 - Collector 默认 `proposal-only`；对 knowledge、Connector、identity、credential 或 live probe 的改变必须经过 gate。
 - 普通调用结果不返回 Connector ID、Collector ID、provider route、prompt 或 credential ref。

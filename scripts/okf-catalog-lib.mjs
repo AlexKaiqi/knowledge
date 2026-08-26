@@ -258,6 +258,7 @@ export async function validateKnowledgeBundle({ root, now = new Date(), contract
         if (!validateConnector(connector)) {
           addError('connector.definition-invalid', document.relativePath, schemaErrors(validateConnector).join('; '))
         } else {
+          if (connector.conformance.status !== 'verified') addError('connector.not-verified', document.relativePath, `connector ${report.connectorId} is ${connector.conformance.status}`)
           if (!connector.capabilityRefs.includes(capabilityRef)) addError('connector.capability-missing', document.relativePath, `connector ${report.connectorId} does not bind ${capabilityRef}`)
           if (connector.conformance.probeReportRef !== reportReference) addError('connector.report-mismatch', document.relativePath, `connector ${report.connectorId} references a different conformance report`)
           const entrypoint = path.resolve(repositoryRoot, connector.execution.entrypoint)

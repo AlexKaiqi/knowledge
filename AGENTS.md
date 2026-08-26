@@ -15,7 +15,8 @@
 - 一次变更只准入一个 Capability 及其最小必要 Subject、Concept、Schema、Connector 和 Verification。
 - 没有真实执行、新鲜通过报告和可核验来源的 Capability 不得进入 canonical `knowledge/`。
 - Platform、Information Source、Dataset、Service、Protocol 至少需要 sandbox 或 live probe。
-- 候选与失败对象留在被 Git 忽略的 `.staging/`；不要创建空占位目录。
+- 非空、可测试的 Connector 候选允许以 `conformance.status=candidate` 进入仓库；它不能被公开路由，也不能支撑 canonical knowledge。通过 live/sandbox probe 后才切换为 `verified`。
+- 候选 knowledge、报告和失败对象留在被 Git 忽略的 `.staging/`；经过本地契约测试的非空 Connector 候选按上一条规则管理。不要创建空占位目录。
 
 ## 身份与安全
 

@@ -5,7 +5,7 @@
 ```text
 选择 Subject + Capability
   → 在 .staging/ 准备候选知识与 Schema
-  → 实现 Connector
+  → 实现并本地验证 candidate Connector
   → 定义 ProbeDefinition
   → 选择合法 identity / pool
   → 在 local / sandbox / production-private 执行
@@ -28,3 +28,5 @@
 8. 相关 Concept 都从已准入 Capability 可达；无孤立知识。
 
 失败、partial、过期、仅文档调研、仅 mock 测试或仅安装成功都不算完整可用闭环。
+
+`candidate` Connector 可以作为非空、可测试的实现进入 Git；它仍然不会被 Gateway 路由，也不能让对应 Subject/Capability 进入 canonical `knowledge/`。真实 probe 通过并发布 VerificationReport 后，才将其 conformance 切换为 `verified`。

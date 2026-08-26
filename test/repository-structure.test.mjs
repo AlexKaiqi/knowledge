@@ -25,12 +25,10 @@ test('repository initializes every responsibility boundary', async () => {
   await Promise.all(required.map((path) => access(new URL(path, root))))
 })
 
-test('initialized repository contains no fake platform, capability, connector or collector instance', async () => {
+test('canonical knowledge contains no unverified platform or capability', async () => {
   const cases = [
     ['knowledge/platforms/', '.md'],
     ['knowledge/capabilities/', '.md'],
-    ['connectors/', ''],
-    ['collectors/', ''],
   ]
   for (const [directory, suffix] of cases) {
     const entries = await readdir(new URL(directory, root), { withFileTypes: true })

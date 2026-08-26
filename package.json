@@ -9,8 +9,16 @@
   },
   "scripts": {
     "knowledge:check": "node scripts/check-okf-knowledge.mjs",
-    "test": "node --test test/*.test.mjs",
-    "check": "node --check scripts/*.mjs && npm run knowledge:check && npm test"
+    "test": "node --test test/*.test.mjs connectors/*/test/*.test.mjs collectors/*/test/*.test.mjs",
+    "check": "node --check scripts/*.mjs connectors/*/src/*.mjs collectors/*/src/*.mjs && npm run knowledge:check && npm test",
+    "xhs:bootstrap": "node scripts/bootstrap-xiaohongshu.mjs",
+    "xhs:login": "node scripts/run-xiaohongshu.mjs login",
+    "xhs:serve": "node scripts/run-xiaohongshu.mjs serve",
+    "xhs:doctor": "node scripts/doctor-xiaohongshu.mjs",
+    "xhs:probe:prepare": "node scripts/prepare-xiaohongshu-probe.mjs",
+    "xhs:probe:confirm": "node scripts/confirm-xiaohongshu-probe.mjs",
+    "xhs:probe:run": "node scripts/probe-xiaohongshu.mjs",
+    "xhs:maintain": "node collectors/xiaohongshu-maintainer/src/index.mjs"
   },
   "dependencies": {
     "ajv": "^8.20.0",

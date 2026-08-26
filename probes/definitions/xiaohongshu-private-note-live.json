@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "xiaohongshu-private-note-live",
+  "version": "0.1.0",
+  "capabilityRef": "/capabilities/xiaohongshu/publish-private-note-and-observe.md",
+  "connectorId": "xiaohongshu-browser",
+  "environment": "production-private",
+  "identity": {
+    "required": true,
+    "poolRef": "identity-pool:xiaohongshu-owned-probes"
+  },
+  "effect": "platform-write",
+  "steps": [
+    { "id": "inspect-session", "operation": "inspectSession" },
+    { "id": "freeze-revision", "operation": "freezeProbeRevision", "inputRef": "runtime:probe-fixture" },
+    { "id": "obtain-confirmation", "operation": "requireExplicitOneTimeConfirmation", "inputRef": "runtime:frozen-revision" },
+    { "id": "publish-private", "operation": "publishPrivateNoteAndObserve", "inputRef": "runtime:confirmed-revision" }
+  ],
+  "assertions": [
+    "login belongs to an explicitly authorized owned-test identity",
+    "publication visibility is private",
+    "returned status is confirmed",
+    "platform object id is new relative to the owned-profile baseline",
+    "note title, media count, and body verification marker match the frozen revision",
+    "initial metric and comment observation is available",
+    "receipt contains no cookie, sidecar token, xsec token, username, or commenter identity"
+  ],
+  "cleanup": [
+    "retain the private probe note because no verified delete capability exists",
+    "record the retained side effect in the verification report"
+  ],
+  "budget": {
+    "timeoutSeconds": 900,
+    "maxCost": 0,
+    "currency": "CNY"
+  }
+}

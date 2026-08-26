@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "xiaohongshu-browser",
+  "version": "0.1.0",
+  "capabilityRefs": [
+    "/capabilities/xiaohongshu/publish-private-note-and-observe.md"
+  ],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "connectors/xiaohongshu-browser/src/index.mjs"
+  },
+  "configSchema": "repo:/connectors/xiaohongshu-browser/config.schema.json",
+  "credentialSlots": [
+    {
+      "name": "sidecar-token",
+      "required": true,
+      "purpose": "Authenticate the loopback-only xiaohongshu-mcp sidecar without exposing its token to capability callers."
+    },
+    {
+      "name": "owned-account-session",
+      "required": true,
+      "purpose": "Reference an explicitly authorized, user-owned Xiaohongshu browser session stored outside Git."
+    }
+  ],
+  "handlers": [
+    {
+      "capabilityRef": "/capabilities/xiaohongshu/publish-private-note-and-observe.md",
+      "operation": "publishPrivateNoteAndObserve"
+    }
+  ],
+  "conformance": {
+    "status": "candidate",
+    "probeDefinitionRef": "repo:/probes/definitions/xiaohongshu-private-note-live.json"
+  }
+}
