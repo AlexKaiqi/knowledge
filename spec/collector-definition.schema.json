@@ -10,6 +10,7 @@
     "schemaVersion": { "const": "dsh.collector-definition/v1" },
     "id": { "$ref": "#/$defs/id" },
     "version": { "type": "string", "minLength": 1 },
+    "projectCatalogRef": { "$ref": "#/$defs/repositoryRef" },
     "scope": {
       "type": "object",
       "additionalProperties": false,
@@ -91,6 +92,7 @@
   },
   "$defs": {
     "id": { "type": "string", "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$" },
-    "localRef": { "type": "string", "pattern": "^/(?!/)(?!.*\\.\\.)[^?#]+$" }
+    "localRef": { "type": "string", "pattern": "^/(?!/)(?!.*\\.\\.)[^?#]+$" },
+    "repositoryRef": { "type": "string", "pattern": "^repo:/(?!/)(?!.*\\.\\.)[^?#]+$" }
   }
 }

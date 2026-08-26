@@ -17,6 +17,7 @@ test('Xiaohongshu candidate control-plane instances match their schemas', async 
     ['../spec/access-route-catalog.schema.json', '../connectors/xiaohongshu-browser/routes.json'],
     ['../spec/collector-definition.schema.json', '../collectors/xiaohongshu-maintainer/collector.json'],
     ['../spec/source-watch-list.schema.json', '../collectors/xiaohongshu-maintainer/sources.json'],
+    ['../spec/ecosystem-project-catalog.schema.json', '../collectors/xiaohongshu-maintainer/projects.json'],
     ['../spec/probe-definition.schema.json', '../probes/definitions/xiaohongshu-private-note-live.json'],
   ]
   for (const [schemaPath, instancePath] of cases) {

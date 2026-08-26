@@ -80,7 +80,7 @@
         "id": { "$ref": "#/$defs/id" },
         "lifecycle": { "enum": ["researching", "candidate", "verified", "degraded", "suspended", "retired"] },
         "contractLevel": { "enum": ["full", "degraded", "recovery", "component"] },
-        "accessMethod": { "enum": ["official-api", "official-sdk", "browser-assisted", "manual"] },
+        "accessMethod": { "enum": ["official-api", "official-sdk", "signed-web-api", "browser-assisted", "manual"] },
         "automaticSelectionEligible": { "type": "boolean" },
         "priority": { "type": "integer", "minimum": 0 },
         "connectorId": { "$ref": "#/$defs/id" },

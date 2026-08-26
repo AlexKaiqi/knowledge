@@ -5,9 +5,13 @@ Collector 持续维护 OKF knowledge 和 Connector，不承担业务 Capability 
 ```text
 collectors/<collector-id>/
 ├── collector.json   CollectorDefinition
+├── projects.json    optional ecosystem project watch catalog
+├── sources.json     optional official/authoritative source watch list
 ├── src/             maintenance controller
 ├── prompts/         optional agent prompts
 └── evals/           agentic maintenance evaluations
 ```
 
 Collector 默认只生成 knowledge proposal、connector change proposal 或 verification report；合入 canonical knowledge 仍经过准入门。
+
+项目 watch catalog 不是“推荐列表”。它同时保存可采用候选、许可证阻断项目、只供研究的实现和已排除的关键词命中，避免重复调研。Collector 观察 HEAD、许可证/归档/issue/release 事件和复审周期；变化只生成 proposal，不自动升级依赖、route 或 canonical knowledge。

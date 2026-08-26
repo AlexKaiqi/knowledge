@@ -9,6 +9,7 @@
 | `connector-definition.schema.json` | Capability 到同仓库隐藏执行入口的绑定；支持 candidate/verified/suspended/retired conformance 与 deterministic、agentic、hybrid、manual 执行 |
 | `access-route-catalog.schema.json` | 同一 Subject/Capability 的完整、降级、恢复与组件接入路径；记录故障域、覆盖缺口、维护来源和安全切换策略 |
 | `source-watch-list.schema.json` | Collector 维护的官方/权威来源、已审阅文档指纹、静态或浏览器渲染观测方式与关键语义断言 |
+| `ecosystem-project-catalog.schema.json` | 开源生态项目的能力信号、许可证、实现机制、共同故障域、研究缺口与持续复审策略；项目被发现不等于可作为依赖或自动路由 |
 | `collector-definition.schema.json` | knowledge/Connector 的维护控制器、trigger、proposal-only 写策略与预算 |
 | `probe-definition.schema.json` | 可重复执行的 probe、环境、身份要求、断言、清理与预算 |
 | `probe-report.schema.json` | probe 的结果、有效期、检查项、证据哈希和副作用 |

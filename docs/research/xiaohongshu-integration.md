@@ -2,7 +2,7 @@
 
 状态：实现候选；canonical knowledge 尚未准入
 
-核验日期：2026-08-26
+核验日期：2026-08-27
 
 目标：让外部只看到一项稳定知识能力，隐藏登录态、可见浏览器、sidecar、页面选择器、`xsec_token`、基线差分和反馈去身份化等复杂度。只有真实私密发布、平台侧反查和初次反馈观察全部通过后，才把能力写入 `knowledge/`。
 
@@ -32,7 +32,10 @@
 | 创作服务平台人工操作 | 官方产品 UI | 人工发布、查看本人内容与数据 | 可人工完成，但不能提供自动化 Connector 契约 | 作为故障时的人工 reconcile / handoff |
 | `xpzouying/xiaohongshu-mcp` | 非官方开源实现，Apache-2.0 | 本机浏览器登录、图文/视频发布、私密可见性、本人主页、笔记详情和评论 | 可以提供执行原语，但自身发布响应没有笔记 ID | 选为固定、loopback-only sidecar；外层必须补 receipt gate |
 | `dreammis/social-auto-upload` | 非官方开源实现 | Python/Playwright 登录与图文/视频上传 | 目标覆盖可达，但私密可见性、receipt、reconcile 与反馈观察尚未完成 conformance | 保持 research route；验证后可成为第二个完整实现候选 |
+| `CNQQC/xhs-mcp` | 非官方开源实现，Apache-2.0 | 在 `xpzouying` 基线上维护超时、panic、内存与安全验证修复 | 能抵抗部分实现缺陷，但共享代码血缘、Rod runtime 和创作中心 DOM | 维护为 upstream variant，不算独立故障域 |
+| `white0dew/XiaohongshuSkills` | 非官方开源实现，MIT | 原生 CDP 发布、发布后 note link 探测、主页读取、详情/评论与创作者内容数据 | 具备 submit/reconcile/observe 原语，但未暴露私密发布，link 探测也尚不是稳定 receipt | 新增 full research route，优先补私密与 receipt conformance |
 | `chatek/opencli` | 非官方开源实现 | 登录浏览器 + Browser Bridge，声明支持图文发布、创作者笔记与统计读取 | 控制通道不同，但扩展信任、私密发布、receipt 和防重尚未验证 | 保持 research route；不能因命令存在就视为可用 |
+| `jackwener/xiaohongshu-cli` | 非官方开源实现；当前无仓库许可证 | 反向工程签名 API，支持 `--private` 图文发布、本人笔记列表、详情与评论 | 是最有价值的独立故障域候选，但许可证缺失，publish response/receipt 尚未 live 验证 | 新增 blocked research route；只持续观察，不复制、不 vendor、不自动路由 |
 | `RbBtSn0w/omni-post` | 非官方开源实现 | Playwright 多平台上传，含小红书路径 | 当前没有建立本纵切要求的私密发布、稳定 receipt、reconcile 和反馈契约 | 作为 degraded research input，不进入自动选择 |
 
 代码许可证只授权使用开源实现，不等于小红书授权浏览器自动化。真实账号接入必须由账号所有者确认授权与适用条款；不得使用身份池规避风控，不自动评论、点赞、私信或公开发布。
@@ -46,7 +49,7 @@
 3. `recovery`：人工创作中心，用于异常后的核对或显式接管；
 4. `component`：只提供身份等局部能力，例如官方账号 API。
 
-`xiaohongshu-mcp`、`social-auto-upload`、OpenCLI 和 OmniPost 并非四个独立故障域：它们都依赖小红书创作中心及其 DOM。不同运行时只能抵抗自身实现、依赖或浏览器控制通道故障，不能抵抗页面整体改版。2026 年 7 月已有上游 issue 记录发布按钮或编辑器选择器失效，因此路由目录必须显式记录共同的 `creator-center-dom` 故障域。
+`xiaohongshu-mcp`、CNQQC variant、`social-auto-upload`、XiaohongshuSkills、OpenCLI 和 OmniPost 并非六个独立故障域：它们都直接或间接依赖小红书创作中心及其 DOM。不同运行时只能抵抗自身实现、依赖或浏览器控制通道故障，不能抵抗页面整体改版。2026 年 7 月已有上游 issue 记录发布按钮或编辑器选择器失效，因此路由目录必须显式记录共同的 `creator-center-dom` 故障域。`jackwener/xiaohongshu-cli` 的签名 API 才构成不同故障域，但会转而承担内部 API 与签名漂移风险。
 
 平台写入采用 sticky route：ledger 在副作用前记录选定 route；只有明确证明 `definitely-not-executed` 才允许换到另一个已验证完整 route。只要结果是 `possibly-executed` 或 `unknown`，自动 fallback 一律禁止，先通过原 route 或人工 recovery route 对账，避免重复发布。
 
@@ -148,6 +151,18 @@ effect：platform-write
 - 失败执行触发 reconcile proposal，不自动重发；
 - live probe 永远需要显式批准，Collector 不得自行发布。
 
+此外，`projects.json` 保存经代码与许可证核验的开源生态目录。目前记录 18 个项目，来源关键词包括 `xiaohongshu`、`小红书`、`xhs`、`rednote`、MCP、自动发布、crawler 和 creator analytics。项目按职责分成：
+
+- **Connector candidate**：可能承担发布或观察阶段；只有少数会提升为 route；
+- **Collector candidate**：搜索、详情、评论、创作者数据或被动页面观测；
+- **Upstream variant**：同一代码血缘的 bugfix 分支，不计算故障域冗余；
+- **Evaluation source**：横评与故障样本，只提供研究证据；
+- **Blocked / excluded**：缺许可证或目标为 `rednote.com` 等不匹配范围，保留记录以避免反复误选。
+
+重点 Collector 候选包括：OpenWeb 的适配传输与结构化详情/评论、MediaCrawler 的搜索/创作者/评论采集、Apache-2.0 的 `tamnd/xiaohongshu-cli` 签名读取路径、MIT 的被动浏览器采集扩展，以及 `xhs-toolkit` / XiaohongshuSkills 的创作者数据面。MediaCrawler 使用非商业学习许可证，只能作为研究参考，不能因开源可见就进入通用生产依赖。
+
+持续关注规则：高优先级项目 7 天复审，中优先级 14 天，低优先级 30 天；同时观察 branch HEAD、release、issue、license 和 archived 状态。HEAD 漂移与周期到期分别生成 proposal。研究项目变化不会直接把已验证 route 判死，但 route 所绑定的同一 revision 漂移仍是 capability blocker。
+
 官网变更观测分层进行，不能把 HTTP 200 当成“没变化”：
 
 1. **传输层**：URL、状态码、重定向链、TLS/超时；
@@ -178,6 +193,8 @@ effect：platform-write
 - 上游 `go test ./...` 通过；
 - 候选 Connector、持久防重 ledger、去身份化反馈和 conformance tests；
 - proposal-only Collector 与 live probe 定义。
+- 10 条 access route（完整候选、研究、降级、恢复和组件）与 18 项开源生态 watch catalog；
+- 7 个 route 上游和 18 个研究项目的独立 HEAD/复审观测；
 
 尚未完成，因此当前完整可用闭环仍是 **0**：
 
@@ -201,6 +218,14 @@ effect：platform-write
 - `dreammis/social-auto-upload`：https://github.com/dreammis/social-auto-upload
 - `chatek/opencli` 小红书适配说明：https://github.com/chatek/opencli/blob/main/docs/adapters/browser/xiaohongshu.md
 - `RbBtSn0w/omni-post`：https://github.com/RbBtSn0w/omni-post
+- `CNQQC/xhs-mcp`：https://github.com/CNQQC/xhs-mcp
+- `white0dew/XiaohongshuSkills`：https://github.com/white0dew/XiaohongshuSkills
+- `jackwener/xiaohongshu-cli`：https://github.com/jackwener/xiaohongshu-cli
+- `aki66938/xhs-toolkit`：https://github.com/aki66938/xhs-toolkit
+- OpenWeb 小红书 adapter：https://github.com/imoonkey/openweb/blob/main/src/sites/xiaohongshu/DOC.md
+- MediaCrawler 小红书实现：https://github.com/NanmiCoder/MediaCrawler/blob/main/media_platform/xhs/core.py
+- `tamnd/xiaohongshu-cli`：https://github.com/tamnd/xiaohongshu-cli
+- 小红书采集工具横评：https://github.com/lijiajie-git/xiaohongshu-scraper-bakeoff
 - 上游创作中心 DOM 失效实例：https://github.com/xpzouying/xiaohongshu-mcp/issues/725
 - 上游编辑器选择器失效实例：https://github.com/xpzouying/xiaohongshu-mcp/issues/780
 - 上游假阳性问题实例：https://github.com/xpzouying/xiaohongshu-mcp/issues/625

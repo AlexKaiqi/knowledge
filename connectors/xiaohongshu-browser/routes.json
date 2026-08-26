@@ -40,6 +40,33 @@
       "notes": "Current implemented route. Upstream publish success is not a receipt; the outer connector must rediscover and verify the note."
     },
     {
+      "id": "creator-web-cnqqc-xhs-mcp",
+      "lifecycle": "researching",
+      "contractLevel": "full",
+      "accessMethod": "browser-assisted",
+      "automaticSelectionEligible": false,
+      "priority": 15,
+      "capabilityCoverage": [
+        {
+          "capabilityRef": "/capabilities/xiaohongshu/publish-private-note-and-observe.md",
+          "phases": ["authorize", "prepare", "submit", "reconcile", "observe"],
+          "gaps": ["Local conformance, live private publication, stable receipt reconciliation, and compatibility with the outer connector have not been verified."]
+        }
+      ],
+      "failureDomains": ["xiaohongshu-creator-center", "creator-center-dom", "rod-runtime", "local-browser-session", "xpzouying-code-lineage"],
+      "sourceRefs": ["https://github.com/CNQQC/xhs-mcp"],
+      "upstream": {
+        "repository": "https://github.com/CNQQC/xhs-mcp.git",
+        "branch": "main",
+        "observedRevision": "4915580ece0b2c65c5fc777225e2945a67e300d3"
+      },
+      "maintenance": {
+        "owner": "xiaohongshu-maintainer",
+        "reviewOn": ["upstream-change", "source-change", "probe-failure", "contract-gap-change", "manual"]
+      },
+      "notes": "Apache-licensed upstream variant with documented timeout, panic and safety-verification fixes; useful against implementation defects but not creator-center changes."
+    },
+    {
       "id": "creator-web-social-auto-upload",
       "lifecycle": "researching",
       "contractLevel": "full",
@@ -70,6 +97,36 @@
       "notes": "Independent implementation runtime, but not independent of creator-center DOM changes."
     },
     {
+      "id": "creator-cdp-xiaohongshu-skills",
+      "lifecycle": "researching",
+      "contractLevel": "full",
+      "accessMethod": "browser-assisted",
+      "automaticSelectionEligible": false,
+      "priority": 25,
+      "capabilityCoverage": [
+        {
+          "capabilityRef": "/capabilities/xiaohongshu/publish-private-note-and-observe.md",
+          "phases": ["authorize", "prepare", "submit", "reconcile", "observe"],
+          "gaps": ["Private visibility is not exposed by the reviewed publish command; post-click note-link discovery and creator analytics are not yet a conformed receipt/observation contract."]
+        }
+      ],
+      "failureDomains": ["xiaohongshu-creator-center", "creator-center-dom", "browser-cdp", "local-browser-session"],
+      "sourceRefs": [
+        "https://github.com/white0dew/XiaohongshuSkills",
+        "https://github.com/white0dew/XiaohongshuSkills/blob/main/scripts/cdp_publish.py"
+      ],
+      "upstream": {
+        "repository": "https://github.com/white0dew/XiaohongshuSkills.git",
+        "branch": "main",
+        "observedRevision": "ba485253e51fabe6a99916f0d378fa97884b0b75"
+      },
+      "maintenance": {
+        "owner": "xiaohongshu-maintainer",
+        "reviewOn": ["upstream-change", "source-change", "probe-failure", "contract-gap-change", "manual"]
+      },
+      "notes": "MIT-licensed CDP implementation with explicit fill/click separation, note-link discovery, owned-profile reads and creator content analytics."
+    },
+    {
       "id": "creator-web-opencli",
       "lifecycle": "researching",
       "contractLevel": "full",
@@ -98,6 +155,37 @@
         "reviewOn": ["upstream-change", "source-change", "contract-gap-change", "manual"]
       },
       "notes": "Different control channel through a browser extension; still shares the creator-center UI failure domain."
+    },
+    {
+      "id": "creator-api-xiaohongshu-cli",
+      "lifecycle": "researching",
+      "contractLevel": "full",
+      "accessMethod": "signed-web-api",
+      "automaticSelectionEligible": false,
+      "priority": 35,
+      "capabilityCoverage": [
+        {
+          "capabilityRef": "/capabilities/xiaohongshu/publish-private-note-and-observe.md",
+          "phases": ["authorize", "prepare", "submit", "reconcile", "observe"],
+          "gaps": ["Repository license is absent, so dependency use is blocked; publish response shape, receipt stability, and live private-note reconciliation are unverified."]
+        }
+      ],
+      "failureDomains": ["xiaohongshu-internal-api", "signature-algorithm", "cookie-session", "api-contract"],
+      "sourceRefs": [
+        "https://github.com/jackwener/xiaohongshu-cli",
+        "https://github.com/jackwener/xiaohongshu-cli/blob/main/xhs_cli/commands/creator.py",
+        "https://github.com/jackwener/xiaohongshu-cli/blob/main/xhs_cli/client_mixins.py"
+      ],
+      "upstream": {
+        "repository": "https://github.com/jackwener/xiaohongshu-cli.git",
+        "branch": "main",
+        "observedRevision": "4d63f3c0c85ccd9054fa8e96d7f761aaf2507449"
+      },
+      "maintenance": {
+        "owner": "xiaohongshu-maintainer",
+        "reviewOn": ["upstream-change", "source-change", "probe-failure", "contract-gap-change", "manual"]
+      },
+      "notes": "Promising independent signed-API route: implements private image-note creation and the creator owned-note list, but cannot be adopted until licensing and conformance gaps are resolved."
     },
     {
       "id": "creator-web-omni-post",

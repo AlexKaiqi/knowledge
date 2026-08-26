@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/ecosystem-project-catalog.schema.json",
+  "title": "EcosystemProjectCatalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "id", "subject", "searchQueries", "projects"],
+  "properties": {
+    "schemaVersion": { "const": "dsh.ecosystem-project-catalog/v1" },
+    "id": { "$ref": "#/$defs/id" },
+    "subject": { "$ref": "#/$defs/id" },
+    "searchQueries": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "projects": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/project" }
+    }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$" },
+    "project": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "repository", "branch", "observedRevision", "status", "roles", "platformScope", "accessMechanisms", "capabilitySignals", "failureDomains", "license", "evidenceRefs", "gaps", "watch"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "repository": { "type": "string", "format": "uri" },
+        "branch": { "type": "string", "minLength": 1 },
+        "observedRevision": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "status": { "enum": ["candidate", "researching", "reference", "blocked", "excluded", "retired"] },
+        "roles": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "enum": ["connector-candidate", "collector-candidate", "upstream-variant", "reference-implementation", "evaluation-source"] }
+        },
+        "platformScope": { "enum": ["xiaohongshu.com", "rednote.com", "cross-platform"] },
+        "accessMechanisms": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "enum": ["creator-center-dom", "creator-signed-api", "public-signed-api", "browser-cdp", "browser-playwright", "browser-selenium", "browser-extension", "passive-browser-observation", "manual-evaluation"] }
+        },
+        "capabilitySignals": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "enum": ["authorize", "publish-image", "publish-video", "publish-private", "list-owned-notes", "note-detail", "comments", "search", "creator-analytics", "passive-capture", "benchmark"] }
+        },
+        "failureDomains": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/id" } },
+        "license": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "dependencyUse"],
+          "properties": {
+            "status": { "enum": ["verified", "custom", "absent", "unverified"] },
+            "spdx": { "type": "string", "minLength": 1 },
+            "dependencyUse": { "enum": ["allowed", "research-only", "blocked"] },
+            "constraint": { "type": "string", "minLength": 1 }
+          }
+        },
+        "evidenceRefs": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "format": "uri" } },
+        "gaps": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+        "exclusionReason": { "type": "string", "minLength": 1 },
+        "watch": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["priority", "lastReviewedAt", "reviewCadenceDays", "reviewOn"],
+          "properties": {
+            "priority": { "enum": ["high", "medium", "low"] },
+            "lastReviewedAt": { "type": "string", "format": "date-time" },
+            "reviewCadenceDays": { "type": "integer", "minimum": 1 },
+            "reviewOn": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": { "enum": ["head-change", "release", "issue-change", "license-change", "archive", "cadence"] }
+            }
+          }
+        },
+        "notes": { "type": "string", "minLength": 1 }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "excluded" } }, "required": ["status"] },
+          "then": { "required": ["exclusionReason"] }
+        }
+      ]
+    }
+  }
+}

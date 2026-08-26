@@ -49,6 +49,12 @@ export function evaluateRenderedSemanticObservation(source, renderedText) {
   }
 }
 
+export function isProjectReviewDue(project, observedAt) {
+  const lastReviewed = new Date(project.watch.lastReviewedAt).getTime()
+  const cadenceMs = project.watch.reviewCadenceDays * 24 * 60 * 60 * 1000
+  return observedAt.getTime() >= lastReviewed + cadenceMs
+}
+
 async function defaultSourceCheck(source, fetchImpl, renderedObservation) {
   try {
     const response = await fetchImpl(source.url, { method: 'GET', redirect: 'follow', signal: AbortSignal.timeout(15_000) })
@@ -105,6 +111,7 @@ export async function collectXiaohongshuMaintenance({
   fetchImpl = fetch,
   sourceCheck = defaultSourceCheck,
   upstreamHead = defaultUpstreamHead,
+  projectHead = upstreamHead,
   artifactCheck = defaultArtifactCheck,
   now = () => new Date(),
   runtimeRoot = path.join(repositoryRoot, '.runtime/xiaohongshu-browser'),
@@ -113,8 +120,10 @@ export async function collectXiaohongshuMaintenance({
   const upstream = JSON.parse(await readFile(path.join(repositoryRoot, 'connectors/xiaohongshu-browser/upstream.json'), 'utf8'))
   const connector = JSON.parse(await readFile(path.join(repositoryRoot, 'connectors/xiaohongshu-browser/connector.json'), 'utf8'))
   const routeCatalog = JSON.parse(await readFile(path.join(repositoryRoot, 'connectors/xiaohongshu-browser/routes.json'), 'utf8'))
+  const projectCatalog = JSON.parse(await readFile(path.join(repositoryRoot, 'collectors/xiaohongshu-maintainer/projects.json'), 'utf8'))
   const upstreamRoutes = routeCatalog.routes.filter((route) => route.upstream)
-  const [sources, routeUpstreams, artifacts] = await Promise.all([
+  const observedAtDate = now()
+  const [sources, routeUpstreams, projects, artifacts] = await Promise.all([
     Promise.all(officialSources.map((source) => sourceCheck(source, fetchImpl, renderedSourceObservations[source.id]))),
     Promise.all(upstreamRoutes.map(async (route) => {
       try {
@@ -144,12 +153,43 @@ export async function collectXiaohongshuMaintenance({
         }
       }
     })),
+    Promise.all(projectCatalog.projects.map(async (project) => {
+      const reviewDue = isProjectReviewDue(project, observedAtDate)
+      try {
+        const currentHead = await projectHead(project.repository, project.branch, project)
+        return {
+          id: project.id,
+          status: project.status,
+          roles: project.roles,
+          license: project.license,
+          priority: project.watch.priority,
+          repository: project.repository,
+          observedRevision: project.observedRevision,
+          currentHead,
+          headStatus: currentHead === project.observedRevision ? 'current' : 'review-required',
+          reviewDue,
+        }
+      } catch {
+        return {
+          id: project.id,
+          status: project.status,
+          roles: project.roles,
+          license: project.license,
+          priority: project.watch.priority,
+          repository: project.repository,
+          observedRevision: project.observedRevision,
+          currentHead: null,
+          headStatus: 'unreachable',
+          reviewDue,
+        }
+      }
+    })),
     artifactCheck(runtimeRoot),
   ])
   const canonicalCapabilityPath = path.join(repositoryRoot, 'knowledge/capabilities/xiaohongshu/publish-private-note-and-observe.md')
   let canonicalCapability = false
   try { await access(canonicalCapabilityPath); canonicalCapability = true } catch {}
-  const observedAt = now().toISOString()
+  const observedAt = observedAtDate.toISOString()
   const blockers = []
   if (connector.conformance.status !== 'verified') blockers.push('connector-not-live-verified')
   if (!routeCatalog.routes.some((route) => route.automaticSelectionEligible && route.lifecycle === 'verified' && route.contractLevel === 'full')) blockers.push('no-verified-full-route')
@@ -177,6 +217,15 @@ export async function collectXiaohongshuMaintenance({
   if (browserRequired.length > 0) sourceProposals.push({ kind: 'knowledge-proposal', action: 'run-browser-semantic-observation', sourceIds: browserRequired })
   if (baselineRequired.length > 0) sourceProposals.push({ kind: 'knowledge-proposal', action: 'review-and-accept-source-baseline', sourceIds: baselineRequired })
   if (changedSources.length > 0) sourceProposals.push({ kind: 'knowledge-proposal', action: 'review-official-source-change', sourceIds: changedSources })
+  const projectProposals = []
+  for (const project of projects) {
+    if (project.headStatus === 'review-required') {
+      projectProposals.push({ kind: 'connector-change-proposal', projectId: project.id, action: 'review-research-project-update' })
+    } else if (project.headStatus === 'unreachable') {
+      projectProposals.push({ kind: 'connector-change-proposal', projectId: project.id, action: 'restore-project-observation' })
+    }
+    if (project.reviewDue) projectProposals.push({ kind: 'connector-change-proposal', projectId: project.id, action: 'scheduled-project-review' })
+  }
   return {
     schemaVersion: 'knowledge.maintenance-report/v1',
     subject: 'xiaohongshu',
@@ -201,10 +250,20 @@ export async function collectXiaohongshuMaintenance({
       })),
       upstreams: routeUpstreams,
     },
+    ecosystemProjects: {
+      catalogId: projectCatalog.id,
+      searchQueries: projectCatalog.searchQueries,
+      total: projects.length,
+      connectorRelevant: projects.filter((project) => project.roles.includes('connector-candidate') && project.status !== 'excluded' && project.status !== 'retired').map((project) => project.id),
+      adoptableCandidates: projects.filter((project) => project.roles.includes('connector-candidate') && project.license.dependencyUse === 'allowed' && ['candidate', 'researching'].includes(project.status)).map((project) => project.id),
+      dependencyBlocked: projects.filter((project) => project.license.dependencyUse === 'blocked').map((project) => project.id),
+      researchOnly: projects.filter((project) => project.license.dependencyUse === 'research-only').map((project) => project.id),
+      observations: projects,
+    },
     connector: { id: connector.id, conformance: connector.conformance.status, artifacts },
     canonicalCapability,
     blockers: [...new Set(blockers)],
-    proposals: [...routeProposals, ...sourceProposals],
+    proposals: [...routeProposals, ...sourceProposals, ...projectProposals],
     nextRequiredGate: connector.conformance.status === 'verified' ? 'none' : 'explicit-live-probe-approval',
   }
 }

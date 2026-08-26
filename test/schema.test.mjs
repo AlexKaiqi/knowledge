@@ -7,7 +7,7 @@ import addFormats from 'ajv-formats'
 test('all knowledge control-plane schemas compile with unique ids', async () => {
   const directory = new URL('../spec/', import.meta.url)
   const files = (await readdir(directory)).filter((file) => file.endsWith('.schema.json')).sort()
-  assert.equal(files.length, 10)
+  assert.equal(files.length, 11)
   const ids = new Set()
   for (const file of files) {
     const schema = JSON.parse(await readFile(new URL(file, directory), 'utf8'))
