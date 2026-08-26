@@ -146,11 +146,15 @@ test('ecosystem discovery is serial, bounded and deduplicates unseen repositorie
 })
 
 test('maintainer is proposal-only and cannot promote an unverified connector', async () => {
+  const routeHeadCalls = new Map()
   const report = await collectXiaohongshuMaintenance({
     repositorySearch: currentDiscovery,
     releaseTags: currentReleaseTags,
     sourceCheck: async (source) => ({ ...source, status: 'reachable', httpStatus: 200 }),
-    upstreamHead: currentRouteHead,
+    upstreamHead: async (repository) => {
+      routeHeadCalls.set(repository, (routeHeadCalls.get(repository) ?? 0) + 1)
+      return currentRouteHead(repository)
+    },
     projectHead: currentProjectHead,
     artifactCheck: async () => [
       { id: 'xiaohongshu-mcp', status: 'present' },
@@ -162,11 +166,13 @@ test('maintainer is proposal-only and cannot promote an unverified connector', a
   assert.equal(report.sources.length, officialSources.length)
   assert.equal(report.connector.conformance, 'candidate')
   assert.equal(report.connector.capabilityConformance.find((binding) => binding.operation === 'listOwnedNotes').verificationStatus, 'current')
-  assert.ok(report.blockers.includes('connector-not-live-verified'))
-  assert.ok(report.blockers.includes('no-verified-full-route'))
-  assert.ok(report.blockers.includes('capability-not-admitted'))
-  assert.equal(report.accessRoutes.automaticEligible.length, 0)
-  assert.equal(report.accessRoutes.upstreams.length, 7)
+  assert.ok(report.blockers.includes('capability-not-live-verified:publishPrivateNoteAndObserve'))
+  assert.ok(report.blockers.includes('no-verified-full-route:publishPrivateNoteAndObserve'))
+  assert.ok(report.blockers.includes('capability-not-admitted:publishPrivateNoteAndObserve'))
+  assert.equal(report.blockers.some((blocker) => blocker.endsWith(':listOwnedNotes')), false)
+  assert.deepEqual(report.accessRoutes.automaticEligible, ['owned-notes-xiaohongshu-mcp'])
+  assert.equal(report.accessRoutes.upstreams.length, 8)
+  assert.equal(routeHeadCalls.get('https://github.com/xpzouying/xiaohongshu-mcp.git'), 1)
   assert.equal(report.ecosystemProjects.total, 31)
   assert.equal(report.ecosystemProjects.discovery.queries.length, 4)
   assert.equal(report.ecosystemProjects.discovery.fullCycleDays, 5)
@@ -200,12 +206,12 @@ test('maintainer reports upstream drift for review without repinning', async () 
     artifactCheck: async () => [],
   })
   assert.equal(report.upstream.status, 'review-required')
-  assert.equal(report.proposals.length, 7)
-  assert.deepEqual(report.proposals[0], {
-    kind: 'connector-change-proposal',
-    routeId: 'creator-web-xiaohongshu-mcp',
-    action: 'audit-new-upstream-before-repin',
-  })
+  assert.equal(report.proposals.length, 8)
+  assert.deepEqual(report.proposals.slice(0, 2).map((proposal) => proposal.routeId), [
+    'owned-notes-xiaohongshu-mcp',
+    'creator-web-xiaohongshu-mcp',
+  ])
+  assert.equal(report.proposals.slice(0, 2).every((proposal) => proposal.kind === 'connector-change-proposal' && proposal.action === 'audit-new-upstream-before-repin'), true)
 })
 
 test('maintainer preserves an unreachable research route as a proposal instead of hiding it', async () => {

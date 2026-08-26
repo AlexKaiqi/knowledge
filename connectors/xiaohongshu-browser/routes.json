@@ -3,9 +3,48 @@
   "id": "xiaohongshu-access-routes",
   "subjectRef": "/platforms/xiaohongshu.md",
   "capabilityRefs": [
-    "/capabilities/xiaohongshu/publish-private-note-and-observe.md"
+    "/capabilities/xiaohongshu/publish-private-note-and-observe.md",
+    "/capabilities/xiaohongshu/list-owned-notes.md"
   ],
   "routes": [
+    {
+      "id": "owned-notes-xiaohongshu-mcp",
+      "lifecycle": "verified",
+      "contractLevel": "full",
+      "accessMethod": "browser-assisted",
+      "automaticSelectionEligible": true,
+      "priority": 5,
+      "connectorId": "xiaohongshu-browser",
+      "implementationRef": "repo:/connectors/xiaohongshu-browser/src/index.mjs",
+      "probeReportRef": "/verifications/xiaohongshu/owned-notes/report.json",
+      "capabilityCoverage": [
+        {
+          "capabilityRef": "/capabilities/xiaohongshu/list-owned-notes.md",
+          "phases": ["authorize", "observe"],
+          "gaps": []
+        }
+      ],
+      "failureDomains": [
+        "xiaohongshu-creator-center",
+        "creator-center-dom",
+        "rod-runtime",
+        "local-browser-session"
+      ],
+      "sourceRefs": [
+        "https://github.com/xpzouying/xiaohongshu-mcp",
+        "https://github.com/xpzouying/xiaohongshu-mcp/blob/main/xiaohongshu/user_profile.go"
+      ],
+      "upstream": {
+        "repository": "https://github.com/xpzouying/xiaohongshu-mcp.git",
+        "branch": "main",
+        "observedRevision": "6fb866a7db4e3dcce8dc00a0dde07370f3b12946"
+      },
+      "maintenance": {
+        "owner": "xiaohongshu-maintainer",
+        "reviewOn": ["upstream-change", "source-change", "probe-failure", "contract-gap-change", "manual"]
+      },
+      "notes": "Capability-specific read route admitted only for bounded owned-note listing; it does not confer publication conformance on the sibling write route."
+    },
     {
       "id": "creator-web-xiaohongshu-mcp",
       "lifecycle": "candidate",

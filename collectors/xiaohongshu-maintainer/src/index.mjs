@@ -206,11 +206,17 @@ export async function collectXiaohongshuMaintenance({
   const observedAtDate = now()
   const discoveryQueries = selectDiscoveryQueries(projectCatalog.searchQueries, observedAtDate)
   const releaseWatchProjects = selectReleaseWatchProjects(projectCatalog, observedAtDate, RELEASE_TAG_PROJECTS_PER_RUN)
+  const routeHeadCache = new Map()
+  const readRouteHead = (repository, branch) => {
+    const key = `${repository}\n${branch}`
+    if (!routeHeadCache.has(key)) routeHeadCache.set(key, upstreamHead(repository, branch))
+    return routeHeadCache.get(key)
+  }
   const [sources, routeUpstreams, projects, artifacts, discovery, releaseTagObservations] = await Promise.all([
     Promise.all(officialSources.map((source) => sourceCheck(source, fetchImpl, renderedSourceObservations[source.id]))),
     Promise.all(upstreamRoutes.map(async (route) => {
       try {
-        const currentHead = await upstreamHead(route.upstream.repository, route.upstream.branch)
+        const currentHead = await readRouteHead(route.upstream.repository, route.upstream.branch)
         return {
           routeId: route.id,
           lifecycle: route.lifecycle,
@@ -295,9 +301,16 @@ export async function collectXiaohongshuMaintenance({
   }))
   const observedAt = observedAtDate.toISOString()
   const blockers = []
-  if (connector.conformance.status !== 'verified') blockers.push('connector-not-live-verified')
-  if (!routeCatalog.routes.some((route) => route.automaticSelectionEligible && route.lifecycle === 'verified' && route.contractLevel === 'full')) blockers.push('no-verified-full-route')
-  if (!canonicalCapability) blockers.push('capability-not-admitted')
+  for (const binding of capabilityConformance) {
+    if (binding.status !== 'verified') blockers.push(`capability-not-live-verified:${binding.operation}`)
+    const hasVerifiedRoute = routeCatalog.routes.some((route) => route.automaticSelectionEligible
+      && route.lifecycle === 'verified'
+      && route.contractLevel === 'full'
+      && route.capabilityCoverage.some((coverage) => coverage.capabilityRef === binding.capabilityRef && coverage.gaps.length === 0))
+    if (!hasVerifiedRoute) blockers.push(`no-verified-full-route:${binding.operation}`)
+  }
+  if (!canonicalCapability) blockers.push('capability-not-admitted:publishPrivateNoteAndObserve')
+  if (!canonicalReadCapability) blockers.push('capability-not-admitted:listOwnedNotes')
   for (const route of routeUpstreams) {
     if (route.status === 'review-required') blockers.push(`route-upstream-changed:${route.routeId}`)
     if (route.status === 'unreachable') blockers.push(`route-upstream-unreachable:${route.routeId}`)
@@ -323,7 +336,8 @@ export async function collectXiaohongshuMaintenance({
       verificationProposals.push({ kind: 'verification-report', capabilityRef: binding.capabilityRef, action: 'restore-live-verification-report' })
     }
   }
-  const primaryRoute = routeUpstreams.find((route) => route.repository === upstream.repository)
+  const primaryRoute = routeUpstreams.find((route) => route.routeId === 'creator-web-xiaohongshu-mcp')
+    ?? routeUpstreams.find((route) => route.repository === upstream.repository)
   const routeProposals = routeUpstreams
     .filter((route) => route.status !== 'current')
     .map((route) => ({
