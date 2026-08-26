@@ -55,10 +55,17 @@
         "required": ["capabilityRef", "operation"],
         "properties": {
           "capabilityRef": { "$ref": "#/$defs/localRef" },
-          "operation": { "type": "string", "minLength": 1 }
+          "operation": { "type": "string", "minLength": 1 },
+          "conformance": { "$ref": "#/$defs/conformance" }
         }
       }
     },
+    "conformance": { "$ref": "#/$defs/conformance" }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$" },
+    "localRef": { "type": "string", "pattern": "^/(?!/)(?!.*\\.\\.)[^?#]+$" },
+    "repositoryRef": { "type": "string", "pattern": "^repo:/(?!/)(?!.*\\.\\.)[^?#]+$" },
     "conformance": {
       "oneOf": [
         {
@@ -91,10 +98,5 @@
         }
       ]
     }
-  },
-  "$defs": {
-    "id": { "type": "string", "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$" },
-    "localRef": { "type": "string", "pattern": "^/(?!/)(?!.*\\.\\.)[^?#]+$" },
-    "repositoryRef": { "type": "string", "pattern": "^repo:/(?!/)(?!.*\\.\\.)[^?#]+$" }
   }
 }

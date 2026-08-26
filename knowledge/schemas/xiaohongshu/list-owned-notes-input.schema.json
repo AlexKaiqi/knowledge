@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/xiaohongshu/list-owned-notes-input.schema.json",
+  "title": "ListXiaohongshuOwnedNotesInput",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "limit": { "type": "integer", "minimum": 1, "maximum": 100, "default": 20 }
+  }
+}

@@ -37,6 +37,38 @@ test('connector only permits an authenticated loopback sidecar', () => {
   assert.throws(() => new XiaohongshuBrowserConnector(), /token credential/)
 })
 
+test('lists only stable owned-note summaries without leaking ephemeral access artifacts', async () => {
+  const feed = {
+    id: 'owned-note-1',
+    xsecToken: 'must-not-leak',
+    noteCard: { displayTitle: '我的笔记', user: { nickname: 'must-not-leak-either' } },
+  }
+  const queue = [
+    response({ status: 'healthy' }),
+    response({ success: true, data: { is_logged_in: true } }),
+    response({ success: true, data: { feeds: [feed] } }),
+  ]
+  const connector = new XiaohongshuBrowserConnector({
+    token: 'loopback-secret',
+    fetchImpl: async () => queue.shift(),
+    now: () => new Date('2026-08-27T00:00:00.000Z'),
+  })
+  const result = await connector.listOwnedNotes({ limit: 1 })
+  assert.deepEqual(result, {
+    status: 'available',
+    observedAt: '2026-08-27T00:00:00.000Z',
+    items: [{ externalId: 'owned-note-1', title: '我的笔记', url: 'https://www.xiaohongshu.com/explore/owned-note-1' }],
+  })
+  assert.equal(JSON.stringify(result).includes('must-not-leak'), false)
+})
+
+test('owned-note listing validates limits before touching the platform', async () => {
+  let called = false
+  const connector = new XiaohongshuBrowserConnector({ token: 'secret', fetchImpl: async () => { called = true } })
+  await assert.rejects(() => connector.listOwnedNotes({ limit: 0 }), /limit must be/)
+  assert.equal(called, false)
+})
+
 test('private publication is confirmed by owned-profile diff and detail, then observed without identities', async (t) => {
   const stateRoot = await mkdtemp(path.join(os.tmpdir(), 'knowledge-xhs-test-'))
   t.after(() => rm(stateRoot, { recursive: true, force: true }))

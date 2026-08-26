@@ -41,6 +41,7 @@ test('maintainer is proposal-only and cannot promote an unverified connector', a
   assert.equal(report.mode, 'proposal-only')
   assert.equal(report.sources.length, officialSources.length)
   assert.equal(report.connector.conformance, 'candidate')
+  assert.equal(report.connector.capabilityConformance.find((binding) => binding.operation === 'listOwnedNotes').verificationStatus, 'current')
   assert.ok(report.blockers.includes('connector-not-live-verified'))
   assert.ok(report.blockers.includes('no-verified-full-route'))
   assert.ok(report.blockers.includes('capability-not-admitted'))
@@ -50,6 +51,18 @@ test('maintainer is proposal-only and cannot promote an unverified connector', a
   assert.ok(report.ecosystemProjects.dependencyBlocked.includes('jackwener-xiaohongshu-cli'))
   assert.equal(report.ecosystemProjects.adoptableCandidates.includes('jackwener-xiaohongshu-cli'), false)
   assert.equal(report.nextRequiredGate, 'explicit-live-probe-approval')
+})
+
+test('maintainer proposes a new probe when a verified capability report expires', async () => {
+  const report = await collectXiaohongshuMaintenance({
+    sourceCheck: async (source) => ({ ...source, status: 'reachable', httpStatus: 200 }),
+    upstreamHead: currentRouteHead,
+    projectHead: currentProjectHead,
+    artifactCheck: async () => [],
+    now: () => new Date('2026-09-03T00:00:00Z'),
+  })
+  assert.ok(report.blockers.includes('capability-verification-expired:listOwnedNotes'))
+  assert.ok(report.proposals.some((proposal) => proposal.action === 'rerun-expired-live-probe' && proposal.capabilityRef === '/capabilities/xiaohongshu/list-owned-notes.md'))
 })
 
 test('maintainer reports upstream drift for review without repinning', async () => {

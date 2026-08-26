@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "dsh.probe-report/v1",
+  "id": "xiaohongshu-owned-notes-live-20260826",
+  "capabilityRef": "/capabilities/xiaohongshu/list-owned-notes.md",
+  "connectorId": "xiaohongshu-browser",
+  "probeDefinitionRef": "repo:/probes/definitions/xiaohongshu-owned-notes-live.json",
+  "identityRef": "identity:xiaohongshu-owned-default",
+  "identityPoolRef": "identity-pool:xiaohongshu-owned-probes",
+  "environment": "production-private",
+  "level": "live",
+  "outcome": "passed",
+  "startedAt": "2026-08-26T16:43:27.783Z",
+  "finishedAt": "2026-08-26T16:43:43.032Z",
+  "expiresAt": "2026-09-02T16:43:43.032Z",
+  "checks": [
+    { "id": "owned-session-ready", "status": "passed" },
+    { "id": "owned-profile-readable", "status": "passed", "detail": "0 owned notes observed" },
+    { "id": "output-schema-valid", "status": "passed" },
+    { "id": "evidence-deidentified", "status": "passed" }
+  ],
+  "evidence": [
+    {
+      "kind": "snapshot",
+      "ref": "repo:/knowledge/verifications/xiaohongshu/owned-notes/snapshot.json",
+      "sha256": "565c881daba8f65d7d5cfcf2064793487aae5232a9b992b1037c12a67bfcbf66"
+    }
+  ],
+  "sideEffects": [{ "effect": "none", "status": "none" }]
+}

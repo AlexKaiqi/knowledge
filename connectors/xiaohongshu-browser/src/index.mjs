@@ -223,6 +223,22 @@ export class XiaohongshuBrowserConnector {
     return { feedIds: feeds.map(feedId).filter(Boolean), observedAt: this.now().toISOString() }
   }
 
+  async listOwnedNotes({ limit = 20 } = {}) {
+    if (!Number.isInteger(limit) || limit < 1 || limit > 100) throw new Error('limit must be an integer from 1 to 100')
+    const session = await this.inspectSession()
+    if (!session.ready) throw new Error('owned Xiaohongshu session is not logged in')
+    const feeds = findFeeds(await this.request('/api/v1/user/me?tab=note'))
+    return {
+      status: 'available',
+      observedAt: this.now().toISOString(),
+      items: feeds.slice(0, limit).flatMap((feed) => {
+        const id = feedId(feed)
+        if (!id) return []
+        return [{ externalId: id, title: feedTitle(feed), url: `https://www.xiaohongshu.com/explore/${id}` }]
+      }),
+    }
+  }
+
   async submitPrivate(revision) {
     const common = {
       title: revision.title,

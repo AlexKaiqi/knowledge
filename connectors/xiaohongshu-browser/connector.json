@@ -1,9 +1,10 @@
 {
   "schemaVersion": "dsh.connector-definition/v1",
   "id": "xiaohongshu-browser",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "capabilityRefs": [
-    "/capabilities/xiaohongshu/publish-private-note-and-observe.md"
+    "/capabilities/xiaohongshu/publish-private-note-and-observe.md",
+    "/capabilities/xiaohongshu/list-owned-notes.md"
   ],
   "execution": {
     "kind": "deterministic",
@@ -28,6 +29,14 @@
     {
       "capabilityRef": "/capabilities/xiaohongshu/publish-private-note-and-observe.md",
       "operation": "publishPrivateNoteAndObserve"
+    },
+    {
+      "capabilityRef": "/capabilities/xiaohongshu/list-owned-notes.md",
+      "operation": "listOwnedNotes",
+      "conformance": {
+        "status": "verified",
+        "probeReportRef": "/verifications/xiaohongshu/owned-notes/report.json"
+      }
     }
   ],
   "conformance": {

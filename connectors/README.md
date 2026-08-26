@@ -12,4 +12,6 @@ connectors/<connector-id>/
 
 真实候选实现可以以 `conformance.status=candidate` 进入仓库接受 review 和 probe；它不会被 Gateway 路由，也不能支撑 canonical knowledge。只有 `verified` Connector 才能被已准入 Capability 使用。空目录、伪实现和仅有声明的占位仍然禁止。
 
+同一 Connector 可以绑定多个成熟度不同的 Capability。`handlers[].conformance` 可覆盖 Connector 默认 conformance；准入和路由始终读取目标 Capability handler 的有效状态，不能用一个已验证读能力替整项写能力背书。
+
 多路径不等于盲目 fallback。等价自动切换必须同时满足 `verified`、完整 Capability 契约和健康检查；共享同一平台 UI/接口的实现要显式声明共同故障域。平台写入必须在副作用前固定 route，任何 `possibly-executed` 或 `unknown` 结果都先对账，禁止换 route 重发。

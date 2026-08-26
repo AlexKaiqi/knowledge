@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "dsh.xiaohongshu-owned-notes-snapshot/v1",
+  "observedAt": "2026-08-26T16:43:43.005Z",
+  "sessionReady": true,
+  "status": "available",
+  "itemCount": 0,
+  "outputSchemaValid": true,
+  "retainedEvidence": "count-and-structural-checks-only",
+  "internalArtifactLeakCheck": "passed"
+}

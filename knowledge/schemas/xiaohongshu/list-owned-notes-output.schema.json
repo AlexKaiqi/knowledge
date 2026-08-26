@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/xiaohongshu/list-owned-notes-output.schema.json",
+  "title": "XiaohongshuOwnedNoteList",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["status", "observedAt", "items"],
+  "properties": {
+    "status": { "const": "available" },
+    "observedAt": { "type": "string", "format": "date-time" },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["externalId", "title", "url"],
+        "properties": {
+          "externalId": { "type": "string", "minLength": 1 },
+          "title": { "type": "string" },
+          "url": { "type": "string", "format": "uri", "pattern": "^https://www\\.xiaohongshu\\.com/explore/" }
+        }
+      }
+    }
+  }
+}

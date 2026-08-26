@@ -12,6 +12,10 @@ const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url))
 const sourceWatchList = JSON.parse(await readFile(path.join(repositoryRoot, 'collectors/xiaohongshu-maintainer/sources.json'), 'utf8'))
 export const officialSources = sourceWatchList.sources
 
+async function readJson(file) {
+  return JSON.parse(await readFile(file, 'utf8'))
+}
+
 function normalizeHtml(html, mode) {
   const withoutVolatileScripts = html
     .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '')
@@ -187,8 +191,27 @@ export async function collectXiaohongshuMaintenance({
     artifactCheck(runtimeRoot),
   ])
   const canonicalCapabilityPath = path.join(repositoryRoot, 'knowledge/capabilities/xiaohongshu/publish-private-note-and-observe.md')
+  const canonicalReadCapabilityPath = path.join(repositoryRoot, 'knowledge/capabilities/xiaohongshu/list-owned-notes.md')
   let canonicalCapability = false
+  let canonicalReadCapability = false
   try { await access(canonicalCapabilityPath); canonicalCapability = true } catch {}
+  try { await access(canonicalReadCapabilityPath); canonicalReadCapability = true } catch {}
+  const capabilityConformance = await Promise.all(connector.handlers.map(async (handler) => {
+    const conformance = handler.conformance ?? connector.conformance
+    const state = { capabilityRef: handler.capabilityRef, operation: handler.operation, status: conformance.status }
+    if (conformance.status !== 'verified') return state
+    try {
+      const report = await readJson(path.join(repositoryRoot, 'knowledge', conformance.probeReportRef.replace(/^\//, '')))
+      return {
+        ...state,
+        probeReportRef: conformance.probeReportRef,
+        verificationExpiresAt: report.expiresAt,
+        verificationStatus: Date.parse(report.expiresAt) > observedAtDate.getTime() ? 'current' : 'expired',
+      }
+    } catch {
+      return { ...state, probeReportRef: conformance.probeReportRef, verificationStatus: 'unreadable' }
+    }
+  }))
   const observedAt = observedAtDate.toISOString()
   const blockers = []
   if (connector.conformance.status !== 'verified') blockers.push('connector-not-live-verified')
@@ -202,6 +225,16 @@ export async function collectXiaohongshuMaintenance({
   if (sources.some((source) => source.fingerprintStatus === 'review-required')) blockers.push('official-source-content-changed')
   if (sources.some((source) => source.semanticStatus === 'failed')) blockers.push('official-source-semantic-assertion-failed')
   if (artifacts.some((artifact) => artifact.status !== 'present')) blockers.push('local-runtime-not-built')
+  const verificationProposals = []
+  for (const binding of capabilityConformance) {
+    if (binding.verificationStatus === 'expired') {
+      blockers.push(`capability-verification-expired:${binding.operation}`)
+      verificationProposals.push({ kind: 'verification-report', capabilityRef: binding.capabilityRef, action: 'rerun-expired-live-probe' })
+    } else if (binding.verificationStatus === 'unreadable') {
+      blockers.push(`capability-verification-unreadable:${binding.operation}`)
+      verificationProposals.push({ kind: 'verification-report', capabilityRef: binding.capabilityRef, action: 'restore-live-verification-report' })
+    }
+  }
   const primaryRoute = routeUpstreams.find((route) => route.repository === upstream.repository)
   const routeProposals = routeUpstreams
     .filter((route) => route.status !== 'current')
@@ -260,10 +293,11 @@ export async function collectXiaohongshuMaintenance({
       researchOnly: projects.filter((project) => project.license.dependencyUse === 'research-only').map((project) => project.id),
       observations: projects,
     },
-    connector: { id: connector.id, conformance: connector.conformance.status, artifacts },
+    connector: { id: connector.id, conformance: connector.conformance.status, capabilityConformance, artifacts },
     canonicalCapability,
+    canonicalReadCapability,
     blockers: [...new Set(blockers)],
-    proposals: [...routeProposals, ...sourceProposals, ...projectProposals],
+    proposals: [...routeProposals, ...sourceProposals, ...projectProposals, ...verificationProposals],
     nextRequiredGate: connector.conformance.status === 'verified' ? 'none' : 'explicit-live-probe-approval',
   }
 }

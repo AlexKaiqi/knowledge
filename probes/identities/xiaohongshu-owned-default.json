@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "dsh.probe-identity/v1",
+  "id": "xiaohongshu-owned-default",
+  "subjectRef": "/platforms/xiaohongshu.md",
+  "kind": "owned-test",
+  "ownership": "user",
+  "credentialRef": "credential:runtime/xiaohongshu-browser/accounts/default",
+  "environment": "production-private",
+  "purpose": "Read-only conformance checks against the explicitly requested Xiaohongshu integration using the local owned-account session.",
+  "allowedCapabilityRefs": [
+    "/capabilities/xiaohongshu/list-owned-notes.md"
+  ],
+  "isolationKey": "xiaohongshu-owned-default",
+  "termsEvidenceRefs": [
+    "authorization:user-requested-xiaohongshu-integration"
+  ],
+  "lifecycle": {
+    "state": "active",
+    "createdAt": "2026-08-26T16:50:00Z"
+  },
+  "restrictions": {
+    "noRiskEvasion": true,
+    "noCrossIdentityCorrelation": true,
+    "noThirdPartyImpersonation": true
+  }
+}

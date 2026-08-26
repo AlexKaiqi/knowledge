@@ -16,7 +16,7 @@ const verificationTime = new Date('2026-08-26T12:00:00Z')
 test('canonical OKF bundle contains only probe-backed admitted knowledge', async () => {
   const result = await validateKnowledgeBundle({ root: knowledgeRoot, contractRoot, now: verificationTime })
   assert.equal(result.valid, true, JSON.stringify(result.errors, null, 2))
-  assert.deepEqual(result.summary, { documents: 15, capabilities: 1, admittedSubjects: 1 })
+  assert.deepEqual(result.summary, { documents: 18, capabilities: 2, admittedSubjects: 2 })
 })
 
 test('admission rejects unverified subject knowledge', async (context) => {
@@ -39,6 +39,20 @@ test('admission rejects stale canonical knowledge', async () => {
   })
   assert.equal(result.valid, false)
   assert.equal(result.errors.some((error) => error.code === 'knowledge.stale'), true)
+})
+
+test('admission rejects identity-required verification without identity bindings', async (context) => {
+  const temporaryRoot = await mkdtemp(path.join(os.tmpdir(), 'dsh-okf-identity-'))
+  context.after(() => rm(temporaryRoot, { recursive: true, force: true }))
+  await cp(knowledgeRoot, temporaryRoot, { recursive: true })
+  const reportPath = path.join(temporaryRoot, 'verifications/xiaohongshu/owned-notes/report.json')
+  const report = JSON.parse(await readFile(reportPath, 'utf8'))
+  delete report.identityRef
+  delete report.identityPoolRef
+  await writeFile(reportPath, `${JSON.stringify(report, null, 2)}\n`)
+  const result = await validateKnowledgeBundle({ root: temporaryRoot, contractRoot, now: verificationTime })
+  assert.equal(result.valid, false)
+  assert.equal(result.errors.some((error) => error.code === 'probe.identity-missing'), true)
 })
 
 test('co-located connector definition stays hidden from public knowledge', async () => {

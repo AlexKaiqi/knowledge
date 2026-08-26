@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "xiaohongshu-owned-notes-live",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/xiaohongshu/list-owned-notes.md",
+  "connectorId": "xiaohongshu-browser",
+  "environment": "production-private",
+  "identity": {
+    "required": true,
+    "poolRef": "identity-pool:xiaohongshu-owned-probes"
+  },
+  "effect": "none",
+  "steps": [
+    { "id": "inspect-session", "operation": "inspectSession" },
+    { "id": "list-owned-notes", "operation": "listOwnedNotes", "inputRef": "inline:{\"limit\":20}" },
+    { "id": "validate-output", "operation": "validateAgainstCapabilityOutputSchema" },
+    { "id": "redact-evidence", "operation": "retainCountAndStructuralChecksOnly" }
+  ],
+  "assertions": [
+    "The loopback sidecar is healthy and the owned session is logged in.",
+    "The owned-profile note endpoint returns an available result; an empty item list is a valid platform response.",
+    "The result validates against the public output schema.",
+    "The retained evidence contains no note ID, title, username, cookie, sidecar token, xsec token, or account identity."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 180, "maxCost": 0, "currency": "CNY" }
+}

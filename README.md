@@ -69,15 +69,14 @@ Subject knowledge
 ## 当前状态
 
 ```text
-完整可用闭环：1（Information Source）
-已准入 Subject：1
-已准入 Capability：1
-已验证 Connector：1（xiaohongshu-account-docs）
-候选 Connector：1（xiaohongshu-browser）
+完整可用闭环：2（Information Source 1；Platform 1）
+已准入 Subject：2
+已准入 Capability：2
+Connector：xiaohongshu-account-docs 已验证；xiaohongshu-browser 为 mixed（读取已验证、发布候选）
 维护 Collector：2（xiaohongshu-account-docs-maintainer、xiaohongshu-maintainer）
 ```
 
-小红书官方账号 API 参考页已经形成“信息源 → Capability → Connector → live probe → Verification → canonical knowledge”的真实只读闭环。它不等于小红书平台业务接入完成：笔记发布、本人笔记反查与反馈采集仍是候选实现，尚未完成自有账号的真实私密发布与反查，因此不计为平台业务闭环。仓库不创建空的平台、Connector 或 Collector 占位。
+小红书已有两个真实闭环：官方账号 API 参考信息源，以及通过自有账号会话读取本人笔记列表的平台能力。后者 live probe 实际返回可用的空列表。笔记发布、详情反查与反馈采集仍是候选能力，尚未完成真实私密发布闭环。仓库不创建空的平台、Connector 或 Collector 占位。
 
 - [小红书接入调研与第一条能力纵切](docs/research/xiaohongshu-integration.md)
 

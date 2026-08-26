@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "dsh.probe-identity-pool/v1",
+  "id": "xiaohongshu-owned-probes",
+  "purpose": "Select the explicitly authorized owned Xiaohongshu session for bounded private-production conformance probes.",
+  "identityRefs": ["identity:xiaohongshu-owned-default"],
+  "selector": "sticky",
+  "limits": {
+    "maxConcurrency": 1,
+    "cooldownSeconds": 300,
+    "maxRunsPerIdentityPerDay": 4
+  },
+  "restrictions": {
+    "noRiskEvasion": true,
+    "noCrossIdentityCorrelation": true,
+    "noThirdPartyImpersonation": true
+  }
+}

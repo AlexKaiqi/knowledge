@@ -1,6 +1,6 @@
 # 小红书接入调研与第一条能力纵切
 
-状态：实现候选；canonical knowledge 尚未准入
+状态：本人笔记读取能力已准入；私密发布纵切仍为实现候选
 
 核验日期：2026-08-27
 
@@ -105,7 +105,7 @@ Publication Attempt
 - **Ephemeral Access Artifact**：`xsec_token` 只在当前请求链内使用，不进 knowledge、ledger、receipt 或日志。
 - **Owned Account Session**：仓库只保存 opaque identity/credential ref；Cookie 与真实账号信息留在仓库外。
 
-## 5. 候选能力契约
+## 5. 候选发布能力契约
 
 稳定 ID：`xiaohongshu.note.publish-private-and-observe`
 
@@ -196,15 +196,21 @@ effect：platform-write
 - 10 条 access route（完整候选、研究、降级、恢复和组件）与 18 项开源生态 watch catalog；
 - 7 个 route 上游和 18 个研究项目的独立 HEAD/复审观测；
 
-尚未完成，因此当前完整可用闭环仍是 **0**：
+平台读取闭环已完成：
 
-- 当前 sidecar 已构建，用户自有账号扫码登录与只读 doctor 已通过，但这只证明执行环境和本人主页读取可用；
-- 创建 opaque probe identity/pool（需要用户确认所有权和授权依据）；
+- 当前 sidecar 已构建，自有账号会话登录有效；
+- `listOwnedNotes` live probe 实际读取本人主页并返回 0 条的合法空列表；
+- 输出通过产品 Schema，证据只保留条目数量与结构检查；
+- 小红书 Platform、本人笔记摘要 Concept、读取 Capability 和 live Verification 已进入 canonical `knowledge/`。
+
+私密发布闭环仍为 **0**，尚未完成：
+
+- 扩展当前 opaque probe identity 对私密发布 Capability 的一次性授权；
 - 冻结私密 probe revision；
 - 用户对该 revision 做一次性发布确认；
 - 真实发布、本人主页差分、详情核验和初始反馈读取；
 - 生成脱敏 VerificationReport；
-- 将 Platform、Concept、Capability 和 Schema 从候选提升到 canonical `knowledge/`。
+- 将发布相关 Concept、Capability 和 Schema 从候选提升到 canonical `knowledge/`。
 
 ## 8. 来源
 

@@ -22,12 +22,25 @@ test('Xiaohongshu candidate control-plane instances match their schemas', async 
     ['../spec/connector-definition.schema.json', '../connectors/xiaohongshu-account-docs/connector.json'],
     ['../spec/collector-definition.schema.json', '../collectors/xiaohongshu-account-docs-maintainer/collector.json'],
     ['../spec/probe-definition.schema.json', '../probes/definitions/xiaohongshu-account-api-live.json'],
+    ['../spec/probe-definition.schema.json', '../probes/definitions/xiaohongshu-owned-notes-live.json'],
+    ['../spec/probe-identity.schema.json', '../probes/identities/xiaohongshu-owned-default.json'],
+    ['../spec/probe-identity-pool.schema.json', '../probes/pools/xiaohongshu-owned-probes.json'],
   ]
   for (const [schemaPath, instancePath] of cases) {
     const validate = await validator(schemaPath)
     const instance = JSON.parse(await readFile(new URL(instancePath, import.meta.url), 'utf8'))
     assert.equal(validate(instance), true, `${instancePath}: ${JSON.stringify(validate.errors)}`)
   }
+})
+
+test('Connector handlers can carry capability-specific conformance', async () => {
+  const connector = JSON.parse(await readFile(new URL('../connectors/xiaohongshu-browser/connector.json', import.meta.url), 'utf8'))
+  const publish = connector.handlers.find((handler) => handler.operation === 'publishPrivateNoteAndObserve')
+  const listing = connector.handlers.find((handler) => handler.operation === 'listOwnedNotes')
+  assert.equal(publish.conformance, undefined)
+  assert.equal(connector.conformance.status, 'candidate')
+  assert.equal(listing.conformance.status, 'verified')
+  assert.equal(listing.conformance.probeReportRef, '/verifications/xiaohongshu/owned-notes/report.json')
 })
 
 test('Xiaohongshu connector configuration schema compiles', async () => {

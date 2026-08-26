@@ -126,19 +126,25 @@ export async function validateKnowledgeBundle({ root, now = new Date(), contract
   const admissionSchemaPath = path.join(absoluteContractRoot, 'knowledge-admission-policy.schema.json')
   const reportSchemaPath = path.join(absoluteContractRoot, 'probe-report.schema.json')
   const probeSchemaPath = path.join(absoluteContractRoot, 'probe-definition.schema.json')
+  const identitySchemaPath = path.join(absoluteContractRoot, 'probe-identity.schema.json')
+  const identityPoolSchemaPath = path.join(absoluteContractRoot, 'probe-identity-pool.schema.json')
   const connectorSchemaPath = path.join(absoluteContractRoot, 'connector-definition.schema.json')
   let policy
   let validateCapability
   let validateReport
   let validateProbe
+  let validateIdentity
+  let validateIdentityPool
   let validateConnector
   try {
-    const [policyValue, capabilitySchema, admissionSchema, reportSchema, probeSchema, connectorSchema] = await Promise.all([
+    const [policyValue, capabilitySchema, admissionSchema, reportSchema, probeSchema, identitySchema, identityPoolSchema, connectorSchema] = await Promise.all([
       readJson(policyPath),
       readJson(capabilitySchemaPath),
       readJson(admissionSchemaPath),
       readJson(reportSchemaPath),
       readJson(probeSchemaPath),
+      readJson(identitySchemaPath),
+      readJson(identityPoolSchemaPath),
       readJson(connectorSchemaPath),
     ])
     const validateAdmission = createValidator(admissionSchema)
@@ -149,6 +155,8 @@ export async function validateKnowledgeBundle({ root, now = new Date(), contract
     validateCapability = createValidator(capabilitySchema)
     validateReport = createValidator(reportSchema)
     validateProbe = createValidator(probeSchema)
+    validateIdentity = createValidator(identitySchema)
+    validateIdentityPool = createValidator(identityPoolSchema)
     validateConnector = createValidator(connectorSchema)
   } catch (error) {
     addError('policy.unreadable', 'references/admission-policy.json', error.message)
@@ -158,7 +166,7 @@ export async function validateKnowledgeBundle({ root, now = new Date(), contract
   const admittedSubjects = new Set()
   const referencedConcepts = new Set()
 
-  if (policy && validateCapability && validateReport && validateProbe && validateConnector) {
+  if (policy && validateCapability && validateReport && validateProbe && validateIdentity && validateIdentityPool && validateConnector) {
     const repositoryRoot = path.dirname(absoluteContractRoot)
     for (const document of documents.values()) {
       const frontmatter = document.frontmatter
@@ -267,9 +275,12 @@ export async function validateKnowledgeBundle({ root, now = new Date(), contract
         if (!validateConnector(connector)) {
           addError('connector.definition-invalid', document.relativePath, schemaErrors(validateConnector).join('; '))
         } else {
-          if (connector.conformance.status !== 'verified') addError('connector.not-verified', document.relativePath, `connector ${report.connectorId} is ${connector.conformance.status}`)
           if (!connector.capabilityRefs.includes(capabilityRef)) addError('connector.capability-missing', document.relativePath, `connector ${report.connectorId} does not bind ${capabilityRef}`)
-          if (connector.conformance.probeReportRef !== reportReference) addError('connector.report-mismatch', document.relativePath, `connector ${report.connectorId} references a different conformance report`)
+          const handler = connector.handlers.find((candidate) => candidate.capabilityRef === capabilityRef)
+          if (!handler) addError('connector.handler-missing', document.relativePath, `connector ${report.connectorId} has no handler for ${capabilityRef}`)
+          const conformance = handler?.conformance ?? connector.conformance
+          if (conformance.status !== 'verified') addError('connector.not-verified', document.relativePath, `connector ${report.connectorId} handler is ${conformance.status}`)
+          if (conformance.probeReportRef !== reportReference) addError('connector.report-mismatch', document.relativePath, `connector ${report.connectorId} handler references a different conformance report`)
           const entrypoint = path.resolve(repositoryRoot, connector.execution.entrypoint)
           const relativeEntrypoint = path.relative(repositoryRoot, entrypoint)
           if (relativeEntrypoint.startsWith('..') || path.isAbsolute(relativeEntrypoint)) addError('connector.entrypoint-outside-repository', document.relativePath, `connector entrypoint escapes repository: ${connector.execution.entrypoint}`)
@@ -313,6 +324,43 @@ export async function validateKnowledgeBundle({ root, now = new Date(), contract
           if (!validateProbe(probe)) addError('probe.definition-invalid', normalizeBundleRef(report.probeDefinitionRef), schemaErrors(validateProbe).join('; '))
           if (probe.capabilityRef !== capabilityRef || probe.connectorId !== report.connectorId) {
             addError('probe.definition-mismatch', normalizeBundleRef(report.probeDefinitionRef), 'probe definition does not match capability or connector')
+          }
+          if (probe.identity.required) {
+            if (!report.identityRef || !report.identityPoolRef) {
+              addError('probe.identity-missing', normalizeBundleRef(reportReference), 'identity-required probe report must bind an identity and identity pool')
+            } else {
+              if (report.identityPoolRef !== probe.identity.poolRef) {
+                addError('probe.identity-pool-mismatch', normalizeBundleRef(reportReference), 'report identity pool differs from probe definition')
+              }
+              const identityId = report.identityRef.slice('identity:'.length)
+              const poolId = report.identityPoolRef.slice('identity-pool:'.length)
+              const identityPath = path.join(repositoryRoot, 'probes/identities', `${identityId}.json`)
+              const poolPath = path.join(repositoryRoot, 'probes/pools', `${poolId}.json`)
+              try {
+                const identity = await readJson(identityPath)
+                if (!validateIdentity(identity)) addError('probe.identity-invalid', normalizeBundleRef(reportReference), schemaErrors(validateIdentity).join('; '))
+                else {
+                  if (identity.id !== identityId) addError('probe.identity-id-mismatch', normalizeBundleRef(reportReference), 'identity file id differs from report identityRef')
+                  if (identity.subjectRef !== frontmatter.capability.subjectRef) addError('probe.identity-subject-mismatch', normalizeBundleRef(reportReference), 'identity subject differs from capability subject')
+                  if (!identity.allowedCapabilityRefs.includes(capabilityRef)) addError('probe.identity-capability-missing', normalizeBundleRef(reportReference), 'identity does not allow this capability')
+                  if (identity.lifecycle.state !== 'active') addError('probe.identity-inactive', normalizeBundleRef(reportReference), `identity is ${identity.lifecycle.state}`)
+                }
+              } catch (error) {
+                addError('probe.identity-unreadable', normalizeBundleRef(reportReference), `${report.identityRef}: ${error.message}`)
+              }
+              try {
+                const pool = await readJson(poolPath)
+                if (!validateIdentityPool(pool)) addError('probe.identity-pool-invalid', normalizeBundleRef(reportReference), schemaErrors(validateIdentityPool).join('; '))
+                else {
+                  if (pool.id !== poolId) addError('probe.identity-pool-id-mismatch', normalizeBundleRef(reportReference), 'identity pool file id differs from report identityPoolRef')
+                  if (!pool.identityRefs.includes(report.identityRef)) addError('probe.identity-not-in-pool', normalizeBundleRef(reportReference), 'identity pool does not contain report identity')
+                }
+              } catch (error) {
+                addError('probe.identity-pool-unreadable', normalizeBundleRef(reportReference), `${report.identityPoolRef}: ${error.message}`)
+              }
+            }
+          } else if (report.identityRef || report.identityPoolRef) {
+            addError('probe.identity-unexpected', normalizeBundleRef(reportReference), 'identity-free probe report must not bind an identity or identity pool')
           }
         } catch (error) {
           addError('probe.definition-unreadable', normalizeBundleRef(report.probeDefinitionRef), error.message)
