@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/okf-capability-profile.schema.json",
+  "title": "OkfCapabilityProfile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["capability", "access", "verification"],
+  "properties": {
+    "capability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "subjectRef", "kind", "effect", "inputSchema", "outputSchema"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "version": { "type": "string", "minLength": 1 },
+        "subjectRef": { "$ref": "#/$defs/localRef" },
+        "kind": { "enum": ["query", "action", "operation", "subscription", "computation"] },
+        "effect": { "enum": ["none", "local-write", "platform-write", "financial", "communication", "identity-relationship"] },
+        "inputSchema": { "$ref": "#/$defs/localRef" },
+        "outputSchema": { "$ref": "#/$defs/localRef" },
+        "inputConcepts": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/localRef" } },
+        "resultConcepts": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/localRef" } },
+        "executionCharacteristics": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["determinism", "humanReview", "agentInvolvement"],
+          "properties": {
+            "determinism": { "enum": ["deterministic", "nondeterministic", "mixed"] },
+            "humanReview": { "enum": ["none", "optional", "required"] },
+            "agentInvolvement": { "enum": ["none", "allowed", "required"] }
+          }
+        }
+      }
+    },
+    "access": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["class", "methods", "accountRequired", "durableRetention"],
+      "properties": {
+        "class": { "enum": ["public", "owned", "authorized", "partner"] },
+        "methods": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "enum": ["official-api", "official-sdk", "public-feed", "webhook", "authorized-export", "cli", "mcp", "browser-assisted", "manual-import", "local-file"] }
+        },
+        "accountRequired": { "type": "boolean" },
+        "durableRetention": { "enum": ["allowed", "restricted", "prohibited"] },
+        "authorizationNotes": { "type": "string", "minLength": 1 }
+      }
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["level", "report"],
+      "properties": {
+        "level": { "enum": ["local", "sandbox", "live"] },
+        "report": { "$ref": "#/$defs/localRef" }
+      }
+    }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$" },
+    "localRef": { "type": "string", "pattern": "^/(?!/)(?!.*\\.\\.)[^?#]+$" }
+  }
+}

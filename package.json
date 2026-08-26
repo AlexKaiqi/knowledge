@@ -1,0 +1,20 @@
+{
+  "name": "@dsh/knowledge",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Git-backed, OKF-native knowledge catalog for verified DSH platform, tool, source and capability knowledge.",
+  "engines": {
+    "node": "^22.19.0 || >=24.0.0"
+  },
+  "scripts": {
+    "knowledge:check": "node scripts/check-okf-knowledge.mjs",
+    "test": "node --test test/*.test.mjs",
+    "check": "node --check scripts/*.mjs && npm run knowledge:check && npm test"
+  },
+  "dependencies": {
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1",
+    "js-yaml": "^4.1.0"
+  }
+}

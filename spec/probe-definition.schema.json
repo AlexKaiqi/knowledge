@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/probe-definition.schema.json",
+  "title": "ProbeDefinition",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "id", "version", "capabilityRef", "connectorId", "environment", "identity", "effect", "steps", "assertions", "cleanup", "budget"],
+  "properties": {
+    "schemaVersion": { "const": "dsh.probe-definition/v1" },
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$" },
+    "version": { "type": "string", "minLength": 1 },
+    "capabilityRef": { "$ref": "#/$defs/localRef" },
+    "connectorId": { "type": "string", "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$" },
+    "environment": { "enum": ["local", "sandbox", "production-private"] },
+    "identity": {
+      "oneOf": [
+        { "type": "object", "additionalProperties": false, "required": ["required"], "properties": { "required": { "const": false } } },
+        { "type": "object", "additionalProperties": false, "required": ["required", "poolRef"], "properties": { "required": { "const": true }, "poolRef": { "type": "string", "pattern": "^identity-pool:[a-z0-9]+(?:[._-][a-z0-9]+)*$" } } }
+      ]
+    },
+    "effect": { "enum": ["none", "local-write", "platform-write", "financial", "communication", "identity-relationship"] },
+    "steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "operation"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$" },
+          "operation": { "type": "string", "minLength": 1 },
+          "inputRef": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "assertions": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+    "cleanup": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["timeoutSeconds", "maxCost"],
+      "properties": {
+        "timeoutSeconds": { "type": "integer", "minimum": 1 },
+        "maxCost": { "type": "number", "minimum": 0 },
+        "currency": { "type": "string", "pattern": "^[A-Z]{3}$" }
+      }
+    }
+  },
+  "$defs": {
+    "localRef": { "type": "string", "pattern": "^/(?!/)(?!.*\\.\\.)[^?#]+$" }
+  }
+}

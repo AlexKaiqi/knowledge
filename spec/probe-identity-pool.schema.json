@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/probe-identity-pool.schema.json",
+  "title": "ProbeIdentityPool",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "id", "purpose", "identityRefs", "selector", "limits", "restrictions"],
+  "properties": {
+    "schemaVersion": { "const": "dsh.probe-identity-pool/v1" },
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$" },
+    "purpose": { "type": "string", "minLength": 1 },
+    "identityRefs": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "pattern": "^identity:[a-z0-9]+(?:[._-][a-z0-9]+)*$" } },
+    "selector": { "enum": ["manual", "round-robin", "least-recently-used", "sticky"] },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["maxConcurrency", "cooldownSeconds", "maxRunsPerIdentityPerDay"],
+      "properties": {
+        "maxConcurrency": { "type": "integer", "minimum": 1 },
+        "cooldownSeconds": { "type": "integer", "minimum": 0 },
+        "maxRunsPerIdentityPerDay": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "restrictions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["noRiskEvasion", "noCrossIdentityCorrelation", "noThirdPartyImpersonation"],
+      "properties": {
+        "noRiskEvasion": { "const": true },
+        "noCrossIdentityCorrelation": { "const": true },
+        "noThirdPartyImpersonation": { "const": true }
+      }
+    }
+  }
+}

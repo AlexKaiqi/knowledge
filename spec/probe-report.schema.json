@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/probe-report.schema.json",
+  "title": "ProbeReport",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "id", "capabilityRef", "connectorId", "probeDefinitionRef", "environment", "level", "outcome", "startedAt", "finishedAt", "expiresAt", "checks", "evidence", "sideEffects"],
+  "properties": {
+    "schemaVersion": { "const": "dsh.probe-report/v1" },
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$" },
+    "capabilityRef": { "$ref": "#/$defs/localRef" },
+    "connectorId": { "type": "string", "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$" },
+    "probeDefinitionRef": { "$ref": "#/$defs/localRef" },
+    "identityRef": { "type": "string", "pattern": "^identity:[a-z0-9]+(?:[._-][a-z0-9]+)*$" },
+    "identityPoolRef": { "type": "string", "pattern": "^identity-pool:[a-z0-9]+(?:[._-][a-z0-9]+)*$" },
+    "environment": { "enum": ["local", "sandbox", "production-private"] },
+    "level": { "enum": ["local", "sandbox", "live"] },
+    "outcome": { "enum": ["passed", "failed", "partial"] },
+    "startedAt": { "type": "string", "format": "date-time" },
+    "finishedAt": { "type": "string", "format": "date-time" },
+    "expiresAt": { "type": "string", "format": "date-time" },
+    "checks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "status"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$" },
+          "status": { "enum": ["passed", "failed", "skipped"] },
+          "detail": { "type": "string" }
+        }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["kind", "ref", "sha256"],
+        "properties": {
+          "kind": { "enum": ["receipt", "log", "artifact", "snapshot", "test-output"] },
+          "ref": { "type": "string", "minLength": 1 },
+          "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+        }
+      }
+    },
+    "sideEffects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["effect", "status"],
+        "properties": {
+          "effect": { "enum": ["none", "local-write", "platform-write", "financial", "communication", "identity-relationship"] },
+          "status": { "enum": ["none", "created", "cleaned", "retained"] },
+          "receiptRef": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "localRef": { "type": "string", "pattern": "^/(?!/)(?!.*\\.\\.)[^?#]+$" }
+  }
+}

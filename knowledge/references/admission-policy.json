@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "dsh.knowledge-admission-policy/v1",
+  "requirePassedReport": true,
+  "requireFreshReport": true,
+  "requireFreshKnowledge": true,
+  "requireSources": true,
+  "requireVerified": true,
+  "rejectOrphans": true,
+  "subjectTypes": {
+    "Tool": { "acceptedVerificationLevels": ["local", "sandbox", "live"] },
+    "Platform": { "acceptedVerificationLevels": ["sandbox", "live"] },
+    "Information Source": { "acceptedVerificationLevels": ["sandbox", "live"] },
+    "Dataset": { "acceptedVerificationLevels": ["sandbox", "live"] },
+    "Service": { "acceptedVerificationLevels": ["sandbox", "live"] },
+    "Protocol": { "acceptedVerificationLevels": ["sandbox", "live"] }
+  }
+}

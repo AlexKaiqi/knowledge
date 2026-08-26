@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/probe-identity.schema.json",
+  "title": "ProbeIdentity",
+  "description": "Opaque metadata for a legitimate test identity. Usernames, emails, cookies and secrets are forbidden; only credential refs are allowed.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "id", "subjectRef", "kind", "ownership", "credentialRef", "environment", "purpose", "allowedCapabilityRefs", "termsEvidenceRefs", "lifecycle", "restrictions"],
+  "properties": {
+    "schemaVersion": { "const": "dsh.probe-identity/v1" },
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$" },
+    "subjectRef": { "type": "string", "pattern": "^/(?!/)(?!.*\\.\\.)[^?#]+$" },
+    "kind": { "enum": ["owned-test", "provider-sandbox", "synthetic-test", "partner-test"] },
+    "ownership": { "enum": ["user", "organization", "provider", "contracted-partner"] },
+    "credentialRef": { "type": "string", "pattern": "^credential:[a-zA-Z0-9._/-]+$" },
+    "environment": { "enum": ["local", "sandbox", "production-private"] },
+    "purpose": { "type": "string", "minLength": 1 },
+    "allowedCapabilityRefs": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "pattern": "^/(?!/)(?!.*\\.\\.)[^?#]+$" } },
+    "isolationKey": { "type": "string", "minLength": 1 },
+    "termsEvidenceRefs": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+    "lifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "createdAt"],
+      "properties": {
+        "state": { "enum": ["active", "quarantined", "retired"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "expiresAt": { "type": "string", "format": "date-time" },
+        "lastUsedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "restrictions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["noRiskEvasion", "noCrossIdentityCorrelation", "noThirdPartyImpersonation"],
+      "properties": {
+        "noRiskEvasion": { "const": true },
+        "noCrossIdentityCorrelation": { "const": true },
+        "noThirdPartyImpersonation": { "const": true }
+      }
+    }
+  }
+}
