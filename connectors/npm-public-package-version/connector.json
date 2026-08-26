@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "npm-public-package-version",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/npm/read-public-package-version.md"],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "connectors/npm-public-package-version/src/index.mjs"
+  },
+  "configSchema": "repo:/connectors/npm-public-package-version/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [
+    {
+      "capabilityRef": "/capabilities/npm/read-public-package-version.md",
+      "operation": "readPublicPackageVersion"
+    }
+  ],
+  "conformance": {
+    "status": "verified",
+    "probeReportRef": "/verifications/npm/public-package-version/report.json"
+  }
+}

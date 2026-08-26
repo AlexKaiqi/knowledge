@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/npm/read-public-package-version-input.schema.json",
+  "title": "ReadNpmPublicPackageVersionInput",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["packageName", "version"],
+  "properties": {
+    "packageName": {
+      "type": "string",
+      "maxLength": 214,
+      "pattern": "^(?:@[a-z0-9](?:[a-z0-9._~-]{0,99})/[a-z0-9](?:[a-z0-9._~-]{0,99})|[a-z0-9](?:[a-z0-9._~-]{0,213}))$"
+    },
+    "version": {
+      "type": "string",
+      "maxLength": 128,
+      "pattern": "^(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)(?:-[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$"
+    }
+  }
+}

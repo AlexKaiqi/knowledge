@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "npm-public-package-version-live",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/npm/read-public-package-version.md",
+  "connectorId": "npm-public-package-version",
+  "environment": "production-public",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "read-known-exact-package-version", "operation": "readPublicPackageVersion" },
+    { "id": "verify-distribution-integrity", "operation": "normalizePublicPackageVersionResponse" }
+  ],
+  "assertions": [
+    "The fixed https://registry.npmjs.org public registry returns ajv@8.20.0 without authentication.",
+    "The exact package identity, MIT license, repository URL, SHA-512 SRI, SHA-1 shasum and registry tarball URL match the reviewed fixture.",
+    "The normalized output contains no maintainer, contributor, author, email, token, cookie or raw registry response.",
+    "Tags, version ranges, alternate registries, redirects and responses larger than 1 MiB are not accepted."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 30, "maxCost": 0, "currency": "CNY" }
+}

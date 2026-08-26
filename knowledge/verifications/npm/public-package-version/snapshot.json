@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "dsh.npm-public-package-version-snapshot/v1",
+  "fixture": {
+    "expected": {
+      "license": "MIT",
+      "repositoryUrl": "git+https://github.com/ajv-validator/ajv.git",
+      "integrity": "sha512-Thbli+OlOj+iMPYFBVBfJ3OmCAnaSyNn4M1vz9T6Gka5Jt9ba/HIR56joy65tY6kx/FCF5VXNB819Y7/GUrBGA==",
+      "shasum": "304b3636add88ba7d936760dd50ece006dea95f9",
+      "tarballUrl": "https://registry.npmjs.org/ajv/-/ajv-8.20.0.tgz"
+    }
+  },
+  "source": {
+    "id": "npm-public-package-version",
+    "registry": "https://registry.npmjs.org"
+  },
+  "request": {
+    "packageName": "ajv",
+    "version": "8.20.0"
+  },
+  "packageVersion": {
+    "name": "ajv",
+    "version": "8.20.0",
+    "description": "Another JSON Schema Validator",
+    "license": "MIT",
+    "deprecated": null,
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/ajv-validator/ajv.git",
+      "directory": null
+    },
+    "engines": {},
+    "distribution": {
+      "integrity": "sha512-Thbli+OlOj+iMPYFBVBfJ3OmCAnaSyNn4M1vz9T6Gka5Jt9ba/HIR56joy65tY6kx/FCF5VXNB819Y7/GUrBGA==",
+      "shasum": "304b3636add88ba7d936760dd50ece006dea95f9",
+      "tarballUrl": "https://registry.npmjs.org/ajv/-/ajv-8.20.0.tgz"
+    }
+  },
+  "observedAt": "2026-08-26T18:06:14.202Z",
+  "resultDigest": "bdd083a2282bbe724f35b5e28bcd65bed2fca38e6e099033cc26bb989dd151e0",
+  "conformance": {
+    "status": "passed",
+    "assertions": [
+      {
+        "id": "exact-package-version",
+        "passed": true
+      },
+      {
+        "id": "distribution-integrity",
+        "passed": true
+      },
+      {
+        "id": "registry-tarball-origin",
+        "passed": true
+      },
+      {
+        "id": "personal-fields-excluded",
+        "passed": true
+      }
+    ]
+  }
+}

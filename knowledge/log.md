@@ -35,3 +35,6 @@ title: Knowledge bundle history
 - 通过公开 live probe 准入“读取 GitHub 公共仓库文件”Capability；官方 Contents API 在完整 commit ID 下返回已知 README，Git blob ID 与正文 SHA-256 均匹配固定预期。
 - Connector 拒绝 branch/tag、目录、路径穿越、超过 256 KiB、非 UTF-8、二进制 NUL、revision 漂移和失败重试；新增 proposal-only Collector 观察内容完整性、API conformance 与验证过期。
 - 完整可用闭环更新为 6（Information Source 3；Platform 3），已准入 Subject 保持 5，Capability 更新为 6。
+- 通过公开 live probe 准入 npm Public Registry Platform 与“读取公共包精确版本元数据”Capability；`ajv@8.20.0` 的包身份、许可证声明、仓库地址、SRI、shasum 和 tarball URL 均命中固定证据。
+- Connector 固定公共 Registry，只接受精确 semver，拒绝 tag/range、alternate registry、重定向、超限响应和发行完整性漂移；输出剔除 author、maintainers、contributors 与邮箱。
+- 新增 proposal-only Collector 观察精确版本的发行完整性、许可证/废弃/仓库元数据变化和验证过期；完整可用闭环更新为 7（Information Source 3；Platform 4），Subject 更新为 6，Capability 更新为 7。
