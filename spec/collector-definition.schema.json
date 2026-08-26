@@ -74,7 +74,7 @@
       "additionalProperties": false,
       "required": ["allowedEnvironments", "identityPoolRefs", "maximumEffect"],
       "properties": {
-        "allowedEnvironments": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["local", "sandbox", "production-private"] } },
+        "allowedEnvironments": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["local", "sandbox", "production-public", "production-private"] } },
         "identityPoolRefs": { "type": "array", "uniqueItems": true, "items": { "type": "string", "pattern": "^identity-pool:[a-z0-9]+(?:[._-][a-z0-9]+)*$" } },
         "maximumEffect": { "enum": ["none", "local-write", "platform-write", "financial", "communication", "identity-relationship"] }
       }

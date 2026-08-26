@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/xiaohongshu-account-docs-config.schema.json",
+  "title": "XiaohongshuAccountDocsConnectorConfig",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "timeoutMs": { "type": "integer", "minimum": 1000, "maximum": 60000, "default": 15000 }
+  }
+}

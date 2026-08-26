@@ -25,14 +25,19 @@ test('repository initializes every responsibility boundary', async () => {
   await Promise.all(required.map((path) => access(new URL(path, root))))
 })
 
-test('canonical knowledge contains no unverified platform or capability', async () => {
-  const cases = [
-    ['knowledge/platforms/', '.md'],
-    ['knowledge/capabilities/', '.md'],
-  ]
-  for (const [directory, suffix] of cases) {
-    const entries = await readdir(new URL(directory, root), { withFileTypes: true })
-    const instances = entries.filter((entry) => entry.name !== 'index.md' && entry.name !== 'README.md' && (suffix ? entry.name.endsWith(suffix) : entry.isDirectory()))
-    assert.deepEqual(instances.map((entry) => entry.name), [], directory)
+async function markdownInstances(directory, prefix = '') {
+  const entries = await readdir(new URL(directory, root), { withFileTypes: true })
+  const paths = []
+  for (const entry of entries) {
+    if (entry.name === 'index.md' || entry.name === 'README.md') continue
+    const relative = `${prefix}${entry.name}`
+    if (entry.isDirectory()) paths.push(...await markdownInstances(`${directory}${entry.name}/`, `${relative}/`))
+    else if (entry.name.endsWith('.md')) paths.push(relative)
   }
+  return paths.sort()
+}
+
+test('canonical knowledge contains only probe-admitted platform and capability files', async () => {
+  assert.deepEqual(await markdownInstances('knowledge/platforms/'), [])
+  assert.deepEqual(await markdownInstances('knowledge/capabilities/'), ['xiaohongshu/read-account-api-surface.md'])
 })

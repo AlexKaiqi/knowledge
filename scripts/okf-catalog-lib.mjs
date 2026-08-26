@@ -49,6 +49,15 @@ function safeBundlePath(root, reference) {
   return resolved
 }
 
+function safeRepositoryOrBundlePath({ bundleRoot, repositoryRoot, reference }) {
+  if (reference.startsWith('repo:/')) {
+    const resolved = path.resolve(repositoryRoot, reference.slice('repo:/'.length))
+    const relative = path.relative(repositoryRoot, resolved)
+    return relative.startsWith('..') || path.isAbsolute(relative) ? null : resolved
+  }
+  return safeBundlePath(bundleRoot, reference)
+}
+
 async function readJson(file) {
   return JSON.parse(await readFile(file, 'utf8'))
 }
@@ -291,8 +300,12 @@ export async function validateKnowledgeBundle({ root, now = new Date(), contract
         addError('probe.level-insufficient', normalizeBundleRef(reportReference), `${report.level} is not accepted for ${subject.frontmatter.type}`)
       }
 
-      const probeFile = safeBundlePath(absoluteRoot, report.probeDefinitionRef)
-      if (!probeFile || !files.includes(probeFile)) {
+      const probeFile = safeRepositoryOrBundlePath({
+        bundleRoot: absoluteRoot,
+        repositoryRoot,
+        reference: report.probeDefinitionRef,
+      })
+      if (!probeFile) {
         addError('probe.definition-missing', normalizeBundleRef(reportReference), `probe definition does not exist: ${report.probeDefinitionRef}`)
       } else {
         try {

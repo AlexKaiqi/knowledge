@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "dsh.probe-report/v1",
+  "id": "xiaohongshu-account-api-live-20260826",
+  "capabilityRef": "/capabilities/xiaohongshu/read-account-api-surface.md",
+  "connectorId": "xiaohongshu-account-docs",
+  "probeDefinitionRef": "repo:/probes/definitions/xiaohongshu-account-api-live.json",
+  "environment": "production-public",
+  "level": "live",
+  "outcome": "passed",
+  "startedAt": "2026-08-26T16:35:24.650Z",
+  "finishedAt": "2026-08-26T16:35:24.882Z",
+  "expiresAt": "2026-09-02T16:35:24.882Z",
+  "checks": [
+    { "id": "official-title", "status": "passed" },
+    { "id": "production-base-url", "status": "passed" },
+    { "id": "test-base-url", "status": "passed" },
+    { "id": "post-json-transport", "status": "passed" },
+    { "id": "expected-endpoint-catalog", "status": "passed" },
+    { "id": "pkce-documented", "status": "passed" },
+    { "id": "device-code-server-only", "status": "passed" },
+    { "id": "safe-qr-payload", "status": "passed" },
+    { "id": "polling-interval", "status": "passed" }
+  ],
+  "evidence": [
+    {
+      "kind": "snapshot",
+      "ref": "repo:/knowledge/verifications/xiaohongshu/account-api/snapshot.json",
+      "sha256": "0c61551138094498d950a9a2f3a17791a5ad57a22b607ccd968667eda31469f5"
+    }
+  ],
+  "sideEffects": [{ "effect": "none", "status": "none" }]
+}

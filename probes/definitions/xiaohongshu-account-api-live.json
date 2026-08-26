@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "xiaohongshu-account-api-live",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/xiaohongshu/read-account-api-surface.md",
+  "connectorId": "xiaohongshu-account-docs",
+  "environment": "production-public",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "fetch-reference", "operation": "readAccountApiSurface" },
+    { "id": "normalize-surface", "operation": "parseAccountApiReference" }
+  ],
+  "assertions": [
+    "The official HTTPS document is reachable and returns HTML.",
+    "All ten accepted endpoint sections, both base URLs, POST JSON transport, PKCE, and device-flow safety requirements are present.",
+    "No unclassified OAuth endpoint path is present.",
+    "The normalized result contains no credential or raw HTML."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 30, "maxCost": 0, "currency": "CNY" }
+}

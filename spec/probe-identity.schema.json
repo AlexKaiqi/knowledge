@@ -13,7 +13,7 @@
     "kind": { "enum": ["owned-test", "provider-sandbox", "synthetic-test", "partner-test"] },
     "ownership": { "enum": ["user", "organization", "provider", "contracted-partner"] },
     "credentialRef": { "type": "string", "pattern": "^credential:[a-zA-Z0-9._/-]+$" },
-    "environment": { "enum": ["local", "sandbox", "production-private"] },
+    "environment": { "enum": ["local", "sandbox", "production-public", "production-private"] },
     "purpose": { "type": "string", "minLength": 1 },
     "allowedCapabilityRefs": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "pattern": "^/(?!/)(?!.*\\.\\.)[^?#]+$" } },
     "isolationKey": { "type": "string", "minLength": 1 },

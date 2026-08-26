@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "xiaohongshu-account-docs",
+  "version": "1.0.0",
+  "capabilityRefs": [
+    "/capabilities/xiaohongshu/read-account-api-surface.md"
+  ],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "connectors/xiaohongshu-account-docs/src/index.mjs"
+  },
+  "configSchema": "repo:/connectors/xiaohongshu-account-docs/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [
+    {
+      "capabilityRef": "/capabilities/xiaohongshu/read-account-api-surface.md",
+      "operation": "readAccountApiSurface"
+    }
+  ],
+  "conformance": {
+    "status": "verified",
+    "probeReportRef": "/verifications/xiaohongshu/account-api/report.json"
+  }
+}

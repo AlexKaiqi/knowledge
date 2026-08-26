@@ -8,7 +8,7 @@
   → 实现并本地验证 candidate Connector
   → 定义 ProbeDefinition
   → 选择合法 identity / pool
-  → 在 local / sandbox / production-private 执行
+  → 在 local / sandbox / production-public / production-private 执行
   → 清理副作用并生成 ProbeReport
   → 脱敏报告发布到 knowledge/verifications/
   → 运行确定性校验与 Connector conformance tests

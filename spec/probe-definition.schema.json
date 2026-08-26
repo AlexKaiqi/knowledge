@@ -11,7 +11,7 @@
     "version": { "type": "string", "minLength": 1 },
     "capabilityRef": { "$ref": "#/$defs/localRef" },
     "connectorId": { "type": "string", "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$" },
-    "environment": { "enum": ["local", "sandbox", "production-private"] },
+    "environment": { "enum": ["local", "sandbox", "production-public", "production-private"] },
     "identity": {
       "oneOf": [
         { "type": "object", "additionalProperties": false, "required": ["required"], "properties": { "required": { "const": false } } },

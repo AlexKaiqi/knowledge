@@ -10,10 +10,15 @@
     "id": { "type": "string", "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$" },
     "capabilityRef": { "$ref": "#/$defs/localRef" },
     "connectorId": { "type": "string", "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$" },
-    "probeDefinitionRef": { "$ref": "#/$defs/localRef" },
+    "probeDefinitionRef": {
+      "oneOf": [
+        { "$ref": "#/$defs/localRef" },
+        { "$ref": "#/$defs/repositoryRef" }
+      ]
+    },
     "identityRef": { "type": "string", "pattern": "^identity:[a-z0-9]+(?:[._-][a-z0-9]+)*$" },
     "identityPoolRef": { "type": "string", "pattern": "^identity-pool:[a-z0-9]+(?:[._-][a-z0-9]+)*$" },
-    "environment": { "enum": ["local", "sandbox", "production-private"] },
+    "environment": { "enum": ["local", "sandbox", "production-public", "production-private"] },
     "level": { "enum": ["local", "sandbox", "live"] },
     "outcome": { "enum": ["passed", "failed", "partial"] },
     "startedAt": { "type": "string", "format": "date-time" },
@@ -62,6 +67,7 @@
     }
   },
   "$defs": {
-    "localRef": { "type": "string", "pattern": "^/(?!/)(?!.*\\.\\.)[^?#]+$" }
+    "localRef": { "type": "string", "pattern": "^/(?!/)(?!.*\\.\\.)[^?#]+$" },
+    "repositoryRef": { "type": "string", "pattern": "^repo:/(?!/)(?!.*\\.\\.)[^?#]+$" }
   }
 }

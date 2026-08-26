@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "dsh.xiaohongshu-account-api-snapshot/v1",
+  "source": {
+    "id": "xiaohongshu-account-api-reference",
+    "url": "https://openaccount.xiaohongshu.com/docs/api-reference",
+    "title": "API 参考 · 小红书开放平台"
+  },
+  "transport": {
+    "method": "POST",
+    "contentType": "application/json",
+    "productionBaseUrl": "https://openaccount.xiaohongshu.com",
+    "testBaseUrl": "https://openaccount.beta.xiaohongshu.com"
+  },
+  "endpoints": [
+    { "order": 1, "id": "auth-info", "title": "查询授权状态 / 拉起授权页", "path": "/api/sns/v1/oauth2/auth_info" },
+    { "order": 2, "id": "authorize", "title": "用户授权并获取 code", "path": "/api/sns/v1/oauth2/authorize" },
+    { "order": 3, "id": "access-token", "title": "换取 access_token", "path": "/api/sns/v1/oauth2/access_token" },
+    { "order": 4, "id": "refresh-token", "title": "刷新 access_token", "path": "/api/sns/v1/oauth2/refresh_token" },
+    { "order": 5, "id": "token-status", "title": "校验 access_token 有效性", "path": "/api/sns/v1/oauth2/token_status" },
+    { "order": 6, "id": "user-info", "title": "获取用户基本信息", "path": "/api/sns/v1/oauth2/batch_get_min_user_info" },
+    { "order": 7, "id": "auth-app-list", "title": "用户已授权应用列表", "path": "/api/sns/v1/oauth2/auth_app/list" },
+    { "order": 8, "id": "auth-app-remove", "title": "用户解除授权", "path": "/api/sns/v1/oauth2/auth_app/remove" },
+    { "order": 9, "id": "device-code", "title": "创建设备授权", "path": "/api/sns/v1/oauth2/device/code" },
+    { "order": 10, "id": "device-token", "title": "轮询设备 Token", "path": "/api/sns/v1/oauth2/device/token" }
+  ],
+  "documentedOperationFamilies": [
+    "oauth-authorization",
+    "token-lifecycle",
+    "minimum-user-profile",
+    "authorized-app-management",
+    "device-authorization"
+  ],
+  "notDocumentedInThisReference": ["note-publishing", "owned-note-listing", "note-feedback"],
+  "safetyRequirements": [
+    "Keep device_code on the application server; never send it to a screen, browser page, or WebView.",
+    "Render device authorization QR codes from verification_uri_complete only; never include device_code.",
+    "Poll the device token endpoint no faster than the returned interval."
+  ],
+  "observedAt": "2026-08-26T16:35:24.878Z",
+  "semanticDigest": "71903f1e07ecca8c6f74f8e53e5a59ca7afc05f976c57d4dba321a10e0bf22e1",
+  "conformance": {
+    "status": "passed",
+    "assertions": [
+      { "id": "official-title", "passed": true },
+      { "id": "production-base-url", "passed": true },
+      { "id": "test-base-url", "passed": true },
+      { "id": "post-json-transport", "passed": true },
+      { "id": "expected-endpoint-catalog", "passed": true },
+      { "id": "pkce-documented", "passed": true },
+      { "id": "device-code-server-only", "passed": true },
+      { "id": "safe-qr-payload", "passed": true },
+      { "id": "polling-interval", "passed": true }
+    ],
+    "missingExpectedPaths": [],
+    "undocumentedPaths": []
+  }
+}
