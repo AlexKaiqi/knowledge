@@ -69,7 +69,6 @@ P0 按下面顺序一次只推进一个。前一项没有真实 probe 结论，�
 | --- | --- | --- |
 | App Store Connect | TestFlight 提交、处理状态、测试反馈与发布 receipt | App 不能通过 App Store Connect API 创建，build 上传还需 Xcode/Transporter；应先完成只读发布状态和受控测试 App |
 | Google Play | Internal testing track 上传、提交、状态对账；生产发布另立能力 | 官方 Edits/Bundle/Track 路线清晰，但写操作要有受控测试 App、不可变 revision、显式确认和防重复提交 |
-| 华为 AppGallery Connect | 自有 App 评论增量、报告、发布状态和受控测试发布 | 官方 Comments/Reports/Publishing API 很完整；是否进入实施取决于 HarmonyOS/华为渠道是否是实际发布目标 |
 | 抖音 | 自有内容发布、平台 receipt、评论/指标增量 | 比继续维护文档面更有价值，但需要开放平台应用、scope、授权账号和对应审核；现有两个能力不能证明可调用 |
 | YouTube | 公开视频/频道/评论研究；自有频道上传、评论管理和 Analytics | 官方 Data/Analytics API 能覆盖研究、发布、反馈和影响力，但需要先确定海外视频渠道是实际目标并准备 OAuth/channel identity |
 | 微信公众号 | 自有账号草稿、发布结果、评论/阅读数据 | 对中文图文传播价值高；先核实账号类型、接口权限、IP 白名单和新版 API 的真实可用范围，再建立候选 Connector |
@@ -153,5 +152,4 @@ Collector 不积累“某平台所有 API”，不自动安装第三方项目、
 - Product Hunt API v2：<https://www.producthunt.com/v2/docs>
 - Hacker News 官方 API：<https://github.com/HackerNews/API>
 - Reddit Data API Terms：<https://redditinc.com/policies/data-api-terms>
-- 华为 AppGallery Connect API：<https://developer.huawei.com/consumer/cn/doc/appgallery-connect-Guides/agcapi-overview-0000001158245083>
 - 快手视频发布接口：<https://open.kuaishou.com/platform/openApi?menu=20>
