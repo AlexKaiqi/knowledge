@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/access-route-catalog.schema.json",
+  "title": "AccessRouteCatalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "id", "subjectRef", "capabilityRefs", "routes", "selectionPolicy"],
+  "properties": {
+    "schemaVersion": { "const": "dsh.access-route-catalog/v1" },
+    "id": { "$ref": "#/$defs/id" },
+    "subjectRef": { "$ref": "#/$defs/localRef" },
+    "capabilityRefs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/localRef" }
+    },
+    "routes": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/route" }
+    },
+    "selectionPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["automaticRouteRequirements", "platformWrite", "readOnly"],
+      "properties": {
+        "automaticRouteRequirements": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["lifecycles", "contractLevels", "requireHealthy"],
+          "properties": {
+            "lifecycles": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": { "const": "verified" }
+            },
+            "contractLevels": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": { "const": "full" }
+            },
+            "requireHealthy": { "const": true }
+          }
+        },
+        "platformWrite": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["stickyRoute", "preEffectFallback", "ambiguousOutcomeFallback", "postEffectRouteChange"],
+          "properties": {
+            "stickyRoute": { "const": true },
+            "preEffectFallback": { "const": "verified-compatible-only" },
+            "ambiguousOutcomeFallback": { "const": "forbidden" },
+            "postEffectRouteChange": { "const": "reconcile-first" }
+          }
+        },
+        "readOnly": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["fallback"],
+          "properties": {
+            "fallback": { "const": "verified-compatible-only" }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$" },
+    "localRef": { "type": "string", "pattern": "^/(?!/)(?!.*\\.\\.)[^?#]+$" },
+    "repositoryRef": { "type": "string", "pattern": "^repo:/(?!/)(?!.*\\.\\.)[^?#]+$" },
+    "phase": { "enum": ["authorize", "prepare", "submit", "reconcile", "observe", "cleanup"] },
+    "route": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "lifecycle", "contractLevel", "accessMethod", "automaticSelectionEligible", "capabilityCoverage", "failureDomains", "sourceRefs", "maintenance"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "lifecycle": { "enum": ["researching", "candidate", "verified", "degraded", "suspended", "retired"] },
+        "contractLevel": { "enum": ["full", "degraded", "recovery", "component"] },
+        "accessMethod": { "enum": ["official-api", "official-sdk", "browser-assisted", "manual"] },
+        "automaticSelectionEligible": { "type": "boolean" },
+        "priority": { "type": "integer", "minimum": 0 },
+        "connectorId": { "$ref": "#/$defs/id" },
+        "implementationRef": { "$ref": "#/$defs/repositoryRef" },
+        "probeDefinitionRef": { "$ref": "#/$defs/repositoryRef" },
+        "probeReportRef": { "$ref": "#/$defs/localRef" },
+        "capabilityCoverage": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["capabilityRef", "phases", "gaps"],
+            "properties": {
+              "capabilityRef": { "$ref": "#/$defs/localRef" },
+              "phases": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/phase" } },
+              "gaps": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } }
+            }
+          }
+        },
+        "failureDomains": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/id" } },
+        "sourceRefs": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "format": "uri" } },
+        "upstream": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["repository", "branch", "observedRevision"],
+          "properties": {
+            "repository": { "type": "string", "format": "uri" },
+            "branch": { "type": "string", "minLength": 1 },
+            "observedRevision": { "type": "string", "pattern": "^[0-9a-f]{40}$" }
+          }
+        },
+        "maintenance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["owner", "reviewOn"],
+          "properties": {
+            "owner": { "$ref": "#/$defs/id" },
+            "reviewOn": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["upstream-change", "source-change", "probe-failure", "contract-gap-change", "manual"] } }
+          }
+        },
+        "notes": { "type": "string", "minLength": 1 }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "automaticSelectionEligible": { "const": true } }, "required": ["automaticSelectionEligible"] },
+          "then": {
+            "properties": {
+              "lifecycle": { "const": "verified" },
+              "contractLevel": { "const": "full" }
+            },
+            "required": ["connectorId", "implementationRef", "probeReportRef"]
+          }
+        },
+        {
+          "if": { "properties": { "lifecycle": { "const": "candidate" } }, "required": ["lifecycle"] },
+          "then": { "required": ["connectorId", "implementationRef", "probeDefinitionRef"] }
+        }
+      ]
+    }
+  }
+}

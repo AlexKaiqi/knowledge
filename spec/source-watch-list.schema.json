@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/source-watch-list.schema.json",
+  "title": "SourceWatchList",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "subject", "sources"],
+  "properties": {
+    "schemaVersion": { "const": "dsh.source-watch-list/v1" },
+    "subject": { "$ref": "#/$defs/id" },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "url", "role", "observation"],
+        "properties": {
+          "id": { "$ref": "#/$defs/id" },
+          "url": { "type": "string", "format": "uri" },
+          "role": { "$ref": "#/$defs/id" },
+          "acceptedDocumentDigest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+          "observation": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["mode", "assertions"],
+            "properties": {
+              "mode": { "enum": ["static-html-semantic", "browser-rendered-semantic"] },
+              "assertions": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["id", "includes"],
+                  "properties": {
+                    "id": { "$ref": "#/$defs/id" },
+                    "includes": { "type": "string", "minLength": 1 }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$" }
+  }
+}

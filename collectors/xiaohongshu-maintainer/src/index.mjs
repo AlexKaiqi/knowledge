@@ -1,4 +1,5 @@
 import { execFile } from 'node:child_process'
+import { createHash } from 'node:crypto'
 import { access, mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import process from 'node:process'
@@ -8,25 +9,81 @@ import { fileURLToPath } from 'node:url'
 const exec = promisify(execFile)
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..')
 
-export const officialSources = [
-  { id: 'share-sdk', url: 'https://agora.xiaohongshu.com/doc/ability', role: 'client-mediated-share' },
-  { id: 'share-sdk-qa', url: 'https://agora.xiaohongshu.com/doc/qa', role: 'share-limitations' },
-  { id: 'account-api', url: 'https://openaccount.xiaohongshu.com/docs/api-reference', role: 'oauth-and-basic-profile' },
-  { id: 'commerce-api', url: 'https://open.xiaohongshu.com/home', role: 'merchant-commerce' },
-  { id: 'community-convention', url: 'https://pgy.xiaohongshu.com/help/detail?id=1eda0a065dd894063c2e029a49e8f6a1&userType=4', role: 'content-policy' },
-]
+const sourceWatchList = JSON.parse(await readFile(path.join(repositoryRoot, 'collectors/xiaohongshu-maintainer/sources.json'), 'utf8'))
+export const officialSources = sourceWatchList.sources
 
-async function defaultSourceCheck(source, fetchImpl) {
-  try {
-    const response = await fetchImpl(source.url, { method: 'GET', redirect: 'follow', signal: AbortSignal.timeout(15_000) })
-    return { ...source, status: response.ok ? 'reachable' : 'changed', httpStatus: response.status }
-  } catch (error) {
-    return { ...source, status: 'unreachable', detail: error.name === 'TimeoutError' ? 'timeout' : 'request-failed' }
+function normalizeHtml(html, mode) {
+  const withoutVolatileScripts = html
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '')
+    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '')
+    .replace(/\b(?:nonce|integrity|crossorigin)=(?:"[^"]*"|'[^']*')/gi, '')
+  if (mode === 'browser-rendered-semantic') {
+    return withoutVolatileScripts
+      .match(/<(?:title|meta|link)\b[^>]*>(?:[^<]*)/gi)?.join('\n').replace(/\s+/g, ' ').trim() ?? ''
+  }
+  return withoutVolatileScripts
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&nbsp;|&#160;/gi, ' ')
+    .replace(/&amp;/gi, '&')
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/&quot;/gi, '"')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
+function digest(value) {
+  return createHash('sha256').update(value).digest('hex')
+}
+
+export function evaluateRenderedSemanticObservation(source, renderedText) {
+  const normalized = renderedText.replace(/\s+/g, ' ').trim()
+  const assertions = source.observation.assertions.map((assertion) => ({
+    id: assertion.id,
+    status: normalized.includes(assertion.includes) ? 'passed' : 'failed',
+  }))
+  return {
+    semanticStatus: assertions.every((assertion) => assertion.status === 'passed') ? 'passed' : 'failed',
+    semanticDigest: digest(normalized),
+    assertions,
   }
 }
 
-async function defaultUpstreamHead(repository) {
-  const result = await exec('git', ['ls-remote', repository, 'refs/heads/main'], { maxBuffer: 1024 * 1024 })
+async function defaultSourceCheck(source, fetchImpl, renderedObservation) {
+  try {
+    const response = await fetchImpl(source.url, { method: 'GET', redirect: 'follow', signal: AbortSignal.timeout(15_000) })
+    const html = await response.text()
+    const normalized = normalizeHtml(html, source.observation.mode)
+    const documentDigest = digest(normalized)
+    const semanticObservation = source.observation.mode === 'browser-rendered-semantic'
+      ? typeof renderedObservation === 'string'
+        ? evaluateRenderedSemanticObservation(source, renderedObservation)
+        : {
+            semanticStatus: 'browser-required',
+            assertions: source.observation.assertions.map((assertion) => ({ id: assertion.id, status: 'browser-required' })),
+          }
+      : evaluateRenderedSemanticObservation(source, normalized)
+    return {
+      id: source.id,
+      url: source.url,
+      role: source.role,
+      status: response.ok ? 'reachable' : 'changed',
+      httpStatus: response.status,
+      finalUrl: response.url || source.url,
+      observationMode: source.observation.mode,
+      documentDigest,
+      fingerprintStatus: source.acceptedDocumentDigest
+        ? documentDigest === source.acceptedDocumentDigest ? 'current' : 'review-required'
+        : 'baseline-required',
+      ...semanticObservation,
+    }
+  } catch (error) {
+    return { id: source.id, url: source.url, role: source.role, status: 'unreachable', detail: error.name === 'TimeoutError' ? 'timeout' : 'request-failed' }
+  }
+}
+
+async function defaultUpstreamHead(repository, branch = 'main') {
+  const result = await exec('git', ['ls-remote', repository, `refs/heads/${branch}`], { maxBuffer: 1024 * 1024 })
   return result.stdout.trim().split(/\s+/)[0] ?? ''
 }
 
@@ -51,12 +108,42 @@ export async function collectXiaohongshuMaintenance({
   artifactCheck = defaultArtifactCheck,
   now = () => new Date(),
   runtimeRoot = path.join(repositoryRoot, '.runtime/xiaohongshu-browser'),
+  renderedSourceObservations = {},
 } = {}) {
   const upstream = JSON.parse(await readFile(path.join(repositoryRoot, 'connectors/xiaohongshu-browser/upstream.json'), 'utf8'))
   const connector = JSON.parse(await readFile(path.join(repositoryRoot, 'connectors/xiaohongshu-browser/connector.json'), 'utf8'))
-  const [sources, currentHead, artifacts] = await Promise.all([
-    Promise.all(officialSources.map((source) => sourceCheck(source, fetchImpl))),
-    upstreamHead(upstream.repository),
+  const routeCatalog = JSON.parse(await readFile(path.join(repositoryRoot, 'connectors/xiaohongshu-browser/routes.json'), 'utf8'))
+  const upstreamRoutes = routeCatalog.routes.filter((route) => route.upstream)
+  const [sources, routeUpstreams, artifacts] = await Promise.all([
+    Promise.all(officialSources.map((source) => sourceCheck(source, fetchImpl, renderedSourceObservations[source.id]))),
+    Promise.all(upstreamRoutes.map(async (route) => {
+      try {
+        const currentHead = await upstreamHead(route.upstream.repository, route.upstream.branch)
+        return {
+          routeId: route.id,
+          lifecycle: route.lifecycle,
+          contractLevel: route.contractLevel,
+          failureDomains: route.failureDomains,
+          repository: route.upstream.repository,
+          branch: route.upstream.branch,
+          observedRevision: route.upstream.observedRevision,
+          currentHead,
+          status: currentHead === route.upstream.observedRevision ? 'current' : 'review-required',
+        }
+      } catch {
+        return {
+          routeId: route.id,
+          lifecycle: route.lifecycle,
+          contractLevel: route.contractLevel,
+          failureDomains: route.failureDomains,
+          repository: route.upstream.repository,
+          branch: route.upstream.branch,
+          observedRevision: route.upstream.observedRevision,
+          currentHead: null,
+          status: 'unreachable',
+        }
+      }
+    })),
     artifactCheck(runtimeRoot),
   ])
   const canonicalCapabilityPath = path.join(repositoryRoot, 'knowledge/capabilities/xiaohongshu/publish-private-note-and-observe.md')
@@ -65,10 +152,31 @@ export async function collectXiaohongshuMaintenance({
   const observedAt = now().toISOString()
   const blockers = []
   if (connector.conformance.status !== 'verified') blockers.push('connector-not-live-verified')
+  if (!routeCatalog.routes.some((route) => route.automaticSelectionEligible && route.lifecycle === 'verified' && route.contractLevel === 'full')) blockers.push('no-verified-full-route')
   if (!canonicalCapability) blockers.push('capability-not-admitted')
-  if (currentHead !== upstream.commit) blockers.push('upstream-head-changed')
+  for (const route of routeUpstreams) {
+    if (route.status === 'review-required') blockers.push(`route-upstream-changed:${route.routeId}`)
+    if (route.status === 'unreachable') blockers.push(`route-upstream-unreachable:${route.routeId}`)
+  }
   if (sources.some((source) => source.status !== 'reachable')) blockers.push('official-source-check-failed')
+  if (sources.some((source) => source.fingerprintStatus === 'review-required')) blockers.push('official-source-content-changed')
+  if (sources.some((source) => source.semanticStatus === 'failed')) blockers.push('official-source-semantic-assertion-failed')
   if (artifacts.some((artifact) => artifact.status !== 'present')) blockers.push('local-runtime-not-built')
+  const primaryRoute = routeUpstreams.find((route) => route.repository === upstream.repository)
+  const routeProposals = routeUpstreams
+    .filter((route) => route.status !== 'current')
+    .map((route) => ({
+      kind: 'connector-change-proposal',
+      routeId: route.routeId,
+      action: route.status === 'unreachable' ? 'restore-upstream-observation' : 'audit-new-upstream-before-repin',
+    }))
+  const sourceProposals = []
+  const browserRequired = sources.filter((source) => source.semanticStatus === 'browser-required').map((source) => source.id)
+  const baselineRequired = sources.filter((source) => source.fingerprintStatus === 'baseline-required').map((source) => source.id)
+  const changedSources = sources.filter((source) => source.fingerprintStatus === 'review-required' || source.semanticStatus === 'failed').map((source) => source.id)
+  if (browserRequired.length > 0) sourceProposals.push({ kind: 'knowledge-proposal', action: 'run-browser-semantic-observation', sourceIds: browserRequired })
+  if (baselineRequired.length > 0) sourceProposals.push({ kind: 'knowledge-proposal', action: 'review-and-accept-source-baseline', sourceIds: baselineRequired })
+  if (changedSources.length > 0) sourceProposals.push({ kind: 'knowledge-proposal', action: 'review-official-source-change', sourceIds: changedSources })
   return {
     schemaVersion: 'knowledge.maintenance-report/v1',
     subject: 'xiaohongshu',
@@ -78,15 +186,25 @@ export async function collectXiaohongshuMaintenance({
     upstream: {
       repository: upstream.repository,
       pinnedCommit: upstream.commit,
-      currentHead,
-      status: currentHead === upstream.commit ? 'current' : 'review-required',
+      currentHead: primaryRoute?.currentHead ?? null,
+      status: primaryRoute?.status ?? 'unreachable',
+    },
+    accessRoutes: {
+      catalogId: routeCatalog.id,
+      automaticEligible: routeCatalog.routes.filter((route) => route.automaticSelectionEligible).map((route) => route.id),
+      researched: routeCatalog.routes.map((route) => ({
+        id: route.id,
+        lifecycle: route.lifecycle,
+        contractLevel: route.contractLevel,
+        automaticSelectionEligible: route.automaticSelectionEligible,
+        failureDomains: route.failureDomains,
+      })),
+      upstreams: routeUpstreams,
     },
     connector: { id: connector.id, conformance: connector.conformance.status, artifacts },
     canonicalCapability,
     blockers: [...new Set(blockers)],
-    proposals: blockers.includes('upstream-head-changed')
-      ? [{ kind: 'connector-change-proposal', action: 'audit-new-upstream-before-repin' }]
-      : [],
+    proposals: [...routeProposals, ...sourceProposals],
     nextRequiredGate: connector.conformance.status === 'verified' ? 'none' : 'explicit-live-probe-approval',
   }
 }

@@ -1,0 +1,215 @@
+{
+  "schemaVersion": "dsh.access-route-catalog/v1",
+  "id": "xiaohongshu-access-routes",
+  "subjectRef": "/platforms/xiaohongshu.md",
+  "capabilityRefs": [
+    "/capabilities/xiaohongshu/publish-private-note-and-observe.md"
+  ],
+  "routes": [
+    {
+      "id": "creator-web-xiaohongshu-mcp",
+      "lifecycle": "candidate",
+      "contractLevel": "full",
+      "accessMethod": "browser-assisted",
+      "automaticSelectionEligible": false,
+      "priority": 10,
+      "connectorId": "xiaohongshu-browser",
+      "implementationRef": "repo:/connectors/xiaohongshu-browser/src/index.mjs",
+      "probeDefinitionRef": "repo:/probes/definitions/xiaohongshu-private-note-live.json",
+      "capabilityCoverage": [
+        {
+          "capabilityRef": "/capabilities/xiaohongshu/publish-private-note-and-observe.md",
+          "phases": ["authorize", "prepare", "submit", "reconcile", "observe", "cleanup"],
+          "gaps": ["Live private publish and receipt probe has not been approved and completed."]
+        }
+      ],
+      "failureDomains": ["xiaohongshu-creator-center", "creator-center-dom", "rod-runtime", "local-browser-session"],
+      "sourceRefs": [
+        "https://github.com/xpzouying/xiaohongshu-mcp",
+        "https://github.com/xpzouying/xiaohongshu-mcp/blob/main/skills/post-to-xhs/references/publish-workflow.md"
+      ],
+      "upstream": {
+        "repository": "https://github.com/xpzouying/xiaohongshu-mcp.git",
+        "branch": "main",
+        "observedRevision": "6fb866a7db4e3dcce8dc00a0dde07370f3b12946"
+      },
+      "maintenance": {
+        "owner": "xiaohongshu-maintainer",
+        "reviewOn": ["upstream-change", "source-change", "probe-failure", "contract-gap-change", "manual"]
+      },
+      "notes": "Current implemented route. Upstream publish success is not a receipt; the outer connector must rediscover and verify the note."
+    },
+    {
+      "id": "creator-web-social-auto-upload",
+      "lifecycle": "researching",
+      "contractLevel": "full",
+      "accessMethod": "browser-assisted",
+      "automaticSelectionEligible": false,
+      "priority": 20,
+      "capabilityCoverage": [
+        {
+          "capabilityRef": "/capabilities/xiaohongshu/publish-private-note-and-observe.md",
+          "phases": ["authorize", "prepare", "submit"],
+          "gaps": ["Private visibility, stable receipt reconciliation, observation, and anti-duplicate behavior are not yet conformance-tested."]
+        }
+      ],
+      "failureDomains": ["xiaohongshu-creator-center", "creator-center-dom", "playwright-runtime", "local-browser-session"],
+      "sourceRefs": [
+        "https://github.com/dreammis/social-auto-upload",
+        "https://github.com/dreammis/social-auto-upload/blob/main/docs/agent-bootstrap.md"
+      ],
+      "upstream": {
+        "repository": "https://github.com/dreammis/social-auto-upload.git",
+        "branch": "main",
+        "observedRevision": "1c66b7db4b30585bbb40c58eb0aa572ffa3cce97"
+      },
+      "maintenance": {
+        "owner": "xiaohongshu-maintainer",
+        "reviewOn": ["upstream-change", "source-change", "contract-gap-change", "manual"]
+      },
+      "notes": "Independent implementation runtime, but not independent of creator-center DOM changes."
+    },
+    {
+      "id": "creator-web-opencli",
+      "lifecycle": "researching",
+      "contractLevel": "full",
+      "accessMethod": "browser-assisted",
+      "automaticSelectionEligible": false,
+      "priority": 30,
+      "capabilityCoverage": [
+        {
+          "capabilityRef": "/capabilities/xiaohongshu/publish-private-note-and-observe.md",
+          "phases": ["authorize", "prepare", "submit", "observe"],
+          "gaps": ["Browser Bridge trust, private visibility, stable receipt reconciliation, and write idempotency are not yet conformance-tested."]
+        }
+      ],
+      "failureDomains": ["xiaohongshu-creator-center", "creator-center-dom", "browser-extension", "interactive-chrome-session"],
+      "sourceRefs": [
+        "https://github.com/chatek/opencli",
+        "https://github.com/chatek/opencli/blob/main/docs/adapters/browser/xiaohongshu.md"
+      ],
+      "upstream": {
+        "repository": "https://github.com/chatek/opencli.git",
+        "branch": "main",
+        "observedRevision": "8dee08bc4c6329fdc807c208adb197adb21a1d7f"
+      },
+      "maintenance": {
+        "owner": "xiaohongshu-maintainer",
+        "reviewOn": ["upstream-change", "source-change", "contract-gap-change", "manual"]
+      },
+      "notes": "Different control channel through a browser extension; still shares the creator-center UI failure domain."
+    },
+    {
+      "id": "creator-web-omni-post",
+      "lifecycle": "researching",
+      "contractLevel": "degraded",
+      "accessMethod": "browser-assisted",
+      "automaticSelectionEligible": false,
+      "priority": 40,
+      "capabilityCoverage": [
+        {
+          "capabilityRef": "/capabilities/xiaohongshu/publish-private-note-and-observe.md",
+          "phases": ["authorize", "prepare", "submit"],
+          "gaps": ["Private-note support, a stable platform receipt, reconciliation, and feedback observation are not established."]
+        }
+      ],
+      "failureDomains": ["xiaohongshu-creator-center", "creator-center-dom", "playwright-runtime", "local-browser-session"],
+      "sourceRefs": ["https://github.com/RbBtSn0w/omni-post"],
+      "upstream": {
+        "repository": "https://github.com/RbBtSn0w/omni-post.git",
+        "branch": "main",
+        "observedRevision": "e690a13291d6152f4b5e4810110fe59b9c5eda47"
+      },
+      "maintenance": {
+        "owner": "xiaohongshu-maintainer",
+        "reviewOn": ["upstream-change", "source-change", "contract-gap-change", "manual"]
+      },
+      "notes": "Kept as a research input, not as an automatic fallback."
+    },
+    {
+      "id": "official-share-sdk",
+      "lifecycle": "degraded",
+      "contractLevel": "degraded",
+      "accessMethod": "official-sdk",
+      "automaticSelectionEligible": false,
+      "priority": 100,
+      "capabilityCoverage": [
+        {
+          "capabilityRef": "/capabilities/xiaohongshu/publish-private-note-and-observe.md",
+          "phases": ["prepare", "submit"],
+          "gaps": ["The SDK hands media to the Xiaohongshu app; it does not provide the full automated content, receipt, reconciliation, or observation contract."]
+        }
+      ],
+      "failureDomains": ["official-share-sdk", "xiaohongshu-mobile-app", "human-confirmation"],
+      "sourceRefs": [
+        "https://agora.xiaohongshu.com/doc/ability",
+        "https://agora.xiaohongshu.com/doc/qa"
+      ],
+      "maintenance": {
+        "owner": "xiaohongshu-maintainer",
+        "reviewOn": ["source-change", "contract-gap-change", "manual"]
+      },
+      "notes": "A different failure domain for a user-mediated handoff, not a substitute for the full capability."
+    },
+    {
+      "id": "creator-center-manual",
+      "lifecycle": "degraded",
+      "contractLevel": "recovery",
+      "accessMethod": "manual",
+      "automaticSelectionEligible": false,
+      "priority": 110,
+      "capabilityCoverage": [
+        {
+          "capabilityRef": "/capabilities/xiaohongshu/publish-private-note-and-observe.md",
+          "phases": ["authorize", "prepare", "submit", "reconcile", "observe"],
+          "gaps": ["Requires a human operator and cannot satisfy the deterministic connector contract."]
+        }
+      ],
+      "failureDomains": ["xiaohongshu-creator-center", "human-operator"],
+      "sourceRefs": ["https://creator.xiaohongshu.com"],
+      "maintenance": {
+        "owner": "xiaohongshu-maintainer",
+        "reviewOn": ["source-change", "manual"]
+      },
+      "notes": "Recovery and reconciliation path when automation is unavailable or a write outcome is ambiguous."
+    },
+    {
+      "id": "official-account-api",
+      "lifecycle": "degraded",
+      "contractLevel": "component",
+      "accessMethod": "official-api",
+      "automaticSelectionEligible": false,
+      "priority": 120,
+      "capabilityCoverage": [
+        {
+          "capabilityRef": "/capabilities/xiaohongshu/publish-private-note-and-observe.md",
+          "phases": ["authorize"],
+          "gaps": ["Provides account authorization and basic profile only; no note publishing, owned-note reconciliation, or feedback observation API is documented."]
+        }
+      ],
+      "failureDomains": ["official-account-api", "oauth-session"],
+      "sourceRefs": ["https://openaccount.xiaohongshu.com/docs/api-reference"],
+      "maintenance": {
+        "owner": "xiaohongshu-maintainer",
+        "reviewOn": ["source-change", "contract-gap-change", "manual"]
+      },
+      "notes": "Identity component that may later replace browser-session authorization, not a publishing route."
+    }
+  ],
+  "selectionPolicy": {
+    "automaticRouteRequirements": {
+      "lifecycles": ["verified"],
+      "contractLevels": ["full"],
+      "requireHealthy": true
+    },
+    "platformWrite": {
+      "stickyRoute": true,
+      "preEffectFallback": "verified-compatible-only",
+      "ambiguousOutcomeFallback": "forbidden",
+      "postEffectRouteChange": "reconcile-first"
+    },
+    "readOnly": {
+      "fallback": "verified-compatible-only"
+    }
+  }
+}

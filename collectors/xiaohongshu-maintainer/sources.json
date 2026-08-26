@@ -1,0 +1,68 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "xiaohongshu",
+  "sources": [
+    {
+      "id": "share-sdk",
+      "url": "https://agora.xiaohongshu.com/doc/ability",
+      "role": "client-mediated-share",
+      "acceptedDocumentDigest": "3e38d31944c02cb1cee60fa264678a3ae6d23722cbe7b415ff92be73d7e5ca5a",
+      "observation": {
+        "mode": "browser-rendered-semantic",
+        "assertions": [
+          { "id": "client-sdk-boundary-present", "includes": "提供了基于客户端代码的分享SDK" },
+          { "id": "media-handoff-present", "includes": "可直接将图文和视频内容分享到小红书" }
+        ]
+      }
+    },
+    {
+      "id": "share-sdk-qa",
+      "url": "https://agora.xiaohongshu.com/doc/qa",
+      "role": "share-limitations",
+      "acceptedDocumentDigest": "3e38d31944c02cb1cee60fa264678a3ae6d23722cbe7b415ff92be73d7e5ca5a",
+      "observation": {
+        "mode": "browser-rendered-semantic",
+        "assertions": [
+          { "id": "autofill-limitation-present", "includes": "限制了通过分享 SDK 自动填充标题和文案" }
+        ]
+      }
+    },
+    {
+      "id": "account-api",
+      "url": "https://openaccount.xiaohongshu.com/docs/api-reference",
+      "role": "oauth-and-basic-profile",
+      "acceptedDocumentDigest": "9403ac3ac0e1806d134a6e7898d7801a4f46653fc6ba3f18f8da45f33d07f87b",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "oauth-present", "includes": "OAuth 2.0" },
+          { "id": "basic-profile-present", "includes": "获取用户基本信息" }
+        ]
+      }
+    },
+    {
+      "id": "commerce-api",
+      "url": "https://open.xiaohongshu.com/home",
+      "role": "merchant-commerce",
+      "acceptedDocumentDigest": "eb12d77ad8844c98c90bb79e2b094841e1ebf0acadef1ccaa23b364afba11c3c",
+      "observation": {
+        "mode": "browser-rendered-semantic",
+        "assertions": [
+          { "id": "merchant-domain-present", "includes": "店铺授权后可为店铺提供erp、打单、搬家上货、进销存" }
+        ]
+      }
+    },
+    {
+      "id": "community-convention",
+      "url": "https://pgy.xiaohongshu.com/help/detail?id=1eda0a065dd894063c2e029a49e8f6a1&userType=4",
+      "role": "content-policy",
+      "acceptedDocumentDigest": "e5f30500906e8a18e3b3fb5375828a5ce3dc3ea32f7284244cbc4b890360cf5a",
+      "observation": {
+        "mode": "browser-rendered-semantic",
+        "assertions": [
+          { "id": "community-convention-present", "includes": "小红书社区公约2.0" }
+        ]
+      }
+    }
+  ]
+}

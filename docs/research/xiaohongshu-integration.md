@@ -31,8 +31,24 @@
 | 小红书电商开放平台 | 官方 | 店铺 ERP、打单、搬家上货、进销存等商家能力 | 否；领域是店铺与交易，不是普通创作者笔记 | 不路由到内容发布能力 |
 | 创作服务平台人工操作 | 官方产品 UI | 人工发布、查看本人内容与数据 | 可人工完成，但不能提供自动化 Connector 契约 | 作为故障时的人工 reconcile / handoff |
 | `xpzouying/xiaohongshu-mcp` | 非官方开源实现，Apache-2.0 | 本机浏览器登录、图文/视频发布、私密可见性、本人主页、笔记详情和评论 | 可以提供执行原语，但自身发布响应没有笔记 ID | 选为固定、loopback-only sidecar；外层必须补 receipt gate |
+| `dreammis/social-auto-upload` | 非官方开源实现 | Python/Playwright 登录与图文/视频上传 | 目标覆盖可达，但私密可见性、receipt、reconcile 与反馈观察尚未完成 conformance | 保持 research route；验证后可成为第二个完整实现候选 |
+| `chatek/opencli` | 非官方开源实现 | 登录浏览器 + Browser Bridge，声明支持图文发布、创作者笔记与统计读取 | 控制通道不同，但扩展信任、私密发布、receipt 和防重尚未验证 | 保持 research route；不能因命令存在就视为可用 |
+| `RbBtSn0w/omni-post` | 非官方开源实现 | Playwright 多平台上传，含小红书路径 | 当前没有建立本纵切要求的私密发布、稳定 receipt、reconcile 和反馈契约 | 作为 degraded research input，不进入自动选择 |
 
 代码许可证只授权使用开源实现，不等于小红书授权浏览器自动化。真实账号接入必须由账号所有者确认授权与适用条款；不得使用身份池规避风控，不自动评论、点赞、私信或公开发布。
+
+### 2.1 多路由不是盲目 fallback
+
+公开 Capability 仍然只有一个；具体 route 藏在 Connector/Collector 后面。`routes.json` 同时维护四类路径：
+
+1. `full`：目标是完整履行 authorize → submit → reconcile → observe；只有 `verified + healthy` 才能自动选择；
+2. `degraded`：只能完成部分流程，例如官方 Share SDK 的 App 交接；
+3. `recovery`：人工创作中心，用于异常后的核对或显式接管；
+4. `component`：只提供身份等局部能力，例如官方账号 API。
+
+`xiaohongshu-mcp`、`social-auto-upload`、OpenCLI 和 OmniPost 并非四个独立故障域：它们都依赖小红书创作中心及其 DOM。不同运行时只能抵抗自身实现、依赖或浏览器控制通道故障，不能抵抗页面整体改版。2026 年 7 月已有上游 issue 记录发布按钮或编辑器选择器失效，因此路由目录必须显式记录共同的 `creator-center-dom` 故障域。
+
+平台写入采用 sticky route：ledger 在副作用前记录选定 route；只有明确证明 `definitely-not-executed` 才允许换到另一个已验证完整 route。只要结果是 `possibly-executed` 或 `unknown`，自动 fallback 一律禁止，先通过原 route 或人工 recovery route 对账，避免重复发布。
 
 ## 3. 选定执行组合
 
@@ -121,15 +137,28 @@ effect：platform-write
 
 ## 6. 维护模型
 
-`xiaohongshu-maintainer` 是 proposal-only Collector：
+`xiaohongshu-maintainer` 是 proposal-only Collector，同时维护当前实现与尚在调研的 route：
 
 - 每日检查官方分享、账号、电商和社区规则来源是否可达；
-- 对比固定上游 commit 与当前 main；
+- 对比每个开源 route 的已审阅 commit 与当前分支 HEAD；无法访问、发生漂移都按 route 单独生成 proposal，不静默遗忘研究路径；
+- 检查 route lifecycle、契约覆盖缺口、共同故障域与 probe 状态；只有 `verified + full + healthy` 可进入自动选择；
 - 检查本机二进制存在性；
 - 检查 Connector conformance 与 canonical Capability 是否一致；
 - 上游变化只生成“审计后再 repin”的 proposal，不自动升级；
 - 失败执行触发 reconcile proposal，不自动重发；
 - live probe 永远需要显式批准，Collector 不得自行发布。
+
+官网变更观测分层进行，不能把 HTTP 200 当成“没变化”：
+
+1. **传输层**：URL、状态码、重定向链、TLS/超时；
+2. **页面结构层**：文档导航、标题、主内容区域、静态资源版本；SPA 页面必须用浏览器渲染后的 DOM，不能只 hash 空壳 HTML；
+3. **语义层**：抽取已审阅事实，例如“Share SDK 是否仍为用户在 App 内完成发布”“账号 API 是否新增笔记接口”；用断言和结构化 snapshot 比较；
+4. **能力层**：当语义变化可能改变 Capability 边界时生成 `knowledge-proposal` 和相应 probe 计划；Collector 不直接改 canonical knowledge；
+5. **证据层**：保存 URL、观测时间、规范化片段摘要与内容 digest；原始网页快照放受限 staging/object store，不把整页复制进 knowledge。
+
+内容指纹变化只是“需要审阅”，不是事实变化。反过来，即使页面指纹不变，周期性 live probe 失败仍会独立 suspend 路由。官网 source monitor 与行为 probe 必须双轨存在。
+
+确定性入口若遇到 `browser-rendered-semantic` 来源，会生成浏览器观测 proposal；Collector Agent 读取渲染 DOM 后把规范化文本交给同一断言求值器。求值器只返回 digest 与逐条 pass/fail，不让 Agent 自行修改基线或 canonical knowledge。
 
 建议 live verification 新鲜期为 7 天；以下事件立即使能力进入 suspended/review-required：
 
@@ -152,8 +181,7 @@ effect：platform-write
 
 尚未完成，因此当前完整可用闭环仍是 **0**：
 
-- 本机 sidecar 构建并启动；
-- 用户自有账号扫码登录；
+- 当前 sidecar 已构建，用户自有账号扫码登录与只读 doctor 已通过，但这只证明执行环境和本人主页读取可用；
 - 创建 opaque probe identity/pool（需要用户确认所有权和授权依据）；
 - 冻结私密 probe revision；
 - 用户对该 revision 做一次性发布确认；
@@ -170,4 +198,9 @@ effect：platform-write
 - 小红书电商开放平台：https://open.xiaohongshu.com/home
 - 小红书社区公约 2.0：https://pgy.xiaohongshu.com/help/detail?id=1eda0a065dd894063c2e029a49e8f6a1&userType=4
 - `xpzouying/xiaohongshu-mcp`：https://github.com/xpzouying/xiaohongshu-mcp
+- `dreammis/social-auto-upload`：https://github.com/dreammis/social-auto-upload
+- `chatek/opencli` 小红书适配说明：https://github.com/chatek/opencli/blob/main/docs/adapters/browser/xiaohongshu.md
+- `RbBtSn0w/omni-post`：https://github.com/RbBtSn0w/omni-post
+- 上游创作中心 DOM 失效实例：https://github.com/xpzouying/xiaohongshu-mcp/issues/725
+- 上游编辑器选择器失效实例：https://github.com/xpzouying/xiaohongshu-mcp/issues/780
 - 上游假阳性问题实例：https://github.com/xpzouying/xiaohongshu-mcp/issues/625

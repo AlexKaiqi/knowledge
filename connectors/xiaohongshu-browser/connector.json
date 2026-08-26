@@ -1,7 +1,7 @@
 {
   "schemaVersion": "dsh.connector-definition/v1",
   "id": "xiaohongshu-browser",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "capabilityRefs": [
     "/capabilities/xiaohongshu/publish-private-note-and-observe.md"
   ],
@@ -11,6 +11,7 @@
     "entrypoint": "connectors/xiaohongshu-browser/src/index.mjs"
   },
   "configSchema": "repo:/connectors/xiaohongshu-browser/config.schema.json",
+  "accessRouteCatalog": "repo:/connectors/xiaohongshu-browser/routes.json",
   "credentialSlots": [
     {
       "name": "sidecar-token",
