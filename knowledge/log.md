@@ -32,3 +32,6 @@ title: Knowledge bundle history
 - 完整可用闭环、已准入 Subject 和已准入 Capability 均更新为 5。
 - 小红书 Collector 接入已验证的 GitHub 搜索 Connector；每次串行发现 2 个关键词，5 天轮换覆盖全部 10 个查询，并过滤 `xhs` / `rednote` 同名噪声。
 - 开源项目 watch catalog 从 18 项扩展到 24 项；新审计 6 项中 2 项保持 MIT researching、1 项 GPL research-only、3 项因缺许可证和高风险写行为 blocked。
+- 通过公开 live probe 准入“读取 GitHub 公共仓库文件”Capability；官方 Contents API 在完整 commit ID 下返回已知 README，Git blob ID 与正文 SHA-256 均匹配固定预期。
+- Connector 拒绝 branch/tag、目录、路径穿越、超过 256 KiB、非 UTF-8、二进制 NUL、revision 漂移和失败重试；新增 proposal-only Collector 观察内容完整性、API conformance 与验证过期。
+- 完整可用闭环更新为 6（Information Source 3；Platform 3），已准入 Subject 保持 5，Capability 更新为 6。

@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "github-public-repository-file",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/github/read-public-repository-file.md"],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "connectors/github-public-repository-file/src/index.mjs"
+  },
+  "configSchema": "repo:/connectors/github-public-repository-file/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [
+    {
+      "capabilityRef": "/capabilities/github/read-public-repository-file.md",
+      "operation": "readPublicRepositoryFile"
+    }
+  ],
+  "conformance": {
+    "status": "verified",
+    "probeReportRef": "/verifications/github/public-repository-file/report.json"
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/github/read-public-repository-file-output.schema.json",
+  "title": "GitHubPublicRepositoryFileResult",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["source", "request", "file", "rateLimit", "observedAt", "resultDigest", "conformance"],
+  "properties": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "apiBaseUrl", "apiVersion"],
+      "properties": {
+        "id": { "const": "github-public-repository-file" },
+        "apiBaseUrl": { "const": "https://api.github.com" },
+        "apiVersion": { "const": "2026-03-10" }
+      }
+    },
+    "request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "path", "revision"],
+      "properties": {
+        "repository": { "type": "string", "pattern": "^[^/]+/[^/]+$" },
+        "path": { "type": "string", "minLength": 1, "maxLength": 512 },
+        "revision": { "type": "string", "pattern": "^[a-f0-9]{40}$" }
+      }
+    },
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "path", "gitBlobId", "sizeBytes", "htmlUrl", "content", "contentSha256"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "path": { "type": "string", "minLength": 1 },
+        "gitBlobId": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+        "sizeBytes": { "type": "integer", "minimum": 0, "maximum": 262144 },
+        "htmlUrl": { "type": "string", "format": "uri", "pattern": "^https://github\\.com/" },
+        "content": { "type": "string", "maxLength": 262144 },
+        "contentSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+      }
+    },
+    "rateLimit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["resource", "limit", "remaining", "resetAt"],
+      "properties": {
+        "resource": { "type": ["string", "null"] },
+        "limit": { "type": ["integer", "null"], "minimum": 0 },
+        "remaining": { "type": ["integer", "null"], "minimum": 0 },
+        "resetAt": { "type": ["string", "null"], "format": "date-time" }
+      }
+    },
+    "observedAt": { "type": "string", "format": "date-time" },
+    "resultDigest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "conformance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "assertions"],
+      "properties": {
+        "status": { "enum": ["passed", "review-required"] },
+        "assertions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "passed"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+              "passed": { "type": "boolean" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

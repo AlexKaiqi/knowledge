@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "dsh.github-public-repository-file-snapshot/v1",
+  "fixture": {
+    "expected": {
+      "gitBlobId": "980a0d5f19a64b4b30a87d4206aade58726b60e3",
+      "contentSha256": "03ba204e50d126e4674c005e04d82e84c21366780af1f43bd54a37816b6ab340"
+    }
+  },
+  "source": {
+    "id": "github-public-repository-file",
+    "apiBaseUrl": "https://api.github.com",
+    "apiVersion": "2026-03-10"
+  },
+  "request": {
+    "repository": "octocat/Hello-World",
+    "path": "README",
+    "revision": "7fd1a60b01f91b314f59955a4e4d4e80d8edf11d"
+  },
+  "file": {
+    "name": "README",
+    "path": "README",
+    "gitBlobId": "980a0d5f19a64b4b30a87d4206aade58726b60e3",
+    "sizeBytes": 13,
+    "htmlUrl": "https://github.com/octocat/Hello-World/blob/7fd1a60b01f91b314f59955a4e4d4e80d8edf11d/README",
+    "content": "Hello World!\n",
+    "contentSha256": "03ba204e50d126e4674c005e04d82e84c21366780af1f43bd54a37816b6ab340"
+  },
+  "rateLimit": {
+    "resource": "core",
+    "limit": 60,
+    "remaining": 51,
+    "resetAt": "2026-08-26T18:53:34.000Z"
+  },
+  "observedAt": "2026-08-26T17:54:29.477Z",
+  "resultDigest": "9c0464a77c527e01edb81e73bc89a59cb757735ac4fcf6dc54bfaa766323483d",
+  "conformance": {
+    "status": "passed",
+    "assertions": [
+      {
+        "id": "response-shape",
+        "passed": true
+      },
+      {
+        "id": "api-version",
+        "passed": true
+      },
+      {
+        "id": "core-rate-bucket",
+        "passed": true
+      },
+      {
+        "id": "immutable-revision",
+        "passed": true
+      },
+      {
+        "id": "bounded-utf8-file",
+        "passed": true
+      }
+    ]
+  }
+}

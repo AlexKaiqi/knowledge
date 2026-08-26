@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "github-public-repository-file-live",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/github/read-public-repository-file.md",
+  "connectorId": "github-public-repository-file",
+  "environment": "production-public",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "read-known-file-at-commit", "operation": "readPublicRepositoryFile" },
+    { "id": "verify-content-integrity", "operation": "normalizePublicRepositoryFileResponse" }
+  ],
+  "assertions": [
+    "The official GET /repos/{owner}/{repo}/contents/{path} endpoint reads a public UTF-8 file without authentication using a full immutable commit id and the pinned API version.",
+    "octocat/Hello-World README at commit 7fd1a60b01f91b314f59955a4e4d4e80d8edf11d has Git blob id 980a0d5f19a64b4b30a87d4206aade58726b60e3 and SHA-256 03ba204e50d126e4674c005e04d82e84c21366780af1f43bd54a37816b6ab340.",
+    "The response is charged to the core rate-limit bucket and explicitly exposes remaining budget and reset time.",
+    "No token, credential, mutable branch reference, raw response, private repository data, or file larger than 256 KiB is accepted or retained."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 30, "maxCost": 0, "currency": "CNY" }
+}

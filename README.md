@@ -69,11 +69,11 @@ Subject knowledge
 ## 当前状态
 
 ```text
-完整可用闭环：5（Information Source 3；Platform 2）
+完整可用闭环：6（Information Source 3；Platform 3）
 已准入 Subject：5
-已准入 Capability：5
-Connector：4 个已验证；xiaohongshu-browser 为 mixed（读取已验证、发布候选）
-维护 Collector：6
+已准入 Capability：6
+Connector：5 个已验证；xiaohongshu-browser 为 mixed（读取已验证、发布候选）
+维护 Collector：7
 ```
 
 小红书已有三个真实闭环：官方账号 API 参考、浏览器渲染的社区公约信息源，以及通过自有账号会话读取本人笔记列表的平台能力。后者 live probe 实际返回可用的空列表。笔记发布、详情反查与反馈采集仍是候选能力，尚未完成真实私密发布闭环。仓库不创建空的平台、Connector 或 Collector 占位。
@@ -84,7 +84,7 @@ Connector：4 个已验证；xiaohongshu-browser 为 mixed（读取已验证、�
 
 抖音维护 Collector 当前管理 24 个固定提交的开源项目和 10 条访问路线，区分官方 OpenAPI、创作者中心发布、草稿准备、公开 Web 研究、自有创作者数据与人工恢复。每次串行查询 2 个关键词、5 天覆盖 10 个查询；同时观察项目和路线 HEAD。所有路线仍为 `researching`/`degraded`，自动选择数为 0。MediaCrawler 的受限许可证、`social-media-copilot` 的许可证冲突、无许可证项目和“点击即成功”实现都被显式阻断，Collector 不会自动安装、登录、接受许可证或升级路线。
 
-GitHub 已有一个真实 Platform 闭环：通过官方 REST API、无需身份搜索公共仓库。输出强制声明排序分页、1,000 条结果窗口、`incomplete_results` 和 Search 限流状态；它只能发现候选，不能证明生态完整、项目许可证可用或项目能力可执行。
+GitHub 已有两个真实 Platform 闭环：通过官方 REST API、无需身份搜索公共仓库，以及在完整不可变 commit ID 下读取一个不超过 256 KiB 的 UTF-8 公共仓库文件。搜索输出强制声明排序分页、1,000 条结果窗口、`incomplete_results` 和 Search 限流状态；文件输出保留 Git blob ID、正文 SHA-256 与 `core` 限流状态。二者组合可以发现候选并核验固定 revision 的 README、LICENSE、manifest 和实现证据，但仍不能证明生态完整、许可证有效或项目能力可执行。
 
 - [小红书接入调研与第一条能力纵切](docs/research/xiaohongshu-integration.md)
 

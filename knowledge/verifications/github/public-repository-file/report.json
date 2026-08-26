@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "dsh.probe-report/v1",
+  "id": "github-public-repository-file-live-20260826",
+  "capabilityRef": "/capabilities/github/read-public-repository-file.md",
+  "connectorId": "github-public-repository-file",
+  "probeDefinitionRef": "repo:/probes/definitions/github-public-repository-file-live.json",
+  "environment": "production-public",
+  "level": "live",
+  "outcome": "passed",
+  "startedAt": "2026-08-26T17:54:28.738Z",
+  "finishedAt": "2026-08-26T17:54:29.479Z",
+  "expiresAt": "2026-09-02T17:54:29.479Z",
+  "checks": [
+    { "id": "response-shape", "status": "passed" },
+    { "id": "api-version", "status": "passed" },
+    { "id": "core-rate-bucket", "status": "passed" },
+    { "id": "immutable-revision", "status": "passed" },
+    { "id": "bounded-utf8-file", "status": "passed" },
+    { "id": "fixture-identity", "status": "passed" },
+    { "id": "fixture-integrity", "status": "passed" },
+    { "id": "fixture-content", "status": "passed" }
+  ],
+  "evidence": [
+    {
+      "kind": "snapshot",
+      "ref": "repo:/knowledge/verifications/github/public-repository-file/snapshot.json",
+      "sha256": "69359b06bff4bca63b315f22032e1027462be31614c8fc4396f2d5e147dba36a"
+    }
+  ],
+  "sideEffects": [{ "effect": "none", "status": "none" }]
+}

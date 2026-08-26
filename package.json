@@ -28,7 +28,9 @@
     "douyin:open-platform:maintain": "node collectors/douyin-open-platform-docs-maintainer/src/index.mjs",
     "douyin:maintain": "node collectors/douyin-maintainer/src/index.mjs",
     "github:repositories:probe": "node scripts/probe-github-public-repository-search.mjs",
-    "github:repositories:maintain": "node collectors/github-public-repository-search-maintainer/src/index.mjs"
+    "github:repositories:maintain": "node collectors/github-public-repository-search-maintainer/src/index.mjs",
+    "github:file:probe": "node scripts/probe-github-public-repository-file.mjs",
+    "github:file:maintain": "node collectors/github-public-repository-file-maintainer/src/index.mjs"
   },
   "dependencies": {
     "ajv": "^8.20.0",
