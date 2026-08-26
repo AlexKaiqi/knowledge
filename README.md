@@ -60,14 +60,14 @@ Connector：10 个已验证；xiaohongshu-browser 为 mixed（读取已验证、
 
 ## 下一优先级
 
-1. App Store / Google Play：搜索、榜单、应用详情、版本发布、公开评论与自有应用反馈。
-2. 社媒发布与反馈：小红书、抖音，以及后续视频/图文平台的可验证读写闭环。
-3. 需求来源：GitHub Issues、应用商店评论、公开社区、竞品变化和用户反馈聚类。
-4. 影响力：内容发布回执、曝光/互动指标、评论主题和跨渠道复盘。
+候选不再按“平台是否有 API”排列，而按可验证的结果切片排队。当前 active build 是小红书私密发布、平台侧对账和持续反馈；App Store 公开应用检索作为并行 research。随后是自有 App Store/Google Play 评论、发布状态和受控测试发布。
+
+完整的 P0/P1/P2、Watch、Reject 和最小 Schema 见 [有价值的候选接入对象](docs/INTEGRATION_CANDIDATES.md)。同一时刻只实施一个切片，避免再次积累一批只有文档、没有闭环的“接入”。
 
 ## 文档
 
 - [产品范围与价值门](docs/PRODUCT_SCOPE.md)
+- [有价值的候选接入对象](docs/INTEGRATION_CANDIDATES.md)
 - [小红书接入调研](docs/research/xiaohongshu-integration.md)
 - [GitHub Work Item 变更调研](docs/research/github-public-work-item-changes.md)
 - [准入流程](docs/ADMISSION_WORKFLOW.md)
