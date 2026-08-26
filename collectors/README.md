@@ -14,4 +14,4 @@ collectors/<collector-id>/
 
 Collector 默认只生成 knowledge proposal、connector change proposal 或 verification report；合入 canonical knowledge 仍经过准入门。
 
-项目 watch catalog 不是“推荐列表”。它同时保存可采用候选、许可证阻断项目、只供研究的实现和已排除的关键词命中，避免重复调研。Collector 观察 HEAD、许可证/归档/issue/release 事件和复审周期；变化只生成 proposal，不自动升级依赖、route 或 canonical knowledge。
+项目 watch catalog 不是“推荐列表”。它同时保存可采用候选、许可证阻断项目、只供研究的实现和已排除的关键词命中，避免重复调研。确定性 Collector 自动观察 HEAD 与复审周期；HEAD 漂移或到期后生成 proposal，由审阅流程核验 release、issue、license、archived、能力文档与代码差异。任何变化都不能自动升级依赖、route 或 canonical knowledge。

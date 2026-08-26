@@ -161,7 +161,7 @@ effect：platform-write
 
 重点 Collector 候选包括：OpenWeb 的适配传输与结构化详情/评论、MediaCrawler 的搜索/创作者/评论采集、Apache-2.0 的 `tamnd/xiaohongshu-cli` 签名读取路径、MIT 的被动浏览器采集扩展，以及 `xhs-toolkit` / XiaohongshuSkills 的创作者数据面。MediaCrawler 使用非商业学习许可证，只能作为研究参考，不能因开源可见就进入通用生产依赖。
 
-持续关注规则：高优先级项目 7 天复审，中优先级 14 天，低优先级 30 天；同时观察 branch HEAD、release、issue、license 和 archived 状态。HEAD 漂移与周期到期分别生成 proposal。研究项目变化不会直接把已验证 route 判死，但 route 所绑定的同一 revision 漂移仍是 capability blocker。
+持续关注规则：高优先级项目 7 天复审，中优先级 14 天，低优先级 30 天。确定性入口每日比较 branch HEAD 并计算复审到期；任一信号生成 proposal 后，再由审阅流程检查 release、issue、license、archived、能力文档和相关代码差异。研究项目变化不会直接把已验证 route 判死，但 route 所绑定的同一 revision 漂移仍是 capability blocker。
 
 官网变更观测分层进行，不能把 HTTP 200 当成“没变化”：
 
