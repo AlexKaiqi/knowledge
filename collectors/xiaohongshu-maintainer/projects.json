@@ -84,6 +84,14 @@
     "leeguooooo-xhs-skill": { "tagCount": 0, "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" },
     "excalibursssooo-xiaohongshu-search": { "tagCount": 2, "digest": "62ca9b62ac8290f02b8b2d06984204633ea6478e68b3d08b327edac8464b493d" }
   },
+  "workItemCheckpoints": {
+    "tamnd-xiaohongshu-cli": {
+      "updatedAt": "2026-08-19T02:50:19.000Z",
+      "seenItemDigests": [
+        { "number": 18, "digest": "f93327b405b76d55fda8edf9cf5ef0fa0e8471266836bf7c0b17ef57dff692db" }
+      ]
+    }
+  },
   "projects": [
     {
       "id": "xpzouying-xiaohongshu-mcp",

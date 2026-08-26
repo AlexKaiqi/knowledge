@@ -55,6 +55,11 @@
         }
       }
     },
+    "workItemCheckpoints": {
+      "type": "object",
+      "propertyNames": { "$ref": "#/$defs/id" },
+      "additionalProperties": { "$ref": "#/$defs/workItemCheckpoint" }
+    },
     "projects": {
       "type": "array",
       "minItems": 1,
@@ -63,6 +68,27 @@
   },
   "$defs": {
     "id": { "type": "string", "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$" },
+    "workItemCheckpoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["updatedAt", "seenItemDigests"],
+      "properties": {
+        "updatedAt": { "type": "string", "format": "date-time", "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.000Z$" },
+        "seenItemDigests": {
+          "type": "array",
+          "maxItems": 500,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["number", "digest"],
+            "properties": {
+              "number": { "type": "integer", "minimum": 1 },
+              "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+            }
+          }
+        }
+      }
+    },
     "project": {
       "type": "object",
       "additionalProperties": false,

@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "id": "github-public-repository-work-item-change-sources",
+  "sources": [
+    {
+      "id": "github-list-repository-issues",
+      "url": "https://docs.github.com/en/rest/issues/issues?apiVersion=2026-03-10",
+      "role": "official-contract",
+      "reviewCadenceDays": 7,
+      "lastReviewedAt": "2026-08-27T07:00:00Z",
+      "observation": {
+        "mode": "normalized-html-semantic",
+        "assertions": [
+          { "id": "public-resources-without-authentication", "includes": "This endpoint can be used without authentication" },
+          { "id": "issues-include-pull-requests", "includes": "GitHub's REST API considers every pull request an issue" },
+          { "id": "updated-since-semantics", "includes": "Only show results that were last updated after the given time" },
+          { "id": "page-size-maximum", "includes": "The number of results per page (max 100)" }
+        ]
+      }
+    },
+    {
+      "id": "github-rest-pagination",
+      "url": "https://docs.github.com/en/rest/using-the-rest-api/using-pagination-in-the-rest-api?apiVersion=2026-03-10",
+      "role": "official-pagination-contract",
+      "reviewCadenceDays": 14,
+      "lastReviewedAt": "2026-08-27T07:00:00Z",
+      "observation": {
+        "mode": "normalized-html-semantic",
+        "assertions": [
+          { "id": "link-header", "includes": "link header" },
+          { "id": "next-relation", "includes": "rel=\"next\"" }
+        ]
+      }
+    },
+    {
+      "id": "github-rest-rate-limits",
+      "url": "https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api?apiVersion=2026-03-10",
+      "role": "official-access-contract",
+      "reviewCadenceDays": 14,
+      "lastReviewedAt": "2026-08-27T07:00:00Z",
+      "observation": {
+        "mode": "normalized-html-semantic",
+        "assertions": [
+          { "id": "unauthenticated-core-budget", "includes": "The primary rate limit for unauthenticated requests is 60 requests per hour" },
+          { "id": "source-ip-shaped", "includes": "Unauthenticated requests are associated with the originating IP address" }
+        ]
+      }
+    }
+  ]
+}

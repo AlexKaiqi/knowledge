@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "dsh.ecosystem-project-catalog/v1",
+  "id": "github-public-repository-work-item-change-upstreams",
+  "subject": "github-public-repository-work-item-changes",
+  "selectionPolicy": {
+    "purpose": "Observe the official OpenAPI contract and the reviewed pagination reference that can change this Connector's interpretation or traversal.",
+    "requiredEvidence": ["public-repository", "exact-reviewed-revision", "license-state", "contract-relevance"],
+    "includeWhenAny": ["publishes-official-rest-openapi", "implements-reviewed-rest-pagination"],
+    "excludeWhenAll": ["generic-github-client", "no-issue-or-pagination-contract-impact"],
+    "admissionBoundary": "HEAD drift creates a proposal only; it never changes the API version, checkpoint model, schema or Connector automatically."
+  },
+  "searchQueries": ["GitHub REST issues pagination checkpoint"],
+  "projects": [
+    {
+      "id": "github-rest-api-description",
+      "repository": "https://github.com/github/rest-api-description.git",
+      "branch": "main",
+      "observedRevision": "6601e5ced001a05f4574552116ebcb276413eceb",
+      "status": "reference",
+      "roles": ["reference-implementation", "evaluation-source"],
+      "platformScope": "github.com",
+      "accessMechanisms": ["public-web-dom", "manual-evaluation"],
+      "capabilitySignals": ["route-health"],
+      "failureDomains": ["rest-openapi-contract", "issue-response-schema", "api-version"],
+      "license": { "status": "verified", "spdx": "MIT", "dependencyUse": "allowed" },
+      "evidenceRefs": ["https://github.com/github/rest-api-description", "https://github.com/github/rest-api-description/blob/main/LICENSE.md"],
+      "gaps": ["The generated description can lag deployed behavior; live conformance and official prose documentation remain independent evidence."],
+      "watch": { "priority": "high", "lastReviewedAt": "2026-08-27T07:00:00Z", "reviewCadenceDays": 7, "reviewOn": ["head-change", "license-change", "archive", "cadence"] }
+    },
+    {
+      "id": "octokit-plugin-paginate-rest",
+      "repository": "https://github.com/octokit/plugin-paginate-rest.js.git",
+      "branch": "main",
+      "observedRevision": "27411a02014add863308588113dd4d703bf3d165",
+      "status": "reference",
+      "roles": ["reference-implementation", "evaluation-source"],
+      "platformScope": "github.com",
+      "accessMechanisms": ["manual-evaluation"],
+      "capabilitySignals": ["route-health"],
+      "failureDomains": ["rest-link-pagination", "iterator-stop-condition"],
+      "license": { "status": "verified", "spdx": "MIT", "dependencyUse": "allowed" },
+      "evidenceRefs": ["https://github.com/octokit/plugin-paginate-rest.js", "https://github.com/octokit/plugin-paginate-rest.js/blob/main/LICENSE"],
+      "gaps": ["This project is a pagination reference, not a Connector dependency; it does not solve mutable ordering or same-second checkpoint semantics."],
+      "watch": { "priority": "medium", "lastReviewedAt": "2026-08-27T07:00:00Z", "reviewCadenceDays": 14, "reviewOn": ["head-change", "license-change", "archive", "cadence"] }
+    }
+  ]
+}

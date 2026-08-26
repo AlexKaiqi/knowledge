@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "dsh.probe-report/v1",
+  "id": "github-public-repository-work-item-changes-live-20260826",
+  "capabilityRef": "/capabilities/github/list-public-repository-work-item-changes.md",
+  "connectorId": "github-public-repository-work-item-changes",
+  "probeDefinitionRef": "repo:/probes/definitions/github-public-repository-work-item-changes-live.json",
+  "environment": "production-public",
+  "level": "live",
+  "outcome": "passed",
+  "startedAt": "2026-08-26T23:06:41.642Z",
+  "finishedAt": "2026-08-26T23:06:42.407Z",
+  "expiresAt": "2026-09-02T23:06:42.407Z",
+  "checks": [
+    { "id": "response-shape", "status": "passed" },
+    { "id": "api-version", "status": "passed" },
+    { "id": "core-rate-bucket", "status": "passed" },
+    { "id": "ascending-update-order", "status": "passed" },
+    { "id": "bounded-requests", "status": "passed" },
+    { "id": "unique-work-item-numbers", "status": "passed" },
+    { "id": "checkpoint-declared", "status": "passed" },
+    { "id": "coverage-declared", "status": "passed" },
+    { "id": "personal-fields-excluded", "status": "passed" },
+    { "id": "fixture-work-item", "status": "passed" },
+    { "id": "checkpoint-advanced", "status": "passed" },
+    { "id": "complete-bounded-window", "status": "passed" },
+    { "id": "data-minimization", "status": "passed" }
+  ],
+  "evidence": [{ "kind": "snapshot", "ref": "repo:/knowledge/verifications/github/public-repository-work-item-changes/snapshot.json", "sha256": "c9ef0d73670b0648629994a1c4bf268cc3061534de710d9197b77412da994cfb" }],
+  "sideEffects": [{ "effect": "none", "status": "none" }]
+}

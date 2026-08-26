@@ -2,7 +2,7 @@
 
 保存 Capability 引用的产品输入输出 JSON Schema。不同产品可以完全不同，不强制统一业务字段；公共层只统一 Capability envelope。
 
-当前：38。
+当前：40。
 
 - [OSV 公共公告输入](osv/read-public-advisory-input.schema.json)
 - [OSV 公共公告输出](osv/read-public-advisory-output.schema.json)
@@ -22,6 +22,8 @@
 - [GitHub 公共仓库 Tag 集合输出](github/list-public-repository-tags-output.schema.json)
 - [GitHub 公共仓库搜索输入](github/search-public-repositories-input.schema.json)
 - [GitHub 公共仓库搜索输出](github/search-public-repositories-output.schema.json)
+- [GitHub 公共仓库 Work Item 变更输入](github/list-public-repository-work-item-changes-input.schema.json)
+- [GitHub 公共仓库 Work Item 变更输出](github/list-public-repository-work-item-changes-output.schema.json)
 - [Hugging Face 公共模型 Revision 清单输入](hugging-face/read-public-model-revision-manifest-input.schema.json)
 - [Hugging Face 公共模型 Revision 清单输出](hugging-face/read-public-model-revision-manifest-output.schema.json)
 - [Maven Central 公共 JAR Release 证据输入](maven-central/read-public-jar-release-evidence-input.schema.json)

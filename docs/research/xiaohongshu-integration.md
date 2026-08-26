@@ -177,7 +177,7 @@ effect：platform-write
 
 发现阶段先做双条件相关性过滤：一侧必须出现 `xiaohongshu`、`小红书`、独立 token `xhs` 或 `rednote`，另一侧还必须出现 MCP/API/SDK/CLI、采集、发布、搜索、评论、下载、自动化等 Connector/Collector 能力词；只有仓库名精确为 `xhs` / `xiaohongshu` / `rednote` 时允许省略能力词。因此 `XhsWelcomeAnim` 与 `rednotebook` 等同名碰撞不会进入 triage。每个查询只观察排序前 10 项、最多提出 5 项新候选，且始终保留 `ecosystemComplete=false`。GitHub Search 失败或限流不会重试，也不会退回网页抓取。
 
-持续关注规则：高优先级项目 7 天复审，中优先级 14 天，低优先级 30 天。确定性入口每日比较 47 个项目的 branch HEAD 并计算复审到期；对 36 个声明关注 release 的项目，还会串行轮换调用已验证的 `github-public-repository-tags` Connector，每次最多 4 个、9 天覆盖一轮，并比较其规范化 tag→commit 摘要。只有完整集合才参与基线比较，截断或限流分别生成扩大预算/延期 proposal。自动化保证只覆盖 branch HEAD、release tag set 和 ranked search；issue、license、archive、能力文档与相关代码差异是 HEAD/release 变化或 cadence 到期后的强制审阅清单，并非每次运行都独立轮询。任一信号只生成 proposal。研究项目变化不会直接把已验证 route 判死，但 route 所绑定的同一 revision 漂移仍是 capability blocker。
+持续关注规则：高优先级项目 7 天复审，中优先级 14 天，低优先级 30 天。确定性入口每日比较 47 个项目的 branch HEAD 并计算复审到期；对 36 个声明关注 release 的项目，还会串行轮换调用已验证的 `github-public-repository-tags` Connector，每次最多 4 个、9 天覆盖一轮，并比较其规范化 tag→commit 摘要。只有完整集合才参与基线比较，截断或限流分别生成扩大预算/延期 proposal。`tamnd/xiaohongshu-cli` 是首个 issue watch 消费者：目录保存 live probe 已接受的复合 checkpoint，已验证的 `github-public-repository-work-item-changes` Connector 独立观察 issue 与 pull request 变化，新变化连同 proposed checkpoint 进入 proposal，Collector 不前移基线。自动化保证覆盖 branch HEAD、release tag set、ranked search，以及显式声明 checkpoint 的 work-item 窗口；其余项目的 issue 和所有项目的 license、archive、能力文档与相关代码差异仍是信号变化或 cadence 到期后的强制审阅清单。任一信号只生成 proposal。研究项目变化不会直接把已验证 route 判死，但 route 所绑定的同一 revision 漂移仍是 capability blocker。
 
 官网变更观测分层进行，不能把 HTTP 200 当成“没变化”：
 

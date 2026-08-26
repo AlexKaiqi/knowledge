@@ -70,24 +70,24 @@ Subject knowledge
 ## 当前状态
 
 ```text
-完整可用闭环：19（Tool 1；Information Source 4；Platform 13；Service 1）
+完整可用闭环：20（Tool 1；Information Source 4；Platform 14；Service 1）
 已准入 Subject：16
-已准入 Capability：19
-Connector：18 个已验证；xiaohongshu-browser 为 mixed（读取已验证、发布候选）
-维护 Collector：20
+已准入 Capability：20
+Connector：19 个已验证；xiaohongshu-browser 为 mixed（读取已验证、发布候选）
+维护 Collector：21
 ```
 
 Web Feed Reader 已形成第一条 Tool 闭环：外部只按固定 `feedId` 读取逐项审阅的公共 Feed，不接受任意 URL、header、凭据或重定向。当前唯一登记源是 Node.js 官方 Release Feed；production-public live probe 实际解析 RSS 2.0 的 807 个条目并有界返回 10 个。输出剔除正文、摘要、作者、邮箱、附件、扩展字段和 raw XML，并把归一化语义摘要与原始文档摘要分开，使 Collector 能区分真实条目变化和序列化噪声。解析器的 Atom 1.0 路径已通过本地契约测试，但在首个 Atom 来源独立 live probe 前不算可用 Atom 数据源。维护 Collector 同时观察 RSS/Atom 规范、Node.js 官网 Feed 生成源码、生成器和精确固定的 XML parser 上游；变化只生成 proposal。
 
 小红书已有三个真实闭环：官方账号 API 参考、浏览器渲染的社区公约信息源，以及通过自有账号会话读取本人笔记列表的平台能力。后者 live probe 实际返回可用的空列表。笔记发布、详情反查与反馈采集仍是候选能力，尚未完成真实私密发布闭环。仓库不创建空的平台、Connector 或 Collector 占位。
 
-小红书维护 Collector 还管理 47 个已审计开源项目，并消费已验证的 GitHub 搜索 Connector 做关键词轮换发现：每次串行查询 4 个关键词、7 天覆盖 28 个查询，显式覆盖 MCP、CLI、Playwright、CDP、浏览器扩展、多账号、私密/长文发布、网络截获、普通评论、直播评论、私信与创作者分析。项目必须能改变 Connector、Collector、probe、身份池、conformance 或 failure-domain 决策；只有关键词命中、没有具体平台路径或没有新增维护决策的仓库不进入目录。已人工排除的命中只保留最小 `discoveryDecision`（仓库、当时的 `pushedAt` 和理由码），相同 revision 不重复制造 proposal，仓库一旦更新就自动重新进入审阅。对其中 36 个声明关注 release 的项目，另消费已验证的 GitHub Tag Connector，每次串行观察 4 个、9 天覆盖一轮，并比较规范化的 tag→commit 摘要。自动信号明确限于全目录 branch HEAD、轮换 tag 集合和轮换关键词发现；issue、license、archive、契约与相关代码差异在信号触发或复审到期后进入审阅清单，不伪装成每次都已轮询。所有变化只生成 proposal，不自动安装、升级、路由或接受第三方许可证。当前已为 `DeliciousBuding/xiaohongshu-skill` 建立固定 commit、固定补丁与固定 runtime diff 的本地 JSON CLI adapter；它能在离线契约中强制私密可见性、隔离 profile，并对不确定写入禁重试，但在真实 probe 前仍不是可用路线。新一轮重点补入多账号矩阵 CLI 的本人列表对账/草稿分流/未知结果禁重发模式、默认私密的长文管理页核验、MCP+CDP 混合路由和完整增长工作台；另将 instruction-only 的发布门禁项目和带签名浏览器采集项目纳入监测，但因 Cookie 输出、原始身份数据落盘及风控规避建议保持 research-only。许可证血缘不明、预编译二进制不透明或缺许可证的项目仍保持 blocked/research-only。
+小红书维护 Collector 管理 47 个已审计开源项目。它使用已验证的 GitHub Search Connector，每次串行查询 4 个关键词、7 天覆盖 28 个查询；36 个 release watch 使用 GitHub Tag Connector，每次观察 4 个、9 天覆盖一轮。首个 `tamnd/xiaohongshu-cli` 项目还使用 Work Item Connector 独立观察 issue/PR 增量窗口；checkpoint 只有审阅 proposal 才能推进，限流、截断和契约漂移不会被误报为“无变化”。其余项目的 issue，以及所有项目的 license、archive、契约与相关代码差异，仍在信号触发或复审到期后进入审阅清单。项目只有能改变 Connector、Collector、probe、身份池、conformance 或 failure-domain 决策才进入目录；所有变化只生成 proposal，不自动安装、升级、路由或接受第三方许可证。当前本地 JSON CLI adapter 仍须通过真实 probe 才可成为路线；Cookie 输出、原始身份数据落盘、风控规避建议、许可证血缘不明和不透明预编译二进制均保持 blocked/research-only。
 
 抖音已有两个真实闭环：一条无需身份读取并语义校验官方开放平台文档的 Information Source 能力；一条按明确 VideoID 调用官方免权限接口、读取公开视频标题/宽高/受约束播放器 URL 的 Platform 能力。后者不暴露原始 iframe HTML，也不使用账号、Cookie、token、内部签名或爬虫身份伪装。应用审核、scope、用户授权、搜索、创作者数据和写操作仍未验证。
 
 抖音维护 Collector 当前管理 24 个固定提交的开源项目和 11 条访问路线，区分官方 OpenAPI、创作者中心发布、草稿准备、公开读取、公开 Web 研究、自有创作者数据与人工恢复。每次串行查询 2 个关键词、5 天覆盖 10 个查询；同时观察项目和路线 HEAD。对 15 个声明关注 release 的项目，另消费已验证的 GitHub Tag Connector，每次串行观察 4 个、4 天覆盖一轮。当前只有官方公开视频 iframe API 是 `verified/full` 且可自动选择；已归档 `yzfly/douyin-mcp-server` 的旧分享页解析路线因 `iesdouyin` 重定向和 HTML 契约失效而退休。其余路线仍为 `researching`/`degraded`。MediaCrawler 的受限许可证、`social-media-copilot` 的许可证冲突、无许可证项目和“点击即成功”实现都被显式阻断，Collector 不会自动安装、登录、接受许可证或升级路线。
 
-GitHub 已有四个真实 Platform 闭环：通过官方 REST API、无需身份搜索公共仓库；串行分页读取最多 500 个 tag 名称与目标 commit SHA；按精确 tag 读取一个非草稿 release 的有界说明和最多 64 个内嵌资产；以及在完整不可变 commit ID 下读取一个不超过 256 KiB 的 UTF-8 公共仓库文件。它们可以发现候选、观察 tag/release 面，并核验固定 revision 的 README、LICENSE、manifest 和实现证据；仍不能证明生态完整、许可证有效、tag 不会移动、资产集合完整、资产安全或项目能力可执行。
+GitHub 已有五个真实 Platform 闭环：通过官方 REST API、无需身份搜索公共仓库；串行分页读取最多 500 个 tag 名称与目标 commit SHA；按精确 tag 读取一个非草稿 release 的有界说明和最多 64 个内嵌资产；在完整不可变 commit ID 下读取一个不超过 256 KiB 的 UTF-8 公共仓库文件；以及从复合 checkpoint 增量读取最多 5×100 个公共 issue/pull-request 变化。Work Item 能力重读边界前一秒，并用 number+语义摘要识别同秒重放；正文只保留长度与 SHA-256，作者、assignee、邮箱、头像、评论和 raw payload 被排除。它们可以发现候选、观察 tag/release/issue 面，并核验固定 revision 的 README、LICENSE、manifest 和实现证据；仍不能证明生态或历史完整、许可证有效、tag 不会移动、资产安全、分页期间没有并发缺口或项目能力可执行。
 
 Hugging Face Hub 已有一个真实 Platform 闭环：无需身份按 `namespace/name` 和完整 40 位 commit 读取公开、非 gated、未禁用模型的有界完整文件清单。输出包含 pipeline/library/tags、文件路径和声明大小、Git blob SHA-1 及可用的 LFS SHA-256/Xet hash，并显式返回官方 5 分钟 `api` RateLimit 观测；不读取本机 HF token，不接受 `main`/tag，不下载或执行模型文件，也不把模型卡的 `license:*` tag 当作许可证审计。
 
@@ -109,6 +109,7 @@ Go Module Mirror 与 Checksum Database 已有一个真实 Service 闭环：调�
 
 - [小红书接入调研与第一条能力纵切](docs/research/xiaohongshu-integration.md)
 - [Web Feed Reader 调研与接入决策](docs/research/web-feed-reader.md)
+- [GitHub 公共仓库 Work Item 变更接入调研](docs/research/github-public-work-item-changes.md)
 
 ## 规范
 

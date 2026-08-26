@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "github-public-repository-work-item-changes",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/github/list-public-repository-work-item-changes.md"],
+  "execution": { "kind": "deterministic", "runtime": "node >=22.19", "entrypoint": "connectors/github-public-repository-work-item-changes/src/index.mjs" },
+  "configSchema": "repo:/connectors/github-public-repository-work-item-changes/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [{ "capabilityRef": "/capabilities/github/list-public-repository-work-item-changes.md", "operation": "listPublicRepositoryWorkItemChanges" }],
+  "conformance": { "status": "verified", "probeReportRef": "/verifications/github/public-repository-work-item-changes/report.json" }
+}

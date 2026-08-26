@@ -8,8 +8,10 @@ import { fileURLToPath } from 'node:url'
 import { searchPublicRepositories } from '../../../connectors/github-public-repository-search/src/index.mjs'
 import { XiaohongshuSkillCliDriver } from '../../../connectors/xiaohongshu-browser/src/index.mjs'
 import { observeProjectReleaseTags, selectReleaseWatchProjects } from '../../lib/github-release-watch.mjs'
+import { observeProjectWorkItemChanges, selectWorkItemWatchProjects } from '../../lib/github-work-item-watch.mjs'
 
 export { observeProjectReleaseTags, selectReleaseWatchProjects } from '../../lib/github-release-watch.mjs'
+export { observeProjectWorkItemChanges, selectWorkItemWatchProjects } from '../../lib/github-work-item-watch.mjs'
 
 const exec = promisify(execFile)
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..')
@@ -18,17 +20,19 @@ const sourceWatchList = JSON.parse(await readFile(path.join(repositoryRoot, 'col
 export const officialSources = sourceWatchList.sources
 export const DISCOVERY_QUERIES_PER_RUN = 4
 export const RELEASE_TAG_PROJECTS_PER_RUN = 4
+export const WORK_ITEM_PROJECTS_PER_RUN = 1
 const DISCOVERY_RESULTS_PER_QUERY = 10
 const DISCOVERY_CANDIDATES_PER_QUERY = 5
 export const projectWatchPolicy = Object.freeze({
   automatedSignals: [
     { id: 'default-branch-head', coverage: 'all-catalog-projects', behavior: 'compare-every-run' },
     { id: 'release-tag-set', coverage: 'projects-with-release-baseline', behavior: 'bounded-rotation' },
+    { id: 'issue-work-item-window', coverage: 'projects-with-work-item-checkpoint', behavior: 'bounded-rotation' },
     { id: 'ranked-repository-search', coverage: 'all-declared-search-queries', behavior: 'bounded-rotation' },
   ],
   scheduledReviewChecklist: ['issues', 'license', 'archive-state', 'capability-contract', 'relevant-code-diff'],
   limitations: [
-    'Issue, license and archive state are reviewed after a HEAD/release signal or when cadence expires; they are not independently polled on every run.',
+    'Issue changes are independently polled only for projects with an accepted work-item checkpoint; license and archive state remain scheduled-review checks.',
     'Ranked search observes only the first bounded result page and never claims ecosystem completeness.',
     'Every signal creates a proposal; no project is installed, repinned or promoted automatically.',
   ],
@@ -232,6 +236,7 @@ export async function collectXiaohongshuMaintenance({
   renderedSourceObservations = {},
   repositorySearch = searchPublicRepositories,
   releaseTags,
+  workItemChanges,
 } = {}) {
   const upstream = JSON.parse(await readFile(path.join(repositoryRoot, 'connectors/xiaohongshu-browser/upstream.json'), 'utf8'))
   const connector = JSON.parse(await readFile(path.join(repositoryRoot, 'connectors/xiaohongshu-browser/connector.json'), 'utf8'))
@@ -241,13 +246,14 @@ export async function collectXiaohongshuMaintenance({
   const observedAtDate = now()
   const discoveryQueries = selectDiscoveryQueries(projectCatalog.searchQueries, observedAtDate)
   const releaseWatchProjects = selectReleaseWatchProjects(projectCatalog, observedAtDate, RELEASE_TAG_PROJECTS_PER_RUN)
+  const workItemWatchProjects = selectWorkItemWatchProjects(projectCatalog, observedAtDate, WORK_ITEM_PROJECTS_PER_RUN)
   const routeHeadCache = new Map()
   const readRouteHead = (repository, branch) => {
     const key = `${repository}\n${branch}`
     if (!routeHeadCache.has(key)) routeHeadCache.set(key, upstreamHead(repository, branch))
     return routeHeadCache.get(key)
   }
-  const [sources, routeUpstreams, projects, artifacts, discovery, releaseTagObservations] = await Promise.all([
+  const [sources, routeUpstreams, projects, artifacts, discovery, releaseTagObservations, workItemObservations] = await Promise.all([
     Promise.all(officialSources.map((source) => sourceCheck(source, fetchImpl, renderedSourceObservations[source.id]))),
     Promise.all(upstreamRoutes.map(async (route) => {
       try {
@@ -311,6 +317,7 @@ export async function collectXiaohongshuMaintenance({
     artifactCheck(runtimeRoot, skillRuntimeRoot),
     discoverEcosystemProjects({ queries: discoveryQueries, repositorySearch, projectCatalog }),
     observeProjectReleaseTags({ projects: releaseWatchProjects, baselines: projectCatalog.releaseTagBaselines, releaseTags }),
+    observeProjectWorkItemChanges({ projects: workItemWatchProjects, checkpoints: projectCatalog.workItemCheckpoints, workItemChanges }),
   ])
   const canonicalCapabilityPath = path.join(repositoryRoot, 'knowledge/capabilities/xiaohongshu/publish-private-note-and-observe.md')
   const canonicalReadCapabilityPath = path.join(repositoryRoot, 'knowledge/capabilities/xiaohongshu/list-owned-notes.md')
@@ -361,6 +368,12 @@ export async function collectXiaohongshuMaintenance({
   if (releaseTagObservations.some((observation) => observation.status === 'budget-review')) blockers.push('ecosystem-release-watch-budget-exceeded')
   if (releaseTagObservations.some((observation) => observation.status === 'contract-review')) blockers.push('ecosystem-release-watch-contract-review')
   if (releaseTagObservations.some((observation) => observation.status === 'review-required')) blockers.push('ecosystem-release-tags-changed')
+  if (workItemObservations.some((observation) => observation.status === 'unreachable')) blockers.push('ecosystem-work-item-watch-unreachable')
+  if (workItemObservations.some((observation) => observation.status === 'missing')) blockers.push('ecosystem-work-item-repository-missing')
+  if (workItemObservations.some((observation) => observation.status === 'deferred')) blockers.push('ecosystem-work-item-watch-deferred')
+  if (workItemObservations.some((observation) => observation.status === 'budget-review')) blockers.push('ecosystem-work-item-watch-budget-exceeded')
+  if (workItemObservations.some((observation) => observation.status === 'contract-review')) blockers.push('ecosystem-work-item-watch-contract-review')
+  if (workItemObservations.some((observation) => observation.status === 'review-required')) blockers.push('ecosystem-work-items-changed')
   const verificationProposals = []
   for (const binding of capabilityConformance) {
     if (binding.verificationStatus === 'expired') {
@@ -412,6 +425,21 @@ export async function collectXiaohongshuMaintenance({
       projectProposals.push({ kind: 'connector-change-proposal', projectId: observation.projectId, action: 'review-project-release-tag-connector-contract' })
     }
   }
+  for (const observation of workItemObservations) {
+    if (observation.status === 'review-required') {
+      projectProposals.push({ kind: 'connector-change-proposal', projectId: observation.projectId, action: 'review-project-work-item-changes', changes: observation.changes, proposedCheckpoint: observation.nextCheckpoint })
+    } else if (observation.status === 'unreachable') {
+      projectProposals.push({ kind: 'connector-change-proposal', projectId: observation.projectId, action: 'restore-project-work-item-observation' })
+    } else if (observation.status === 'missing') {
+      projectProposals.push({ kind: 'connector-change-proposal', projectId: observation.projectId, action: 'review-missing-project-work-item-repository' })
+    } else if (observation.status === 'deferred') {
+      projectProposals.push({ kind: 'verification-report', projectId: observation.projectId, action: 'rerun-project-work-item-observation', ...(observation.notBefore ? { notBefore: observation.notBefore } : {}) })
+    } else if (observation.status === 'budget-review') {
+      projectProposals.push({ kind: 'connector-change-proposal', projectId: observation.projectId, action: 'expand-project-work-item-budget' })
+    } else if (observation.status === 'contract-review') {
+      projectProposals.push({ kind: 'connector-change-proposal', projectId: observation.projectId, action: 'review-project-work-item-connector-contract' })
+    }
+  }
   return {
     schemaVersion: 'knowledge.maintenance-report/v1',
     subject: 'xiaohongshu',
@@ -459,6 +487,14 @@ export async function collectXiaohongshuMaintenance({
         eligibleProjects: Object.keys(projectCatalog.releaseTagBaselines).length,
         fullCycleDays: Math.ceil(Object.keys(projectCatalog.releaseTagBaselines).length / RELEASE_TAG_PROJECTS_PER_RUN),
         observations: releaseTagObservations,
+      },
+      workItemWatch: {
+        method: 'github-public-repository-work-item-changes',
+        connectorId: 'github-public-repository-work-item-changes',
+        projectsPerRun: WORK_ITEM_PROJECTS_PER_RUN,
+        eligibleProjects: Object.keys(projectCatalog.workItemCheckpoints ?? {}).length,
+        fullCycleDays: Math.ceil(Object.keys(projectCatalog.workItemCheckpoints ?? {}).length / WORK_ITEM_PROJECTS_PER_RUN),
+        observations: workItemObservations,
       },
     },
     connector: { id: connector.id, conformance: connector.conformance.status, capabilityConformance, artifacts },

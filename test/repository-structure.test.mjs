@@ -49,6 +49,7 @@ test('canonical knowledge contains only probe-admitted subject and capability fi
     'douyin/read-open-platform-surface.md',
     'douyin/read-public-video-embed.md',
     'github/list-public-repository-tags.md',
+    'github/list-public-repository-work-item-changes.md',
     'github/read-public-repository-file.md',
     'github/read-public-repository-release-by-tag.md',
     'github/search-public-repositories.md',

@@ -1,0 +1,84 @@
+{
+  "schemaVersion": "dsh.github-public-repository-work-item-changes-snapshot/v1",
+  "fixture": {
+    "input": {
+      "owner": "tamnd",
+      "repository": "xiaohongshu-cli",
+      "checkpoint": { "updatedAt": "2026-08-19T02:50:18.000Z", "seenItemDigests": [] },
+      "maxItems": 100
+    },
+    "expectedItem": {
+      "number": 18,
+      "kind": "issue",
+      "url": "https://github.com/tamnd/xiaohongshu-cli/issues/18",
+      "title": "v0.3.0: know why you were refused before you say so"
+    }
+  },
+  "source": {
+    "id": "github-public-repository-work-item-changes",
+    "endpointTemplate": "https://api.github.com/repos/{owner}/{repository}/issues",
+    "apiVersion": "2026-03-10"
+  },
+  "request": {
+    "owner": "tamnd",
+    "repository": "xiaohongshu-cli",
+    "checkpoint": { "updatedAt": "2026-08-19T02:50:18.000Z", "seenItemDigests": [] },
+    "maxItems": 100
+  },
+  "repositoryUrl": "https://github.com/tamnd/xiaohongshu-cli",
+  "coverage": {
+    "representation": "incremental-work-item-window",
+    "delivery": "bounded-composite-checkpoint",
+    "scannedCount": 1,
+    "returnedCount": 1,
+    "requestsMade": 1,
+    "perRequestLimit": 100,
+    "maximumItems": 100,
+    "maximumRequests": 5,
+    "pageExhausted": true,
+    "complete": true,
+    "truncated": false,
+    "truncationReason": null,
+    "sameSecondReplayProtected": true
+  },
+  "items": [
+    {
+      "number": 18,
+      "kind": "issue",
+      "url": "https://github.com/tamnd/xiaohongshu-cli/issues/18",
+      "state": "open",
+      "stateReason": null,
+      "title": "v0.3.0: know why you were refused before you say so",
+      "labels": ["milestone"],
+      "comments": 3,
+      "locked": false,
+      "createdAt": "2026-08-19T02:23:04.000Z",
+      "updatedAt": "2026-08-19T02:50:19.000Z",
+      "closedAt": null,
+      "body": { "present": true, "length": 4964, "sha256": "46fc5903f00f3b141a7a45ee9bb4d2c5cffc8b5504f3e7d3b48bf65720bf0b71" },
+      "changeDigest": "f93327b405b76d55fda8edf9cf5ef0fa0e8471266836bf7c0b17ef57dff692db"
+    }
+  ],
+  "nextCheckpoint": {
+    "updatedAt": "2026-08-19T02:50:19.000Z",
+    "seenItemDigests": [{ "number": 18, "digest": "f93327b405b76d55fda8edf9cf5ef0fa0e8471266836bf7c0b17ef57dff692db" }]
+  },
+  "windowDigest": "1f1adbe17f17efa7a4c112c7a301e012ebb88ee5dbd91268c8903ea04b51922d",
+  "rateLimit": { "resource": "core", "limit": 60, "remaining": 41, "resetAt": "2026-08-26T23:56:59.000Z" },
+  "observedAt": "2026-08-26T23:06:42.407Z",
+  "resultDigest": "9751589ea9ea531b39e4aaca9ab35302ff8da531d5fa916553acaef04a35713a",
+  "conformance": {
+    "status": "passed",
+    "assertions": [
+      { "id": "response-shape", "passed": true },
+      { "id": "api-version", "passed": true },
+      { "id": "core-rate-bucket", "passed": true },
+      { "id": "ascending-update-order", "passed": true },
+      { "id": "bounded-requests", "passed": true },
+      { "id": "unique-work-item-numbers", "passed": true },
+      { "id": "checkpoint-declared", "passed": true },
+      { "id": "coverage-declared", "passed": true },
+      { "id": "personal-fields-excluded", "passed": true }
+    ]
+  }
+}

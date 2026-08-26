@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import { readFile } from 'node:fs/promises'
 import test from 'node:test'
 import { GitHubPublicRepositoryTagsError } from '../../../connectors/github-public-repository-tags/src/index.mjs'
-import { collectXiaohongshuMaintenance, discoverEcosystemProjects, evaluateRenderedSemanticObservation, isProjectReviewDue, isRelevantDiscoveryCandidate, observeProjectReleaseTags, officialSources, projectWatchPolicy, selectDiscoveryQueries, selectReleaseWatchProjects } from '../src/index.mjs'
+import { collectXiaohongshuMaintenance, discoverEcosystemProjects, evaluateRenderedSemanticObservation, isProjectReviewDue, isRelevantDiscoveryCandidate, observeProjectReleaseTags, observeProjectWorkItemChanges, officialSources, projectWatchPolicy, selectDiscoveryQueries, selectReleaseWatchProjects, selectWorkItemWatchProjects } from '../src/index.mjs'
 
 const projectCatalog = JSON.parse(await readFile(new URL('../projects.json', import.meta.url), 'utf8'))
 
@@ -38,6 +38,13 @@ const pinnedRouteHeads = {
 const currentRouteHead = async (repository) => pinnedRouteHeads[repository]
 const currentProjectHead = async (_repository, _branch, project) => project.observedRevision
 const currentReleaseTags = async (_repository, project) => projectCatalog.releaseTagBaselines[project.id]
+const currentWorkItemChanges = async (_repository, checkpoint) => ({
+  conformance: { status: 'passed', assertions: [] },
+  coverage: { complete: true, truncated: false, returnedCount: 0, requestsMade: 1 },
+  items: [],
+  nextCheckpoint: checkpoint,
+  rateLimit: { resource: 'core', remaining: 50 },
+})
 const currentDiscovery = async ({ query, page, perPage }) => ({
   query: { query, page, perPage, sort: 'best-match', order: 'desc' },
   coverage: { representation: 'ranked-page', totalCount: 0, returnedCount: 0, incompleteResults: false, accessibleResultCount: 0, resultWindowLimit: 1000, pageExhausted: true, ecosystemComplete: false },
@@ -71,10 +78,41 @@ test('project watch policy distinguishes automated signals from scheduled review
   assert.deepEqual(projectWatchPolicy.automatedSignals.map((signal) => signal.id), [
     'default-branch-head',
     'release-tag-set',
+    'issue-work-item-window',
     'ranked-repository-search',
   ])
   assert.ok(projectWatchPolicy.scheduledReviewChecklist.includes('issues'))
-  assert.match(projectWatchPolicy.limitations.join(' '), /not independently polled on every run/)
+  assert.match(projectWatchPolicy.limitations.join(' '), /only for projects with an accepted work-item checkpoint/)
+})
+
+test('work-item watch is bounded, serial and advances checkpoints only through a proposal', async () => {
+  const projects = selectWorkItemWatchProjects(projectCatalog, new Date('2026-08-26T00:00:00Z'))
+  assert.deepEqual(projects.map((project) => project.id), ['tamnd-xiaohongshu-cli'])
+  let inFlight = 0
+  let maximumInFlight = 0
+  const observations = await observeProjectWorkItemChanges({
+    projects,
+    checkpoints: projectCatalog.workItemCheckpoints,
+    workItemChanges: async (_repository, checkpoint) => {
+      inFlight += 1
+      maximumInFlight = Math.max(maximumInFlight, inFlight)
+      await Promise.resolve()
+      inFlight -= 1
+      return {
+        conformance: { status: 'passed' },
+        coverage: { complete: true, truncated: false },
+        items: [{ number: 19, kind: 'issue', title: 'new contract signal' }],
+        nextCheckpoint: { updatedAt: '2026-08-26T00:00:00.000Z', seenItemDigests: [{ number: 19, digest: 'a'.repeat(64) }] },
+        rateLimit: { resource: 'core', remaining: 40 },
+      }
+    },
+  })
+  assert.equal(maximumInFlight, 1)
+  assert.equal(observations[0].status, 'review-required')
+  assert.deepEqual(projectCatalog.workItemCheckpoints['tamnd-xiaohongshu-cli'], {
+    updatedAt: '2026-08-19T02:50:19.000Z',
+    seenItemDigests: [{ number: 18, digest: 'f93327b405b76d55fda8edf9cf5ef0fa0e8471266836bf7c0b17ef57dff692db' }],
+  })
 })
 
 test('release watch rotation covers all eligible projects in one full cycle', () => {
@@ -191,6 +229,7 @@ test('maintainer is proposal-only and cannot promote an unverified connector', a
   const report = await collectXiaohongshuMaintenance({
     repositorySearch: currentDiscovery,
     releaseTags: currentReleaseTags,
+    workItemChanges: currentWorkItemChanges,
     sourceCheck: async (source) => ({ ...source, status: 'reachable', httpStatus: 200 }),
     upstreamHead: async (repository) => {
       routeHeadCalls.set(repository, (routeHeadCalls.get(repository) ?? 0) + 1)
@@ -219,6 +258,8 @@ test('maintainer is proposal-only and cannot promote an unverified connector', a
   assert.equal(report.ecosystemProjects.discovery.fullCycleDays, 7)
   assert.equal(report.ecosystemProjects.discovery.newCandidates.length, 0)
   assert.equal(report.ecosystemProjects.releaseWatch.eligibleProjects, 36)
+  assert.equal(report.ecosystemProjects.workItemWatch.eligibleProjects, 1)
+  assert.equal(report.ecosystemProjects.workItemWatch.observations[0].status, 'current')
   assert.deepEqual(report.ecosystemProjects.watchPolicy, projectWatchPolicy)
   assert.ok(report.ecosystemProjects.dependencyBlocked.includes('jackwener-xiaohongshu-cli'))
   assert.equal(report.ecosystemProjects.adoptableCandidates.includes('jackwener-xiaohongshu-cli'), false)
@@ -229,6 +270,7 @@ test('maintainer proposes a new probe when a verified capability report expires'
   const report = await collectXiaohongshuMaintenance({
     repositorySearch: currentDiscovery,
     releaseTags: currentReleaseTags,
+    workItemChanges: currentWorkItemChanges,
     sourceCheck: async (source) => ({ ...source, status: 'reachable', httpStatus: 200 }),
     upstreamHead: currentRouteHead,
     projectHead: currentProjectHead,
@@ -243,6 +285,7 @@ test('maintainer reports upstream drift for review without repinning', async () 
   const report = await collectXiaohongshuMaintenance({
     repositorySearch: currentDiscovery,
     releaseTags: currentReleaseTags,
+    workItemChanges: currentWorkItemChanges,
     sourceCheck: async (source) => ({ ...source, status: 'reachable', httpStatus: 200 }),
     upstreamHead: async () => 'f'.repeat(40),
     projectHead: currentProjectHead,
@@ -261,6 +304,7 @@ test('maintainer preserves an unreachable research route as a proposal instead o
   const report = await collectXiaohongshuMaintenance({
     repositorySearch: currentDiscovery,
     releaseTags: currentReleaseTags,
+    workItemChanges: currentWorkItemChanges,
     sourceCheck: async (source) => ({ ...source, status: 'reachable', httpStatus: 200 }),
     upstreamHead: async (repository) => {
       if (repository.includes('opencli')) throw new Error('network unavailable')
@@ -281,6 +325,7 @@ test('maintainer proposes review when an official semantic fingerprint changes',
   const report = await collectXiaohongshuMaintenance({
     repositorySearch: currentDiscovery,
     releaseTags: currentReleaseTags,
+    workItemChanges: currentWorkItemChanges,
     sourceCheck: async (source) => ({
       id: source.id,
       url: source.url,
@@ -305,6 +350,7 @@ test('maintainer keeps project drift separate from live route health', async () 
   const report = await collectXiaohongshuMaintenance({
     repositorySearch: currentDiscovery,
     releaseTags: currentReleaseTags,
+    workItemChanges: currentWorkItemChanges,
     sourceCheck: async (source) => ({ ...source, status: 'reachable', httpStatus: 200 }),
     upstreamHead: currentRouteHead,
     projectHead: async (_repository, _branch, project) => project.id === 'jackwener-xiaohongshu-cli' ? 'f'.repeat(40) : project.observedRevision,
@@ -323,6 +369,7 @@ test('maintainer treats an empty project HEAD observation as unreachable instead
   const report = await collectXiaohongshuMaintenance({
     repositorySearch: currentDiscovery,
     releaseTags: currentReleaseTags,
+    workItemChanges: currentWorkItemChanges,
     sourceCheck: async (source) => ({ ...source, status: 'reachable', httpStatus: 200 }),
     upstreamHead: currentRouteHead,
     projectHead: async (_repository, _branch, project) => project.id === 'bzlrj-java-xiaohongshu-mcp' ? '' : project.observedRevision,
@@ -347,6 +394,7 @@ test('maintainer proposes review for changed release tags without updating a con
     releaseTags: async (_repository, project) => project.id === changedProject.id
       ? { tagCount: 999, digest: 'f'.repeat(64) }
       : currentReleaseTags(_repository, project),
+    workItemChanges: currentWorkItemChanges,
     sourceCheck: async (source) => ({ ...source, status: 'reachable', httpStatus: 200 }),
     upstreamHead: currentRouteHead,
     projectHead: currentProjectHead,
@@ -359,4 +407,33 @@ test('maintainer proposes review for changed release tags without updating a con
     projectId: changedProject.id,
     action: 'review-project-release-tags',
   }])
+})
+
+test('maintainer proposes issue review and checkpoint advancement without applying either', async () => {
+  const nextCheckpoint = { updatedAt: '2026-08-27T00:00:00.000Z', seenItemDigests: [{ number: 19, digest: 'a'.repeat(64) }] }
+  const report = await collectXiaohongshuMaintenance({
+    repositorySearch: currentDiscovery,
+    releaseTags: currentReleaseTags,
+    workItemChanges: async () => ({
+      conformance: { status: 'passed' },
+      coverage: { complete: true, truncated: false },
+      items: [{ number: 19, kind: 'issue', title: 'new contract signal' }],
+      nextCheckpoint,
+      rateLimit: { resource: 'core', remaining: 40 },
+    }),
+    sourceCheck: async (source) => ({ ...source, status: 'reachable', httpStatus: 200 }),
+    upstreamHead: currentRouteHead,
+    projectHead: currentProjectHead,
+    artifactCheck: async () => [],
+    now: () => new Date('2026-08-27T01:00:00Z'),
+  })
+  assert.ok(report.blockers.includes('ecosystem-work-items-changed'))
+  assert.deepEqual(report.proposals, [{
+    kind: 'connector-change-proposal',
+    projectId: 'tamnd-xiaohongshu-cli',
+    action: 'review-project-work-item-changes',
+    changes: [{ number: 19, kind: 'issue', title: 'new contract signal' }],
+    proposedCheckpoint: nextCheckpoint,
+  }])
+  assert.deepEqual(projectCatalog.workItemCheckpoints['tamnd-xiaohongshu-cli'].updatedAt, '2026-08-19T02:50:19.000Z')
 })

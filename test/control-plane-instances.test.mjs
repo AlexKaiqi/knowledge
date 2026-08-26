@@ -114,6 +114,7 @@ test('Connector configuration schemas compile', async () => {
     '../connectors/github-public-repository-file/config.schema.json',
     '../connectors/github-public-repository-tags/config.schema.json',
     '../connectors/github-public-repository-release/config.schema.json',
+    '../connectors/github-public-repository-work-item-changes/config.schema.json',
     '../connectors/npm-public-package-version/config.schema.json',
     '../connectors/pypi-public-project-release/config.schema.json',
     '../connectors/go-public-module-version/config.schema.json',
@@ -229,6 +230,13 @@ test('NuGet.org public package version live snapshot matches its product output 
 test('registered public Web Feed live snapshot matches its product output schema', async () => {
   const validate = await validator('../knowledge/schemas/web-feeds/read-registered-public-feed-output.schema.json')
   const snapshot = JSON.parse(await readFile(new URL('../knowledge/verifications/web-feeds/nodejs-releases/snapshot.json', import.meta.url), 'utf8'))
+  const { schemaVersion: _schemaVersion, fixture: _fixture, ...payload } = snapshot
+  assert.equal(validate(payload), true, JSON.stringify(validate.errors))
+})
+
+test('GitHub public repository work-item change live snapshot matches its product output schema', async () => {
+  const validate = await validator('../knowledge/schemas/github/list-public-repository-work-item-changes-output.schema.json')
+  const snapshot = JSON.parse(await readFile(new URL('../knowledge/verifications/github/public-repository-work-item-changes/snapshot.json', import.meta.url), 'utf8'))
   const { schemaVersion: _schemaVersion, fixture: _fixture, ...payload } = snapshot
   assert.equal(validate(payload), true, JSON.stringify(validate.errors))
 })

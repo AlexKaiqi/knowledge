@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/github/list-public-repository-work-item-changes-output.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["source", "request", "repositoryUrl", "coverage", "items", "nextCheckpoint", "windowDigest", "rateLimit", "observedAt", "resultDigest", "conformance"],
+  "properties": {
+    "source": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "endpointTemplate", "apiVersion"],
+      "properties": {
+        "id": { "const": "github-public-repository-work-item-changes" },
+        "endpointTemplate": { "const": "https://api.github.com/repos/{owner}/{repository}/issues" },
+        "apiVersion": { "const": "2026-03-10" }
+      }
+    },
+    "request": {
+      "type": "object", "additionalProperties": false,
+      "required": ["owner", "repository", "checkpoint", "maxItems"],
+      "properties": {
+        "owner": { "type": "string" },
+        "repository": { "type": "string" },
+        "checkpoint": { "$ref": "#/$defs/checkpoint" },
+        "maxItems": { "type": "integer", "minimum": 1, "maximum": 500 }
+      }
+    },
+    "repositoryUrl": { "type": "string", "format": "uri", "pattern": "^https://github\\.com/" },
+    "coverage": {
+      "type": "object", "additionalProperties": false,
+      "required": ["representation", "delivery", "scannedCount", "returnedCount", "requestsMade", "perRequestLimit", "maximumItems", "maximumRequests", "pageExhausted", "complete", "truncated", "truncationReason", "sameSecondReplayProtected"],
+      "properties": {
+        "representation": { "const": "incremental-work-item-window" },
+        "delivery": { "const": "bounded-composite-checkpoint" },
+        "scannedCount": { "type": "integer", "minimum": 0, "maximum": 500 },
+        "returnedCount": { "type": "integer", "minimum": 0, "maximum": 500 },
+        "requestsMade": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "perRequestLimit": { "const": 100 },
+        "maximumItems": { "type": "integer", "minimum": 1, "maximum": 500 },
+        "maximumRequests": { "const": 5 },
+        "pageExhausted": { "type": "boolean" },
+        "complete": { "type": "boolean" },
+        "truncated": { "type": "boolean" },
+        "truncationReason": { "enum": ["max-items", "max-requests", null] },
+        "sameSecondReplayProtected": { "const": true }
+      }
+    },
+    "items": { "type": "array", "maxItems": 500, "items": { "$ref": "#/$defs/item" } },
+    "nextCheckpoint": { "$ref": "#/$defs/checkpoint" },
+    "windowDigest": { "$ref": "#/$defs/sha256" },
+    "rateLimit": { "$ref": "#/$defs/rateLimit" },
+    "observedAt": { "type": "string", "format": "date-time" },
+    "resultDigest": { "$ref": "#/$defs/sha256" },
+    "conformance": { "$ref": "#/$defs/conformance" }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "checkpoint": {
+      "type": "object", "additionalProperties": false,
+      "required": ["updatedAt", "seenItemDigests"],
+      "properties": {
+        "updatedAt": { "type": "string", "format": "date-time", "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.000Z$" },
+        "seenItemDigests": {
+          "type": "array", "maxItems": 500,
+          "items": {
+            "type": "object", "additionalProperties": false,
+            "required": ["number", "digest"],
+            "properties": { "number": { "type": "integer", "minimum": 1 }, "digest": { "$ref": "#/$defs/sha256" } }
+          }
+        }
+      }
+    },
+    "item": {
+      "type": "object", "additionalProperties": false,
+      "required": ["number", "kind", "url", "state", "stateReason", "title", "labels", "comments", "locked", "createdAt", "updatedAt", "closedAt", "body", "changeDigest"],
+      "properties": {
+        "number": { "type": "integer", "minimum": 1 },
+        "kind": { "enum": ["issue", "pull-request"] },
+        "url": { "type": "string", "format": "uri", "pattern": "^https://github\\.com/" },
+        "state": { "enum": ["open", "closed"] },
+        "stateReason": { "type": ["string", "null"], "maxLength": 64 },
+        "title": { "type": "string", "minLength": 1, "maxLength": 512 },
+        "labels": { "type": "array", "maxItems": 64, "uniqueItems": true, "items": { "type": "string", "minLength": 1, "maxLength": 100 } },
+        "comments": { "type": "integer", "minimum": 0 },
+        "locked": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "closedAt": { "type": ["string", "null"], "format": "date-time" },
+        "body": {
+          "type": "object", "additionalProperties": false,
+          "required": ["present", "length", "sha256"],
+          "properties": { "present": { "type": "boolean" }, "length": { "type": "integer", "minimum": 0 }, "sha256": { "$ref": "#/$defs/sha256" } }
+        },
+        "changeDigest": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "rateLimit": {
+      "type": "object", "additionalProperties": false,
+      "required": ["resource", "limit", "remaining", "resetAt"],
+      "properties": {
+        "resource": { "type": ["string", "null"] },
+        "limit": { "type": ["integer", "null"], "minimum": 0 },
+        "remaining": { "type": ["integer", "null"], "minimum": 0 },
+        "resetAt": { "type": ["string", "null"], "format": "date-time" }
+      }
+    },
+    "conformance": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status", "assertions"],
+      "properties": {
+        "status": { "enum": ["passed", "review-required"] },
+        "assertions": {
+          "type": "array",
+          "items": {
+            "type": "object", "additionalProperties": false,
+            "required": ["id", "passed"],
+            "properties": { "id": { "type": "string" }, "passed": { "type": "boolean" } }
+          }
+        }
+      }
+    }
+  }
+}

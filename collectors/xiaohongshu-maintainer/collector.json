@@ -10,12 +10,13 @@
       "knowledge/capabilities/xiaohongshu/*.md",
       "knowledge/verifications/xiaohongshu/**/*.json"
     ],
-    "connectorIds": ["xiaohongshu-browser", "github-public-repository-search", "github-public-repository-tags"],
+    "connectorIds": ["xiaohongshu-browser", "github-public-repository-search", "github-public-repository-tags", "github-public-repository-work-item-changes"],
     "capabilityRefs": [
       "/capabilities/xiaohongshu/publish-private-note-and-observe.md",
       "/capabilities/xiaohongshu/list-owned-notes.md",
       "/capabilities/github/search-public-repositories.md",
-      "/capabilities/github/list-public-repository-tags.md"
+      "/capabilities/github/list-public-repository-tags.md",
+      "/capabilities/github/list-public-repository-work-item-changes.md"
     ]
   },
   "triggers": [

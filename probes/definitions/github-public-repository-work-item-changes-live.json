@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "github-public-repository-work-item-changes-live",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/github/list-public-repository-work-item-changes.md",
+  "connectorId": "github-public-repository-work-item-changes",
+  "environment": "production-public",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "list-known-public-repository-work-item-window", "operation": "listPublicRepositoryWorkItemChanges" },
+    { "id": "verify-pagination-and-checkpoint-projection", "operation": "normalizeRepositoryWorkItemPage" }
+  ],
+  "assertions": [
+    "The official GET /repos/{owner}/{repo}/issues endpoint accepts an unauthenticated public-repository request using the pinned API version.",
+    "The complete fixture window contains tamnd/xiaohongshu-cli issue 18 with its reviewed public identity.",
+    "The Connector fixes state=all, sort=updated, direction=asc, follows at most five numbered pages, and returns a bounded composite checkpoint.",
+    "The output distinguishes issues from pull requests because the GitHub Issues endpoint can return both.",
+    "Bodies are represented only by presence, length and SHA-256; user, author, assignee, email, avatar, raw response and credentials are not retained.",
+    "Core rate-limit state, request count, page exhaustion, truncation and checkpoint limitations are explicit."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 45, "maxCost": 0, "currency": "CNY" }
+}

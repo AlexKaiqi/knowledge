@@ -77,3 +77,7 @@ title: Knowledge bundle history
 - 通过 production-public live probe 准入 Web Feed Reader Tool 与“读取已登记公共 Web Feed”Capability；当前唯一登记源是 Node.js 官方 Release Feed，实际解析 RSS 2.0 的 807 个条目并有界返回 10 个，固定 LTS fixture 命中。
 - Connector 只接受 `feedId` 与 1–20 的 limit，拒绝任意 URL、凭据、重定向、DTD、关键字段重复、标题 markup 和跨 origin 条目链接；输出剔除正文、摘要、作者、邮箱、附件、扩展与 raw XML，并区分语义摘要和文档摘要。Atom 1.0 仅完成离线契约测试，尚未准入具体来源。
 - 新增 proposal-only Collector，语义观察 RSS/Atom 标准，检查 Node.js 官网、Feed 生成器和 saxes parser 上游 HEAD，并区分 Feed 语义变化、原始 XML 变化、验证过期和访问失败。首次真实维护运行识别出 Node.js 站点重建会仅刷新 `lastBuildDate`；该字段已从语义摘要剔除，document-only 漂移只保留观测、不制造日常假 proposal。完整闭环更新为 19（Tool 1；Information Source 4；Platform 13；Service 1），Subject 16，Capability 19。
+- 通过 production-public live probe 准入“读取 GitHub 公共仓库 Work Item 变更”Capability；匿名官方 API 对 `tamnd/xiaohongshu-cli` 一次请求得到完整单项窗口，命中 issue 18，并将复合 checkpoint 从 `2026-08-19T02:50:18Z` 推进到 `02:50:19Z`。
+- Connector 固定 `state=all`、updated 升序、每页 100/最多 5 页，显式区分 issue 与 pull request；边界前一秒重读并用 number+change digest 过滤同秒重放。4,964 字 fixture body 只保留长度和 SHA-256，个人字段、正文、评论、timeline 和 raw payload 均被排除。
+- 新增 proposal-only Collector，语义观察 Issues、pagination、rate-limit 三份官方契约，并检查 GitHub OpenAPI 描述和 Octokit pagination reference 的固定 HEAD；首次真实运行正确延期到匿名 core rate reset，配额恢复后 live probe 通过。完整闭环更新为 20（Tool 1；Information Source 4；Platform 14；Service 1），Subject 16，Capability 20。
+- 小红书维护 Collector 首次实际消费 Work Item 变更能力：为 `tamnd/xiaohongshu-cli` 接受 issue 18 对应的复合 checkpoint，后续 issue/PR 变化、限流、截断和契约漂移均分类生成 proposal；checkpoint 不由 Collector 自动前移。

@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/github/list-public-repository-work-item-changes-input.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["owner", "repository", "checkpoint"],
+  "properties": {
+    "owner": { "type": "string", "pattern": "^[A-Za-z0-9](?:[A-Za-z0-9-]{0,98}[A-Za-z0-9])?$" },
+    "repository": { "type": "string", "pattern": "^[A-Za-z0-9._-]{1,100}$" },
+    "checkpoint": { "$ref": "#/$defs/checkpoint" },
+    "maxItems": { "type": "integer", "minimum": 1, "maximum": 500, "default": 100 }
+  },
+  "$defs": {
+    "checkpoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["updatedAt", "seenItemDigests"],
+      "properties": {
+        "updatedAt": { "type": "string", "format": "date-time", "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.000Z$" },
+        "seenItemDigests": {
+          "type": "array", "maxItems": 500,
+          "items": {
+            "type": "object", "additionalProperties": false,
+            "required": ["number", "digest"],
+            "properties": {
+              "number": { "type": "integer", "minimum": 1 },
+              "digest": { "$ref": "#/$defs/sha256" }
+            }
+          }
+        }
+      }
+    },
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+  }
+}
