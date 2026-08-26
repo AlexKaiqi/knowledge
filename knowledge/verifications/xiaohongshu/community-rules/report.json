@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "dsh.probe-report/v1",
+  "id": "xiaohongshu-community-rules-live-20260826",
+  "capabilityRef": "/capabilities/xiaohongshu/read-community-rule-surface.md",
+  "connectorId": "xiaohongshu-community-rules-browser",
+  "probeDefinitionRef": "repo:/probes/definitions/xiaohongshu-community-rules-live.json",
+  "environment": "production-public",
+  "level": "live",
+  "outcome": "passed",
+  "startedAt": "2026-08-26T16:56:02.476Z",
+  "finishedAt": "2026-08-26T16:56:02.500Z",
+  "expiresAt": "2026-09-02T16:56:02.500Z",
+  "checks": [
+    { "id": "official-title", "status": "passed" },
+    { "id": "published-version", "status": "passed" },
+    { "id": "top-level-sections", "status": "passed" },
+    { "id": "rule-heading-count", "status": "passed" },
+    { "id": "selected-obligations", "status": "passed" },
+    { "id": "output-schema-valid", "status": "passed" },
+    { "id": "normalized-evidence-only", "status": "passed" }
+  ],
+  "evidence": [
+    {
+      "kind": "snapshot",
+      "ref": "repo:/knowledge/verifications/xiaohongshu/community-rules/snapshot.json",
+      "sha256": "8630a2949ee9dec55fbd9c590fd3c5b053a7b8b74f17e6ddc44b05de908f4dc5"
+    }
+  ],
+  "sideEffects": [{ "effect": "none", "status": "none" }]
+}

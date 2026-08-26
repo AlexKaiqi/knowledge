@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/xiaohongshu-community-rules-browser-config.schema.json",
+  "title": "XiaohongshuCommunityRulesBrowserConfig",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "sourceUrl": {
+      "const": "https://pgy.xiaohongshu.com/help/detail?id=1eda0a065dd894063c2e029a49e8f6a1&userType=4"
+    }
+  }
+}

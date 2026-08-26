@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "xiaohongshu-community-rules-live",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/xiaohongshu/read-community-rule-surface.md",
+  "connectorId": "xiaohongshu-community-rules-browser",
+  "environment": "production-public",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "render-official-page", "operation": "browserReadOnlyRender" },
+    { "id": "extract-headings", "operation": "extractTitlePublicationAndArticleHeadings" },
+    { "id": "normalize-rule-surface", "operation": "readCommunityRuleSurface" }
+  ],
+  "assertions": [
+    "The configured official URL renders without login.",
+    "The title, published version, three top-level sections, 25 rule headings, and selected obligations match the reviewed baseline.",
+    "The normalized result contains no raw HTML, full paragraphs, identity, credential, or browser state."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 120, "maxCost": 0, "currency": "CNY" }
+}

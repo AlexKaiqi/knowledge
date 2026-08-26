@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "dsh.collector-definition/v1",
+  "id": "xiaohongshu-community-rules-maintainer",
+  "version": "1.0.0",
+  "scope": {
+    "knowledgeGlobs": [
+      "knowledge/sources/xiaohongshu-community-rules.md",
+      "knowledge/concepts/xiaohongshu/community-rule-surface.md",
+      "knowledge/capabilities/xiaohongshu/read-community-rule-surface.md",
+      "knowledge/verifications/xiaohongshu/community-rules/*.json"
+    ],
+    "connectorIds": ["xiaohongshu-community-rules-browser"],
+    "capabilityRefs": ["/capabilities/xiaohongshu/read-community-rule-surface.md"]
+  },
+  "triggers": [
+    { "kind": "schedule", "schedule": "40 5 * * *" },
+    { "kind": "source-change" },
+    { "kind": "connector-change" },
+    { "kind": "manual" }
+  ],
+  "execution": {
+    "kind": "hybrid",
+    "runtime": "browser-capable agent + node >=22.19",
+    "entrypoint": "collectors/xiaohongshu-community-rules-maintainer/src/index.mjs",
+    "modelRouteRef": "runtime:browser-capable-agent",
+    "promptRef": "repo:/collectors/xiaohongshu-community-rules-maintainer/prompts/maintain.md",
+    "toolRefs": ["browser:read-only"],
+    "evalRefs": ["repo:/collectors/xiaohongshu-community-rules-maintainer/evals/contract.md"]
+  },
+  "outputs": ["knowledge-proposal", "connector-change-proposal", "verification-report"],
+  "writePolicy": { "mode": "proposal-only", "requiresApprovalFor": ["knowledge", "connector", "live-probe"] },
+  "probePolicy": { "allowedEnvironments": ["production-public"], "identityPoolRefs": [], "maximumEffect": "none" },
+  "budgets": { "maxRunsPerDay": 4, "maxCostPerDay": 0, "currency": "CNY" }
+}

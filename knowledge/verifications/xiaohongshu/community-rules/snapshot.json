@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "dsh.xiaohongshu-community-rule-snapshot/v1",
+  "source": {
+    "id": "xiaohongshu-community-rules-2",
+    "url": "https://pgy.xiaohongshu.com/help/detail?id=1eda0a065dd894063c2e029a49e8f6a1&userType=4"
+  },
+  "title": "小红书社区公约2.0",
+  "publishedAt": "2026-07-31 18:15:12",
+  "sections": [
+    "一、真诚分享",
+    "二、友好互动",
+    "三、有序经营"
+  ],
+  "ruleHeadingCount": 25,
+  "obligations": [
+    { "id": "originality-and-authenticity", "documented": true },
+    { "id": "disclose-ai-assistance", "documented": true },
+    { "id": "no-impersonation", "documented": true },
+    { "id": "protect-privacy-and-reject-doxxing", "documented": true },
+    { "id": "no-fabricated-performance-data", "documented": true },
+    { "id": "use-platform-transaction-tools", "documented": true },
+    { "id": "no-infringement", "documented": true }
+  ],
+  "observedAt": "2026-08-26T16:53:05Z",
+  "semanticDigest": "e34a2a73a9f1efa028c758a9826b28745f6efcb18bf489264120ad7f197a50c3",
+  "conformance": {
+    "status": "passed",
+    "assertions": [
+      { "id": "official-title", "passed": true },
+      { "id": "published-version", "passed": true },
+      { "id": "top-level-sections", "passed": true },
+      { "id": "rule-heading-count", "passed": true },
+      { "id": "selected-obligations", "passed": true }
+    ]
+  }
+}

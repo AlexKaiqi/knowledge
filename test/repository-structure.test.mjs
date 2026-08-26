@@ -42,5 +42,6 @@ test('canonical knowledge contains only probe-admitted platform and capability f
   assert.deepEqual(await markdownInstances('knowledge/capabilities/'), [
     'xiaohongshu/list-owned-notes.md',
     'xiaohongshu/read-account-api-surface.md',
+    'xiaohongshu/read-community-rule-surface.md',
   ])
 })

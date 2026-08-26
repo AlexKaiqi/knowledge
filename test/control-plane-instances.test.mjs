@@ -25,6 +25,9 @@ test('Xiaohongshu candidate control-plane instances match their schemas', async 
     ['../spec/probe-definition.schema.json', '../probes/definitions/xiaohongshu-owned-notes-live.json'],
     ['../spec/probe-identity.schema.json', '../probes/identities/xiaohongshu-owned-default.json'],
     ['../spec/probe-identity-pool.schema.json', '../probes/pools/xiaohongshu-owned-probes.json'],
+    ['../spec/connector-definition.schema.json', '../connectors/xiaohongshu-community-rules-browser/connector.json'],
+    ['../spec/collector-definition.schema.json', '../collectors/xiaohongshu-community-rules-maintainer/collector.json'],
+    ['../spec/probe-definition.schema.json', '../probes/definitions/xiaohongshu-community-rules-live.json'],
   ]
   for (const [schemaPath, instancePath] of cases) {
     const validate = await validator(schemaPath)
@@ -47,6 +50,7 @@ test('Xiaohongshu connector configuration schema compiles', async () => {
   for (const schemaPath of [
     '../connectors/xiaohongshu-browser/config.schema.json',
     '../connectors/xiaohongshu-account-docs/config.schema.json',
+    '../connectors/xiaohongshu-community-rules-browser/config.schema.json',
   ]) {
     const schema = JSON.parse(await readFile(new URL(schemaPath, import.meta.url), 'utf8'))
     const ajv = new Ajv2020({ allErrors: true, strict: false })

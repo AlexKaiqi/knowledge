@@ -20,3 +20,6 @@ title: Knowledge bundle history
 - 通过自有账号只读 live probe 准入“小红书”Platform 与“读取本人笔记”Capability；验证时实际返回 0 条的合法空列表。
 - Connector conformance 支持按 Capability handler 独立声明，`xiaohongshu-browser` 的读取 handler 已验证，发布 handler 继续继承 candidate 状态。
 - 完整可用闭环、已准入 Subject 和已准入 Capability 均更新为 2。
+- 通过真实浏览器渲染准入“小红书社区公约 2.0”Information Source 与社区规则接口面 Capability；静态 SPA 外壳不再被当作有效观测。
+- 增加 Agent 只读浏览器观测 + 确定性语义归一化的 hybrid Connector，以及 proposal-only hybrid Collector。
+- 完整可用闭环、已准入 Subject 和已准入 Capability 均更新为 3。

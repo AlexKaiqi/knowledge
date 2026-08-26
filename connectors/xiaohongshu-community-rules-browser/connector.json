@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "xiaohongshu-community-rules-browser",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/xiaohongshu/read-community-rule-surface.md"],
+  "execution": {
+    "kind": "hybrid",
+    "runtime": "browser-capable agent + node >=22.19",
+    "entrypoint": "connectors/xiaohongshu-community-rules-browser/src/index.mjs",
+    "modelRouteRef": "runtime:browser-capable-agent",
+    "promptRef": "repo:/connectors/xiaohongshu-community-rules-browser/prompts/read-community-rules.md",
+    "toolRefs": ["browser:read-only"],
+    "evalRefs": ["repo:/connectors/xiaohongshu-community-rules-browser/evals/contract.md"]
+  },
+  "configSchema": "repo:/connectors/xiaohongshu-community-rules-browser/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [
+    {
+      "capabilityRef": "/capabilities/xiaohongshu/read-community-rule-surface.md",
+      "operation": "readCommunityRuleSurface"
+    }
+  ],
+  "conformance": {
+    "status": "verified",
+    "probeReportRef": "/verifications/xiaohongshu/community-rules/report.json"
+  }
+}

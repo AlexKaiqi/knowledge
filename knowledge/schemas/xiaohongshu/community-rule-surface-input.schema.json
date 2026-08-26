@@ -1,0 +1,7 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/xiaohongshu/community-rule-surface-input.schema.json",
+  "title": "ReadXiaohongshuCommunityRuleSurfaceInput",
+  "type": "object",
+  "additionalProperties": false
+}
