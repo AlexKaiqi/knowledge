@@ -9,6 +9,7 @@ test('repository initializes every responsibility boundary', async () => {
     'knowledge/index.md',
     'knowledge/log.md',
     'knowledge/platforms/index.md',
+    'knowledge/services/index.md',
     'knowledge/tools/index.md',
     'knowledge/sources/index.md',
     'knowledge/concepts/index.md',
@@ -39,10 +40,12 @@ async function markdownInstances(directory, prefix = '') {
 
 test('canonical knowledge contains only probe-admitted platform and capability files', async () => {
   assert.deepEqual(await markdownInstances('knowledge/platforms/'), ['github.md', 'npm-public-registry.md', 'pypi.md', 'xiaohongshu.md'])
+  assert.deepEqual(await markdownInstances('knowledge/services/'), ['go-module-services.md'])
   assert.deepEqual(await markdownInstances('knowledge/capabilities/'), [
     'douyin/read-open-platform-surface.md',
     'github/read-public-repository-file.md',
     'github/search-public-repositories.md',
+    'go/read-authenticated-public-module-version.md',
     'npm/read-public-package-version.md',
     'pypi/read-public-project-release.md',
     'xiaohongshu/list-owned-notes.md',

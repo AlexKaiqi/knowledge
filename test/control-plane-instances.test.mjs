@@ -46,6 +46,9 @@ test('control-plane instances match their schemas', async () => {
     ['../spec/connector-definition.schema.json', '../connectors/pypi-public-project-release/connector.json'],
     ['../spec/collector-definition.schema.json', '../collectors/pypi-public-project-release-maintainer/collector.json'],
     ['../spec/probe-definition.schema.json', '../probes/definitions/pypi-public-project-release-live.json'],
+    ['../spec/connector-definition.schema.json', '../connectors/go-public-module-version/connector.json'],
+    ['../spec/collector-definition.schema.json', '../collectors/go-public-module-version-maintainer/collector.json'],
+    ['../spec/probe-definition.schema.json', '../probes/definitions/go-public-module-version-live.json'],
   ]
   for (const [schemaPath, instancePath] of cases) {
     const validate = await validator(schemaPath)
@@ -74,6 +77,7 @@ test('Connector configuration schemas compile', async () => {
     '../connectors/github-public-repository-file/config.schema.json',
     '../connectors/npm-public-package-version/config.schema.json',
     '../connectors/pypi-public-project-release/config.schema.json',
+    '../connectors/go-public-module-version/config.schema.json',
   ]) {
     const schema = JSON.parse(await readFile(new URL(schemaPath, import.meta.url), 'utf8'))
     const ajv = new Ajv2020({ allErrors: true, strict: false })
@@ -106,6 +110,13 @@ test('npm public package version live snapshot matches its product output schema
 test('PyPI public project release live snapshot matches its product output schema', async () => {
   const validate = await validator('../knowledge/schemas/pypi/read-public-project-release-output.schema.json')
   const snapshot = JSON.parse(await readFile(new URL('../knowledge/verifications/pypi/public-project-release/snapshot.json', import.meta.url), 'utf8'))
+  const { schemaVersion: _schemaVersion, fixture: _fixture, ...payload } = snapshot
+  assert.equal(validate(payload), true, JSON.stringify(validate.errors))
+})
+
+test('Go public module version live snapshot matches its product output schema', async () => {
+  const validate = await validator('../knowledge/schemas/go/read-authenticated-public-module-version-output.schema.json')
+  const snapshot = JSON.parse(await readFile(new URL('../knowledge/verifications/go/public-module-version/snapshot.json', import.meta.url), 'utf8'))
   const { schemaVersion: _schemaVersion, fixture: _fixture, ...payload } = snapshot
   assert.equal(validate(payload), true, JSON.stringify(validate.errors))
 })

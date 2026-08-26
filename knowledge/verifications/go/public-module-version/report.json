@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "dsh.probe-report/v1",
+  "id": "go-public-module-version-live-20260826",
+  "capabilityRef": "/capabilities/go/read-authenticated-public-module-version.md",
+  "connectorId": "go-public-module-version",
+  "probeDefinitionRef": "repo:/probes/definitions/go-public-module-version-live.json",
+  "environment": "production-public",
+  "level": "live",
+  "outcome": "passed",
+  "startedAt": "2026-08-26T18:36:53.556Z",
+  "finishedAt": "2026-08-26T18:36:54.915Z",
+  "expiresAt": "2026-09-02T18:36:54.915Z",
+  "checks": [
+    { "id": "exact-module-version", "status": "passed" },
+    { "id": "public-module-acknowledged", "status": "passed" },
+    { "id": "module-tree-authenticated", "status": "passed" },
+    { "id": "go-mod-authenticated", "status": "passed" },
+    { "id": "go-mod-identity", "status": "passed" },
+    { "id": "bounded-archive-transfer", "status": "passed" },
+    { "id": "ephemeral-cache-removed", "status": "passed" },
+    { "id": "module-code-not-executed", "status": "passed" },
+    { "id": "fixture-identity", "status": "passed" },
+    { "id": "fixture-metadata", "status": "passed" },
+    { "id": "fixture-authentication", "status": "passed" },
+    { "id": "isolation-and-cleanup", "status": "passed" },
+    { "id": "data-minimization", "status": "passed" }
+  ],
+  "evidence": [
+    {
+      "kind": "snapshot",
+      "ref": "repo:/knowledge/verifications/go/public-module-version/snapshot.json",
+      "sha256": "b4431d008ad655f64c39dd72f4c8fbf82d46d5a6b1c0b9dea41690cd320a4f70"
+    }
+  ],
+  "sideEffects": [{ "effect": "local-write", "status": "cleaned" }]
+}

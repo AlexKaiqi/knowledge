@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "dsh.collector-definition/v1",
+  "id": "go-public-module-version-maintainer",
+  "version": "1.0.0",
+  "scope": {
+    "knowledgeGlobs": [
+      "knowledge/services/go-module-services.md",
+      "knowledge/concepts/go/authenticated-public-module-version.md",
+      "knowledge/capabilities/go/read-authenticated-public-module-version.md",
+      "knowledge/schemas/go/read-authenticated-public-module-version-*.schema.json",
+      "knowledge/verifications/go/public-module-version/*.json"
+    ],
+    "connectorIds": ["go-public-module-version"],
+    "capabilityRefs": ["/capabilities/go/read-authenticated-public-module-version.md"]
+  },
+  "triggers": [
+    { "kind": "schedule", "schedule": "15 8 * * *" },
+    { "kind": "source-change" },
+    { "kind": "schema-change" },
+    { "kind": "connector-change" },
+    { "kind": "failed-execution" },
+    { "kind": "manual" }
+  ],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19 + go >=1.20",
+    "entrypoint": "collectors/go-public-module-version-maintainer/src/index.mjs"
+  },
+  "outputs": ["knowledge-proposal", "connector-change-proposal", "verification-report"],
+  "writePolicy": { "mode": "proposal-only", "requiresApprovalFor": ["knowledge", "connector", "live-probe"] },
+  "probePolicy": { "allowedEnvironments": ["production-public"], "identityPoolRefs": [], "maximumEffect": "local-write" },
+  "budgets": { "maxRunsPerDay": 3, "maxCostPerDay": 0, "currency": "CNY" }
+}

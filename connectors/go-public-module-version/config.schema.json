@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/go-public-module-version-config.schema.json",
+  "title": "GoPublicModuleVersionConnectorConfig",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "timeoutMs": { "type": "integer", "minimum": 5000, "maximum": 60000, "default": 30000 },
+    "userAgent": { "type": "string", "minLength": 1, "maxLength": 128, "default": "dsh-knowledge-catalog/0.1" }
+  }
+}

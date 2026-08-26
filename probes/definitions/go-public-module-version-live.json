@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "go-public-module-version-live",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/go/read-authenticated-public-module-version.md",
+  "connectorId": "go-public-module-version",
+  "environment": "production-public",
+  "identity": { "required": false },
+  "effect": "local-write",
+  "steps": [
+    { "id": "preflight-known-module-archive", "operation": "readAuthenticatedPublicModuleVersion" },
+    { "id": "authenticate-module-and-go-mod", "operation": "downloadAuthenticatedPublicModule" },
+    { "id": "remove-isolated-module-cache", "operation": "cleanup" }
+  ],
+  "assertions": [
+    "The official proxy serves the exact rsc.io/quote v1.5.2 module archive within the 32 MiB transfer budget.",
+    "A fresh isolated Go module cache authenticates both module-tree and go.mod h1 values against sum.golang.org.",
+    "The requested identity, version timestamp, module directive, go.mod SHA-256 and both authenticated h1 values match the reviewed fixture.",
+    "The downloaded public archive is never executed, all cache paths and raw source files are excluded from output, and the isolated cache is removed before success."
+  ],
+  "cleanup": ["remove isolated Go module and build caches"],
+  "budget": { "timeoutSeconds": 45, "maxCost": 0, "currency": "CNY" }
+}

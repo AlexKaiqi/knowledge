@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/go/read-authenticated-public-module-version-input.schema.json",
+  "title": "ReadAuthenticatedPublicGoModuleVersionInput",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["modulePath", "version", "publicModuleAcknowledged"],
+  "properties": {
+    "modulePath": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 512,
+      "pattern": "^[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?(?:/[A-Za-z0-9](?:[A-Za-z0-9._~-]*[A-Za-z0-9])?)*$",
+      "description": "Explicit public Go module path. The domain-like first segment must contain a dot."
+    },
+    "version": {
+      "type": "string",
+      "minLength": 6,
+      "maxLength": 128,
+      "pattern": "^v(?:0|[1-9][0-9]*)\\.(?:0|[1-9][0-9]*)\\.(?:0|[1-9][0-9]*)(?:-[0-9A-Za-z]+(?:[.-][0-9A-Za-z]+)*)?(?:\\+incompatible)?$",
+      "description": "Exact canonical Go module version; latest, branch names and ranges are rejected."
+    },
+    "publicModuleAcknowledged": {
+      "const": true,
+      "description": "The caller confirms the complete module path and version are public and may be sent to proxy.golang.org and sum.golang.org."
+    }
+  }
+}

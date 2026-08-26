@@ -41,3 +41,6 @@ title: Knowledge bundle history
 - 通过公开 live probe 准入 PyPI Platform 与“读取公共项目精确 Release 元数据”Capability；`sampleproject==4.0.0` 的项目身份、Python 要求、MIT classifier、wheel/sdist 文件及 SHA-256/BLAKE2b-256/Core Metadata 摘要均命中固定证据。
 - Connector 固定官方 release JSON API，只接受规范化项目名与精确版本，限制 2 MiB 响应和 64 个发行文件，并验证 ETag、serial 与 `files.pythonhosted.org`；输出剔除个人字段、漏洞详情、长许可证正文和无关链接。
 - 新增 proposal-only Collector 观察语义摘要、发行完整性、yank/漏洞数量/许可证变化、验证过期和限流；完整可用闭环更新为 8（Information Source 3；Platform 5），Subject 更新为 7，Capability 更新为 8。
+- 通过 production-public live probe 准入 Go Module Mirror 与 Checksum Database Service，以及“读取并认证公共 Go 模块精确版本”Capability；`rsc.io/quote@v1.5.2` 的模块树 h1、go.mod h1/SHA-256、版本身份和 2,987-byte 归档均命中固定证据。
+- Connector 固定官方 public proxy/SumDB，要求显式公开路径确认，拒绝 latest/range、direct/VCS fallback、超 32 MiB 归档和裸 `/lookup` 信任；官方 Go verifier 在隔离 cache 中完成透明日志认证，归档不执行且 cache 已清理。
+- 新增 proposal-only Collector 观察精确模块证据、Go verifier、认证漂移、验证过期和限流；完整可用闭环更新为 9（Information Source 3；Platform 5；Service 1），Subject 更新为 8，Capability 更新为 9。

@@ -15,6 +15,7 @@ probes/      可用性的主动证明
 
 - 路径使用小写 kebab-case；稳定路径就是稳定 Concept ID。
 - Platform：`/platforms/<platform>.md`
+- Service：`/services/<service>.md`
 - Tool：`/tools/<tool>.md`
 - Source：`/sources/<source>.md`
 - Concept：`/concepts/<domain>/<concept>.md`
