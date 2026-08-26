@@ -1,0 +1,45 @@
+diff --git a/scripts/__main__.py b/scripts/__main__.py
+--- a/scripts/__main__.py
++++ b/scripts/__main__.py
+@@ -402,6 +402,7 @@ def cmd_publish(args):
+         tags=tags,
+         schedule_time=args.schedule_time,
+         auto_publish=args.auto_publish,
++        visibility=args.visibility,
+         headless=_headless(args),
+         cookie_path=_cookie_path(args),
+     )
+@@ -420,6 +421,7 @@ def cmd_publish_video(args):
+         tags=tags,
+         schedule_time=args.schedule_time,
+         auto_publish=args.auto_publish,
++        visibility=args.visibility,
+         headless=_headless(args),
+         cookie_path=_cookie_path(args),
+     )
+@@ -724,6 +726,12 @@ def main():
+     pub_p.add_argument("--images", required=True, help="图片路径，逗号分隔")
+     pub_p.add_argument("--tags", help="话题标签，逗号分隔")
+     pub_p.add_argument("--schedule-time", help="定时发布（格式: 2025-01-01 12:00）")
++    pub_p.add_argument(
++        "--visibility",
++        choices=("公开可见", "仅自己可见", "仅互关好友可见"),
++        default="公开可见",
++        help="可见范围",
++    )
+     pub_p.add_argument("--auto-publish", action="store_true", help="自动点击发布（默认停在发布按钮处）")
+     pub_p.add_argument("--headless", default='true')
+     pub_p.set_defaults(func=cmd_publish)
+@@ -735,6 +743,12 @@ def main():
+     pubv_p.add_argument("--video", required=True, help="视频文件路径")
+     pubv_p.add_argument("--tags", help="话题标签，逗号分隔")
+     pubv_p.add_argument("--schedule-time", help="定时发布（格式: 2025-01-01 12:00）")
++    pubv_p.add_argument(
++        "--visibility",
++        choices=("公开可见", "仅自己可见", "仅互关好友可见"),
++        default="公开可见",
++        help="可见范围",
++    )
+     pubv_p.add_argument("--auto-publish", action="store_true", help="自动点击发布")
+     pubv_p.add_argument("--headless", default='true')
+     pubv_p.set_defaults(func=cmd_publish_video)

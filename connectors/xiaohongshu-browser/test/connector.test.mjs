@@ -1,11 +1,14 @@
 import assert from 'node:assert/strict'
-import { mkdtemp, rm } from 'node:fs/promises'
+import { createHash } from 'node:crypto'
+import { mkdtemp, readFile, rm } from 'node:fs/promises'
 import os from 'node:os'
 import path from 'node:path'
 import test from 'node:test'
 import {
   computeRevisionDigest,
   XiaohongshuBrowserConnector,
+  xiaohongshuBrowserInternals,
+  XiaohongshuSkillCliDriver,
 } from '../src/index.mjs'
 
 function response(data, { status = 200 } = {}) {
@@ -32,9 +35,150 @@ function confirmation(value) {
   }
 }
 
+function skillCliRuntime({ publishStatus = 'confirmed' } = {}) {
+  const calls = []
+  const reviewedDiff = 'reviewed-test-diff\n'
+  let meCalls = 0
+  const oldFeed = { id: 'old', xsecToken: 'old-token', noteCard: { displayTitle: 'old' } }
+  const newFeed = { id: 'new-note', xsecToken: 'ephemeral-skill-token', noteCard: { displayTitle: '闭环探针 0826' } }
+  const execFileImpl = async (file, args, options) => {
+    calls.push({ file, args, options })
+    if (file === 'git' && args[0] === 'rev-parse') return { stdout: 'afa96802d3e61cdd5e7bd7b37ec59182bbe07d37\n', stderr: '' }
+    if (file === 'git' && args[0] === 'status') return { stdout: ' M scripts/__main__.py\n', stderr: '' }
+    if (file === 'git' && args[0] === 'diff') return { stdout: reviewedDiff, stderr: '' }
+    if (args.includes('--version')) return { stdout: 'Python 3.12.11\n', stderr: '' }
+    if (args.includes('--help')) return { stdout: 'usage: publish --visibility {公开可见,仅自己可见,仅互关好友可见}\n', stderr: '' }
+    if (args.includes('check-login') || args.includes('check-creator-login')) return { stdout: '{"is_logged_in":true}', stderr: '' }
+    if (args.includes('me')) {
+      meCalls += 1
+      return { stdout: JSON.stringify({ feeds: meCalls === 1 ? [oldFeed] : [newFeed, oldFeed] }), stderr: '' }
+    }
+    if (args.includes('publish')) {
+      return { stdout: JSON.stringify({ status: publishStatus, published: publishStatus === 'confirmed', visibility: '仅自己可见' }), stderr: '' }
+    }
+    if (args.includes('feed')) {
+      const withComments = args.includes('--load-comments')
+      return {
+        stdout: JSON.stringify({
+          note: {
+            desc: '仅用于私密闭环验证。marker:xhs-probe-0826',
+            imageList: [{}],
+            interactInfo: { likedCount: '2', collectedCount: '1', commentCount: withComments ? '1' : '0', sharedCount: '0' },
+          },
+          comments: { list: withComments ? [{ id: 'comment-skill', content: 'skill route', userInfo: { nickname: 'must-not-leak' } }] : [] },
+        }),
+        stderr: '',
+      }
+    }
+    throw new Error(`unexpected CLI call: ${args.join(' ')}`)
+  }
+  return { calls, execFileImpl, runtimeDiffSha256: createHash('sha256').update(reviewedDiff).digest('hex') }
+}
+
 test('connector only permits an authenticated loopback sidecar', () => {
   assert.throws(() => new XiaohongshuBrowserConnector({ baseUrl: 'https://example.com', token: 'secret' }), /loopback-only/)
   assert.throws(() => new XiaohongshuBrowserConnector(), /token credential/)
+})
+
+test('skill upstream manifest, adapter constants, and reviewed patch stay synchronized', async () => {
+  const manifest = JSON.parse(await readFile(new URL('../skill-upstream.json', import.meta.url), 'utf8'))
+  const patch = await readFile(new URL(`../../../${manifest.patch.path}`, import.meta.url))
+  assert.equal(createHash('sha256').update(patch).digest('hex'), manifest.patch.sha256)
+  assert.equal(manifest.commit, xiaohongshuBrowserInternals.XIAOHONGSHU_SKILL_REVISION)
+  assert.equal(manifest.patch.runtimeDiffSha256, xiaohongshuBrowserInternals.XIAOHONGSHU_SKILL_RUNTIME_DIFF_SHA256)
+  assert.equal(manifest.pythonVersion, '3.12')
+})
+
+test('skill route requires a pinned runtime, opaque profile, and reviewed visibility CLI', async () => {
+  assert.throws(() => new XiaohongshuSkillCliDriver({ runtimeRoot: 'relative', profile: 'probe-a' }), /absolute path/)
+  assert.throws(() => new XiaohongshuSkillCliDriver({ runtimeRoot: '/tmp/runtime', profile: '../escape' }), /opaque profile/)
+  const driver = new XiaohongshuSkillCliDriver({
+    runtimeRoot: '/tmp/runtime',
+    profile: 'probe-a',
+    expectedRuntimeDiffSha256: createHash('sha256').update('reviewed-test-diff\n').digest('hex'),
+    execFileImpl: async (file, args) => {
+      if (file !== 'git' && args.includes('--version')) return { stdout: 'Python 3.12.11\n', stderr: '' }
+      if (file !== 'git') return { stdout: 'usage: publish\n', stderr: '' }
+      if (args[0] === 'rev-parse') return { stdout: 'afa96802d3e61cdd5e7bd7b37ec59182bbe07d37\n', stderr: '' }
+      if (args[0] === 'status') return { stdout: ' M scripts/__main__.py\n', stderr: '' }
+      return { stdout: 'reviewed-test-diff\n', stderr: '' }
+    },
+  })
+  await assert.rejects(() => driver.ensureRuntime(), /lacks the reviewed private-visibility CLI patch/)
+})
+
+test('skill authorization is explicit, visible, profile-bound, and minimized', async () => {
+  const runtime = skillCliRuntime()
+  const execFileImpl = async (file, args, options) => {
+    if (file === 'git' || args.includes('--help') || args.includes('--version')) return runtime.execFileImpl(file, args, options)
+    runtime.calls.push({ file, args, options })
+    if (args.includes('creator-login')) return { stdout: '{"status":"logged_in","username":"must-not-leak"}', stderr: '' }
+    if (args.includes('login')) return { stdout: '{"status":"logged_in","username":"must-not-leak"}', stderr: '' }
+    throw new Error(`unexpected CLI call: ${args.join(' ')}`)
+  }
+  const headless = new XiaohongshuSkillCliDriver({
+    runtimeRoot: '/tmp/runtime', profile: 'probe-a', execFileImpl, expectedRuntimeDiffSha256: runtime.runtimeDiffSha256,
+  })
+  await assert.rejects(() => headless.authorize(), /visible browser/)
+  const driver = new XiaohongshuSkillCliDriver({
+    runtimeRoot: '/tmp/runtime', profile: 'probe-a', headless: false, execFileImpl, expectedRuntimeDiffSha256: runtime.runtimeDiffSha256,
+  })
+  const result = await driver.authorize()
+  assert.deepEqual(result, { readReady: true, writeReady: true, phase: 'complete', status: 'logged_in' })
+  assert.equal(JSON.stringify(result).includes('must-not-leak'), false)
+  const loginCalls = runtime.calls.filter((call) => call.args.includes('login') || call.args.includes('creator-login'))
+  assert.equal(loginCalls.length, 2)
+  assert.ok(loginCalls.every((call) => call.args[call.args.indexOf('--headless') + 1] === 'false'))
+  assert.ok(loginCalls.every((call) => call.args[call.args.indexOf('--profile') + 1] === 'probe-a'))
+})
+
+test('skill route executes the private write through argv and reconciles it through the owned profile', async (t) => {
+  const stateRoot = await mkdtemp(path.join(os.tmpdir(), 'knowledge-xhs-skill-test-'))
+  t.after(() => rm(stateRoot, { recursive: true, force: true }))
+  const runtime = skillCliRuntime()
+  const connector = new XiaohongshuBrowserConnector({
+    routeId: 'creator-web-xiaohongshu-skill',
+    skillRuntimeRoot: '/tmp/xhs-skill-runtime',
+    profile: 'owned-probe-a',
+    stateRoot,
+    skillExecFileImpl: runtime.execFileImpl,
+    skillExpectedRuntimeDiffSha256: runtime.runtimeDiffSha256,
+    now: () => new Date('2026-08-26T08:00:00.000Z'),
+  })
+  const frozen = revision()
+  const result = await connector.publishPrivateNoteAndObserve({ revision: frozen, confirmation: confirmation(frozen) })
+  assert.equal(result.status, 'confirmed')
+  assert.equal(result.platformObject.id, 'new-note')
+  assert.equal(result.observation.status, 'available')
+  assert.equal(JSON.stringify(result).includes('ephemeral-skill-token'), false)
+  assert.equal(JSON.stringify(result).includes('must-not-leak'), false)
+  const publishCall = runtime.calls.find((call) => call.args.includes('publish') && !call.args.includes('--help'))
+  assert.ok(publishCall)
+  assert.equal(publishCall.args[publishCall.args.indexOf('--visibility') + 1], '仅自己可见')
+  assert.equal(publishCall.args.includes('--auto-publish'), true)
+  assert.equal(publishCall.args[publishCall.args.indexOf('--profile') + 1], 'owned-probe-a')
+  assert.equal(runtime.calls.filter((call) => call.file === 'git').length, 3)
+})
+
+test('skill route preserves submitted_unconfirmed as a durable no-retry outcome', async (t) => {
+  const stateRoot = await mkdtemp(path.join(os.tmpdir(), 'knowledge-xhs-skill-unknown-'))
+  t.after(() => rm(stateRoot, { recursive: true, force: true }))
+  const runtime = skillCliRuntime({ publishStatus: 'submitted_unconfirmed' })
+  const connector = new XiaohongshuBrowserConnector({
+    routeId: 'creator-web-xiaohongshu-skill',
+    skillRuntimeRoot: '/tmp/xhs-skill-runtime',
+    profile: 'owned-probe-a',
+    stateRoot,
+    skillExecFileImpl: runtime.execFileImpl,
+    skillExpectedRuntimeDiffSha256: runtime.runtimeDiffSha256,
+    now: () => new Date('2026-08-26T08:00:00.000Z'),
+  })
+  const frozen = revision()
+  await assert.rejects(() => connector.publishPrivateNoteAndObserve({ revision: frozen, confirmation: confirmation(frozen) }), /outcome is unknown/)
+  const publishCalls = () => runtime.calls.filter((call) => call.args.includes('publish') && !call.args.includes('--help')).length
+  assert.equal(publishCalls(), 1)
+  await assert.rejects(() => connector.publishPrivateNoteAndObserve({ revision: frozen, confirmation: confirmation(frozen) }), /requires reconciliation/)
+  assert.equal(publishCalls(), 1)
 })
 
 test('lists only stable owned-note summaries without leaking ephemeral access artifacts', async () => {

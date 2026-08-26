@@ -1,14 +1,14 @@
 {
   "schemaVersion": "dsh.connector-definition/v1",
   "id": "xiaohongshu-browser",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "capabilityRefs": [
     "/capabilities/xiaohongshu/publish-private-note-and-observe.md",
     "/capabilities/xiaohongshu/list-owned-notes.md"
   ],
   "execution": {
     "kind": "deterministic",
-    "runtime": "node >=22.19",
+    "runtime": "node >=22.19; optional pinned Python 3.10-3.12 route runtime",
     "entrypoint": "connectors/xiaohongshu-browser/src/index.mjs"
   },
   "configSchema": "repo:/connectors/xiaohongshu-browser/config.schema.json",
@@ -16,8 +16,8 @@
   "credentialSlots": [
     {
       "name": "sidecar-token",
-      "required": true,
-      "purpose": "Authenticate the loopback-only xiaohongshu-mcp sidecar without exposing its token to capability callers."
+      "required": false,
+      "purpose": "Required only by the xiaohongshu-mcp routes; authenticates the loopback sidecar without exposing its token to capability callers."
     },
     {
       "name": "owned-account-session",

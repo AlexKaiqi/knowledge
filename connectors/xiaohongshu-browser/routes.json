@@ -80,16 +80,24 @@
     },
     {
       "id": "creator-web-xiaohongshu-skill",
-      "lifecycle": "researching",
+      "lifecycle": "candidate",
       "contractLevel": "full",
       "accessMethod": "browser-assisted",
       "automaticSelectionEligible": false,
       "priority": 12,
+      "connectorId": "xiaohongshu-browser",
+      "implementationRef": "repo:/connectors/xiaohongshu-browser/src/index.mjs",
+      "probeDefinitionRef": "repo:/probes/definitions/xiaohongshu-private-note-live.json",
       "capabilityCoverage": [
         {
           "capabilityRef": "/capabilities/xiaohongshu/publish-private-note-and-observe.md",
           "phases": ["authorize", "prepare", "submit", "observe"],
-          "gaps": ["No local adapter or live private-note probe exists; confirmed and submitted_unconfirmed outcomes are not yet reconciled to an owned-note receipt, and probe cleanup is unverified."]
+          "gaps": ["The local adapter and reviewed visibility patch are offline-conformed, but no live private-note probe exists; confirmed and submitted_unconfirmed outcomes are not yet reconciled to an owned-note receipt, and probe cleanup is unverified."]
+        },
+        {
+          "capabilityRef": "/capabilities/xiaohongshu/list-owned-notes.md",
+          "phases": ["authorize", "observe"],
+          "gaps": ["The pinned JSON CLI exposes the owned profile feed and the adapter minimizes it to stable note summaries, but this route has not passed the existing read-only live probe with an isolated profile."]
         }
       ],
       "failureDomains": ["xiaohongshu-creator-center", "creator-center-dom", "playwright-python-runtime", "cookie-session", "identity-state", "selector-contract", "platform-write"],
@@ -108,7 +116,7 @@
         "owner": "xiaohongshu-maintainer",
         "reviewOn": ["upstream-change", "source-change", "probe-failure", "contract-gap-change", "manual"]
       },
-      "notes": "Highest-priority alternative route to adapt and probe: it exposes self-only visibility, explicit write confirmation, JSON output contracts, isolated profiles and fail-closed publish outcome states."
+      "notes": "Highest-priority alternative route to probe: the connector invokes only the pinned JSON CLI, verifies its local visibility patch, binds an opaque isolated profile and fails closed on non-private or ambiguous outcomes."
     },
     {
       "id": "creator-web-cnqqc-xhs-mcp",

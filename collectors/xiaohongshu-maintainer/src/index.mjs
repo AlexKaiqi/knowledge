@@ -6,6 +6,7 @@ import process from 'node:process'
 import { promisify } from 'node:util'
 import { fileURLToPath } from 'node:url'
 import { searchPublicRepositories } from '../../../connectors/github-public-repository-search/src/index.mjs'
+import { XiaohongshuSkillCliDriver } from '../../../connectors/xiaohongshu-browser/src/index.mjs'
 import { observeProjectReleaseTags, selectReleaseWatchProjects } from '../../lib/github-release-watch.mjs'
 
 export { observeProjectReleaseTags, selectReleaseWatchProjects } from '../../lib/github-release-watch.mjs'
@@ -180,7 +181,7 @@ function requireGitCommitId(value) {
   return value
 }
 
-async function defaultArtifactCheck(runtimeRoot) {
+async function defaultArtifactCheck(runtimeRoot, skillRuntimeRoot) {
   const binaries = ['xiaohongshu-mcp', 'xiaohongshu-login']
   const checks = []
   for (const binary of binaries) {
@@ -190,6 +191,18 @@ async function defaultArtifactCheck(runtimeRoot) {
     } catch {
       checks.push({ id: binary, status: 'missing' })
     }
+  }
+  try {
+    const driver = new XiaohongshuSkillCliDriver({ runtimeRoot: skillRuntimeRoot, profile: 'collector-integrity' })
+    const runtime = await driver.ensureRuntime()
+    checks.push({
+      id: 'xiaohongshu-skill-reviewed-runtime',
+      status: 'present',
+      revision: runtime.revision,
+      runtimeDiffSha256: runtime.runtimeDiffSha256,
+    })
+  } catch {
+    checks.push({ id: 'xiaohongshu-skill-reviewed-runtime', status: 'missing' })
   }
   return checks
 }
@@ -202,6 +215,7 @@ export async function collectXiaohongshuMaintenance({
   artifactCheck = defaultArtifactCheck,
   now = () => new Date(),
   runtimeRoot = path.join(repositoryRoot, '.runtime/xiaohongshu-browser'),
+  skillRuntimeRoot = path.join(repositoryRoot, '.runtime/xiaohongshu-skill'),
   renderedSourceObservations = {},
   repositorySearch = searchPublicRepositories,
   releaseTags,
@@ -281,7 +295,7 @@ export async function collectXiaohongshuMaintenance({
         }
       }
     })),
-    artifactCheck(runtimeRoot),
+    artifactCheck(runtimeRoot, skillRuntimeRoot),
     discoverEcosystemProjects({ queries: discoveryQueries, repositorySearch, projectCatalog }),
     observeProjectReleaseTags({ projects: releaseWatchProjects, baselines: projectCatalog.releaseTagBaselines, releaseTags }),
   ])

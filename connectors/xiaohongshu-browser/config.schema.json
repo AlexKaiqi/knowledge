@@ -4,8 +4,12 @@
   "title": "XiaohongshuBrowserConnectorConfig",
   "type": "object",
   "additionalProperties": false,
-  "required": ["baseUrl", "stateRoot"],
+  "required": ["stateRoot"],
   "properties": {
+    "routeId": {
+      "enum": ["owned-notes-xiaohongshu-mcp", "creator-web-xiaohongshu-mcp", "creator-web-xiaohongshu-skill"],
+      "default": "creator-web-xiaohongshu-mcp"
+    },
     "baseUrl": {
       "type": "string",
       "format": "uri",
@@ -16,8 +20,25 @@
       "minLength": 1,
       "description": "Private, non-Git operation ledger root."
     },
+    "skillRuntimeRoot": {
+      "type": "string",
+      "pattern": "^/",
+      "description": "Private local runtime containing the pinned and reviewed xiaohongshu-skill checkout."
+    },
+    "profile": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$",
+      "description": "Opaque local account-profile binding; never a username or credential."
+    },
     "requestTimeoutMs": { "type": "integer", "minimum": 1000, "maximum": 600000 },
     "verificationTimeoutMs": { "type": "integer", "minimum": 1000, "maximum": 300000 },
     "verificationPollMs": { "type": "integer", "minimum": 250, "maximum": 30000 }
-  }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "routeId": { "const": "creator-web-xiaohongshu-skill" } }, "required": ["routeId"] },
+      "then": { "required": ["skillRuntimeRoot", "profile"] },
+      "else": { "required": ["baseUrl"] }
+    }
+  ]
 }

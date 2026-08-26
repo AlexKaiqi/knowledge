@@ -31,6 +31,7 @@
 | 小红书电商开放平台 | 官方 | 店铺 ERP、打单、搬家上货、进销存等商家能力 | 否；领域是店铺与交易，不是普通创作者笔记 | 不路由到内容发布能力 |
 | 创作服务平台人工操作 | 官方产品 UI | 人工发布、查看本人内容与数据 | 可人工完成，但不能提供自动化 Connector 契约 | 作为故障时的人工 reconcile / handoff |
 | `xpzouying/xiaohongshu-mcp` | 非官方开源实现，Apache-2.0 | 本机浏览器登录、图文/视频发布、私密可见性、本人主页、笔记详情和评论 | 可以提供执行原语，但自身发布响应没有笔记 ID | 选为固定、loopback-only sidecar；外层必须补 receipt gate |
+| `DeliciousBuding/xiaohongshu-skill` | 非官方开源实现，Apache-2.0 | Playwright、隔离 profile、JSON CLI、图文/视频发布、本人主页、详情/评论与三态发布结果 | 是当前最接近完整契约的第二路线；稳定 CLI 原先未暴露内部已有的可见性参数 | 固定 commit，并用摘要锁定的最小补丁只向 JSON CLI 暴露 `仅自己可见`；离线 conformance 已通过，待 live probe |
 | `dreammis/social-auto-upload` | 非官方开源实现 | Python/Playwright 登录与图文/视频上传 | 目标覆盖可达，但私密可见性、receipt、reconcile 与反馈观察尚未完成 conformance | 保持 research route；验证后可成为第二个完整实现候选 |
 | `CNQQC/xhs-mcp` | 非官方开源实现，Apache-2.0 | 在 `xpzouying` 基线上维护超时、panic、内存与安全验证修复 | 能抵抗部分实现缺陷，但共享代码血缘、Rod runtime 和创作中心 DOM | 维护为 upstream variant，不算独立故障域 |
 | `white0dew/XiaohongshuSkills` | 非官方开源实现，MIT | 原生 CDP 发布、发布后 note link 探测、主页读取、详情/评论与创作者内容数据 | 具备 submit/reconcile/observe 原语，但未暴露私密发布，link 探测也尚不是稳定 receipt | 新增 full research route，优先补私密与 receipt conformance |
@@ -49,7 +50,7 @@
 3. `recovery`：人工创作中心，用于异常后的核对或显式接管；
 4. `component`：只提供身份等局部能力，例如官方账号 API。
 
-`xiaohongshu-mcp`、CNQQC variant、`social-auto-upload`、XiaohongshuSkills、OpenCLI 和 OmniPost 并非六个独立故障域：它们都直接或间接依赖小红书创作中心及其 DOM。不同运行时只能抵抗自身实现、依赖或浏览器控制通道故障，不能抵抗页面整体改版。2026 年 7 月已有上游 issue 记录发布按钮或编辑器选择器失效，因此路由目录必须显式记录共同的 `creator-center-dom` 故障域。`jackwener/xiaohongshu-cli` 的签名 API 才构成不同故障域，但会转而承担内部 API 与签名漂移风险。
+`xiaohongshu-mcp`、`xiaohongshu-skill`、CNQQC variant、`social-auto-upload`、XiaohongshuSkills、OpenCLI 和 OmniPost 并非独立的平台故障域：它们都直接或间接依赖小红书创作中心及其 DOM。不同运行时只能抵抗自身实现、依赖或浏览器控制通道故障，不能抵抗页面整体改版。2026 年 7 月已有上游 issue 记录发布按钮或编辑器选择器失效，因此路由目录必须显式记录共同的 `creator-center-dom` 故障域。`jackwener/xiaohongshu-cli` 的签名 API 才构成不同故障域，但会转而承担内部 API 与签名漂移风险。
 
 平台写入采用 sticky route：ledger 在副作用前记录选定 route；只有明确证明 `definitely-not-executed` 才允许换到另一个已验证完整 route。只要结果是 `possibly-executed` 或 `unknown`，自动 fallback 一律禁止，先通过原 route 或人工 recovery route 对账，避免重复发布。
 
@@ -75,6 +76,8 @@ Capability: publish private note and observe
 关键判断：上游目前会确认发布后离开创作表单，这能消除一部分假阳性，但其 `PublishResponse` 仍只有标题、正文、媒体数和“发布完成”，没有笔记 ID。因此本 Connector 不信任上游成功为最终 receipt。
 
 为避免超时后的重复发帖，revision digest 在平台调用前进入持久 ledger。任何提交后异常都进入 `unknown`，后续自动重试被拒绝，必须先人工或平台侧 reconcile。
+
+第二条候选路线调用 `xiaohongshu-skill` 的稳定 JSON CLI，不导入其内部 Python action。bootstrap 固定 upstream commit、补丁文件 SHA-256 和补丁应用后的 Git diff SHA-256，只允许 `scripts/__main__.py` 出现已审阅改动；缺补丁、额外脏文件、版本漂移、非私密结果或 `submitted_unconfirmed` 都 fail closed。该路线已完成本机构建、Chromium 安装和离线契约验证，但尚未绑定真实 probe identity，因此不能自动选择。
 
 ## 4. 概念图
 
@@ -147,12 +150,12 @@ effect：platform-write
 - 检查 route lifecycle、契约覆盖缺口、共同故障域与 probe 状态；只有 `verified + full + healthy` 可进入自动选择；
 - 检查本机二进制存在性；
 - 检查 Connector conformance 与 canonical Capability 是否一致；
-- 通过已验证的 GitHub 公共仓库搜索 Connector，每次串行运行 2 个关键词，5 个 UTC 日覆盖全部 10 个查询；结果只生成去重的 triage proposal；
+- 通过已验证的 GitHub 公共仓库搜索 Connector，每次串行运行 4 个关键词，5 个 UTC 日覆盖全部 20 个查询；结果只生成去重的 triage proposal；
 - 上游变化只生成“审计后再 repin”的 proposal，不自动升级；
 - 失败执行触发 reconcile proposal，不自动重发；
 - live probe 永远需要显式批准，Collector 不得自行发布。
 
-此外，`projects.json` 保存经代码与许可证核验的开源生态目录。目前记录 24 个项目，来源关键词包括 `xiaohongshu`、`小红书`、`xhs`、`rednote`、MCP、自动发布、crawler 和 creator analytics。项目按职责分成：
+此外，`projects.json` 保存经代码与许可证核验的开源生态目录。目前记录 40 个项目，来源关键词包括 `xiaohongshu`、`小红书`、`xhs`、`rednote`、MCP、自动发布、crawler 和 creator analytics。项目按职责分成：
 
 - **Connector candidate**：可能承担发布或观察阶段；只有少数会提升为 route；
 - **Collector candidate**：搜索、详情、评论、创作者数据或被动页面观测；
@@ -166,7 +169,7 @@ effect：platform-write
 
 发现阶段先做双条件相关性过滤：一侧必须出现 `xiaohongshu`、`小红书`、独立 token `xhs` 或 `rednote`，另一侧还必须出现 MCP/API/SDK/CLI、采集、发布、搜索、评论、下载、自动化等 Connector/Collector 能力词；只有仓库名精确为 `xhs` / `xiaohongshu` / `rednote` 时允许省略能力词。因此 `XhsWelcomeAnim` 与 `rednotebook` 等同名碰撞不会进入 triage。每个查询只观察排序前 10 项、最多提出 5 项新候选，且始终保留 `ecosystemComplete=false`。GitHub Search 失败或限流不会重试，也不会退回网页抓取。
 
-持续关注规则：高优先级项目 7 天复审，中优先级 14 天，低优先级 30 天。确定性入口每日比较 branch HEAD 并计算复审到期；对 17 个声明关注 release 的项目，还会串行轮换调用已验证的 `github-public-repository-tags` Connector，每次最多 4 个、5 天覆盖一轮，并比较其规范化 tag→commit 摘要。只有完整集合才参与基线比较，截断或限流分别生成扩大预算/延期 proposal。任一信号只生成 proposal，再由审阅流程检查 release、issue、license、archived、能力文档和相关代码差异。研究项目变化不会直接把已验证 route 判死，但 route 所绑定的同一 revision 漂移仍是 capability blocker。
+持续关注规则：高优先级项目 7 天复审，中优先级 14 天，低优先级 30 天。确定性入口每日比较 branch HEAD 并计算复审到期；对 29 个声明关注 release 的项目，还会串行轮换调用已验证的 `github-public-repository-tags` Connector，每次最多 4 个、8 天覆盖一轮，并比较其规范化 tag→commit 摘要。只有完整集合才参与基线比较，截断或限流分别生成扩大预算/延期 proposal。任一信号只生成 proposal，再由审阅流程检查 release、issue、license、archived、能力文档和相关代码差异。研究项目变化不会直接把已验证 route 判死，但 route 所绑定的同一 revision 漂移仍是 capability blocker。
 
 官网变更观测分层进行，不能把 HTTP 200 当成“没变化”：
 
@@ -198,9 +201,10 @@ effect：platform-write
 - 上游 `go test ./...` 通过；
 - 候选 Connector、持久防重 ledger、去身份化反馈和 conformance tests；
 - proposal-only Collector 与 live probe 定义。
-- 10 条 access route（完整候选、研究、降级、恢复和组件）与 24 项开源生态 watch catalog；
-- 7 个 route 上游和 24 个研究项目的独立 HEAD/复审观测，以及 17 个项目的轮换 release-tag 观测；
-- GitHub 关键词轮换发现：每次 2 个、5 天覆盖 10 个查询，串行调用并在匿名 Search 配额内运行；
+- 12 条 access route（完整候选、研究、降级、恢复和组件）与 40 项开源生态 watch catalog；
+- 9 个 route 上游和 40 个研究项目的独立 HEAD/复审观测，以及 29 个项目的轮换 release-tag 观测；
+- GitHub 关键词轮换发现：每次 4 个、5 天覆盖 20 个查询，串行调用并在匿名 Search 配额内运行；
+- `xiaohongshu-skill` 固定版本 adapter、私密可见性 CLI 补丁、完整性锁、离线写入/对账契约测试与本地 Chromium runtime；
 
 平台读取闭环已完成：
 
@@ -237,6 +241,9 @@ effect：platform-write
 - OpenWeb 小红书 adapter：https://github.com/imoonkey/openweb/blob/main/src/sites/xiaohongshu/DOC.md
 - MediaCrawler 小红书实现：https://github.com/NanmiCoder/MediaCrawler/blob/main/media_platform/xhs/core.py
 - `tamnd/xiaohongshu-cli`：https://github.com/tamnd/xiaohongshu-cli
+- `DeliciousBuding/xiaohongshu-skill`：https://github.com/DeliciousBuding/xiaohongshu-skill
+- `SingularGuyLeBorn/xhs-analytics`：https://github.com/SingularGuyLeBorn/xhs-analytics
+- `ROY3795/XiaohongshuSkills`：https://github.com/ROY3795/XiaohongshuSkills
 - 小红书采集工具横评：https://github.com/lijiajie-git/xiaohongshu-scraper-bakeoff
 - 上游创作中心 DOM 失效实例：https://github.com/xpzouying/xiaohongshu-mcp/issues/725
 - 上游编辑器选择器失效实例：https://github.com/xpzouying/xiaohongshu-mcp/issues/780

@@ -1,0 +1,14 @@
+{
+  "repository": "https://github.com/DeliciousBuding/xiaohongshu-skill.git",
+  "commit": "afa96802d3e61cdd5e7bd7b37ec59182bbe07d37",
+  "license": "Apache-2.0",
+  "pythonVersion": "3.12",
+  "bootstrapUvVersion": "0.12.6",
+  "patch": {
+    "path": "connectors/xiaohongshu-browser/patches/xiaohongshu-skill-cli-visibility.patch",
+    "sha256": "87bfb46535ce26decb24c90331662532f45655257ab4b244569a9404b3a69d35",
+    "runtimeDiffSha256": "a95a9fae75c32d7b875c401a2ae46a5919ebec80288b9cbfb826056c4194838a",
+    "purpose": "Expose the upstream publish visibility argument through its stable JSON CLI so the connector can require self-only publication without importing private Python modules."
+  },
+  "usage": "Pinned JSON CLI runtime. Any missing patch, revision drift, non-private result or ambiguous submit fails closed before route admission."
+}

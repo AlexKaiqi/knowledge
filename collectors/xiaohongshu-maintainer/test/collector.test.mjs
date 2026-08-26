@@ -194,7 +194,7 @@ test('maintainer is proposal-only and cannot promote an unverified connector', a
   assert.deepEqual(report.accessRoutes.automaticEligible, ['owned-notes-xiaohongshu-mcp'])
   assert.equal(report.accessRoutes.upstreams.length, 9)
   assert.equal(routeHeadCalls.get('https://github.com/xpzouying/xiaohongshu-mcp.git'), 1)
-  assert.equal(report.ecosystemProjects.total, 38)
+  assert.equal(report.ecosystemProjects.total, 40)
   assert.equal(report.ecosystemProjects.discovery.queries.length, 4)
   assert.equal(report.ecosystemProjects.discovery.fullCycleDays, 5)
   assert.equal(report.ecosystemProjects.discovery.newCandidates.length, 0)

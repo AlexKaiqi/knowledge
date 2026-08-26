@@ -79,7 +79,7 @@ Connector：12 个已验证；xiaohongshu-browser 为 mixed（读取已验证、
 
 小红书已有三个真实闭环：官方账号 API 参考、浏览器渲染的社区公约信息源，以及通过自有账号会话读取本人笔记列表的平台能力。后者 live probe 实际返回可用的空列表。笔记发布、详情反查与反馈采集仍是候选能力，尚未完成真实私密发布闭环。仓库不创建空的平台、Connector 或 Collector 占位。
 
-小红书维护 Collector 还管理 38 个已审计开源项目，并消费已验证的 GitHub 搜索 Connector 做关键词轮换发现：每次串行查询 4 个关键词、5 天覆盖 20 个查询，显式覆盖 MCP、CLI、Playwright、浏览器扩展、多账号发布、数据采集、普通评论、直播评论、私信与创作者分析。项目必须能改变 Connector、Collector、probe、身份池、conformance 或 failure-domain 决策；只有关键词命中、没有具体平台路径或没有新增维护决策的仓库不进入目录。已人工排除的命中只保留最小 `discoveryDecision`（仓库、当时的 `pushedAt` 和理由码），相同 revision 不重复制造 proposal，仓库一旦更新就自动重新进入审阅。对其中 29 个声明关注 release 的项目，另消费已验证的 GitHub Tag Connector，每次串行观察 4 个、8 天覆盖一轮，并比较规范化的 tag→commit 摘要；不再让 Collector 自己理解 Git wire 输出。发现新项目或 tag 变化都只生成去重审阅 proposal，不自动安装、升级、路由或接受第三方许可证。当前优先验证 `DeliciousBuding/xiaohongshu-skill` 的私密发布与三态回执路线；CreatorHub 的持久任务队列、身份/出口风控和私信唤醒，oba-live-tool 的千帆/蒲公英直播评论 WebSocket，以及 rednote-extract 的被动网络观测只作为维护与 schema 参考，尚不是可用能力。
+小红书维护 Collector 还管理 40 个已审计开源项目，并消费已验证的 GitHub 搜索 Connector 做关键词轮换发现：每次串行查询 4 个关键词、5 天覆盖 20 个查询，显式覆盖 MCP、CLI、Playwright、浏览器扩展、多账号发布、数据采集、普通评论、直播评论、私信与创作者分析。项目必须能改变 Connector、Collector、probe、身份池、conformance 或 failure-domain 决策；只有关键词命中、没有具体平台路径或没有新增维护决策的仓库不进入目录。已人工排除的命中只保留最小 `discoveryDecision`（仓库、当时的 `pushedAt` 和理由码），相同 revision 不重复制造 proposal，仓库一旦更新就自动重新进入审阅。对其中 29 个声明关注 release 的项目，另消费已验证的 GitHub Tag Connector，每次串行观察 4 个、8 天覆盖一轮，并比较规范化的 tag→commit 摘要；不再让 Collector 自己理解 Git wire 输出。发现新项目或 tag 变化都只生成去重审阅 proposal，不自动安装、升级、路由或接受第三方许可证。当前已为 `DeliciousBuding/xiaohongshu-skill` 建立固定 commit、固定补丁与固定 runtime diff 的本地 JSON CLI adapter；它能在离线契约中强制私密可见性、隔离 profile，并对不确定写入禁重试，但在真实 probe 前仍不是可用路线。`xhs-analytics` 的自有创作者指标截获面已进入高优先级 Collector 调研；CreatorHub 的持久任务队列、身份/出口风控和私信唤醒，oba-live-tool 的千帆/蒲公英直播评论 WebSocket，以及 rednote-extract 的被动网络观测只作为维护与 schema 参考，尚不是可用能力。
 
 抖音已有一个真实闭环：无需身份读取并语义校验官方开放平台文档。它只是一条 Information Source 能力；应用审核、scope、用户授权和真实业务调用尚未验证，所以抖音 Platform 能力仍为 0。
 
@@ -116,4 +116,13 @@ source ~/.nvm/nvm.sh
 nvm use 24.17.0
 npm install
 npm run check
+
+# 构建并核验第二条小红书候选路线；不会登录或触发平台写入
+npm run xhs:skill:bootstrap
+
+# 显式创建/更新仓库外的隔离登录态；会打开可见浏览器
+KNOWLEDGE_XHS_SKILL_PROFILE=<profile-id> npm run xhs:skill:login
+
+# 需要显式提供仓库外的 opaque profile；doctor 只读检查登录态
+KNOWLEDGE_XHS_SKILL_PROFILE=<profile-id> npm run xhs:skill:doctor
 ```
