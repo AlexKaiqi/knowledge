@@ -1,0 +1,5 @@
+{
+  "schemaVersion":"dsh.probe-report/v1","id":"osv-public-advisory-live-20260826","capabilityRef":"/capabilities/osv/read-public-advisory.md","connectorId":"osv-public-advisory","probeDefinitionRef":"repo:/probes/definitions/osv-public-advisory-live.json","environment":"production-public","level":"live","outcome":"passed","startedAt":"2026-08-26T19:42:00.670Z","finishedAt":"2026-08-26T19:42:01.574Z","expiresAt":"2026-09-02T19:42:01.574Z",
+  "checks":[{"id":"exact-advisory-id","status":"passed"},{"id":"bounded-affected-records","status":"passed"},{"id":"version-coverage-declared","status":"passed"},{"id":"personal-credits-excluded","status":"passed"},{"id":"database-specific-excluded","status":"passed"},{"id":"fixture-range","status":"passed"},{"id":"data-minimization","status":"passed"}],
+  "evidence":[{"kind":"snapshot","ref":"repo:/knowledge/verifications/osv/public-advisory/snapshot.json","sha256":"52d2e5580238c5a7e1443f6f0801884535617b8367c24778f19ca59e7098773f"}],"sideEffects":[{"effect":"none","status":"none"}]
+}

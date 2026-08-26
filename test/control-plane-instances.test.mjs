@@ -58,6 +58,9 @@ test('control-plane instances match their schemas', async () => {
     ['../spec/connector-definition.schema.json', '../connectors/crates-io-public-crate-version/connector.json'],
     ['../spec/collector-definition.schema.json', '../collectors/crates-io-public-crate-version-maintainer/collector.json'],
     ['../spec/probe-definition.schema.json', '../probes/definitions/crates-io-public-crate-version-live.json'],
+    ['../spec/connector-definition.schema.json', '../connectors/osv-public-advisory/connector.json'],
+    ['../spec/collector-definition.schema.json', '../collectors/osv-public-advisory-maintainer/collector.json'],
+    ['../spec/probe-definition.schema.json', '../probes/definitions/osv-public-advisory-live.json'],
   ]
   for (const [schemaPath, instancePath] of cases) {
     const validate = await validator(schemaPath)
@@ -90,6 +93,7 @@ test('Connector configuration schemas compile', async () => {
     '../connectors/pypi-public-project-release/config.schema.json',
     '../connectors/go-public-module-version/config.schema.json',
     '../connectors/crates-io-public-crate-version/config.schema.json',
+    '../connectors/osv-public-advisory/config.schema.json',
   ]) {
     const schema = JSON.parse(await readFile(new URL(schemaPath, import.meta.url), 'utf8'))
     const ajv = new Ajv2020({ allErrors: true, strict: false })
@@ -143,6 +147,13 @@ test('Go public module version live snapshot matches its product output schema',
 test('crates.io public crate version live snapshot matches its product output schema', async () => {
   const validate = await validator('../knowledge/schemas/crates-io/read-public-crate-version-output.schema.json')
   const snapshot = JSON.parse(await readFile(new URL('../knowledge/verifications/crates-io/public-crate-version/snapshot.json', import.meta.url), 'utf8'))
+  const { schemaVersion: _schemaVersion, fixture: _fixture, ...payload } = snapshot
+  assert.equal(validate(payload), true, JSON.stringify(validate.errors))
+})
+
+test('OSV public advisory live snapshot matches its product output schema', async () => {
+  const validate = await validator('../knowledge/schemas/osv/read-public-advisory-output.schema.json')
+  const snapshot = JSON.parse(await readFile(new URL('../knowledge/verifications/osv/public-advisory/snapshot.json', import.meta.url), 'utf8'))
   const { schemaVersion: _schemaVersion, fixture: _fixture, ...payload } = snapshot
   assert.equal(validate(payload), true, JSON.stringify(validate.errors))
 })

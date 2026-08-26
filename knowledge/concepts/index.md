@@ -2,8 +2,9 @@
 
 保存跨平台、跨工具复用的业务与数据概念。Concept 只有在被已准入 Capability 的输入或结果引用时才进入知识图。
 
-当前：11。
+当前：12。
 
+- [OSV 公共漏洞公告](osv/public-advisory.md)
 - [crates.io 公共 crate 版本元数据](crates-io/public-crate-version-metadata.md)
 - [抖音开放平台能力接口面](douyin/open-platform-capability-surface.md)
 - [经认证的公共 Go 模块精确版本](go/authenticated-public-module-version.md)

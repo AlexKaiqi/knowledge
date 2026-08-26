@@ -52,3 +52,5 @@ title: Knowledge bundle history
 - 通过 production-public live probe 准入 crates.io Platform 与“读取公共 crate 精确版本元数据”Capability；`serde@1.0.228` 的 crate 身份、MIT/Apache-2.0 声明、Rust 1.56、2021 edition、83,652-byte 发行物和 SHA-256 均命中固定证据。
 - Connector 固定官方 API，只接受注册名精确拼写与精确 semver，内置最短 1 秒请求闸门和带联系 URL 的应用 User-Agent；拒绝 alternate registry、重定向和超 1 MiB 响应，输出剔除下载量、发布者、审计用户、头像、features、dependencies 与原始 payload。
 - 新增 proposal-only Collector 观察发行摘要、yank/许可证/MSRV/edition/链接变化、API policy block、验证过期和访问失败；完整可用闭环更新为 11（Information Source 3；Platform 7；Service 1），Subject 更新为 9，Capability 更新为 11。
+- 通过 production-public live probe 准入 OSV.dev Information Source 与“读取公共 OSV 漏洞公告”Capability；固定公告的精确身份、poppler Git introduced/fixed 边界和 REPORT reference 均命中。
+- Connector 固定按 ID 官方 API，限制 2 MiB；details 与版本清单有界并带完整 hash/coverage，排除 credits 和 database/ecosystem-specific raw 扩展。完整闭环更新为 12（Information Source 4；Platform 7；Service 1），Subject 10，Capability 12。

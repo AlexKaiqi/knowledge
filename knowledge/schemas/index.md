@@ -2,8 +2,10 @@
 
 保存 Capability 引用的产品输入输出 JSON Schema。不同产品可以完全不同，不强制统一业务字段；公共层只统一 Capability envelope。
 
-当前：22。
+当前：24。
 
+- [OSV 公共公告输入](osv/read-public-advisory-input.schema.json)
+- [OSV 公共公告输出](osv/read-public-advisory-output.schema.json)
 - [crates.io 公共 crate 精确版本输入](crates-io/read-public-crate-version-input.schema.json)
 - [crates.io 公共 crate 精确版本输出](crates-io/read-public-crate-version-output.schema.json)
 - [抖音开放平台接口面输入](douyin/open-platform-surface-input.schema.json)

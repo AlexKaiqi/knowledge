@@ -2,8 +2,9 @@
 
 保存 Information Source、Dataset、Service 与 Protocol knowledge，包括权利、访问范围、更新频率和保留限制。
 
-当前：3。
+当前：4。
 
+- [OSV.dev](osv.md)
 - [抖音开放平台官方文档](douyin-open-platform.md)
 - [小红书账号开放平台 API 参考](xiaohongshu-account-api.md)
 - [小红书社区公约 2.0](xiaohongshu-community-rules.md)

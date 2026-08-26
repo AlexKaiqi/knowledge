@@ -41,6 +41,7 @@ async function markdownInstances(directory, prefix = '') {
 test('canonical knowledge contains only probe-admitted platform and capability files', async () => {
   assert.deepEqual(await markdownInstances('knowledge/platforms/'), ['crates-io.md', 'github.md', 'npm-public-registry.md', 'pypi.md', 'xiaohongshu.md'])
   assert.deepEqual(await markdownInstances('knowledge/services/'), ['go-module-services.md'])
+  assert.deepEqual(await markdownInstances('knowledge/sources/'), ['douyin-open-platform.md', 'osv.md', 'xiaohongshu-account-api.md', 'xiaohongshu-community-rules.md'])
   assert.deepEqual(await markdownInstances('knowledge/capabilities/'), [
     'crates-io/read-public-crate-version.md',
     'douyin/read-open-platform-surface.md',
@@ -49,6 +50,7 @@ test('canonical knowledge contains only probe-admitted platform and capability f
     'github/search-public-repositories.md',
     'go/read-authenticated-public-module-version.md',
     'npm/read-public-package-version.md',
+    'osv/read-public-advisory.md',
     'pypi/read-public-project-release.md',
     'xiaohongshu/list-owned-notes.md',
     'xiaohongshu/read-account-api-surface.md',

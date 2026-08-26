@@ -1,0 +1,21 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://dsh.dev/knowledge/osv/read-public-advisory-output.schema.json","type":"object","additionalProperties":false,
+  "required":["source","request","advisory","observedAt","resultDigest","conformance"],
+  "properties":{
+    "source":{"type":"object","additionalProperties":false,"required":["id","apiBaseUrl","endpointTemplate"],"properties":{"id":{"const":"osv-public-advisory"},"apiBaseUrl":{"const":"https://api.osv.dev"},"endpointTemplate":{"const":"https://api.osv.dev/v1/vulns/{id}"}}},
+    "request":{"type":"object","additionalProperties":false,"required":["advisoryId"],"properties":{"advisoryId":{"type":"string"}}},
+    "advisory":{"type":"object","additionalProperties":false,"required":["id","schemaVersion","modifiedAt","publishedAt","withdrawnAt","aliases","upstream","related","summary","details","severity","affected","references"],"properties":{
+      "id":{"type":"string"},"schemaVersion":{"type":"string"},"modifiedAt":{"type":"string","format":"date-time"},"publishedAt":{"type":["string","null"],"format":"date-time"},"withdrawnAt":{"type":["string","null"],"format":"date-time"},
+      "aliases":{"$ref":"#/$defs/stringSet"},"upstream":{"$ref":"#/$defs/stringSet"},"related":{"$ref":"#/$defs/stringSet"},"summary":{"type":["string","null"],"maxLength":2048},"details":{"$ref":"#/$defs/boundedText"},
+      "severity":{"type":"array","maxItems":16,"items":{"type":"object","additionalProperties":false,"required":["type","score","source"],"properties":{"type":{"type":"string"},"score":{"type":"string"},"source":{"type":["string","null"],"format":"uri"}}}},
+      "affected":{"type":"array","maxItems":128,"items":{"type":"object","additionalProperties":false,"required":["package","ranges","versions"],"properties":{
+        "package":{"type":"object","additionalProperties":false,"required":["ecosystem","name","purl"],"properties":{"ecosystem":{"type":"string"},"name":{"type":"string"},"purl":{"type":["string","null"]}}},
+        "ranges":{"type":"array","maxItems":32,"items":{"type":"object","additionalProperties":false,"required":["type","repository","events"],"properties":{"type":{"type":"string"},"repository":{"type":["string","null"],"format":"uri"},"events":{"type":"array","maxItems":128,"items":{"type":"object","additionalProperties":false,"required":["kind","value"],"properties":{"kind":{"enum":["introduced","fixed","last-affected","limit"]},"value":{"type":"string"}}}}}}},
+        "versions":{"type":"object","additionalProperties":false,"required":["totalCount","sample","sampleComplete","sha256"],"properties":{"totalCount":{"type":"integer","minimum":0},"sample":{"type":"array","maxItems":256,"items":{"type":"string"}},"sampleComplete":{"type":"boolean"},"sha256":{"$ref":"#/$defs/sha256"}}}
+      }}},
+      "references":{"type":"array","maxItems":64,"items":{"type":"object","additionalProperties":false,"required":["type","url"],"properties":{"type":{"type":"string"},"url":{"type":"string","format":"uri","pattern":"^https://"}}}}
+    }},
+    "observedAt":{"type":"string","format":"date-time"},"resultDigest":{"$ref":"#/$defs/sha256"},"conformance":{"type":"object","additionalProperties":false,"required":["status","assertions"],"properties":{"status":{"enum":["passed","review-required"]},"assertions":{"type":"array","items":{"type":"object","additionalProperties":false,"required":["id","passed"],"properties":{"id":{"type":"string"},"passed":{"type":"boolean"}}}}}}
+  },
+  "$defs":{"sha256":{"type":"string","pattern":"^[a-f0-9]{64}$"},"stringSet":{"type":"array","uniqueItems":true,"items":{"type":"string"}},"boundedText":{"type":"object","additionalProperties":false,"required":["characterCount","sha256","excerpt","truncated"],"properties":{"characterCount":{"type":"integer","minimum":0},"sha256":{"type":["string","null"],"pattern":"^[a-f0-9]{64}$"},"excerpt":{"type":["string","null"],"maxLength":4096},"truncated":{"type":"boolean"}}}}
+}
