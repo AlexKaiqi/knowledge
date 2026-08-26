@@ -33,6 +33,8 @@
     "github:file:maintain": "node collectors/github-public-repository-file-maintainer/src/index.mjs",
     "github:tags:probe": "node scripts/probe-github-public-repository-tags.mjs",
     "github:tags:maintain": "node collectors/github-public-repository-tags-maintainer/src/index.mjs",
+    "github:release:probe": "node scripts/probe-github-public-repository-release.mjs",
+    "github:release:maintain": "node collectors/github-public-repository-release-maintainer/src/index.mjs",
     "npm:package-version:probe": "node scripts/probe-npm-public-package-version.mjs",
     "npm:package-version:maintain": "node collectors/npm-public-package-version-maintainer/src/index.mjs",
     "pypi:release:probe": "node scripts/probe-pypi-public-project-release.mjs",

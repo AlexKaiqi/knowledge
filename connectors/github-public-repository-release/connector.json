@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "github-public-repository-release",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/github/read-public-repository-release-by-tag.md"],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "connectors/github-public-repository-release/src/index.mjs"
+  },
+  "configSchema": "repo:/connectors/github-public-repository-release/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [
+    {
+      "capabilityRef": "/capabilities/github/read-public-repository-release-by-tag.md",
+      "operation": "readPublicRepositoryReleaseByTag"
+    }
+  ],
+  "conformance": {
+    "status": "candidate",
+    "probeDefinitionRef": "repo:/probes/definitions/github-public-repository-release-live.json"
+  }
+}

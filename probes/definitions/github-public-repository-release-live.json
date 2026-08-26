@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "github-public-repository-release-live",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/github/read-public-repository-release-by-tag.md",
+  "connectorId": "github-public-repository-release",
+  "environment": "production-public",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "read-known-release-by-exact-tag", "operation": "readPublicRepositoryReleaseByTag" },
+    { "id": "verify-release-assets-and-minimization", "operation": "normalizePublicRepositoryReleaseResponse" }
+  ],
+  "assertions": [
+    "The official GET /repos/{owner}/{repo}/releases/tags/{tag} endpoint returns JoeanAmier/XHS-Downloader release 2.7 without authentication.",
+    "The release identity, publication state and four reviewed asset names, sizes and GitHub-provided SHA-256 digests match the fixed fixture.",
+    "The response uses GitHub REST API version 2026-03-10, the core rate bucket and an ETag; the Connector makes one bounded request without redirects or retries.",
+    "The normalized output excludes author/uploader identities, avatars, download counts, tarball/zipball links and raw payload; notes are reduced to a full-body SHA-256 plus at most 4096 characters, and assets are not downloaded or executed."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 30, "maxCost": 0, "currency": "CNY" }
+}
