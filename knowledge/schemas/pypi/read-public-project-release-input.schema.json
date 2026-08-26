@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/pypi/read-public-project-release-input.schema.json",
+  "title": "ReadPyPIPublicProjectReleaseInput",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["projectName", "version"],
+  "properties": {
+    "projectName": {
+      "type": "string",
+      "maxLength": 200,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "version": {
+      "type": "string",
+      "maxLength": 128,
+      "pattern": "^(?:[0-9]+!)?[0-9]+(?:\\.[0-9]+)*(?:(?:a|b|rc)[0-9]+)?(?:\\.post[0-9]+)?(?:\\.dev[0-9]+)?(?:\\+[a-z0-9]+(?:[._-][a-z0-9]+)*)?$"
+    }
+  }
+}

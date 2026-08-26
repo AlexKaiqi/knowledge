@@ -69,11 +69,11 @@ Subject knowledge
 ## 当前状态
 
 ```text
-完整可用闭环：7（Information Source 3；Platform 4）
-已准入 Subject：6
-已准入 Capability：7
-Connector：6 个已验证；xiaohongshu-browser 为 mixed（读取已验证、发布候选）
-维护 Collector：8
+完整可用闭环：8（Information Source 3；Platform 5）
+已准入 Subject：7
+已准入 Capability：8
+Connector：7 个已验证；xiaohongshu-browser 为 mixed（读取已验证、发布候选）
+维护 Collector：9
 ```
 
 小红书已有三个真实闭环：官方账号 API 参考、浏览器渲染的社区公约信息源，以及通过自有账号会话读取本人笔记列表的平台能力。后者 live probe 实际返回可用的空列表。笔记发布、详情反查与反馈采集仍是候选能力，尚未完成真实私密发布闭环。仓库不创建空的平台、Connector 或 Collector 占位。
@@ -87,6 +87,8 @@ Connector：6 个已验证；xiaohongshu-browser 为 mixed（读取已验证、�
 GitHub 已有两个真实 Platform 闭环：通过官方 REST API、无需身份搜索公共仓库，以及在完整不可变 commit ID 下读取一个不超过 256 KiB 的 UTF-8 公共仓库文件。搜索输出强制声明排序分页、1,000 条结果窗口、`incomplete_results` 和 Search 限流状态；文件输出保留 Git blob ID、正文 SHA-256 与 `core` 限流状态。二者组合可以发现候选并核验固定 revision 的 README、LICENSE、manifest 和实现证据，但仍不能证明生态完整、许可证有效或项目能力可执行。
 
 npm Public Registry 已有一个真实 Platform 闭环：无需身份按精确 package name 和精确 semver 读取最小化公共版本元数据。输出保留 license/deprecation/repository/engines 声明和 tarball 的 SHA-512 SRI、SHA-1 shasum、固定 Registry URL，同时排除 author、maintainers、contributors 和邮箱。它可用于依赖证据核验，但不下载或执行包，也不把 license 字段冒充独立授权结论。
+
+PyPI 已有一个真实 Platform 闭环：无需身份按规范化项目名和精确版本读取官方 JSON release metadata。输出包含最小项目/许可证/Python 要求/yank/漏洞数量信号，以及最多 64 个发行文件的 SHA-256、BLAKE2b-256、Core Metadata 摘要、ETag 和 serial；作者、维护者、邮箱、漏洞详情、长许可证正文和无关项目链接被排除。它不下载、安装或执行发行物，也不把上传元数据当作源码、授权或安全审计。
 
 - [小红书接入调研与第一条能力纵切](docs/research/xiaohongshu-integration.md)
 

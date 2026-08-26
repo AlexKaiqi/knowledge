@@ -38,12 +38,13 @@ async function markdownInstances(directory, prefix = '') {
 }
 
 test('canonical knowledge contains only probe-admitted platform and capability files', async () => {
-  assert.deepEqual(await markdownInstances('knowledge/platforms/'), ['github.md', 'npm-public-registry.md', 'xiaohongshu.md'])
+  assert.deepEqual(await markdownInstances('knowledge/platforms/'), ['github.md', 'npm-public-registry.md', 'pypi.md', 'xiaohongshu.md'])
   assert.deepEqual(await markdownInstances('knowledge/capabilities/'), [
     'douyin/read-open-platform-surface.md',
     'github/read-public-repository-file.md',
     'github/search-public-repositories.md',
     'npm/read-public-package-version.md',
+    'pypi/read-public-project-release.md',
     'xiaohongshu/list-owned-notes.md',
     'xiaohongshu/read-account-api-surface.md',
     'xiaohongshu/read-community-rule-surface.md',

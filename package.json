@@ -32,7 +32,9 @@
     "github:file:probe": "node scripts/probe-github-public-repository-file.mjs",
     "github:file:maintain": "node collectors/github-public-repository-file-maintainer/src/index.mjs",
     "npm:package-version:probe": "node scripts/probe-npm-public-package-version.mjs",
-    "npm:package-version:maintain": "node collectors/npm-public-package-version-maintainer/src/index.mjs"
+    "npm:package-version:maintain": "node collectors/npm-public-package-version-maintainer/src/index.mjs",
+    "pypi:release:probe": "node scripts/probe-pypi-public-project-release.mjs",
+    "pypi:release:maintain": "node collectors/pypi-public-project-release-maintainer/src/index.mjs"
   },
   "dependencies": {
     "ajv": "^8.20.0",

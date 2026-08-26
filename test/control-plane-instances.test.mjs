@@ -43,6 +43,9 @@ test('control-plane instances match their schemas', async () => {
     ['../spec/connector-definition.schema.json', '../connectors/npm-public-package-version/connector.json'],
     ['../spec/collector-definition.schema.json', '../collectors/npm-public-package-version-maintainer/collector.json'],
     ['../spec/probe-definition.schema.json', '../probes/definitions/npm-public-package-version-live.json'],
+    ['../spec/connector-definition.schema.json', '../connectors/pypi-public-project-release/connector.json'],
+    ['../spec/collector-definition.schema.json', '../collectors/pypi-public-project-release-maintainer/collector.json'],
+    ['../spec/probe-definition.schema.json', '../probes/definitions/pypi-public-project-release-live.json'],
   ]
   for (const [schemaPath, instancePath] of cases) {
     const validate = await validator(schemaPath)
@@ -70,6 +73,7 @@ test('Connector configuration schemas compile', async () => {
     '../connectors/github-public-repository-search/config.schema.json',
     '../connectors/github-public-repository-file/config.schema.json',
     '../connectors/npm-public-package-version/config.schema.json',
+    '../connectors/pypi-public-project-release/config.schema.json',
   ]) {
     const schema = JSON.parse(await readFile(new URL(schemaPath, import.meta.url), 'utf8'))
     const ajv = new Ajv2020({ allErrors: true, strict: false })
@@ -95,6 +99,13 @@ test('GitHub public repository file live snapshot matches its product output sch
 test('npm public package version live snapshot matches its product output schema', async () => {
   const validate = await validator('../knowledge/schemas/npm/read-public-package-version-output.schema.json')
   const snapshot = JSON.parse(await readFile(new URL('../knowledge/verifications/npm/public-package-version/snapshot.json', import.meta.url), 'utf8'))
+  const { schemaVersion: _schemaVersion, fixture: _fixture, ...payload } = snapshot
+  assert.equal(validate(payload), true, JSON.stringify(validate.errors))
+})
+
+test('PyPI public project release live snapshot matches its product output schema', async () => {
+  const validate = await validator('../knowledge/schemas/pypi/read-public-project-release-output.schema.json')
+  const snapshot = JSON.parse(await readFile(new URL('../knowledge/verifications/pypi/public-project-release/snapshot.json', import.meta.url), 'utf8'))
   const { schemaVersion: _schemaVersion, fixture: _fixture, ...payload } = snapshot
   assert.equal(validate(payload), true, JSON.stringify(validate.errors))
 })

@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "pypi-public-project-release",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/pypi/read-public-project-release.md"],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "connectors/pypi-public-project-release/src/index.mjs"
+  },
+  "configSchema": "repo:/connectors/pypi-public-project-release/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [
+    {
+      "capabilityRef": "/capabilities/pypi/read-public-project-release.md",
+      "operation": "readPublicProjectRelease"
+    }
+  ],
+  "conformance": {
+    "status": "verified",
+    "probeReportRef": "/verifications/pypi/public-project-release/report.json"
+  }
+}

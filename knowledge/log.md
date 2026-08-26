@@ -38,3 +38,6 @@ title: Knowledge bundle history
 - 通过公开 live probe 准入 npm Public Registry Platform 与“读取公共包精确版本元数据”Capability；`ajv@8.20.0` 的包身份、许可证声明、仓库地址、SRI、shasum 和 tarball URL 均命中固定证据。
 - Connector 固定公共 Registry，只接受精确 semver，拒绝 tag/range、alternate registry、重定向、超限响应和发行完整性漂移；输出剔除 author、maintainers、contributors 与邮箱。
 - 新增 proposal-only Collector 观察精确版本的发行完整性、许可证/废弃/仓库元数据变化和验证过期；完整可用闭环更新为 7（Information Source 3；Platform 4），Subject 更新为 6，Capability 更新为 7。
+- 通过公开 live probe 准入 PyPI Platform 与“读取公共项目精确 Release 元数据”Capability；`sampleproject==4.0.0` 的项目身份、Python 要求、MIT classifier、wheel/sdist 文件及 SHA-256/BLAKE2b-256/Core Metadata 摘要均命中固定证据。
+- Connector 固定官方 release JSON API，只接受规范化项目名与精确版本，限制 2 MiB 响应和 64 个发行文件，并验证 ETag、serial 与 `files.pythonhosted.org`；输出剔除个人字段、漏洞详情、长许可证正文和无关链接。
+- 新增 proposal-only Collector 观察语义摘要、发行完整性、yank/漏洞数量/许可证变化、验证过期和限流；完整可用闭环更新为 8（Information Source 3；Platform 5），Subject 更新为 7，Capability 更新为 8。
