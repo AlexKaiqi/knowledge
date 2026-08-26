@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "hugging-face-public-model-revision-live",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/hugging-face/read-public-model-revision-manifest.md",
+  "connectorId": "hugging-face-public-model-revision",
+  "environment": "production-public",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "read-known-public-model-at-exact-commit", "operation": "readPublicModelRevisionManifest" },
+    { "id": "verify-complete-minimized-file-manifest", "operation": "normalizePublicModelRevisionResponse" }
+  ],
+  "assertions": [
+    "The official Hub model_info revision API returns openai-community/gpt2 at the exact full commit without an account or token.",
+    "The public, ungated and enabled model classification and all 26 file paths, sizes, Git blob identities and available LFS SHA-256 values match the reviewed fixture.",
+    "The Connector sends one fixed anonymous request with blobs=true, a contactable User-Agent, no redirect or retry, at most 4 MiB of JSON and at most 1,024 files.",
+    "The normalized output excludes author, downloads, likes, Spaces, widget data, card data, request IDs, tokens and raw payload; it never downloads or executes model files."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 30, "maxCost": 0, "currency": "CNY" }
+}

@@ -37,6 +37,9 @@ test('control-plane instances match their schemas', async () => {
     ['../spec/access-route-catalog.schema.json', '../connectors/douyin-access-routes/routes.json'],
     ['../spec/collector-definition.schema.json', '../collectors/douyin-maintainer/collector.json'],
     ['../spec/ecosystem-project-catalog.schema.json', '../collectors/douyin-maintainer/projects.json'],
+    ['../spec/connector-definition.schema.json', '../connectors/hugging-face-public-model-revision/connector.json'],
+    ['../spec/collector-definition.schema.json', '../collectors/hugging-face-public-model-revision-maintainer/collector.json'],
+    ['../spec/probe-definition.schema.json', '../probes/definitions/hugging-face-public-model-revision-live.json'],
     ['../spec/connector-definition.schema.json', '../connectors/github-public-repository-search/connector.json'],
     ['../spec/collector-definition.schema.json', '../collectors/github-public-repository-search-maintainer/collector.json'],
     ['../spec/probe-definition.schema.json', '../probes/definitions/github-public-repository-search-live.json'],
@@ -89,6 +92,7 @@ test('Connector configuration schemas compile', async () => {
     '../connectors/xiaohongshu-community-rules-browser/config.schema.json',
     '../connectors/douyin-open-platform-docs/config.schema.json',
     '../connectors/douyin-public-video-embed/config.schema.json',
+    '../connectors/hugging-face-public-model-revision/config.schema.json',
     '../connectors/github-public-repository-search/config.schema.json',
     '../connectors/github-public-repository-file/config.schema.json',
     '../connectors/github-public-repository-tags/config.schema.json',
@@ -172,6 +176,13 @@ test('OSV public advisory live snapshot matches its product output schema', asyn
 test('Douyin public video embed live snapshot matches its product output schema', async () => {
   const validate = await validator('../knowledge/schemas/douyin/read-public-video-embed-output.schema.json')
   const snapshot = JSON.parse(await readFile(new URL('../knowledge/verifications/douyin/public-video-embed/snapshot.json', import.meta.url), 'utf8'))
+  const { schemaVersion: _schemaVersion, fixture: _fixture, ...payload } = snapshot
+  assert.equal(validate(payload), true, JSON.stringify(validate.errors))
+})
+
+test('Hugging Face public model revision live snapshot matches its product output schema', async () => {
+  const validate = await validator('../knowledge/schemas/hugging-face/read-public-model-revision-manifest-output.schema.json')
+  const snapshot = JSON.parse(await readFile(new URL('../knowledge/verifications/hugging-face/public-model-revision/snapshot.json', import.meta.url), 'utf8'))
   const { schemaVersion: _schemaVersion, fixture: _fixture, ...payload } = snapshot
   assert.equal(validate(payload), true, JSON.stringify(validate.errors))
 })

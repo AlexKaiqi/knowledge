@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "dsh.collector-definition/v1",
+  "id": "hugging-face-public-model-revision-maintainer",
+  "version": "1.0.0",
+  "scope": {
+    "knowledgeGlobs": [
+      "knowledge/platforms/hugging-face-hub.md",
+      "knowledge/concepts/hugging-face/public-model-revision-manifest.md",
+      "knowledge/capabilities/hugging-face/read-public-model-revision-manifest.md",
+      "knowledge/schemas/hugging-face/read-public-model-revision-manifest-*.schema.json",
+      "knowledge/verifications/hugging-face/public-model-revision/*.json"
+    ],
+    "connectorIds": ["hugging-face-public-model-revision"],
+    "capabilityRefs": ["/capabilities/hugging-face/read-public-model-revision-manifest.md"]
+  },
+  "triggers": [
+    { "kind": "schedule", "schedule": "25 7 * * *" },
+    { "kind": "source-change" },
+    { "kind": "schema-change" },
+    { "kind": "connector-change" },
+    { "kind": "failed-execution" },
+    { "kind": "manual" }
+  ],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "collectors/hugging-face-public-model-revision-maintainer/src/index.mjs"
+  },
+  "outputs": ["knowledge-proposal", "connector-change-proposal", "verification-report"],
+  "writePolicy": { "mode": "proposal-only", "requiresApprovalFor": ["knowledge", "connector", "live-probe"] },
+  "probePolicy": { "allowedEnvironments": ["production-public"], "identityPoolRefs": [], "maximumEffect": "none" },
+  "budgets": { "maxRunsPerDay": 4, "maxCostPerDay": 0, "currency": "CNY" }
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/hugging-face-public-model-revision-config.schema.json",
+  "title": "HuggingFacePublicModelRevisionConnectorConfig",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "timeoutMs": { "type": "integer", "minimum": 1000, "maximum": 60000, "default": 15000 },
+    "userAgent": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9._-]+/[A-Za-z0-9._-]+ \\((?:https://[^()\\s]+|[^()\\s@]+@[^()\\s@]+)\\)$",
+      "default": "dsh-knowledge-catalog/0.1 (https://github.com/AlexKaiqi/knowledge)"
+    }
+  }
+}

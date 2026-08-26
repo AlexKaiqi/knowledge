@@ -59,3 +59,6 @@ title: Knowledge bundle history
 - 通过 production-public live probe 准入抖音 Platform 与“读取公开视频嵌入描述”Capability；官方免权限接口实际返回固定 VideoID 的公开标题、1080×1920 画面尺寸和官方播放器 URL。
 - Connector 固定 `open.douyin.com` 单一 endpoint，不跟随重定向或重试，限制 64 KiB JSON；解析并验证 iframe 后只重建 `autoplay=0` 播放器 URL，排除原始 HTML、日志、作者、互动指标、评论、媒体直链与 raw payload。
 - 新增 proposal-only Collector 观察接口契约、固定公开视频可用性、最小描述漂移与验证过期；旧 `iesdouyin` 分享页 `_ROUTER_DATA` 路线因当前重定向和反爬页面失效而退休。完整闭环更新为 14（Information Source 4；Platform 9；Service 1），Subject 11，Capability 14。
+- 通过 production-public live probe 准入 Hugging Face Hub Platform 与“读取公共模型 Revision 清单”Capability；匿名官方 API 在固定 `openai-community/gpt2` commit 下实际返回完整 26 文件、5,632,417,295-byte 声明总量和 Git/LFS 完整性标识。
+- Connector 只接受 `namespace/name` 与完整小写 40 位 commit，固定 `blobs=true`、4 MiB/1,024 文件上限、不跟随重定向或重试，并显式关闭凭据面；输出排除作者、下载量、点赞、Spaces、widget/card data、请求 ID 和 raw payload，且不下载或执行模型文件。
+- 新增 proposal-only Collector 持续观察模型公开/gated/disabled 状态、分类、完整文件摘要、官方 `api` RateLimit 契约、fixture 消失和验证过期。完整闭环更新为 15（Information Source 4；Platform 10；Service 1），Subject 12，Capability 15。

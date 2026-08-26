@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "dsh.probe-report/v1",
+  "id": "hugging-face-public-model-revision-live-20260826",
+  "capabilityRef": "/capabilities/hugging-face/read-public-model-revision-manifest.md",
+  "connectorId": "hugging-face-public-model-revision",
+  "probeDefinitionRef": "repo:/probes/definitions/hugging-face-public-model-revision-live.json",
+  "environment": "production-public",
+  "level": "live",
+  "outcome": "passed",
+  "startedAt": "2026-08-26T21:09:16.148Z",
+  "finishedAt": "2026-08-26T21:09:16.748Z",
+  "expiresAt": "2026-09-02T21:09:16.748Z",
+  "checks": [
+    { "id": "exact-repository-and-commit", "status": "passed" },
+    { "id": "public-ungated-enabled-model", "status": "passed" },
+    { "id": "complete-bounded-file-manifest", "status": "passed" },
+    { "id": "file-integrity-identities", "status": "passed" },
+    { "id": "official-api-rate-bucket", "status": "passed" },
+    { "id": "personal-and-popularity-fields-excluded", "status": "passed" },
+    { "id": "fixture-identity", "status": "passed" },
+    { "id": "fixture-classification", "status": "passed" },
+    { "id": "fixture-file-manifest", "status": "passed" },
+    { "id": "data-minimization", "status": "passed" }
+  ],
+  "evidence": [
+    {
+      "kind": "snapshot",
+      "ref": "repo:/knowledge/verifications/hugging-face/public-model-revision/snapshot.json",
+      "sha256": "ca360e50d89293aa26d768c7d8db93bbad0e620fced336c2cb2e2562617a4210"
+    }
+  ],
+  "sideEffects": [{ "effect": "none", "status": "none" }]
+}

@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "hugging-face-public-model-revision",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/hugging-face/read-public-model-revision-manifest.md"],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "connectors/hugging-face-public-model-revision/src/index.mjs"
+  },
+  "configSchema": "repo:/connectors/hugging-face-public-model-revision/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [
+    {
+      "capabilityRef": "/capabilities/hugging-face/read-public-model-revision-manifest.md",
+      "operation": "readPublicModelRevisionManifest"
+    }
+  ],
+  "conformance": {
+    "status": "verified",
+    "probeReportRef": "/verifications/hugging-face/public-model-revision/report.json"
+  }
+}

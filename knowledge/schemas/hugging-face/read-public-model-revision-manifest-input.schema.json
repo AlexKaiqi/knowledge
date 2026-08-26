@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/hugging-face/read-public-model-revision-manifest-input.schema.json",
+  "title": "ReadHuggingFacePublicModelRevisionManifestInput",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["repoId", "commitSha"],
+  "properties": {
+    "repoId": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 96,
+      "pattern": "^[A-Za-z0-9_][A-Za-z0-9._-]*/[A-Za-z0-9_][A-Za-z0-9._-]*$",
+      "description": "Exact namespace/name; the Connector additionally rejects '..', '--', '.git', and invalid segment boundaries."
+    },
+    "commitSha": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{40}$",
+      "description": "Full lowercase Git commit hash; branches, tags and abbreviations are rejected."
+    }
+  }
+}
