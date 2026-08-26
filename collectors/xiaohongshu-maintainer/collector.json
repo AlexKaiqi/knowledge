@@ -1,7 +1,7 @@
 {
   "schemaVersion": "dsh.collector-definition/v1",
   "id": "xiaohongshu-maintainer",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "projectCatalogRef": "repo:/collectors/xiaohongshu-maintainer/projects.json",
   "scope": {
     "knowledgeGlobs": [
@@ -10,10 +10,11 @@
       "knowledge/capabilities/xiaohongshu/*.md",
       "knowledge/verifications/xiaohongshu/**/*.json"
     ],
-    "connectorIds": ["xiaohongshu-browser"],
+    "connectorIds": ["xiaohongshu-browser", "github-public-repository-search"],
     "capabilityRefs": [
       "/capabilities/xiaohongshu/publish-private-note-and-observe.md",
-      "/capabilities/xiaohongshu/list-owned-notes.md"
+      "/capabilities/xiaohongshu/list-owned-notes.md",
+      "/capabilities/github/search-public-repositories.md"
     ]
   },
   "triggers": [
@@ -44,7 +45,7 @@
     ]
   },
   "probePolicy": {
-    "allowedEnvironments": ["local", "production-private"],
+    "allowedEnvironments": ["local", "production-public", "production-private"],
     "identityPoolRefs": [],
     "maximumEffect": "platform-write"
   },

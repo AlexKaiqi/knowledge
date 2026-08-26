@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { collectXiaohongshuMaintenance, evaluateRenderedSemanticObservation, isProjectReviewDue, officialSources } from '../src/index.mjs'
+import { collectXiaohongshuMaintenance, discoverEcosystemProjects, evaluateRenderedSemanticObservation, isProjectReviewDue, isRelevantDiscoveryCandidate, officialSources, selectDiscoveryQueries } from '../src/index.mjs'
 
 const pinnedRouteHeads = {
   'https://github.com/xpzouying/xiaohongshu-mcp.git': '6fb866a7db4e3dcce8dc00a0dde07370f3b12946',
@@ -14,6 +14,13 @@ const pinnedRouteHeads = {
 
 const currentRouteHead = async (repository) => pinnedRouteHeads[repository]
 const currentProjectHead = async (_repository, _branch, project) => project.observedRevision
+const currentDiscovery = async ({ query, page, perPage }) => ({
+  query: { query, page, perPage, sort: 'best-match', order: 'desc' },
+  coverage: { representation: 'ranked-page', totalCount: 0, returnedCount: 0, incompleteResults: false, accessibleResultCount: 0, resultWindowLimit: 1000, pageExhausted: true, ecosystemComplete: false },
+  repositories: [],
+  rateLimit: { resource: 'search', limit: 10, remaining: 9, resetAt: '2026-08-26T00:01:00Z' },
+  conformance: { status: 'passed', assertions: [] },
+})
 
 test('rendered browser observations are evaluated against reviewed semantic facts', () => {
   const source = officialSources.find((entry) => entry.id === 'share-sdk-qa')
@@ -27,8 +34,50 @@ test('project review cadence is independent of upstream HEAD drift', () => {
   assert.equal(isProjectReviewDue(project, new Date('2026-08-08T00:00:00Z')), true)
 })
 
+test('discovery rotation covers all ten queries in five UTC days', () => {
+  const queries = Array.from({ length: 10 }, (_, index) => `query-${index}`)
+  const selected = new Set()
+  for (let day = 0; day < 5; day += 1) {
+    for (const query of selectDiscoveryQueries(queries, new Date(Date.UTC(2026, 7, 20 + day)))) selected.add(query)
+  }
+  assert.deepEqual([...selected].sort(), queries)
+})
+
+test('discovery relevance rejects xhs/rednote name collisions', () => {
+  assert.equal(isRelevantDiscoveryCandidate({ fullName: 'w446108264/XhsWelcomeAnim', description: '小红书欢迎引导第二版' }), false)
+  assert.equal(isRelevantDiscoveryCandidate({ fullName: 'jendrikseipp/rednotebook', description: 'cross-platform journal' }), false)
+  assert.equal(isRelevantDiscoveryCandidate({ fullName: 'ReaJason/xhs', description: 'request wrapper' }), true)
+  assert.equal(isRelevantDiscoveryCandidate({ fullName: 'iFurySt/RedNote-MCP', description: 'MCP server' }), true)
+  assert.equal(isRelevantDiscoveryCandidate({ fullName: 'example/tool', description: '小红书搜索工具' }), true)
+})
+
+test('ecosystem discovery is serial, bounded and deduplicates unseen repositories', async () => {
+  let inFlight = 0
+  let maximumInFlight = 0
+  let calls = 0
+  const repositorySearch = async () => {
+    calls += 1
+    inFlight += 1
+    maximumInFlight = Math.max(maximumInFlight, inFlight)
+    await Promise.resolve()
+    inFlight -= 1
+    return {
+      coverage: { representation: 'ranked-page', ecosystemComplete: false },
+      rateLimit: { resource: 'search', remaining: 8 },
+      repositories: [{ fullName: 'example/new-xhs-tool', url: 'https://github.com/example/new-xhs-tool', description: 'xhs tool', defaultBranch: 'main', licenseSpdx: 'MIT', archived: false, disabled: false, pushedAt: '2026-08-26T00:00:00Z' }],
+      conformance: { status: 'passed', assertions: [] },
+    }
+  }
+  const result = await discoverEcosystemProjects({ queries: ['xiaohongshu', 'xhs'], repositorySearch, projectCatalog: { projects: [] } })
+  assert.equal(calls, 2)
+  assert.equal(maximumInFlight, 1)
+  assert.equal(result.newCandidates.length, 1)
+  assert.deepEqual(result.newCandidates[0].matchedQueries, ['xiaohongshu', 'xhs'])
+})
+
 test('maintainer is proposal-only and cannot promote an unverified connector', async () => {
   const report = await collectXiaohongshuMaintenance({
+    repositorySearch: currentDiscovery,
     sourceCheck: async (source) => ({ ...source, status: 'reachable', httpStatus: 200 }),
     upstreamHead: currentRouteHead,
     projectHead: currentProjectHead,
@@ -47,7 +96,10 @@ test('maintainer is proposal-only and cannot promote an unverified connector', a
   assert.ok(report.blockers.includes('capability-not-admitted'))
   assert.equal(report.accessRoutes.automaticEligible.length, 0)
   assert.equal(report.accessRoutes.upstreams.length, 7)
-  assert.equal(report.ecosystemProjects.total, 18)
+  assert.equal(report.ecosystemProjects.total, 24)
+  assert.equal(report.ecosystemProjects.discovery.queries.length, 2)
+  assert.equal(report.ecosystemProjects.discovery.fullCycleDays, 5)
+  assert.equal(report.ecosystemProjects.discovery.newCandidates.length, 0)
   assert.ok(report.ecosystemProjects.dependencyBlocked.includes('jackwener-xiaohongshu-cli'))
   assert.equal(report.ecosystemProjects.adoptableCandidates.includes('jackwener-xiaohongshu-cli'), false)
   assert.equal(report.nextRequiredGate, 'explicit-live-probe-approval')
@@ -55,6 +107,7 @@ test('maintainer is proposal-only and cannot promote an unverified connector', a
 
 test('maintainer proposes a new probe when a verified capability report expires', async () => {
   const report = await collectXiaohongshuMaintenance({
+    repositorySearch: currentDiscovery,
     sourceCheck: async (source) => ({ ...source, status: 'reachable', httpStatus: 200 }),
     upstreamHead: currentRouteHead,
     projectHead: currentProjectHead,
@@ -67,6 +120,7 @@ test('maintainer proposes a new probe when a verified capability report expires'
 
 test('maintainer reports upstream drift for review without repinning', async () => {
   const report = await collectXiaohongshuMaintenance({
+    repositorySearch: currentDiscovery,
     sourceCheck: async (source) => ({ ...source, status: 'reachable', httpStatus: 200 }),
     upstreamHead: async () => 'f'.repeat(40),
     projectHead: currentProjectHead,
@@ -83,6 +137,7 @@ test('maintainer reports upstream drift for review without repinning', async () 
 
 test('maintainer preserves an unreachable research route as a proposal instead of hiding it', async () => {
   const report = await collectXiaohongshuMaintenance({
+    repositorySearch: currentDiscovery,
     sourceCheck: async (source) => ({ ...source, status: 'reachable', httpStatus: 200 }),
     upstreamHead: async (repository) => {
       if (repository.includes('opencli')) throw new Error('network unavailable')
@@ -101,6 +156,7 @@ test('maintainer preserves an unreachable research route as a proposal instead o
 
 test('maintainer proposes review when an official semantic fingerprint changes', async () => {
   const report = await collectXiaohongshuMaintenance({
+    repositorySearch: currentDiscovery,
     sourceCheck: async (source) => ({
       id: source.id,
       url: source.url,
@@ -123,6 +179,7 @@ test('maintainer proposes review when an official semantic fingerprint changes',
 
 test('maintainer keeps project drift separate from live route health', async () => {
   const report = await collectXiaohongshuMaintenance({
+    repositorySearch: currentDiscovery,
     sourceCheck: async (source) => ({ ...source, status: 'reachable', httpStatus: 200 }),
     upstreamHead: currentRouteHead,
     projectHead: async (_repository, _branch, project) => project.id === 'jackwener-xiaohongshu-cli' ? 'f'.repeat(40) : project.observedRevision,

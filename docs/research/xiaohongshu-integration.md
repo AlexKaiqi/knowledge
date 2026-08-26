@@ -147,11 +147,12 @@ effect：platform-write
 - 检查 route lifecycle、契约覆盖缺口、共同故障域与 probe 状态；只有 `verified + full + healthy` 可进入自动选择；
 - 检查本机二进制存在性；
 - 检查 Connector conformance 与 canonical Capability 是否一致；
+- 通过已验证的 GitHub 公共仓库搜索 Connector，每次串行运行 2 个关键词，5 个 UTC 日覆盖全部 10 个查询；结果只生成去重的 triage proposal；
 - 上游变化只生成“审计后再 repin”的 proposal，不自动升级；
 - 失败执行触发 reconcile proposal，不自动重发；
 - live probe 永远需要显式批准，Collector 不得自行发布。
 
-此外，`projects.json` 保存经代码与许可证核验的开源生态目录。目前记录 18 个项目，来源关键词包括 `xiaohongshu`、`小红书`、`xhs`、`rednote`、MCP、自动发布、crawler 和 creator analytics。项目按职责分成：
+此外，`projects.json` 保存经代码与许可证核验的开源生态目录。目前记录 24 个项目，来源关键词包括 `xiaohongshu`、`小红书`、`xhs`、`rednote`、MCP、自动发布、crawler 和 creator analytics。项目按职责分成：
 
 - **Connector candidate**：可能承担发布或观察阶段；只有少数会提升为 route；
 - **Collector candidate**：搜索、详情、评论、创作者数据或被动页面观测；
@@ -160,6 +161,10 @@ effect：platform-write
 - **Blocked / excluded**：缺许可证或目标为 `rednote.com` 等不匹配范围，保留记录以避免反复误选。
 
 重点 Collector 候选包括：OpenWeb 的适配传输与结构化详情/评论、MediaCrawler 的搜索/创作者/评论采集、Apache-2.0 的 `tamnd/xiaohongshu-cli` 签名读取路径、MIT 的被动浏览器采集扩展，以及 `xhs-toolkit` / XiaohongshuSkills 的创作者数据面。MediaCrawler 使用非商业学习许可证，只能作为研究参考，不能因开源可见就进入通用生产依赖。
+
+2026-08-27 的轮换搜索新增审计 6 个高相关候选：`JoeanAmier/XHS-Downloader`（GPL-3.0，API/MCP/下载面，仅研究）、`ReaJason/xhs`（MIT，签名请求封装）、`iFurySt/RedNote-MCP`（MIT，Playwright 搜索/详情）、`JonaFly/RednoteMCP`（无许可证且含自动引流评论，blocked）、`cv-cat/Spider_XHS`（README 显示 MIT badge 但根目录无 LICENSE，且覆盖逆向签名、手机号与平台写，blocked）、`Xiangyu-CAS/xiaohongshu-ops-skill`（无许可证且包含发布/自动回复，blocked）。许可证可用只解除代码版权门，不代表平台允许内部 API、Cookie、采集、下载或自动化。
+
+发现阶段先做双条件相关性过滤：一侧必须出现 `xiaohongshu`、`小红书`、独立 token `xhs` 或 `rednote`，另一侧还必须出现 MCP/API/SDK/CLI、采集、发布、搜索、评论、下载、自动化等 Connector/Collector 能力词；只有仓库名精确为 `xhs` / `xiaohongshu` / `rednote` 时允许省略能力词。因此 `XhsWelcomeAnim` 与 `rednotebook` 等同名碰撞不会进入 triage。每个查询只观察排序前 10 项、最多提出 5 项新候选，且始终保留 `ecosystemComplete=false`。GitHub Search 失败或限流不会重试，也不会退回网页抓取。
 
 持续关注规则：高优先级项目 7 天复审，中优先级 14 天，低优先级 30 天。确定性入口每日比较 branch HEAD 并计算复审到期；任一信号生成 proposal 后，再由审阅流程检查 release、issue、license、archived、能力文档和相关代码差异。研究项目变化不会直接把已验证 route 判死，但 route 所绑定的同一 revision 漂移仍是 capability blocker。
 
@@ -193,8 +198,9 @@ effect：platform-write
 - 上游 `go test ./...` 通过；
 - 候选 Connector、持久防重 ledger、去身份化反馈和 conformance tests；
 - proposal-only Collector 与 live probe 定义。
-- 10 条 access route（完整候选、研究、降级、恢复和组件）与 18 项开源生态 watch catalog；
-- 7 个 route 上游和 18 个研究项目的独立 HEAD/复审观测；
+- 10 条 access route（完整候选、研究、降级、恢复和组件）与 24 项开源生态 watch catalog；
+- 7 个 route 上游和 24 个研究项目的独立 HEAD/复审观测；
+- GitHub 关键词轮换发现：每次 2 个、5 天覆盖 10 个查询，串行调用并在匿名 Search 配额内运行；
 
 平台读取闭环已完成：
 

@@ -5,12 +5,16 @@ import path from 'node:path'
 import process from 'node:process'
 import { promisify } from 'node:util'
 import { fileURLToPath } from 'node:url'
+import { searchPublicRepositories } from '../../../connectors/github-public-repository-search/src/index.mjs'
 
 const exec = promisify(execFile)
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..')
 
 const sourceWatchList = JSON.parse(await readFile(path.join(repositoryRoot, 'collectors/xiaohongshu-maintainer/sources.json'), 'utf8'))
 export const officialSources = sourceWatchList.sources
+export const DISCOVERY_QUERIES_PER_RUN = 2
+const DISCOVERY_RESULTS_PER_QUERY = 10
+const DISCOVERY_CANDIDATES_PER_QUERY = 5
 
 async function readJson(file) {
   return JSON.parse(await readFile(file, 'utf8'))
@@ -57,6 +61,73 @@ export function isProjectReviewDue(project, observedAt) {
   const lastReviewed = new Date(project.watch.lastReviewedAt).getTime()
   const cadenceMs = project.watch.reviewCadenceDays * 24 * 60 * 60 * 1000
   return observedAt.getTime() >= lastReviewed + cadenceMs
+}
+
+export function selectDiscoveryQueries(searchQueries, observedAt, count = DISCOVERY_QUERIES_PER_RUN) {
+  if (!Array.isArray(searchQueries) || searchQueries.length === 0) return []
+  const dayIndex = Math.floor(observedAt.getTime() / (24 * 60 * 60 * 1000))
+  const start = (dayIndex * count) % searchQueries.length
+  return Array.from({ length: Math.min(count, searchQueries.length) }, (_, offset) => searchQueries[(start + offset) % searchQueries.length])
+}
+
+function canonicalRepositoryUrl(url) {
+  return url.replace(/\.git$/i, '').replace(/\/$/, '').toLowerCase()
+}
+
+export function isRelevantDiscoveryCandidate(repository) {
+  const text = [repository.fullName, repository.description, ...(repository.topics ?? [])].filter(Boolean).join(' ').toLowerCase()
+  const platformMatch = text.includes('xiaohongshu') || text.includes('小红书') || /\bxhs\b/i.test(text) || /\brednote\b/i.test(text)
+  const capabilityMatch = /\b(mcp|api|sdk|cli|client|wrapper|crawler|scraper|spider|download(?:er)?|publish|search|comment|creator|tool|toolkit|automation|auto|skill|ops|collector)\b/i.test(text)
+    || /(采集|发布|搜索|笔记|评论|运营|下载|爬虫|接口|自动化?)/.test(text)
+  const exactPlatformRepositoryName = /\/(?:xhs|xiaohongshu|rednote)$/i.test(repository.fullName)
+  return platformMatch && (capabilityMatch || exactPlatformRepositoryName)
+}
+
+export async function discoverEcosystemProjects({ queries, repositorySearch, projectCatalog }) {
+  const known = new Set(projectCatalog.projects.map((project) => canonicalRepositoryUrl(project.repository)))
+  const observations = []
+  const candidates = new Map()
+  for (const query of queries) {
+    try {
+      const result = await repositorySearch({ query, page: 1, perPage: DISCOVERY_RESULTS_PER_QUERY })
+      observations.push({
+        query,
+        status: result.conformance.status === 'passed' ? 'current' : 'review-required',
+        coverage: result.coverage,
+        rateLimit: result.rateLimit,
+        returnedCount: result.repositories.length,
+      })
+      for (const repository of result.repositories.slice(0, DISCOVERY_CANDIDATES_PER_QUERY)) {
+        if (!isRelevantDiscoveryCandidate(repository)) continue
+        const repositoryKey = canonicalRepositoryUrl(repository.url)
+        if (known.has(repositoryKey)) continue
+        const existing = candidates.get(repositoryKey)
+        if (existing) {
+          existing.matchedQueries.push(query)
+          continue
+        }
+        candidates.set(repositoryKey, {
+          fullName: repository.fullName,
+          url: repository.url,
+          description: repository.description,
+          defaultBranch: repository.defaultBranch,
+          licenseSpdx: repository.licenseSpdx,
+          archived: repository.archived,
+          disabled: repository.disabled,
+          pushedAt: repository.pushedAt,
+          matchedQueries: [query],
+        })
+      }
+    } catch (error) {
+      observations.push({ query, status: 'unreachable', detail: error.message })
+    }
+  }
+  const status = observations.every((observation) => observation.status === 'current')
+    ? 'current'
+    : observations.every((observation) => observation.status === 'unreachable')
+      ? 'unreachable'
+      : 'review-required'
+  return { status, queries, observations, newCandidates: [...candidates.values()] }
 }
 
 async function defaultSourceCheck(source, fetchImpl, renderedObservation) {
@@ -120,6 +191,7 @@ export async function collectXiaohongshuMaintenance({
   now = () => new Date(),
   runtimeRoot = path.join(repositoryRoot, '.runtime/xiaohongshu-browser'),
   renderedSourceObservations = {},
+  repositorySearch = searchPublicRepositories,
 } = {}) {
   const upstream = JSON.parse(await readFile(path.join(repositoryRoot, 'connectors/xiaohongshu-browser/upstream.json'), 'utf8'))
   const connector = JSON.parse(await readFile(path.join(repositoryRoot, 'connectors/xiaohongshu-browser/connector.json'), 'utf8'))
@@ -127,7 +199,8 @@ export async function collectXiaohongshuMaintenance({
   const projectCatalog = JSON.parse(await readFile(path.join(repositoryRoot, 'collectors/xiaohongshu-maintainer/projects.json'), 'utf8'))
   const upstreamRoutes = routeCatalog.routes.filter((route) => route.upstream)
   const observedAtDate = now()
-  const [sources, routeUpstreams, projects, artifacts] = await Promise.all([
+  const discoveryQueries = selectDiscoveryQueries(projectCatalog.searchQueries, observedAtDate)
+  const [sources, routeUpstreams, projects, artifacts, discovery] = await Promise.all([
     Promise.all(officialSources.map((source) => sourceCheck(source, fetchImpl, renderedSourceObservations[source.id]))),
     Promise.all(upstreamRoutes.map(async (route) => {
       try {
@@ -189,6 +262,7 @@ export async function collectXiaohongshuMaintenance({
       }
     })),
     artifactCheck(runtimeRoot),
+    discoverEcosystemProjects({ queries: discoveryQueries, repositorySearch, projectCatalog }),
   ])
   const canonicalCapabilityPath = path.join(repositoryRoot, 'knowledge/capabilities/xiaohongshu/publish-private-note-and-observe.md')
   const canonicalReadCapabilityPath = path.join(repositoryRoot, 'knowledge/capabilities/xiaohongshu/list-owned-notes.md')
@@ -225,6 +299,8 @@ export async function collectXiaohongshuMaintenance({
   if (sources.some((source) => source.fingerprintStatus === 'review-required')) blockers.push('official-source-content-changed')
   if (sources.some((source) => source.semanticStatus === 'failed')) blockers.push('official-source-semantic-assertion-failed')
   if (artifacts.some((artifact) => artifact.status !== 'present')) blockers.push('local-runtime-not-built')
+  if (discovery.status === 'unreachable') blockers.push('ecosystem-discovery-unreachable')
+  else if (discovery.status === 'review-required') blockers.push('ecosystem-discovery-review-required')
   const verificationProposals = []
   for (const binding of capabilityConformance) {
     if (binding.verificationStatus === 'expired') {
@@ -259,6 +335,9 @@ export async function collectXiaohongshuMaintenance({
     }
     if (project.reviewDue) projectProposals.push({ kind: 'connector-change-proposal', projectId: project.id, action: 'scheduled-project-review' })
   }
+  if (discovery.status === 'unreachable') projectProposals.push({ kind: 'connector-change-proposal', action: 'restore-ecosystem-discovery', queries: discovery.queries })
+  else if (discovery.status === 'review-required') projectProposals.push({ kind: 'connector-change-proposal', action: 'review-ecosystem-discovery-contract', queries: discovery.queries })
+  if (discovery.newCandidates.length > 0) projectProposals.push({ kind: 'connector-change-proposal', action: 'triage-new-ecosystem-projects', candidates: discovery.newCandidates })
   return {
     schemaVersion: 'knowledge.maintenance-report/v1',
     subject: 'xiaohongshu',
@@ -292,6 +371,12 @@ export async function collectXiaohongshuMaintenance({
       dependencyBlocked: projects.filter((project) => project.license.dependencyUse === 'blocked').map((project) => project.id),
       researchOnly: projects.filter((project) => project.license.dependencyUse === 'research-only').map((project) => project.id),
       observations: projects,
+      discovery: {
+        connectorId: 'github-public-repository-search',
+        queriesPerRun: DISCOVERY_QUERIES_PER_RUN,
+        fullCycleDays: Math.ceil(projectCatalog.searchQueries.length / DISCOVERY_QUERIES_PER_RUN),
+        ...discovery,
+      },
     },
     connector: { id: connector.id, conformance: connector.conformance.status, capabilityConformance, artifacts },
     canonicalCapability,

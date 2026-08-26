@@ -30,3 +30,5 @@ title: Knowledge bundle history
 - 搜索输出固定为有界 `ranked-page`，显式保留 Search 限流、`incomplete_results` 和 1,000 条窗口，并将 `ecosystemComplete` 固定为 false。
 - 增加 proposal-only Collector，持续检查 API conformance、验证过期，以及 fixture 的归档、禁用、许可、可见性和默认分支变化。
 - 完整可用闭环、已准入 Subject 和已准入 Capability 均更新为 5。
+- 小红书 Collector 接入已验证的 GitHub 搜索 Connector；每次串行发现 2 个关键词，5 天轮换覆盖全部 10 个查询，并过滤 `xhs` / `rednote` 同名噪声。
+- 开源项目 watch catalog 从 18 项扩展到 24 项；新审计 6 项中 2 项保持 MIT researching、1 项 GPL research-only、3 项因缺许可证和高风险写行为 blocked。
