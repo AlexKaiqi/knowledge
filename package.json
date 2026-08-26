@@ -26,6 +26,7 @@
     "xhs:community-rules:maintain": "node collectors/xiaohongshu-community-rules-maintainer/src/index.mjs",
     "douyin:open-platform:probe": "node scripts/probe-douyin-open-platform-docs.mjs",
     "douyin:open-platform:maintain": "node collectors/douyin-open-platform-docs-maintainer/src/index.mjs",
+    "douyin:maintain": "node collectors/douyin-maintainer/src/index.mjs",
     "github:repositories:probe": "node scripts/probe-github-public-repository-search.mjs",
     "github:repositories:maintain": "node collectors/github-public-repository-search-maintainer/src/index.mjs"
   },

@@ -73,14 +73,16 @@ Subject knowledge
 已准入 Subject：5
 已准入 Capability：5
 Connector：4 个已验证；xiaohongshu-browser 为 mixed（读取已验证、发布候选）
-维护 Collector：5
+维护 Collector：6
 ```
 
 小红书已有三个真实闭环：官方账号 API 参考、浏览器渲染的社区公约信息源，以及通过自有账号会话读取本人笔记列表的平台能力。后者 live probe 实际返回可用的空列表。笔记发布、详情反查与反馈采集仍是候选能力，尚未完成真实私密发布闭环。仓库不创建空的平台、Connector 或 Collector 占位。
 
 小红书维护 Collector 还管理 24 个已审计开源项目，并消费已验证的 GitHub 搜索 Connector 做关键词轮换发现：每次串行查询 2 个关键词、5 天覆盖 10 个查询，只生成去重 triage proposal，不自动安装、路由或接受第三方许可证。
 
-抖音已有一个真实闭环：无需身份读取并语义校验官方开放平台文档。它只是一条 Information Source 能力；应用审核、scope、用户授权和真实业务调用尚未验证，所以抖音 Platform 能力仍为 0。非官方 MediaCrawler 路线受许可证与登录状态约束，未被计为可用闭环。
+抖音已有一个真实闭环：无需身份读取并语义校验官方开放平台文档。它只是一条 Information Source 能力；应用审核、scope、用户授权和真实业务调用尚未验证，所以抖音 Platform 能力仍为 0。
+
+抖音维护 Collector 当前管理 24 个固定提交的开源项目和 10 条访问路线，区分官方 OpenAPI、创作者中心发布、草稿准备、公开 Web 研究、自有创作者数据与人工恢复。每次串行查询 2 个关键词、5 天覆盖 10 个查询；同时观察项目和路线 HEAD。所有路线仍为 `researching`/`degraded`，自动选择数为 0。MediaCrawler 的受限许可证、`social-media-copilot` 的许可证冲突、无许可证项目和“点击即成功”实现都被显式阻断，Collector 不会自动安装、登录、接受许可证或升级路线。
 
 GitHub 已有一个真实 Platform 闭环：通过官方 REST API、无需身份搜索公共仓库。输出强制声明排序分页、1,000 条结果窗口、`incomplete_results` 和 Search 限流状态；它只能发现候选，不能证明生态完整、项目许可证可用或项目能力可执行。
 

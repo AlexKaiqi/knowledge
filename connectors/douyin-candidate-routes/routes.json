@@ -1,0 +1,183 @@
+{
+  "schemaVersion": "dsh.access-route-catalog/v1",
+  "id": "douyin-candidate-access-routes",
+  "subjectRef": "/platforms/douyin.md",
+  "capabilityRefs": [
+    "/capabilities/douyin/prepare-video-draft.md",
+    "/capabilities/douyin/publish-video-and-reconcile.md",
+    "/capabilities/douyin/search-public-content.md",
+    "/capabilities/douyin/read-owned-creator-analytics.md",
+    "/capabilities/douyin/read-public-video-metadata.md"
+  ],
+  "routes": [
+    {
+      "id": "official-open-platform",
+      "lifecycle": "researching",
+      "contractLevel": "full",
+      "accessMethod": "official-api",
+      "automaticSelectionEligible": false,
+      "priority": 10,
+      "capabilityCoverage": [
+        { "capabilityRef": "/capabilities/douyin/publish-video-and-reconcile.md", "phases": ["authorize", "prepare", "submit", "reconcile", "observe"], "gaps": ["Requires an approved application, granted scopes, server-side tokens and a user-authorized live probe; documentation alone does not prove callable access."] },
+        { "capabilityRef": "/capabilities/douyin/search-public-content.md", "phases": ["authorize", "observe"], "gaps": ["Actual search scope approval and response coverage are unverified."] },
+        { "capabilityRef": "/capabilities/douyin/read-owned-creator-analytics.md", "phases": ["authorize", "observe"], "gaps": ["Actual data-service scopes and identity coverage are unverified."] }
+      ],
+      "failureDomains": ["douyin-open-platform", "application-approval", "oauth-session", "scope-grant", "api-contract"],
+      "sourceRefs": [
+        "https://developer.open-douyin.com/docs/resource/zh-CN/dop/develop/openapi/list/",
+        "https://open.douyin.com/platform/resource/docs/ability/content-management/douyin-publish-solution/"
+      ],
+      "maintenance": { "owner": "douyin-maintainer", "reviewOn": ["source-change", "probe-failure", "contract-gap-change", "manual"] },
+      "notes": "Preferred failure domain when credentials and scopes become available; never replaced by documentation-only confidence."
+    },
+    {
+      "id": "creator-browser-broadcast-kit",
+      "lifecycle": "researching",
+      "contractLevel": "full",
+      "accessMethod": "browser-assisted",
+      "automaticSelectionEligible": false,
+      "priority": 20,
+      "capabilityCoverage": [
+        { "capabilityRef": "/capabilities/douyin/publish-video-and-reconcile.md", "phases": ["authorize", "prepare", "submit", "reconcile", "observe"], "gaps": ["The generic dispatcher can bypass the platform CLI truth gates; package license metadata must be corrected; no local live probe exists."] }
+      ],
+      "failureDomains": ["douyin-creator-center", "creator-center-dom", "playwright-runtime", "local-browser-session"],
+      "sourceRefs": ["https://github.com/ChronoAIProject/broadcast-kit"],
+      "upstream": { "repository": "https://github.com/ChronoAIProject/broadcast-kit.git", "branch": "main", "observedRevision": "94cf038f7ed65f0b6d351368c7236ba6faaf9849" },
+      "maintenance": { "owner": "douyin-maintainer", "reviewOn": ["upstream-change", "source-change", "probe-failure", "contract-gap-change", "manual"] },
+      "notes": "Best existing full-route candidate after a narrow truth-gate patch."
+    },
+    {
+      "id": "creator-browser-humanized-publisher",
+      "lifecycle": "researching",
+      "contractLevel": "full",
+      "accessMethod": "browser-assisted",
+      "automaticSelectionEligible": false,
+      "priority": 25,
+      "capabilityCoverage": [
+        { "capabilityRef": "/capabilities/douyin/publish-video-and-reconcile.md", "phases": ["authorize", "prepare", "submit", "reconcile", "observe"], "gaps": ["Creator-management title/body matching is not a stable platform ID receipt and has not passed local conformance or a live probe."] }
+      ],
+      "failureDomains": ["douyin-creator-center", "creator-center-dom", "playwright-runtime", "local-browser-session"],
+      "sourceRefs": ["https://github.com/lincwang123-bot/humanized-social-publisher", "https://github.com/lincwang123-bot/humanized-social-publisher/blob/main/src/publishers/douyin.py"],
+      "upstream": { "repository": "https://github.com/lincwang123-bot/humanized-social-publisher.git", "branch": "main", "observedRevision": "393d67d2e13354874177584f8a796ab570cae0c1" },
+      "maintenance": { "owner": "douyin-maintainer", "reviewOn": ["upstream-change", "source-change", "probe-failure", "contract-gap-change", "manual"] },
+      "notes": "Independent implementation with an explicit post-click creator-management reconciliation gate."
+    },
+    {
+      "id": "creator-cdp-wjz",
+      "lifecycle": "researching",
+      "contractLevel": "degraded",
+      "accessMethod": "browser-assisted",
+      "automaticSelectionEligible": false,
+      "priority": 30,
+      "capabilityCoverage": [
+        { "capabilityRef": "/capabilities/douyin/publish-video-and-reconcile.md", "phases": ["authorize", "prepare", "submit"], "gaps": ["The current code returns ok=true after a missing toast and has no creator-management reconciliation or platform receipt."] }
+      ],
+      "failureDomains": ["douyin-creator-center", "creator-center-dom", "browser-cdp", "local-browser-session", "false-success"],
+      "sourceRefs": ["https://github.com/WJZ-P/douyin-upload-mcp-skill", "https://github.com/WJZ-P/douyin-upload-mcp-skill/blob/main/src/douyin-ops.js"],
+      "upstream": { "repository": "https://github.com/WJZ-P/douyin-upload-mcp-skill.git", "branch": "main", "observedRevision": "996d75d1e600d9d29c831b7b21b52da2dff325f7" },
+      "maintenance": { "owner": "douyin-maintainer", "reviewOn": ["upstream-change", "contract-gap-change", "manual"] },
+      "notes": "Different browser control runtime, but not eligible even as fallback until false-success is removed."
+    },
+    {
+      "id": "creator-draft-video-publisher-skill",
+      "lifecycle": "researching",
+      "contractLevel": "component",
+      "accessMethod": "browser-assisted",
+      "automaticSelectionEligible": false,
+      "priority": 40,
+      "capabilityCoverage": [
+        { "capabilityRef": "/capabilities/douyin/prepare-video-draft.md", "phases": ["authorize", "prepare", "observe"], "gaps": ["Depends on Ego Lite and has not passed local conformance; it intentionally never performs final publish."] }
+      ],
+      "failureDomains": ["douyin-creator-center", "creator-center-dom", "ego-lite-runtime", "local-browser-session"],
+      "sourceRefs": ["https://github.com/oil-oil/video-publisher-skill"],
+      "upstream": { "repository": "https://github.com/oil-oil/video-publisher-skill.git", "branch": "main", "observedRevision": "eb297bc1c1c5a61d46fb2e04453cbeeeebb1de59" },
+      "maintenance": { "owner": "douyin-maintainer", "reviewOn": ["upstream-change", "source-change", "probe-failure", "contract-gap-change", "manual"] },
+      "notes": "Strong prepare-and-verify component whose READY state explicitly means reviewable draft, not published content."
+    },
+    {
+      "id": "creator-draft-browser-extension",
+      "lifecycle": "researching",
+      "contractLevel": "component",
+      "accessMethod": "browser-assisted",
+      "automaticSelectionEligible": false,
+      "priority": 45,
+      "capabilityCoverage": [
+        { "capabilityRef": "/capabilities/douyin/prepare-video-draft.md", "phases": ["authorize", "prepare"], "gaps": ["Human confirmation is required and there is no structured draft receipt or post-publish reconciliation."] }
+      ],
+      "failureDomains": ["douyin-creator-center", "creator-center-dom", "browser-extension", "interactive-chrome-session"],
+      "sourceRefs": ["https://github.com/xiaoliangliang/auto-publish"],
+      "upstream": { "repository": "https://github.com/xiaoliangliang/auto-publish.git", "branch": "main", "observedRevision": "ce5c3b46c96f5b28eb3c0823398ffac3ed652e93" },
+      "maintenance": { "owner": "douyin-maintainer", "reviewOn": ["upstream-change", "contract-gap-change", "manual"] },
+      "notes": "User-mediated recovery component, not an automatic full capability."
+    },
+    {
+      "id": "public-research-mediacrawler",
+      "lifecycle": "researching",
+      "contractLevel": "degraded",
+      "accessMethod": "signed-web-api",
+      "automaticSelectionEligible": false,
+      "priority": 60,
+      "capabilityCoverage": [
+        { "capabilityRef": "/capabilities/douyin/search-public-content.md", "phases": ["authorize", "observe", "cleanup"], "gaps": ["Restricted non-commercial learning license requires explicit acceptance for every use; observations are small-sample, non-official and identity/risk-control dependent."] }
+      ],
+      "failureDomains": ["douyin-public-web", "douyin-internal-api", "signature-algorithm", "playwright-profile", "account-risk-control"],
+      "sourceRefs": ["https://github.com/NanmiCoder/MediaCrawler"],
+      "upstream": { "repository": "https://github.com/NanmiCoder/MediaCrawler.git", "branch": "main", "observedRevision": "d6f7c5bb906b6dac40ddf343ef9e26438a3de092" },
+      "maintenance": { "owner": "douyin-maintainer", "reviewOn": ["upstream-change", "source-change", "probe-failure", "contract-gap-change", "manual"] },
+      "notes": "Collector monitors the project but never accepts its license, logs in or searches on the user's behalf."
+    },
+    {
+      "id": "owned-analytics-kuhakucai",
+      "lifecycle": "researching",
+      "contractLevel": "degraded",
+      "accessMethod": "signed-web-api",
+      "automaticSelectionEligible": false,
+      "priority": 65,
+      "capabilityCoverage": [
+        { "capabilityRef": "/capabilities/douyin/read-owned-creator-analytics.md", "phases": ["authorize", "observe", "cleanup"], "gaps": ["No runnable upstream test suite was found and no local identity-bound live probe exists."] }
+      ],
+      "failureDomains": ["douyin-creator-center", "douyin-internal-api", "cookie-session", "account-risk-control"],
+      "sourceRefs": ["https://github.com/Kuhakucai/douyin-mcp"],
+      "upstream": { "repository": "https://github.com/Kuhakucai/douyin-mcp.git", "branch": "main", "observedRevision": "53c888a5e1d83ea70978e71432ad8774707d69b7" },
+      "maintenance": { "owner": "douyin-maintainer", "reviewOn": ["upstream-change", "source-change", "probe-failure", "contract-gap-change", "manual"] },
+      "notes": "Owned-data route only; it must not be confused with public ecosystem research."
+    },
+    {
+      "id": "public-share-page-yzfly",
+      "lifecycle": "researching",
+      "contractLevel": "component",
+      "accessMethod": "browser-assisted",
+      "automaticSelectionEligible": false,
+      "priority": 80,
+      "capabilityCoverage": [
+        { "capabilityRef": "/capabilities/douyin/read-public-video-metadata.md", "phases": ["observe"], "gaps": ["Archived upstream and undocumented window._ROUTER_DATA HTML shape; no compliant live fixture has been established."] }
+      ],
+      "failureDomains": ["iesdouyin-share-page", "public-html-contract", "archived-upstream"],
+      "sourceRefs": ["https://github.com/yzfly/douyin-mcp-server", "https://github.com/yzfly/douyin-mcp-server/blob/main/douyin_mcp_server/server.py"],
+      "upstream": { "repository": "https://github.com/yzfly/douyin-mcp-server.git", "branch": "main", "observedRevision": "b0bb8b1fbe4f514bf28099b1471928ebb3716ad2" },
+      "maintenance": { "owner": "douyin-maintainer", "reviewOn": ["upstream-change", "source-change", "probe-failure", "contract-gap-change", "manual"] },
+      "notes": "Research reference for a metadata-only route; media download and transcription are deliberately outside this candidate contract."
+    },
+    {
+      "id": "creator-center-manual",
+      "lifecycle": "degraded",
+      "contractLevel": "recovery",
+      "accessMethod": "manual",
+      "automaticSelectionEligible": false,
+      "priority": 110,
+      "capabilityCoverage": [
+        { "capabilityRef": "/capabilities/douyin/prepare-video-draft.md", "phases": ["authorize", "prepare", "observe"], "gaps": ["Requires a human operator and cannot satisfy a deterministic Connector contract."] },
+        { "capabilityRef": "/capabilities/douyin/publish-video-and-reconcile.md", "phases": ["authorize", "prepare", "submit", "reconcile", "observe"], "gaps": ["Requires a human operator and cannot satisfy a deterministic Connector contract."] }
+      ],
+      "failureDomains": ["douyin-creator-center", "human-operator"],
+      "sourceRefs": ["https://creator.douyin.com"],
+      "maintenance": { "owner": "douyin-maintainer", "reviewOn": ["source-change", "manual"] },
+      "notes": "Recovery and ambiguous-outcome reconciliation path, never an automatic fallback."
+    }
+  ],
+  "selectionPolicy": {
+    "automaticRouteRequirements": { "lifecycles": ["verified"], "contractLevels": ["full"], "requireHealthy": true },
+    "platformWrite": { "stickyRoute": true, "preEffectFallback": "verified-compatible-only", "ambiguousOutcomeFallback": "forbidden", "postEffectRouteChange": "reconcile-first" },
+    "readOnly": { "fallback": "verified-compatible-only" }
+  }
+}

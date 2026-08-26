@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "dsh.collector-definition/v1",
+  "id": "douyin-maintainer",
+  "version": "0.1.0",
+  "projectCatalogRef": "repo:/collectors/douyin-maintainer/projects.json",
+  "scope": {
+    "knowledgeGlobs": [
+      "knowledge/platforms/douyin.md",
+      "knowledge/concepts/douyin/*.md",
+      "knowledge/capabilities/douyin/*.md",
+      "knowledge/verifications/douyin/**/*.json"
+    ],
+    "connectorIds": ["douyin-open-platform-docs", "github-public-repository-search"],
+    "capabilityRefs": [
+      "/capabilities/douyin/read-open-platform-surface.md",
+      "/capabilities/douyin/prepare-video-draft.md",
+      "/capabilities/douyin/publish-video-and-reconcile.md",
+      "/capabilities/douyin/search-public-content.md",
+      "/capabilities/douyin/read-owned-creator-analytics.md",
+      "/capabilities/douyin/read-public-video-metadata.md",
+      "/capabilities/github/search-public-repositories.md"
+    ]
+  },
+  "triggers": [
+    { "kind": "schedule", "schedule": "20 6 * * *" },
+    { "kind": "source-change" },
+    { "kind": "connector-change" },
+    { "kind": "failed-execution" },
+    { "kind": "manual" }
+  ],
+  "execution": { "kind": "deterministic", "runtime": "node >=22.19", "entrypoint": "collectors/douyin-maintainer/src/index.mjs" },
+  "outputs": ["knowledge-proposal", "connector-change-proposal", "verification-report"],
+  "writePolicy": { "mode": "proposal-only", "requiresApprovalFor": ["knowledge", "connector", "identity", "credential", "live-probe"] },
+  "probePolicy": { "allowedEnvironments": ["local", "production-public", "production-private"], "identityPoolRefs": [], "maximumEffect": "platform-write" },
+  "budgets": { "maxRunsPerDay": 4, "maxCostPerDay": 0, "currency": "CNY" }
+}
