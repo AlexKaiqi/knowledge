@@ -2,7 +2,7 @@
 
 保存 Capability 引用的产品输入输出 JSON Schema。不同产品可以完全不同，不强制统一业务字段；公共层只统一 Capability envelope。
 
-当前：36。
+当前：38。
 
 - [OSV 公共公告输入](osv/read-public-advisory-input.schema.json)
 - [OSV 公共公告输出](osv/read-public-advisory-output.schema.json)
@@ -40,3 +40,5 @@
 - [小红书本人笔记列表输出](xiaohongshu/list-owned-notes-output.schema.json)
 - [小红书社区规则接口面输入](xiaohongshu/community-rule-surface-input.schema.json)
 - [小红书社区规则接口面输出](xiaohongshu/community-rule-surface-output.schema.json)
+- [已登记公共 Web Feed 输入](web-feeds/read-registered-public-feed-input.schema.json)
+- [已登记公共 Web Feed 输出](web-feeds/read-registered-public-feed-output.schema.json)

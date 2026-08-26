@@ -119,6 +119,7 @@ test('Connector configuration schemas compile', async () => {
     '../connectors/go-public-module-version/config.schema.json',
     '../connectors/crates-io-public-crate-version/config.schema.json',
     '../connectors/osv-public-advisory/config.schema.json',
+    '../connectors/web-feed-reader/config.schema.json',
   ]) {
     const schema = JSON.parse(await readFile(new URL(schemaPath, import.meta.url), 'utf8'))
     const ajv = new Ajv2020({ allErrors: true, strict: false })
@@ -221,6 +222,13 @@ test('Maven Central public JAR release live snapshot matches its product output 
 test('NuGet.org public package version live snapshot matches its product output schema', async () => {
   const validate = await validator('../knowledge/schemas/nuget-org/read-public-package-version-evidence-output.schema.json')
   const snapshot = JSON.parse(await readFile(new URL('../knowledge/verifications/nuget-org/public-package-version/snapshot.json', import.meta.url), 'utf8'))
+  const { schemaVersion: _schemaVersion, fixture: _fixture, ...payload } = snapshot
+  assert.equal(validate(payload), true, JSON.stringify(validate.errors))
+})
+
+test('registered public Web Feed live snapshot matches its product output schema', async () => {
+  const validate = await validator('../knowledge/schemas/web-feeds/read-registered-public-feed-output.schema.json')
+  const snapshot = JSON.parse(await readFile(new URL('../knowledge/verifications/web-feeds/nodejs-releases/snapshot.json', import.meta.url), 'utf8'))
   const { schemaVersion: _schemaVersion, fixture: _fixture, ...payload } = snapshot
   assert.equal(validate(payload), true, JSON.stringify(validate.errors))
 })

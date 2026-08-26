@@ -2,7 +2,7 @@
 
 保存跨平台、跨工具复用的业务与数据概念。Concept 只有在被已准入 Capability 的输入或结果引用时才进入知识图。
 
-当前：18。
+当前：19。
 
 - [OSV 公共漏洞公告](osv/public-advisory.md)
 - [crates.io 公共 crate 版本元数据](crates-io/public-crate-version-metadata.md)
@@ -22,3 +22,4 @@
 - [小红书账号 API 接口面](xiaohongshu/account-api-surface.md)
 - [小红书本人笔记摘要](xiaohongshu/owned-note-summary.md)
 - [小红书社区规则接口面](xiaohongshu/community-rule-surface.md)
+- [公共 Web Feed 快照](web-feeds/feed-snapshot.md)

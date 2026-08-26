@@ -58,11 +58,14 @@
     "crates-io:crate-version:probe": "node scripts/probe-crates-io-public-crate-version.mjs",
     "crates-io:crate-version:maintain": "node collectors/crates-io-public-crate-version-maintainer/src/index.mjs",
     "osv:advisory:probe": "node scripts/probe-osv-public-advisory.mjs",
-    "osv:advisory:maintain": "node collectors/osv-public-advisory-maintainer/src/index.mjs"
+    "osv:advisory:maintain": "node collectors/osv-public-advisory-maintainer/src/index.mjs",
+    "web-feed:nodejs-releases:probe": "node scripts/probe-web-feed-reader-nodejs-releases.mjs",
+    "web-feed:nodejs-releases:maintain": "node collectors/web-feed-reader-maintainer/src/index.mjs"
   },
   "dependencies": {
     "ajv": "^8.20.0",
     "ajv-formats": "^3.0.1",
-    "js-yaml": "^4.1.0"
+    "js-yaml": "^4.1.0",
+    "saxes": "6.0.0"
   }
 }

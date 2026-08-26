@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "web-feed-reader",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/web-feeds/read-registered-public-feed.md"],
+  "execution": { "kind": "deterministic", "runtime": "node >=22.19", "entrypoint": "connectors/web-feed-reader/src/index.mjs" },
+  "configSchema": "repo:/connectors/web-feed-reader/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [{ "capabilityRef": "/capabilities/web-feeds/read-registered-public-feed.md", "operation": "readRegisteredPublicFeed" }],
+  "conformance": { "status": "verified", "probeReportRef": "/verifications/web-feeds/nodejs-releases/report.json" }
+}

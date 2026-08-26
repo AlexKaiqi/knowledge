@@ -74,3 +74,6 @@ title: Knowledge bundle history
 - 小红书开源生态目录从 40 扩展到 45 项，关键词从 20 扩展到 28 个：新增审计多账号矩阵 CLI、默认私密长文发布器、MCP+CDP 混合 CLI、agent-browser skill 和增长工作台；Connector route catalog 从 12 扩展到 16 条，route 上游从 9 扩展到 13 个。
 - `xiaohongshu-maintainer` 每次继续比较全部项目 HEAD，并把 34 个 release watch 按每次 4 项、9 天一轮观察；维护报告新增显式 watch policy，区分自动 HEAD/tag/search 信号与到期后人工检查 issue/license/archive/契约/相关代码，所有变化仍只生成 proposal。
 - 扩展关键词的首次真实维护运行发现并完成审计 `leeguooooo/xhs-skill` 与 `excalibursssooo/xiaohongshu-search`；目录增至 47 项、release watch 增至 36 项。前者只提供未固定浏览器运行时上的流程门禁且可输出完整 Cookie header，后者虽有具体搜索/详情/用户/评论采集代码，却保存原始 token/身份并建议换 IP/代理处理风控；两者均纳入持续监测但保持 research-only，不新增 Connector route 或可用能力。
+- 通过 production-public live probe 准入 Web Feed Reader Tool 与“读取已登记公共 Web Feed”Capability；当前唯一登记源是 Node.js 官方 Release Feed，实际解析 RSS 2.0 的 807 个条目并有界返回 10 个，固定 LTS fixture 命中。
+- Connector 只接受 `feedId` 与 1–20 的 limit，拒绝任意 URL、凭据、重定向、DTD、关键字段重复、标题 markup 和跨 origin 条目链接；输出剔除正文、摘要、作者、邮箱、附件、扩展与 raw XML，并区分语义摘要和文档摘要。Atom 1.0 仅完成离线契约测试，尚未准入具体来源。
+- 新增 proposal-only Collector，语义观察 RSS/Atom 标准，检查 Node.js 官网、Feed 生成器和 saxes parser 上游 HEAD，并区分 Feed 语义变化、原始 XML 变化、验证过期和访问失败。首次真实维护运行识别出 Node.js 站点重建会仅刷新 `lastBuildDate`；该字段已从语义摘要剔除，document-only 漂移只保留观测、不制造日常假 proposal。完整闭环更新为 19（Tool 1；Information Source 4；Platform 13；Service 1），Subject 16，Capability 19。

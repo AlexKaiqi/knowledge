@@ -38,10 +38,11 @@ async function markdownInstances(directory, prefix = '') {
   return paths.sort()
 }
 
-test('canonical knowledge contains only probe-admitted platform and capability files', async () => {
+test('canonical knowledge contains only probe-admitted subject and capability files', async () => {
   assert.deepEqual(await markdownInstances('knowledge/platforms/'), ['crates-io.md', 'docker-hub.md', 'douyin.md', 'github.md', 'hugging-face-hub.md', 'maven-central.md', 'npm-public-registry.md', 'nuget-org.md', 'pypi.md', 'xiaohongshu.md'])
   assert.deepEqual(await markdownInstances('knowledge/services/'), ['go-module-services.md'])
   assert.deepEqual(await markdownInstances('knowledge/sources/'), ['douyin-open-platform.md', 'osv.md', 'xiaohongshu-account-api.md', 'xiaohongshu-community-rules.md'])
+  assert.deepEqual(await markdownInstances('knowledge/tools/'), ['web-feed-reader.md'])
   assert.deepEqual(await markdownInstances('knowledge/capabilities/'), [
     'crates-io/read-public-crate-version.md',
     'docker-hub/read-public-image-manifest-by-digest.md',
@@ -58,6 +59,7 @@ test('canonical knowledge contains only probe-admitted platform and capability f
     'nuget-org/read-public-package-version-evidence.md',
     'osv/read-public-advisory.md',
     'pypi/read-public-project-release.md',
+    'web-feeds/read-registered-public-feed.md',
     'xiaohongshu/list-owned-notes.md',
     'xiaohongshu/read-account-api-surface.md',
     'xiaohongshu/read-community-rule-surface.md',

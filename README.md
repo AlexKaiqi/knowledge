@@ -70,12 +70,14 @@ Subject knowledge
 ## 当前状态
 
 ```text
-完整可用闭环：18（Information Source 4；Platform 13；Service 1）
-已准入 Subject：15
-已准入 Capability：18
-Connector：17 个已验证；xiaohongshu-browser 为 mixed（读取已验证、发布候选）
-维护 Collector：19
+完整可用闭环：19（Tool 1；Information Source 4；Platform 13；Service 1）
+已准入 Subject：16
+已准入 Capability：19
+Connector：18 个已验证；xiaohongshu-browser 为 mixed（读取已验证、发布候选）
+维护 Collector：20
 ```
+
+Web Feed Reader 已形成第一条 Tool 闭环：外部只按固定 `feedId` 读取逐项审阅的公共 Feed，不接受任意 URL、header、凭据或重定向。当前唯一登记源是 Node.js 官方 Release Feed；production-public live probe 实际解析 RSS 2.0 的 807 个条目并有界返回 10 个。输出剔除正文、摘要、作者、邮箱、附件、扩展字段和 raw XML，并把归一化语义摘要与原始文档摘要分开，使 Collector 能区分真实条目变化和序列化噪声。解析器的 Atom 1.0 路径已通过本地契约测试，但在首个 Atom 来源独立 live probe 前不算可用 Atom 数据源。维护 Collector 同时观察 RSS/Atom 规范、Node.js 官网 Feed 生成源码、生成器和精确固定的 XML parser 上游；变化只生成 proposal。
 
 小红书已有三个真实闭环：官方账号 API 参考、浏览器渲染的社区公约信息源，以及通过自有账号会话读取本人笔记列表的平台能力。后者 live probe 实际返回可用的空列表。笔记发布、详情反查与反馈采集仍是候选能力，尚未完成真实私密发布闭环。仓库不创建空的平台、Connector 或 Collector 占位。
 
@@ -106,6 +108,7 @@ OSV.dev 已有一个真实 Information Source 闭环：按精确 advisory ID 读
 Go Module Mirror 与 Checksum Database 已有一个真实 Service 闭环：调用者显式确认公开的 module path/version 后，Connector 固定 public proxy/SumDB，在全新隔离 cache 中用官方 Go verifier 认证模块树和 go.mod h1。归档最多 32 MiB，会被下载但不执行，成功前删除 cache；`.info` 时间只标记为 transport-only。私有路径、latest/range、direct fallback、依赖求解、构建和执行都不在能力内。
 
 - [小红书接入调研与第一条能力纵切](docs/research/xiaohongshu-integration.md)
+- [Web Feed Reader 调研与接入决策](docs/research/web-feed-reader.md)
 
 ## 规范
 

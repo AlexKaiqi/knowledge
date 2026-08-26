@@ -2,7 +2,7 @@
 
 保存外部可发现、可调用的 Capability 契约。每项能力必须声明 Subject、输入输出 Schema、访问方式、副作用和新鲜验证报告。
 
-当前：18。
+当前：19。
 
 - [读取公共 OSV 漏洞公告](osv/read-public-advisory.md)
 - [读取 crates.io 公共 crate 精确版本元数据](crates-io/read-public-crate-version.md)
@@ -22,3 +22,4 @@
 - [读取小红书账号 API 接口面](xiaohongshu/read-account-api-surface.md)
 - [读取小红书本人笔记](xiaohongshu/list-owned-notes.md)
 - [读取小红书社区规则接口面](xiaohongshu/read-community-rule-surface.md)
+- [读取已登记公共 Web Feed](web-feeds/read-registered-public-feed.md)

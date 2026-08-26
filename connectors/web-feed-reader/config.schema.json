@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/web-feed-reader-config.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "timeoutMs": { "type": "integer", "minimum": 1000, "maximum": 60000, "default": 15000 },
+    "userAgent": { "type": "string", "minLength": 1, "maxLength": 128, "default": "dsh-knowledge-catalog/0.1" }
+  }
+}

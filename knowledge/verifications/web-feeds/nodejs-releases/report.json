@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "dsh.probe-report/v1",
+  "id": "web-feed-reader-nodejs-releases-live-20260826",
+  "capabilityRef": "/capabilities/web-feeds/read-registered-public-feed.md",
+  "connectorId": "web-feed-reader",
+  "probeDefinitionRef": "repo:/probes/definitions/web-feed-reader-nodejs-releases-live.json",
+  "environment": "production-public",
+  "level": "live",
+  "outcome": "passed",
+  "startedAt": "2026-08-26T22:47:44.371Z",
+  "finishedAt": "2026-08-26T22:47:44.695Z",
+  "expiresAt": "2026-09-02T22:47:44.695Z",
+  "checks": [
+    { "id": "registered-fixed-source", "status": "passed" },
+    { "id": "rss-2.0-format", "status": "passed" },
+    { "id": "reviewed-feed-identity", "status": "passed" },
+    { "id": "bounded-document", "status": "passed" },
+    { "id": "bounded-entry-count", "status": "passed" },
+    { "id": "unique-entry-identifiers", "status": "passed" },
+    { "id": "reviewed-entry-origin", "status": "passed" },
+    { "id": "personal-and-content-fields-excluded", "status": "passed" },
+    { "id": "fixture-release-entry", "status": "passed" },
+    { "id": "data-minimization", "status": "passed" }
+  ],
+  "evidence": [{ "kind": "snapshot", "ref": "repo:/knowledge/verifications/web-feeds/nodejs-releases/snapshot.json", "sha256": "6e778f38a10074332662d152ed9ced2b2623d57091bb0313f0a4eabc45fe7e38" }],
+  "sideEffects": [{ "effect": "none", "status": "none" }]
+}
