@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "crates-io-public-crate-version",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/crates-io/read-public-crate-version.md"],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "connectors/crates-io-public-crate-version/src/index.mjs"
+  },
+  "configSchema": "repo:/connectors/crates-io-public-crate-version/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [
+    {
+      "capabilityRef": "/capabilities/crates-io/read-public-crate-version.md",
+      "operation": "readPublicCrateVersion"
+    }
+  ],
+  "conformance": {
+    "status": "verified",
+    "probeReportRef": "/verifications/crates-io/public-crate-version/report.json"
+  }
+}

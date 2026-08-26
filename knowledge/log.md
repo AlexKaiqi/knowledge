@@ -49,3 +49,6 @@ title: Knowledge bundle history
 - Connector 内部串行处理官方分页，每页最多 100、总计最多 500、单页 2 MiB；输出明确完整/截断、`core` 限流和规范化 tag→commit 摘要，并排除 tagger、消息、签名、archive URL 与原始 payload。
 - 新增 proposal-only Collector 观察 tag 集合、已知 tag 身份、验证过期和限流；小红书 Collector 的 17 项 release watch 改为消费该已验证 Connector。完整可用闭环更新为 10（Information Source 3；Platform 6；Service 1），Subject 保持 8，Capability 更新为 10。
 - 抖音 Collector 补齐 15 个 `release` watch 的实际执行：保存规范化 tag→commit 基线，每次串行调用已验证的 GitHub Tag Connector 观察 4 个、4 天覆盖一轮；变化、限流、截断和契约漂移分别生成 proposal，不自动升级候选路线。
+- 通过 production-public live probe 准入 crates.io Platform 与“读取公共 crate 精确版本元数据”Capability；`serde@1.0.228` 的 crate 身份、MIT/Apache-2.0 声明、Rust 1.56、2021 edition、83,652-byte 发行物和 SHA-256 均命中固定证据。
+- Connector 固定官方 API，只接受注册名精确拼写与精确 semver，内置最短 1 秒请求闸门和带联系 URL 的应用 User-Agent；拒绝 alternate registry、重定向和超 1 MiB 响应，输出剔除下载量、发布者、审计用户、头像、features、dependencies 与原始 payload。
+- 新增 proposal-only Collector 观察发行摘要、yank/许可证/MSRV/edition/链接变化、API policy block、验证过期和访问失败；完整可用闭环更新为 11（Information Source 3；Platform 7；Service 1），Subject 更新为 9，Capability 更新为 11。

@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "dsh.collector-definition/v1",
+  "id": "crates-io-public-crate-version-maintainer",
+  "version": "1.0.0",
+  "scope": {
+    "knowledgeGlobs": [
+      "knowledge/platforms/crates-io.md",
+      "knowledge/concepts/crates-io/public-crate-version-metadata.md",
+      "knowledge/capabilities/crates-io/read-public-crate-version.md",
+      "knowledge/schemas/crates-io/read-public-crate-version-*.schema.json",
+      "knowledge/verifications/crates-io/public-crate-version/*.json"
+    ],
+    "connectorIds": ["crates-io-public-crate-version"],
+    "capabilityRefs": ["/capabilities/crates-io/read-public-crate-version.md"]
+  },
+  "triggers": [
+    { "kind": "schedule", "schedule": "45 7 * * *" },
+    { "kind": "source-change" },
+    { "kind": "schema-change" },
+    { "kind": "connector-change" },
+    { "kind": "failed-execution" },
+    { "kind": "manual" }
+  ],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "collectors/crates-io-public-crate-version-maintainer/src/index.mjs"
+  },
+  "outputs": ["knowledge-proposal", "connector-change-proposal", "verification-report"],
+  "writePolicy": { "mode": "proposal-only", "requiresApprovalFor": ["knowledge", "connector", "live-probe"] },
+  "probePolicy": { "allowedEnvironments": ["production-public"], "identityPoolRefs": [], "maximumEffect": "none" },
+  "budgets": { "maxRunsPerDay": 4, "maxCostPerDay": 0, "currency": "CNY" }
+}

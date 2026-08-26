@@ -1,0 +1,85 @@
+{
+  "schemaVersion": "dsh.crates-io-public-crate-version-snapshot/v1",
+  "fixture": {
+    "expected": {
+      "description": "A generic serialization/deserialization framework",
+      "licenseExpression": "MIT OR Apache-2.0",
+      "rustVersion": "1.56",
+      "edition": "2021",
+      "yanked": false,
+      "createdAt": "2025-09-27T16:51:35.265Z",
+      "hasLibrary": true,
+      "binaryNames": [],
+      "repository": "https://github.com/serde-rs/serde",
+      "homepage": "https://serde.rs/",
+      "documentation": "https://docs.rs/serde",
+      "artifactSizeBytes": 83652,
+      "artifactSha256": "9a8e94ea7f378bd32cbbd37198a4a91436180c5bb472411e48b5ec2e2124ae9e",
+      "downloadUrl": "https://crates.io/api/v1/crates/serde/1.0.228/download"
+    }
+  },
+  "source": {
+    "id": "crates-io-public-crate-version",
+    "apiBaseUrl": "https://crates.io",
+    "endpointTemplate": "https://crates.io/api/v1/crates/{crate}/{version}"
+  },
+  "request": {
+    "crateName": "serde",
+    "version": "1.0.228"
+  },
+  "crateVersion": {
+    "crateName": "serde",
+    "version": "1.0.228",
+    "description": "A generic serialization/deserialization framework",
+    "licenseExpression": "MIT OR Apache-2.0",
+    "rustVersion": "1.56",
+    "edition": "2021",
+    "yanked": false,
+    "yankedMessage": null,
+    "createdAt": "2025-09-27T16:51:35.265Z",
+    "updatedAt": "2025-09-27T16:51:35.265Z",
+    "hasLibrary": true,
+    "binaryNames": [],
+    "links": {
+      "repository": "https://github.com/serde-rs/serde",
+      "homepage": "https://serde.rs/",
+      "documentation": "https://docs.rs/serde"
+    },
+    "artifact": {
+      "sizeBytes": 83652,
+      "sha256": "9a8e94ea7f378bd32cbbd37198a4a91436180c5bb472411e48b5ec2e2124ae9e",
+      "downloadUrl": "https://crates.io/api/v1/crates/serde/1.0.228/download"
+    }
+  },
+  "observedAt": "2026-08-26T19:25:43.529Z",
+  "resultDigest": "d3cd5b1f4fc650f73d0936aa21b7300050ce94e1c77546db2a762aa6a8003918",
+  "conformance": {
+    "status": "passed",
+    "assertions": [
+      {
+        "id": "exact-crate-version",
+        "passed": true
+      },
+      {
+        "id": "artifact-integrity",
+        "passed": true
+      },
+      {
+        "id": "official-download-origin",
+        "passed": true
+      },
+      {
+        "id": "bounded-binary-names",
+        "passed": true
+      },
+      {
+        "id": "personal-fields-excluded",
+        "passed": true
+      },
+      {
+        "id": "unbounded-details-excluded",
+        "passed": true
+      }
+    ]
+  }
+}

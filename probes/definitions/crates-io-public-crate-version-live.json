@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "crates-io-public-crate-version-live",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/crates-io/read-public-crate-version.md",
+  "connectorId": "crates-io-public-crate-version",
+  "environment": "production-public",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "read-known-exact-crate-version", "operation": "readPublicCrateVersion" },
+    { "id": "verify-version-integrity-and-minimization", "operation": "normalizePublicCrateVersionResponse" }
+  ],
+  "assertions": [
+    "The official GET /api/v1/crates/<crate>/<version> endpoint returns serde 1.0.228 without authentication.",
+    "The exact crate identity, SHA-256 checksum, artifact size, license expression, minimum Rust version, edition, publication time, project links and library/binary shape match the reviewed fixture.",
+    "The Connector sends one request through a minimum one-second in-process gate with a contactable application User-Agent, accepts no alternate API base, redirect, range/latest alias or response larger than 1 MiB.",
+    "The normalized output excludes download counts, publisher identity, audit users, avatars, raw features, dependencies, raw response, token and cookie data; it does not download or execute the crate artifact."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 30, "maxCost": 0, "currency": "CNY" }
+}

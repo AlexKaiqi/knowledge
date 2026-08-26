@@ -38,7 +38,9 @@
     "pypi:release:probe": "node scripts/probe-pypi-public-project-release.mjs",
     "pypi:release:maintain": "node collectors/pypi-public-project-release-maintainer/src/index.mjs",
     "go:module-version:probe": "node scripts/probe-go-public-module-version.mjs",
-    "go:module-version:maintain": "node collectors/go-public-module-version-maintainer/src/index.mjs"
+    "go:module-version:maintain": "node collectors/go-public-module-version-maintainer/src/index.mjs",
+    "crates-io:crate-version:probe": "node scripts/probe-crates-io-public-crate-version.mjs",
+    "crates-io:crate-version:maintain": "node collectors/crates-io-public-crate-version-maintainer/src/index.mjs"
   },
   "dependencies": {
     "ajv": "^8.20.0",

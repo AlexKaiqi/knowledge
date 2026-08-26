@@ -70,11 +70,11 @@ Subject knowledge
 ## 当前状态
 
 ```text
-完整可用闭环：10（Information Source 3；Platform 6；Service 1）
-已准入 Subject：8
-已准入 Capability：10
-Connector：9 个已验证；xiaohongshu-browser 为 mixed（读取已验证、发布候选）
-维护 Collector：11
+完整可用闭环：11（Information Source 3；Platform 7；Service 1）
+已准入 Subject：9
+已准入 Capability：11
+Connector：10 个已验证；xiaohongshu-browser 为 mixed（读取已验证、发布候选）
+维护 Collector：12
 ```
 
 小红书已有三个真实闭环：官方账号 API 参考、浏览器渲染的社区公约信息源，以及通过自有账号会话读取本人笔记列表的平台能力。后者 live probe 实际返回可用的空列表。笔记发布、详情反查与反馈采集仍是候选能力，尚未完成真实私密发布闭环。仓库不创建空的平台、Connector 或 Collector 占位。
@@ -90,6 +90,8 @@ GitHub 已有三个真实 Platform 闭环：通过官方 REST API、无需身份
 npm Public Registry 已有一个真实 Platform 闭环：无需身份按精确 package name 和精确 semver 读取最小化公共版本元数据。输出保留 license/deprecation/repository/engines 声明和 tarball 的 SHA-512 SRI、SHA-1 shasum、固定 Registry URL，同时排除 author、maintainers、contributors 和邮箱。它可用于依赖证据核验，但不下载或执行包，也不把 license 字段冒充独立授权结论。
 
 PyPI 已有一个真实 Platform 闭环：无需身份按规范化项目名和精确版本读取官方 JSON release metadata。输出包含最小项目/许可证/Python 要求/yank/漏洞数量信号，以及最多 64 个发行文件的 SHA-256、BLAKE2b-256、Core Metadata 摘要、ETag 和 serial；作者、维护者、邮箱、漏洞详情、长许可证正文和无关项目链接被排除。它不下载、安装或执行发行物，也不把上传元数据当作源码、授权或安全审计。
+
+crates.io 已有一个真实 Platform 闭环：无需身份按注册名精确拼写和精确 semver 读取官方版本 API。输出保留许可证、MSRV、edition、yank、发行时间、库/二进制形态、安全项目链接和 `.crate` SHA-256/大小/官方下载 URL；下载量、发布者、审计用户、features、dependencies 和 raw payload 被排除。Connector 遵守官方每秒最多一次请求与可联系 User-Agent 政策，但不下载、重算或执行归档。
 
 Go Module Mirror 与 Checksum Database 已有一个真实 Service 闭环：调用者显式确认公开的 module path/version 后，Connector 固定 public proxy/SumDB，在全新隔离 cache 中用官方 Go verifier 认证模块树和 go.mod h1。归档最多 32 MiB，会被下载但不执行，成功前删除 cache；`.info` 时间只标记为 transport-only。私有路径、latest/range、direct fallback、依赖求解、构建和执行都不在能力内。
 
