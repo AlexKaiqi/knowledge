@@ -1,6 +1,10 @@
 import assert from 'node:assert/strict'
+import { createHash } from 'node:crypto'
+import { readFile } from 'node:fs/promises'
 import test from 'node:test'
-import { collectXiaohongshuMaintenance, discoverEcosystemProjects, evaluateRenderedSemanticObservation, isProjectReviewDue, isRelevantDiscoveryCandidate, officialSources, selectDiscoveryQueries } from '../src/index.mjs'
+import { collectXiaohongshuMaintenance, discoverEcosystemProjects, evaluateRenderedSemanticObservation, isProjectReviewDue, isRelevantDiscoveryCandidate, normalizeRemoteTags, observeProjectReleaseTags, officialSources, selectDiscoveryQueries, selectReleaseWatchProjects } from '../src/index.mjs'
+
+const projectCatalog = JSON.parse(await readFile(new URL('../projects.json', import.meta.url), 'utf8'))
 
 const pinnedRouteHeads = {
   'https://github.com/xpzouying/xiaohongshu-mcp.git': '6fb866a7db4e3dcce8dc00a0dde07370f3b12946',
@@ -14,6 +18,7 @@ const pinnedRouteHeads = {
 
 const currentRouteHead = async (repository) => pinnedRouteHeads[repository]
 const currentProjectHead = async (_repository, _branch, project) => project.observedRevision
+const currentReleaseTags = async (_repository, project) => projectCatalog.releaseTagBaselines[project.id]
 const currentDiscovery = async ({ query, page, perPage }) => ({
   query: { query, page, perPage, sort: 'best-match', order: 'desc' },
   coverage: { representation: 'ranked-page', totalCount: 0, returnedCount: 0, incompleteResults: false, accessibleResultCount: 0, resultWindowLimit: 1000, pageExhausted: true, ecosystemComplete: false },
@@ -41,6 +46,51 @@ test('discovery rotation covers all ten queries in five UTC days', () => {
     for (const query of selectDiscoveryQueries(queries, new Date(Date.UTC(2026, 7, 20 + day)))) selected.add(query)
   }
   assert.deepEqual([...selected].sort(), queries)
+})
+
+test('release watch rotation covers all eligible projects in five UTC days', () => {
+  const declared = projectCatalog.projects.filter((project) => project.watch.reviewOn.includes('release')).map((project) => project.id)
+  assert.deepEqual(Object.keys(projectCatalog.releaseTagBaselines).sort(), declared.sort())
+  const selected = new Set()
+  for (let day = 0; day < 5; day += 1) {
+    for (const project of selectReleaseWatchProjects(projectCatalog, new Date(Date.UTC(2026, 7, 20 + day)))) selected.add(project.id)
+  }
+  assert.deepEqual([...selected].sort(), Object.keys(projectCatalog.releaseTagBaselines).sort())
+})
+
+test('release tag normalization prefers peeled commits for annotated tags', () => {
+  const result = normalizeRemoteTags([
+    `${'1'.repeat(40)}\trefs/tags/v2.0.0`,
+    `${'2'.repeat(40)}\trefs/tags/v1.0.0`,
+    `${'3'.repeat(40)}\trefs/tags/v1.0.0^{}`,
+  ].join('\n'))
+  const expected = [
+    `refs/tags/v1.0.0\t${'3'.repeat(40)}`,
+    `refs/tags/v2.0.0\t${'1'.repeat(40)}`,
+  ].join('\n')
+  assert.deepEqual(result, { tagCount: 2, digest: createHash('sha256').update(expected).digest('hex') })
+})
+
+test('release observations are serial, bounded and proposal-safe', async () => {
+  const projects = selectReleaseWatchProjects(projectCatalog, new Date('2026-08-26T00:00:00Z'))
+  let inFlight = 0
+  let maximumInFlight = 0
+  const observations = await observeProjectReleaseTags({
+    projects,
+    baselines: projectCatalog.releaseTagBaselines,
+    releaseTags: async (_repository, project) => {
+      inFlight += 1
+      maximumInFlight = Math.max(maximumInFlight, inFlight)
+      await Promise.resolve()
+      inFlight -= 1
+      if (project.id === projects[0].id) return { tagCount: 999, digest: 'f'.repeat(64) }
+      return projectCatalog.releaseTagBaselines[project.id]
+    },
+  })
+  assert.equal(observations.length, 4)
+  assert.equal(maximumInFlight, 1)
+  assert.equal(observations[0].status, 'review-required')
+  assert.equal(observations.slice(1).every((observation) => observation.status === 'current'), true)
 })
 
 test('discovery relevance rejects xhs/rednote name collisions', () => {
@@ -78,6 +128,7 @@ test('ecosystem discovery is serial, bounded and deduplicates unseen repositorie
 test('maintainer is proposal-only and cannot promote an unverified connector', async () => {
   const report = await collectXiaohongshuMaintenance({
     repositorySearch: currentDiscovery,
+    releaseTags: currentReleaseTags,
     sourceCheck: async (source) => ({ ...source, status: 'reachable', httpStatus: 200 }),
     upstreamHead: currentRouteHead,
     projectHead: currentProjectHead,
@@ -108,6 +159,7 @@ test('maintainer is proposal-only and cannot promote an unverified connector', a
 test('maintainer proposes a new probe when a verified capability report expires', async () => {
   const report = await collectXiaohongshuMaintenance({
     repositorySearch: currentDiscovery,
+    releaseTags: currentReleaseTags,
     sourceCheck: async (source) => ({ ...source, status: 'reachable', httpStatus: 200 }),
     upstreamHead: currentRouteHead,
     projectHead: currentProjectHead,
@@ -121,6 +173,7 @@ test('maintainer proposes a new probe when a verified capability report expires'
 test('maintainer reports upstream drift for review without repinning', async () => {
   const report = await collectXiaohongshuMaintenance({
     repositorySearch: currentDiscovery,
+    releaseTags: currentReleaseTags,
     sourceCheck: async (source) => ({ ...source, status: 'reachable', httpStatus: 200 }),
     upstreamHead: async () => 'f'.repeat(40),
     projectHead: currentProjectHead,
@@ -138,6 +191,7 @@ test('maintainer reports upstream drift for review without repinning', async () 
 test('maintainer preserves an unreachable research route as a proposal instead of hiding it', async () => {
   const report = await collectXiaohongshuMaintenance({
     repositorySearch: currentDiscovery,
+    releaseTags: currentReleaseTags,
     sourceCheck: async (source) => ({ ...source, status: 'reachable', httpStatus: 200 }),
     upstreamHead: async (repository) => {
       if (repository.includes('opencli')) throw new Error('network unavailable')
@@ -157,6 +211,7 @@ test('maintainer preserves an unreachable research route as a proposal instead o
 test('maintainer proposes review when an official semantic fingerprint changes', async () => {
   const report = await collectXiaohongshuMaintenance({
     repositorySearch: currentDiscovery,
+    releaseTags: currentReleaseTags,
     sourceCheck: async (source) => ({
       id: source.id,
       url: source.url,
@@ -180,6 +235,7 @@ test('maintainer proposes review when an official semantic fingerprint changes',
 test('maintainer keeps project drift separate from live route health', async () => {
   const report = await collectXiaohongshuMaintenance({
     repositorySearch: currentDiscovery,
+    releaseTags: currentReleaseTags,
     sourceCheck: async (source) => ({ ...source, status: 'reachable', httpStatus: 200 }),
     upstreamHead: currentRouteHead,
     projectHead: async (_repository, _branch, project) => project.id === 'jackwener-xiaohongshu-cli' ? 'f'.repeat(40) : project.observedRevision,
@@ -191,5 +247,27 @@ test('maintainer keeps project drift separate from live route health', async () 
     kind: 'connector-change-proposal',
     projectId: 'jackwener-xiaohongshu-cli',
     action: 'review-research-project-update',
+  }])
+})
+
+test('maintainer proposes review for changed release tags without updating a connector', async () => {
+  const observedAt = new Date('2026-08-27T01:00:00Z')
+  const changedProject = selectReleaseWatchProjects(projectCatalog, observedAt)[0]
+  const report = await collectXiaohongshuMaintenance({
+    repositorySearch: currentDiscovery,
+    releaseTags: async (_repository, project) => project.id === changedProject.id
+      ? { tagCount: 999, digest: 'f'.repeat(64) }
+      : currentReleaseTags(_repository, project),
+    sourceCheck: async (source) => ({ ...source, status: 'reachable', httpStatus: 200 }),
+    upstreamHead: currentRouteHead,
+    projectHead: currentProjectHead,
+    artifactCheck: async () => [],
+    now: () => observedAt,
+  })
+  assert.ok(report.blockers.includes('ecosystem-release-tags-changed'))
+  assert.deepEqual(report.proposals, [{
+    kind: 'connector-change-proposal',
+    projectId: changedProject.id,
+    action: 'review-project-release-tags',
   }])
 })

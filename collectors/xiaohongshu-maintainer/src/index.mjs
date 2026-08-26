@@ -13,6 +13,7 @@ const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url))
 const sourceWatchList = JSON.parse(await readFile(path.join(repositoryRoot, 'collectors/xiaohongshu-maintainer/sources.json'), 'utf8'))
 export const officialSources = sourceWatchList.sources
 export const DISCOVERY_QUERIES_PER_RUN = 2
+export const RELEASE_TAG_PROJECTS_PER_RUN = 4
 const DISCOVERY_RESULTS_PER_QUERY = 10
 const DISCOVERY_CANDIDATES_PER_QUERY = 5
 
@@ -68,6 +69,31 @@ export function selectDiscoveryQueries(searchQueries, observedAt, count = DISCOV
   const dayIndex = Math.floor(observedAt.getTime() / (24 * 60 * 60 * 1000))
   const start = (dayIndex * count) % searchQueries.length
   return Array.from({ length: Math.min(count, searchQueries.length) }, (_, offset) => searchQueries[(start + offset) % searchQueries.length])
+}
+
+export function selectReleaseWatchProjects(projectCatalog, observedAt, count = RELEASE_TAG_PROJECTS_PER_RUN) {
+  const eligible = projectCatalog.projects.filter((project) =>
+    project.watch.reviewOn.includes('release') && projectCatalog.releaseTagBaselines?.[project.id])
+  if (eligible.length === 0) return []
+  const dayIndex = Math.floor(observedAt.getTime() / (24 * 60 * 60 * 1000))
+  const start = (dayIndex * count) % eligible.length
+  return Array.from({ length: Math.min(count, eligible.length) }, (_, offset) => eligible[(start + offset) % eligible.length])
+}
+
+export function normalizeRemoteTags(stdout) {
+  const tags = new Map()
+  for (const line of stdout.trim().split('\n').filter(Boolean)) {
+    const match = /^([0-9a-f]{40})\s+(refs\/tags\/[^\s]+?)(\^\{\})?$/.exec(line.trim())
+    if (!match) throw new Error('unexpected git ls-remote tag output')
+    const [, revision, tagRef, peeled] = match
+    const current = tags.get(tagRef)
+    if (!current || peeled) tags.set(tagRef, revision)
+  }
+  const normalized = [...tags.entries()]
+    .sort(([left], [right]) => left < right ? -1 : left > right ? 1 : 0)
+    .map(([tagRef, revision]) => `${tagRef}\t${revision}`)
+    .join('\n')
+  return { tagCount: tags.size, digest: digest(normalized) }
 }
 
 function canonicalRepositoryUrl(url) {
@@ -168,6 +194,37 @@ async function defaultUpstreamHead(repository, branch = 'main') {
   return result.stdout.trim().split(/\s+/)[0] ?? ''
 }
 
+async function defaultReleaseTagState(repository) {
+  const result = await exec('git', ['ls-remote', '--tags', repository], { timeout: 20_000, maxBuffer: 1024 * 1024 })
+  return normalizeRemoteTags(result.stdout)
+}
+
+export async function observeProjectReleaseTags({ projects, baselines, releaseTags = defaultReleaseTagState }) {
+  const observations = []
+  for (const project of projects) {
+    const baseline = baselines[project.id]
+    try {
+      const current = await releaseTags(project.repository, project)
+      observations.push({
+        projectId: project.id,
+        repository: project.repository,
+        status: current.tagCount === baseline.tagCount && current.digest === baseline.digest ? 'current' : 'review-required',
+        baseline,
+        current,
+      })
+    } catch (error) {
+      observations.push({
+        projectId: project.id,
+        repository: project.repository,
+        status: 'unreachable',
+        baseline,
+        detail: error.message,
+      })
+    }
+  }
+  return observations
+}
+
 async function defaultArtifactCheck(runtimeRoot) {
   const binaries = ['xiaohongshu-mcp', 'xiaohongshu-login']
   const checks = []
@@ -192,6 +249,7 @@ export async function collectXiaohongshuMaintenance({
   runtimeRoot = path.join(repositoryRoot, '.runtime/xiaohongshu-browser'),
   renderedSourceObservations = {},
   repositorySearch = searchPublicRepositories,
+  releaseTags = defaultReleaseTagState,
 } = {}) {
   const upstream = JSON.parse(await readFile(path.join(repositoryRoot, 'connectors/xiaohongshu-browser/upstream.json'), 'utf8'))
   const connector = JSON.parse(await readFile(path.join(repositoryRoot, 'connectors/xiaohongshu-browser/connector.json'), 'utf8'))
@@ -200,7 +258,8 @@ export async function collectXiaohongshuMaintenance({
   const upstreamRoutes = routeCatalog.routes.filter((route) => route.upstream)
   const observedAtDate = now()
   const discoveryQueries = selectDiscoveryQueries(projectCatalog.searchQueries, observedAtDate)
-  const [sources, routeUpstreams, projects, artifacts, discovery] = await Promise.all([
+  const releaseWatchProjects = selectReleaseWatchProjects(projectCatalog, observedAtDate)
+  const [sources, routeUpstreams, projects, artifacts, discovery, releaseTagObservations] = await Promise.all([
     Promise.all(officialSources.map((source) => sourceCheck(source, fetchImpl, renderedSourceObservations[source.id]))),
     Promise.all(upstreamRoutes.map(async (route) => {
       try {
@@ -263,6 +322,7 @@ export async function collectXiaohongshuMaintenance({
     })),
     artifactCheck(runtimeRoot),
     discoverEcosystemProjects({ queries: discoveryQueries, repositorySearch, projectCatalog }),
+    observeProjectReleaseTags({ projects: releaseWatchProjects, baselines: projectCatalog.releaseTagBaselines, releaseTags }),
   ])
   const canonicalCapabilityPath = path.join(repositoryRoot, 'knowledge/capabilities/xiaohongshu/publish-private-note-and-observe.md')
   const canonicalReadCapabilityPath = path.join(repositoryRoot, 'knowledge/capabilities/xiaohongshu/list-owned-notes.md')
@@ -301,6 +361,8 @@ export async function collectXiaohongshuMaintenance({
   if (artifacts.some((artifact) => artifact.status !== 'present')) blockers.push('local-runtime-not-built')
   if (discovery.status === 'unreachable') blockers.push('ecosystem-discovery-unreachable')
   else if (discovery.status === 'review-required') blockers.push('ecosystem-discovery-review-required')
+  if (releaseTagObservations.some((observation) => observation.status === 'unreachable')) blockers.push('ecosystem-release-watch-unreachable')
+  if (releaseTagObservations.some((observation) => observation.status === 'review-required')) blockers.push('ecosystem-release-tags-changed')
   const verificationProposals = []
   for (const binding of capabilityConformance) {
     if (binding.verificationStatus === 'expired') {
@@ -338,6 +400,13 @@ export async function collectXiaohongshuMaintenance({
   if (discovery.status === 'unreachable') projectProposals.push({ kind: 'connector-change-proposal', action: 'restore-ecosystem-discovery', queries: discovery.queries })
   else if (discovery.status === 'review-required') projectProposals.push({ kind: 'connector-change-proposal', action: 'review-ecosystem-discovery-contract', queries: discovery.queries })
   if (discovery.newCandidates.length > 0) projectProposals.push({ kind: 'connector-change-proposal', action: 'triage-new-ecosystem-projects', candidates: discovery.newCandidates })
+  for (const observation of releaseTagObservations) {
+    if (observation.status === 'review-required') {
+      projectProposals.push({ kind: 'connector-change-proposal', projectId: observation.projectId, action: 'review-project-release-tags' })
+    } else if (observation.status === 'unreachable') {
+      projectProposals.push({ kind: 'connector-change-proposal', projectId: observation.projectId, action: 'restore-project-release-observation' })
+    }
+  }
   return {
     schemaVersion: 'knowledge.maintenance-report/v1',
     subject: 'xiaohongshu',
@@ -376,6 +445,13 @@ export async function collectXiaohongshuMaintenance({
         queriesPerRun: DISCOVERY_QUERIES_PER_RUN,
         fullCycleDays: Math.ceil(projectCatalog.searchQueries.length / DISCOVERY_QUERIES_PER_RUN),
         ...discovery,
+      },
+      releaseWatch: {
+        method: 'git-ls-remote-tags',
+        projectsPerRun: RELEASE_TAG_PROJECTS_PER_RUN,
+        eligibleProjects: Object.keys(projectCatalog.releaseTagBaselines).length,
+        fullCycleDays: Math.ceil(Object.keys(projectCatalog.releaseTagBaselines).length / RELEASE_TAG_PROJECTS_PER_RUN),
+        observations: releaseTagObservations,
       },
     },
     connector: { id: connector.id, conformance: connector.conformance.status, capabilityConformance, artifacts },

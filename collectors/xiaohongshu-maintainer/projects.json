@@ -14,6 +14,25 @@
     "xiaohongshu crawler",
     "xiaohongshu creator analytics"
   ],
+  "releaseTagBaselines": {
+    "xpzouying-xiaohongshu-mcp": { "tagCount": 131, "digest": "ad80bdfcd84435d1e1a0fec7282c849f7ac73811395361018076f6b2ebe8c579" },
+    "cnqqc-xhs-mcp": { "tagCount": 0, "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" },
+    "dreammis-social-auto-upload": { "tagCount": 5, "digest": "3a4445a1f95dc7f3e10a64373988c35bb89d1db91c0780ab636538a233450605" },
+    "chatek-opencli": { "tagCount": 0, "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" },
+    "rbbtsn0w-omni-post": { "tagCount": 10, "digest": "20849e94e2deb135c5320203d09bed9457b56b14e1c85ad02d2e0b6c76f9f04e" },
+    "jackwener-xiaohongshu-cli": { "tagCount": 17, "digest": "653d54614c5637d0026d3a17d75683c40e13347e31da3176f5ec19e396959e8d" },
+    "white0dew-xiaohongshu-skills": { "tagCount": 0, "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" },
+    "aki66938-xhs-toolkit": { "tagCount": 7, "digest": "15f3fed90bfe2ee96208abd2fa76ac3579a86c0184b4e24d344d07720cfb8af6" },
+    "imoonkey-openweb": { "tagCount": 7, "digest": "5d8af6eb3653513459c04391a593e49b47e809e2a7b1c2ea55b80ae4c8001470" },
+    "nanmicoder-mediacrawler": { "tagCount": 0, "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" },
+    "tamnd-xiaohongshu-cli": { "tagCount": 2, "digest": "712da6fa52f07b83d83003277d8ecc8306ed95b019ec1da31094071987c32b91" },
+    "fancyyan-xiaohongshu-content-collector": { "tagCount": 10, "digest": "6d06daa0aced1a5038408936eab2cf4a9cd2f95ae419f4ba5afe576c47d3967a" },
+    "jiawen-xhs-auto": { "tagCount": 0, "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" },
+    "joeanamier-xhs-downloader": { "tagCount": 18, "digest": "019ac94d4eeeed0fa9b9e5300c36e721064c6c38796c820be4e51b7072e91002" },
+    "reajason-xhs": { "tagCount": 25, "digest": "e147ef82e8b3dded72071d10285294441ce8b188a4fde3afd0088a215c0897ce" },
+    "ifuryst-rednote-mcp": { "tagCount": 12, "digest": "f04cce6aa17e572955b822dade720880b5e77ea4832780a4dab7fd64b6ab36ea" },
+    "cv-cat-spider-xhs": { "tagCount": 3, "digest": "edd8cc6081e206ae84d28bc12b27587dc5b584a015d6585d8f2f3a7fd2c89308" }
+  },
   "projects": [
     {
       "id": "xpzouying-xiaohongshu-mcp",

@@ -1,7 +1,7 @@
 {
   "schemaVersion": "dsh.collector-definition/v1",
   "id": "xiaohongshu-maintainer",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "projectCatalogRef": "repo:/collectors/xiaohongshu-maintainer/projects.json",
   "scope": {
     "knowledgeGlobs": [

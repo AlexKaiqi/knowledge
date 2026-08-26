@@ -166,7 +166,7 @@ effect：platform-write
 
 发现阶段先做双条件相关性过滤：一侧必须出现 `xiaohongshu`、`小红书`、独立 token `xhs` 或 `rednote`，另一侧还必须出现 MCP/API/SDK/CLI、采集、发布、搜索、评论、下载、自动化等 Connector/Collector 能力词；只有仓库名精确为 `xhs` / `xiaohongshu` / `rednote` 时允许省略能力词。因此 `XhsWelcomeAnim` 与 `rednotebook` 等同名碰撞不会进入 triage。每个查询只观察排序前 10 项、最多提出 5 项新候选，且始终保留 `ecosystemComplete=false`。GitHub Search 失败或限流不会重试，也不会退回网页抓取。
 
-持续关注规则：高优先级项目 7 天复审，中优先级 14 天，低优先级 30 天。确定性入口每日比较 branch HEAD 并计算复审到期；任一信号生成 proposal 后，再由审阅流程检查 release、issue、license、archived、能力文档和相关代码差异。研究项目变化不会直接把已验证 route 判死，但 route 所绑定的同一 revision 漂移仍是 capability blocker。
+持续关注规则：高优先级项目 7 天复审，中优先级 14 天，低优先级 30 天。确定性入口每日比较 branch HEAD 并计算复审到期；对 17 个声明关注 release 的项目，还会串行轮换执行 `git ls-remote --tags`，每次最多 4 个、5 天覆盖一轮，并将 annotated tag 归一到 peeled commit 后比较摘要。任一信号只生成 proposal，再由审阅流程检查 release、issue、license、archived、能力文档和相关代码差异。研究项目变化不会直接把已验证 route 判死，但 route 所绑定的同一 revision 漂移仍是 capability blocker。
 
 官网变更观测分层进行，不能把 HTTP 200 当成“没变化”：
 
@@ -199,7 +199,7 @@ effect：platform-write
 - 候选 Connector、持久防重 ledger、去身份化反馈和 conformance tests；
 - proposal-only Collector 与 live probe 定义。
 - 10 条 access route（完整候选、研究、降级、恢复和组件）与 24 项开源生态 watch catalog；
-- 7 个 route 上游和 24 个研究项目的独立 HEAD/复审观测；
+- 7 个 route 上游和 24 个研究项目的独立 HEAD/复审观测，以及 17 个项目的轮换 release-tag 观测；
 - GitHub 关键词轮换发现：每次 2 个、5 天覆盖 10 个查询，串行调用并在匿名 Search 配额内运行；
 
 平台读取闭环已完成：

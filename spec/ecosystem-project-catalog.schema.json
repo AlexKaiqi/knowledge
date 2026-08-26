@@ -15,6 +15,19 @@
       "uniqueItems": true,
       "items": { "type": "string", "minLength": 1 }
     },
+    "releaseTagBaselines": {
+      "type": "object",
+      "propertyNames": { "$ref": "#/$defs/id" },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["tagCount", "digest"],
+        "properties": {
+          "tagCount": { "type": "integer", "minimum": 0 },
+          "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+        }
+      }
+    },
     "projects": {
       "type": "array",
       "minItems": 1,

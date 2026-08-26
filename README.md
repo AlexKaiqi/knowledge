@@ -79,7 +79,7 @@ Connector：8 个已验证；xiaohongshu-browser 为 mixed（读取已验证、�
 
 小红书已有三个真实闭环：官方账号 API 参考、浏览器渲染的社区公约信息源，以及通过自有账号会话读取本人笔记列表的平台能力。后者 live probe 实际返回可用的空列表。笔记发布、详情反查与反馈采集仍是候选能力，尚未完成真实私密发布闭环。仓库不创建空的平台、Connector 或 Collector 占位。
 
-小红书维护 Collector 还管理 24 个已审计开源项目，并消费已验证的 GitHub 搜索 Connector 做关键词轮换发现：每次串行查询 2 个关键词、5 天覆盖 10 个查询，只生成去重 triage proposal，不自动安装、路由或接受第三方许可证。
+小红书维护 Collector 还管理 24 个已审计开源项目，并消费已验证的 GitHub 搜索 Connector 做关键词轮换发现：每次串行查询 2 个关键词、5 天覆盖 10 个查询。对其中 17 个声明关注 release 的项目，另以 `git ls-remote --tags` 每次串行观察 4 个、5 天覆盖一轮，并比较规范化的 tag→commit 摘要。发现新项目或 tag 变化都只生成去重审阅 proposal，不自动安装、升级、路由或接受第三方许可证。
 
 抖音已有一个真实闭环：无需身份读取并语义校验官方开放平台文档。它只是一条 Information Source 能力；应用审核、scope、用户授权和真实业务调用尚未验证，所以抖音 Platform 能力仍为 0。
 
