@@ -71,3 +71,6 @@ title: Knowledge bundle history
 - 通过 production-public live probe 准入 NuGet.org Platform 与“读取公共包精确版本证据”Capability；`Newtonsoft.Json@13.0.3` 的 2,441,966-byte `.nupkg`、本地 SHA-256/SHA-512、24-entry ZIP 结构、`.nuspec` 和 `.signature.p7s` 均命中固定证据。
 - Connector 从官方 V3 service index 动态发现 Registration/Package Content，只接受精确规范化版本和不超过 32 MiB 的包；显式支持当前中国区 `api.nuget.org → nuget.azure.cn` 的一跳同路径 302，拒绝任意镜像、路径变化和第二次重定向。包会下载但不解压、安装、执行或解析依赖，签名 entry 不冒充密码学验签。
 - 新增 proposal-only Collector 语义观察重定向、Registration、flat container、unlist/exceptional deletion 和 repository signing 五组官网契约，并检查 NuGet.Client、NuGetGallery、NuGet Docs 三个固定 revision 官方上游。完整闭环更新为 18（Information Source 4；Platform 13；Service 1），Subject 15，Capability 18。
+- 小红书开源生态目录从 40 扩展到 45 项，关键词从 20 扩展到 28 个：新增审计多账号矩阵 CLI、默认私密长文发布器、MCP+CDP 混合 CLI、agent-browser skill 和增长工作台；Connector route catalog 从 12 扩展到 16 条，route 上游从 9 扩展到 13 个。
+- `xiaohongshu-maintainer` 每次继续比较全部项目 HEAD，并把 34 个 release watch 按每次 4 项、9 天一轮观察；维护报告新增显式 watch policy，区分自动 HEAD/tag/search 信号与到期后人工检查 issue/license/archive/契约/相关代码，所有变化仍只生成 proposal。
+- 扩展关键词的首次真实维护运行发现并完成审计 `leeguooooo/xhs-skill` 与 `excalibursssooo/xiaohongshu-search`；目录增至 47 项、release watch 增至 36 项。前者只提供未固定浏览器运行时上的流程门禁且可输出完整 Cookie header，后者虽有具体搜索/详情/用户/评论采集代码，却保存原始 token/身份并建议换 IP/代理处理风控；两者均纳入持续监测但保持 research-only，不新增 Connector route 或可用能力。

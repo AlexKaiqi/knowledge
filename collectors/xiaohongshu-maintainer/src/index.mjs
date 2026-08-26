@@ -20,6 +20,19 @@ export const DISCOVERY_QUERIES_PER_RUN = 4
 export const RELEASE_TAG_PROJECTS_PER_RUN = 4
 const DISCOVERY_RESULTS_PER_QUERY = 10
 const DISCOVERY_CANDIDATES_PER_QUERY = 5
+export const projectWatchPolicy = Object.freeze({
+  automatedSignals: [
+    { id: 'default-branch-head', coverage: 'all-catalog-projects', behavior: 'compare-every-run' },
+    { id: 'release-tag-set', coverage: 'projects-with-release-baseline', behavior: 'bounded-rotation' },
+    { id: 'ranked-repository-search', coverage: 'all-declared-search-queries', behavior: 'bounded-rotation' },
+  ],
+  scheduledReviewChecklist: ['issues', 'license', 'archive-state', 'capability-contract', 'relevant-code-diff'],
+  limitations: [
+    'Issue, license and archive state are reviewed after a HEAD/release signal or when cadence expires; they are not independently polled on every run.',
+    'Ranked search observes only the first bounded result page and never claims ecosystem completeness.',
+    'Every signal creates a proposal; no project is installed, repinned or promoted automatically.',
+  ],
+})
 
 async function readJson(file) {
   return JSON.parse(await readFile(file, 'utf8'))
@@ -425,6 +438,7 @@ export async function collectXiaohongshuMaintenance({
     },
     ecosystemProjects: {
       catalogId: projectCatalog.id,
+      watchPolicy: projectWatchPolicy,
       searchQueries: projectCatalog.searchQueries,
       total: projects.length,
       connectorRelevant: projects.filter((project) => project.roles.includes('connector-candidate') && project.status !== 'excluded' && project.status !== 'retired').map((project) => project.id),

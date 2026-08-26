@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import { readFile } from 'node:fs/promises'
 import test from 'node:test'
 import { GitHubPublicRepositoryTagsError } from '../../../connectors/github-public-repository-tags/src/index.mjs'
-import { collectXiaohongshuMaintenance, discoverEcosystemProjects, evaluateRenderedSemanticObservation, isProjectReviewDue, isRelevantDiscoveryCandidate, observeProjectReleaseTags, officialSources, selectDiscoveryQueries, selectReleaseWatchProjects } from '../src/index.mjs'
+import { collectXiaohongshuMaintenance, discoverEcosystemProjects, evaluateRenderedSemanticObservation, isProjectReviewDue, isRelevantDiscoveryCandidate, observeProjectReleaseTags, officialSources, projectWatchPolicy, selectDiscoveryQueries, selectReleaseWatchProjects } from '../src/index.mjs'
 
 const projectCatalog = JSON.parse(await readFile(new URL('../projects.json', import.meta.url), 'utf8'))
 
@@ -12,6 +12,12 @@ test('project catalog keeps research useful and non-admitting', () => {
   assert.ok(projectCatalog.selectionPolicy.requiredEvidence.includes('license-state'))
   assert.equal(projectCatalog.projects.find((project) => project.id === 'bzlrj-java-xiaohongshu-mcp').license.dependencyUse, 'allowed')
   assert.equal(projectCatalog.projects.find((project) => project.id === 'vmxmy-xiaohongshu-mcp').license.dependencyUse, 'blocked')
+  assert.equal(projectCatalog.projects.find((project) => project.id === 'alanl1234-xiaohongshu-matrices-cli').license.dependencyUse, 'blocked')
+  assert.equal(projectCatalog.projects.find((project) => project.id === 'youhai020616-xiaohongshu').license.dependencyUse, 'research-only')
+  assert.equal(projectCatalog.projects.find((project) => project.id === 'cnfjlhj-xhs-longform-private-publisher').capabilitySignals.includes('publish-reconcile'), true)
+  assert.equal(projectCatalog.projects.find((project) => project.id === 'leeguooooo-xhs-skill').accessMechanisms.includes('manual-evaluation'), true)
+  assert.equal(projectCatalog.projects.find((project) => project.id === 'excalibursssooo-xiaohongshu-search').license.dependencyUse, 'research-only')
+  assert.match(projectCatalog.projects.find((project) => project.id === 'excalibursssooo-xiaohongshu-search').license.constraint, /do not run it as a Collector route/)
 })
 
 const pinnedRouteHeads = {
@@ -23,6 +29,10 @@ const pinnedRouteHeads = {
   'https://github.com/chatek/opencli.git': '8dee08bc4c6329fdc807c208adb197adb21a1d7f',
   'https://github.com/jackwener/xiaohongshu-cli.git': '4d63f3c0c85ccd9054fa8e96d7f761aaf2507449',
   'https://github.com/RbBtSn0w/omni-post.git': 'e690a13291d6152f4b5e4810110fe59b9c5eda47',
+  'https://github.com/alanl1234/xiaohongshu-matrices-cli.git': '13dc6d7e8e83bc1c59b4559a309ca9d84c413aff',
+  'https://github.com/Youhai020616/xiaohongshu.git': '66b45c0d0ce0ba879e928a202774a984263f1b68',
+  'https://github.com/cnfjlhj/xhs-longform-private-publisher.git': 'b0c16cb8a7a568b6a48f78545f63ac6df8a8443c',
+  'https://github.com/JameryW/XhsGrowthAgent.git': '8d16b6c7ad71f350f41cf136c6d45f9dc14b91df',
 }
 
 const currentRouteHead = async (repository) => pinnedRouteHeads[repository]
@@ -48,13 +58,23 @@ test('project review cadence is independent of upstream HEAD drift', () => {
   assert.equal(isProjectReviewDue(project, new Date('2026-08-08T00:00:00Z')), true)
 })
 
-test('discovery rotation covers all twenty queries in five UTC days', () => {
-  const queries = Array.from({ length: 20 }, (_, index) => `query-${index}`)
+test('discovery rotation covers all twenty-eight queries in seven UTC days', () => {
+  const queries = Array.from({ length: 28 }, (_, index) => `query-${index}`)
   const selected = new Set()
-  for (let day = 0; day < 5; day += 1) {
+  for (let day = 0; day < 7; day += 1) {
     for (const query of selectDiscoveryQueries(queries, new Date(Date.UTC(2026, 7, 20 + day)))) selected.add(query)
   }
   assert.deepEqual([...selected].sort(), [...queries].sort())
+})
+
+test('project watch policy distinguishes automated signals from scheduled review', () => {
+  assert.deepEqual(projectWatchPolicy.automatedSignals.map((signal) => signal.id), [
+    'default-branch-head',
+    'release-tag-set',
+    'ranked-repository-search',
+  ])
+  assert.ok(projectWatchPolicy.scheduledReviewChecklist.includes('issues'))
+  assert.match(projectWatchPolicy.limitations.join(' '), /not independently polled on every run/)
 })
 
 test('release watch rotation covers all eligible projects in one full cycle', () => {
@@ -192,12 +212,14 @@ test('maintainer is proposal-only and cannot promote an unverified connector', a
   assert.ok(report.blockers.includes('capability-not-admitted:publishPrivateNoteAndObserve'))
   assert.equal(report.blockers.some((blocker) => blocker.endsWith(':listOwnedNotes')), false)
   assert.deepEqual(report.accessRoutes.automaticEligible, ['owned-notes-xiaohongshu-mcp'])
-  assert.equal(report.accessRoutes.upstreams.length, 9)
+  assert.equal(report.accessRoutes.upstreams.length, 13)
   assert.equal(routeHeadCalls.get('https://github.com/xpzouying/xiaohongshu-mcp.git'), 1)
-  assert.equal(report.ecosystemProjects.total, 40)
+  assert.equal(report.ecosystemProjects.total, 47)
   assert.equal(report.ecosystemProjects.discovery.queries.length, 4)
-  assert.equal(report.ecosystemProjects.discovery.fullCycleDays, 5)
+  assert.equal(report.ecosystemProjects.discovery.fullCycleDays, 7)
   assert.equal(report.ecosystemProjects.discovery.newCandidates.length, 0)
+  assert.equal(report.ecosystemProjects.releaseWatch.eligibleProjects, 36)
+  assert.deepEqual(report.ecosystemProjects.watchPolicy, projectWatchPolicy)
   assert.ok(report.ecosystemProjects.dependencyBlocked.includes('jackwener-xiaohongshu-cli'))
   assert.equal(report.ecosystemProjects.adoptableCandidates.includes('jackwener-xiaohongshu-cli'), false)
   assert.equal(report.nextRequiredGate, 'explicit-live-probe-approval')
@@ -227,7 +249,7 @@ test('maintainer reports upstream drift for review without repinning', async () 
     artifactCheck: async () => [],
   })
   assert.equal(report.upstream.status, 'review-required')
-  assert.equal(report.proposals.length, 9)
+  assert.equal(report.proposals.length, 13)
   assert.deepEqual(report.proposals.slice(0, 2).map((proposal) => proposal.routeId), [
     'owned-notes-xiaohongshu-mcp',
     'creator-web-xiaohongshu-mcp',

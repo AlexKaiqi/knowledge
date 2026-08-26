@@ -1,7 +1,7 @@
 {
   "schemaVersion": "dsh.connector-definition/v1",
   "id": "xiaohongshu-browser",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "capabilityRefs": [
     "/capabilities/xiaohongshu/publish-private-note-and-observe.md",
     "/capabilities/xiaohongshu/list-owned-notes.md"

@@ -267,6 +267,78 @@
       "notes": "Promising independent signed-API route: implements private image-note creation and the creator owned-note list, but cannot be adopted until licensing and conformance gaps are resolved."
     },
     {
+      "id": "creator-api-xiaohongshu-matrices-cli",
+      "lifecycle": "researching",
+      "contractLevel": "full",
+      "accessMethod": "signed-web-api",
+      "automaticSelectionEligible": false,
+      "priority": 36,
+      "capabilityCoverage": [
+        {
+          "capabilityRef": "/capabilities/xiaohongshu/publish-private-note-and-observe.md",
+          "phases": ["authorize", "prepare", "submit", "reconcile", "observe"],
+          "gaps": ["The fork implements owned-note comparison, draft-diversion detection and unknown-after-submit refusal, but its upstream license provenance is unresolved and no adapter or live probe has bound these states to the OKF contract."]
+        },
+        {
+          "capabilityRef": "/capabilities/xiaohongshu/list-owned-notes.md",
+          "phases": ["authorize", "observe"],
+          "gaps": ["The signed creator endpoint and per-account profile bridge are unverified against the bounded owned-note schema; raw cookies and xsec tokens must remain internal."]
+        }
+      ],
+      "failureDomains": ["xiaohongshu-internal-api", "signature-algorithm", "cookie-session", "api-contract", "camoufox-runtime", "identity-state", "jackwener-code-lineage", "platform-write"],
+      "sourceRefs": [
+        "https://github.com/alanl1234/xiaohongshu-matrices-cli",
+        "https://github.com/alanl1234/xiaohongshu-matrices-cli/blob/main/xhs_cli/dashboard/publisher.py",
+        "https://github.com/alanl1234/xiaohongshu-matrices-cli/blob/main/xhs_cli/dashboard/collector.py"
+      ],
+      "upstream": {
+        "repository": "https://github.com/alanl1234/xiaohongshu-matrices-cli.git",
+        "branch": "main",
+        "observedRevision": "13dc6d7e8e83bc1c59b4559a309ca9d84c413aff"
+      },
+      "maintenance": {
+        "owner": "xiaohongshu-maintainer",
+        "reviewOn": ["upstream-change", "source-change", "probe-failure", "contract-gap-change", "manual"]
+      },
+      "notes": "Strongest reconciliation and identity-governance reference found in this pass. It remains non-executable here because an Apache-2.0 fork does not automatically cure the absent license on its declared upstream code lineage."
+    },
+    {
+      "id": "creator-hybrid-redbook-cli",
+      "lifecycle": "researching",
+      "contractLevel": "full",
+      "accessMethod": "browser-assisted",
+      "automaticSelectionEligible": false,
+      "priority": 38,
+      "capabilityCoverage": [
+        {
+          "capabilityRef": "/capabilities/xiaohongshu/publish-private-note-and-observe.md",
+          "phases": ["authorize", "prepare", "submit", "reconcile", "observe"],
+          "gaps": ["Private publication and creator analytics are exposed across MCP and CDP engines, but the bundled MCP executable is opaque, the stable receipt behavior is unverified, and no durable unknown-outcome ledger is demonstrated."]
+        },
+        {
+          "capabilityRef": "/capabilities/xiaohongshu/list-owned-notes.md",
+          "phases": ["authorize", "observe"],
+          "gaps": ["Profile reads and analytics are broader than the OKF schema and can include xsec tokens, request URLs and account data; no minimized live probe exists."]
+        }
+      ],
+      "failureDomains": ["xiaohongshu-creator-center", "xiaohongshu-web-dom", "creator-center-dom", "browser-cdp", "local-mcp", "opaque-prebuilt-binary", "cookie-session", "identity-state"],
+      "sourceRefs": [
+        "https://github.com/Youhai020616/xiaohongshu",
+        "https://github.com/Youhai020616/xiaohongshu/blob/main/SCHEMA.md",
+        "https://github.com/Youhai020616/xiaohongshu/blob/main/scripts/cdp_publish.py"
+      ],
+      "upstream": {
+        "repository": "https://github.com/Youhai020616/xiaohongshu.git",
+        "branch": "main",
+        "observedRevision": "66b45c0d0ce0ba879e928a202774a984263f1b68"
+      },
+      "maintenance": {
+        "owner": "xiaohongshu-maintainer",
+        "reviewOn": ["upstream-change", "source-change", "probe-failure", "contract-gap-change", "manual"]
+      },
+      "notes": "Hybrid local-MCP plus CDP route reference. Only the inspectable scripts may inform an adapter until the prebuilt MCP binary has reproducible source provenance."
+    },
+    {
       "id": "creator-web-omni-post",
       "lifecycle": "researching",
       "contractLevel": "degraded",
@@ -292,6 +364,72 @@
         "reviewOn": ["upstream-change", "source-change", "contract-gap-change", "manual"]
       },
       "notes": "Kept as a research input, not as an automatic fallback."
+    },
+    {
+      "id": "creator-web-longform-private-publisher",
+      "lifecycle": "researching",
+      "contractLevel": "degraded",
+      "accessMethod": "browser-assisted",
+      "automaticSelectionEligible": false,
+      "priority": 42,
+      "capabilityCoverage": [
+        {
+          "capabilityRef": "/capabilities/xiaohongshu/publish-private-note-and-observe.md",
+          "phases": ["authorize", "prepare", "submit", "reconcile"],
+          "gaps": ["Only the long-form editor is supported; manager-card verification uses title prefix plus visibility but returns no stable note ID, does not inspect published content or feedback, and has no durable anti-duplicate ledger. Missing license blocks dependency use."]
+        }
+      ],
+      "failureDomains": ["xiaohongshu-creator-center", "creator-center-dom", "playwright-python-runtime", "cookie-session", "longform-editor", "platform-write"],
+      "sourceRefs": [
+        "https://github.com/cnfjlhj/xhs-longform-private-publisher",
+        "https://github.com/cnfjlhj/xhs-longform-private-publisher/blob/main/scripts/publish_longform.py"
+      ],
+      "upstream": {
+        "repository": "https://github.com/cnfjlhj/xhs-longform-private-publisher.git",
+        "branch": "main",
+        "observedRevision": "b0c16cb8a7a568b6a48f78545f63ac6df8a8443c"
+      },
+      "maintenance": {
+        "owner": "xiaohongshu-maintainer",
+        "reviewOn": ["upstream-change", "source-change", "contract-gap-change", "manual"]
+      },
+      "notes": "Retained because its post-submit manager-page check is a useful reconcile test pattern; it is not a complete route and cannot be executed as a dependency without a license."
+    },
+    {
+      "id": "creator-web-xhs-growth-agent",
+      "lifecycle": "researching",
+      "contractLevel": "full",
+      "accessMethod": "browser-assisted",
+      "automaticSelectionEligible": false,
+      "priority": 45,
+      "capabilityCoverage": [
+        {
+          "capabilityRef": "/capabilities/xiaohongshu/publish-private-note-and-observe.md",
+          "phases": ["authorize", "prepare", "submit", "observe"],
+          "gaps": ["The service can set self-only visibility, but the agent currently invokes public publication; leaving the publish page or seeing a success message can produce published status with an empty post ID, so receipt and reconciliation conformance fail."]
+        },
+        {
+          "capabilityRef": "/capabilities/xiaohongshu/list-owned-notes.md",
+          "phases": ["authorize", "observe"],
+          "gaps": ["Creator analytics and per-account CDP isolation are implemented, but no bounded owned-note projection or privacy-minimized live verification is available."]
+        }
+      ],
+      "failureDomains": ["xiaohongshu-creator-center", "xiaohongshu-web-dom", "creator-center-dom", "playwright-python-runtime", "browser-cdp", "xiaohongshu-internal-api", "cookie-session", "identity-state", "platform-write"],
+      "sourceRefs": [
+        "https://github.com/JameryW/XhsGrowthAgent",
+        "https://github.com/JameryW/XhsGrowthAgent/blob/main/backend/services/xhs_publisher.py",
+        "https://github.com/JameryW/XhsGrowthAgent/blob/main/backend/agents/publisher.py"
+      ],
+      "upstream": {
+        "repository": "https://github.com/JameryW/XhsGrowthAgent.git",
+        "branch": "main",
+        "observedRevision": "8d16b6c7ad71f350f41cf136c6d45f9dc14b91df"
+      },
+      "maintenance": {
+        "owner": "xiaohongshu-maintainer",
+        "reviewOn": ["upstream-change", "source-change", "probe-failure", "contract-gap-change", "manual"]
+      },
+      "notes": "Useful full-workflow counterexample and analytics source, not an eligible route until private invocation, durable receipt and identity minimization are proven."
     },
     {
       "id": "official-share-sdk",
