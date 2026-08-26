@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/github/list-public-repository-tags-output.schema.json",
+  "title": "GitHubPublicRepositoryTagSet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["source", "request", "repositoryUrl", "coverage", "tags", "tagSetDigest", "rateLimit", "observedAt", "resultDigest", "conformance"],
+  "properties": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "endpointTemplate", "apiVersion"],
+      "properties": {
+        "id": { "const": "github-public-repository-tags" },
+        "endpointTemplate": { "const": "https://api.github.com/repos/{owner}/{repository}/tags" },
+        "apiVersion": { "const": "2026-03-10" }
+      }
+    },
+    "request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["owner", "repository", "maxTags"],
+      "properties": {
+        "owner": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "repository": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "maxTags": { "type": "integer", "minimum": 1, "maximum": 500 }
+      }
+    },
+    "repositoryUrl": { "type": "string", "format": "uri", "pattern": "^https://github\\.com/[^/]+/[^/]+$" },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["representation", "returnedCount", "requestsMade", "perRequestLimit", "maximumTags", "tagSetComplete", "truncated", "truncationReason"],
+      "properties": {
+        "representation": { "const": "bounded-tag-set" },
+        "returnedCount": { "type": "integer", "minimum": 0, "maximum": 500 },
+        "requestsMade": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "perRequestLimit": { "const": 100 },
+        "maximumTags": { "type": "integer", "minimum": 1, "maximum": 500 },
+        "tagSetComplete": { "type": "boolean" },
+        "truncated": { "type": "boolean" },
+        "truncationReason": { "enum": [null, "max-tags"] }
+      }
+    },
+    "tags": {
+      "type": "array",
+      "maxItems": 500,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "commitSha"],
+        "properties": {
+          "name": { "type": "string", "minLength": 1, "maxLength": 1024, "pattern": "^[^\\u0000-\\u001f\\u007f]+$" },
+          "commitSha": { "type": "string", "pattern": "^[a-f0-9]{40}$" }
+        }
+      }
+    },
+    "tagSetDigest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "rateLimit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["resource", "limit", "remaining", "resetAt"],
+      "properties": {
+        "resource": { "type": ["string", "null"] },
+        "limit": { "type": ["integer", "null"], "minimum": 0 },
+        "remaining": { "type": ["integer", "null"], "minimum": 0 },
+        "resetAt": { "type": ["string", "null"], "format": "date-time" }
+      }
+    },
+    "observedAt": { "type": "string", "format": "date-time" },
+    "resultDigest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "conformance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "assertions"],
+      "properties": {
+        "status": { "enum": ["passed", "review-required"] },
+        "assertions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "passed"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+              "passed": { "type": "boolean" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

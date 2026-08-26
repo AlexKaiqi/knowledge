@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "github-public-repository-tags-live",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/github/list-public-repository-tags.md",
+  "connectorId": "github-public-repository-tags",
+  "environment": "production-public",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "list-known-public-repository-tags", "operation": "listPublicRepositoryTags" },
+    { "id": "normalize-complete-tag-set", "operation": "normalizeRepositoryTagPage" }
+  ],
+  "assertions": [
+    "The official public GET /repos/{owner}/{repo}/tags endpoint accepts an unauthenticated request using the pinned API version.",
+    "The bounded result for tamnd/xiaohongshu-cli is complete and contains v0.1.0 and v0.2.0 at the reviewed commit identities.",
+    "The output exposes the core rate-limit state, request count, maximum tag budget, completeness, truncation state, and a normalized tag-set digest.",
+    "No token, credential, archive URL, raw response, tagger identity, signature, or tag message is retained."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 30, "maxCost": 0, "currency": "CNY" }
+}

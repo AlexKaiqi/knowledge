@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "github-public-repository-tags",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/github/list-public-repository-tags.md"],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "connectors/github-public-repository-tags/src/index.mjs"
+  },
+  "configSchema": "repo:/connectors/github-public-repository-tags/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [
+    { "capabilityRef": "/capabilities/github/list-public-repository-tags.md", "operation": "listPublicRepositoryTags" }
+  ],
+  "conformance": {
+    "status": "verified",
+    "probeReportRef": "/verifications/github/public-repository-tags/report.json"
+  }
+}

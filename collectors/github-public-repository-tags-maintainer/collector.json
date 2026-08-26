@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "dsh.collector-definition/v1",
+  "id": "github-public-repository-tags-maintainer",
+  "version": "1.0.0",
+  "scope": {
+    "knowledgeGlobs": [
+      "knowledge/platforms/github.md",
+      "knowledge/concepts/github/public-repository-tag-set.md",
+      "knowledge/capabilities/github/list-public-repository-tags.md",
+      "knowledge/schemas/github/list-public-repository-tags-*.schema.json",
+      "knowledge/verifications/github/public-repository-tags/*.json"
+    ],
+    "connectorIds": ["github-public-repository-tags"],
+    "capabilityRefs": ["/capabilities/github/list-public-repository-tags.md"]
+  },
+  "triggers": [
+    { "kind": "schedule", "schedule": "30 6 * * *" },
+    { "kind": "source-change" },
+    { "kind": "schema-change" },
+    { "kind": "connector-change" },
+    { "kind": "failed-execution" },
+    { "kind": "manual" }
+  ],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "collectors/github-public-repository-tags-maintainer/src/index.mjs"
+  },
+  "outputs": ["knowledge-proposal", "connector-change-proposal", "verification-report"],
+  "writePolicy": { "mode": "proposal-only", "requiresApprovalFor": ["knowledge", "connector", "live-probe"] },
+  "probePolicy": { "allowedEnvironments": ["production-public"], "identityPoolRefs": [], "maximumEffect": "none" },
+  "budgets": { "maxRunsPerDay": 4, "maxCostPerDay": 0, "currency": "CNY" }
+}

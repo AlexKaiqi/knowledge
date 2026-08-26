@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict'
-import { createHash } from 'node:crypto'
 import { readFile } from 'node:fs/promises'
 import test from 'node:test'
-import { collectXiaohongshuMaintenance, discoverEcosystemProjects, evaluateRenderedSemanticObservation, isProjectReviewDue, isRelevantDiscoveryCandidate, normalizeRemoteTags, observeProjectReleaseTags, officialSources, selectDiscoveryQueries, selectReleaseWatchProjects } from '../src/index.mjs'
+import { GitHubPublicRepositoryTagsError } from '../../../connectors/github-public-repository-tags/src/index.mjs'
+import { collectXiaohongshuMaintenance, discoverEcosystemProjects, evaluateRenderedSemanticObservation, isProjectReviewDue, isRelevantDiscoveryCandidate, observeProjectReleaseTags, officialSources, parseGitHubRepositoryUrl, selectDiscoveryQueries, selectReleaseWatchProjects } from '../src/index.mjs'
 
 const projectCatalog = JSON.parse(await readFile(new URL('../projects.json', import.meta.url), 'utf8'))
 
@@ -58,17 +58,10 @@ test('release watch rotation covers all eligible projects in five UTC days', () 
   assert.deepEqual([...selected].sort(), Object.keys(projectCatalog.releaseTagBaselines).sort())
 })
 
-test('release tag normalization prefers peeled commits for annotated tags', () => {
-  const result = normalizeRemoteTags([
-    `${'1'.repeat(40)}\trefs/tags/v2.0.0`,
-    `${'2'.repeat(40)}\trefs/tags/v1.0.0`,
-    `${'3'.repeat(40)}\trefs/tags/v1.0.0^{}`,
-  ].join('\n'))
-  const expected = [
-    `refs/tags/v1.0.0\t${'3'.repeat(40)}`,
-    `refs/tags/v2.0.0\t${'1'.repeat(40)}`,
-  ].join('\n')
-  assert.deepEqual(result, { tagCount: 2, digest: createHash('sha256').update(expected).digest('hex') })
+test('release watch only accepts canonical public GitHub repository URLs', () => {
+  assert.deepEqual(parseGitHubRepositoryUrl('https://github.com/tamnd/xiaohongshu-cli.git'), { owner: 'tamnd', repository: 'xiaohongshu-cli' })
+  assert.throws(() => parseGitHubRepositoryUrl('https://example.com/tamnd/xiaohongshu-cli.git'), /public GitHub/)
+  assert.throws(() => parseGitHubRepositoryUrl('https://github.com/tamnd/xiaohongshu-cli/issues'), /public GitHub/)
 })
 
 test('release observations are serial, bounded and proposal-safe', async () => {
@@ -91,6 +84,31 @@ test('release observations are serial, bounded and proposal-safe', async () => {
   assert.equal(maximumInFlight, 1)
   assert.equal(observations[0].status, 'review-required')
   assert.equal(observations.slice(1).every((observation) => observation.status === 'current'), true)
+})
+
+test('release observation preserves a core rate-limit deferral', async () => {
+  const projects = selectReleaseWatchProjects(projectCatalog, new Date('2026-08-26T00:00:00Z'), 1)
+  const observations = await observeProjectReleaseTags({
+    projects,
+    baselines: projectCatalog.releaseTagBaselines,
+    releaseTags: async () => { throw new GitHubPublicRepositoryTagsError('HTTP_403', { code: 'rate-limited', httpStatus: 403, retryAt: '2026-08-27T00:02:00.000Z' }) },
+  })
+  assert.equal(observations[0].status, 'deferred')
+  assert.equal(observations[0].notBefore, '2026-08-27T00:02:00.000Z')
+})
+
+test('release observation requires review when a tag set exceeds its budget', async () => {
+  const projects = selectReleaseWatchProjects(projectCatalog, new Date('2026-08-26T00:00:00Z'), 1)
+  const observations = await observeProjectReleaseTags({
+    projects,
+    baselines: projectCatalog.releaseTagBaselines,
+    releaseTags: async () => {
+      const error = new Error('truncated')
+      error.code = 'tag-set-truncated'
+      throw error
+    },
+  })
+  assert.equal(observations[0].status, 'budget-review')
 })
 
 test('discovery relevance rejects xhs/rednote name collisions', () => {

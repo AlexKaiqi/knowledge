@@ -45,3 +45,6 @@ title: Knowledge bundle history
 - 通过 production-public live probe 准入 Go Module Mirror 与 Checksum Database Service，以及“读取并认证公共 Go 模块精确版本”Capability；`rsc.io/quote@v1.5.2` 的模块树 h1、go.mod h1/SHA-256、版本身份和 2,987-byte 归档均命中固定证据。
 - Connector 固定官方 public proxy/SumDB，要求显式公开路径确认，拒绝 latest/range、direct/VCS fallback、超 32 MiB 归档和裸 `/lookup` 信任；官方 Go verifier 在隔离 cache 中完成透明日志认证，归档不执行且 cache 已清理。
 - 新增 proposal-only Collector 观察精确模块证据、Go verifier、认证漂移、验证过期和限流；完整可用闭环更新为 9（Information Source 3；Platform 5；Service 1），Subject 更新为 8，Capability 更新为 9。
+- 通过 production-public live probe 准入“读取 GitHub 公共仓库 Tag 集合”Capability；官方 Tags API 匿名返回 `tamnd/xiaohongshu-cli` 的完整 2-tag 集合，两个 tag 的目标 commit 均命中固定证据。
+- Connector 内部串行处理官方分页，每页最多 100、总计最多 500、单页 2 MiB；输出明确完整/截断、`core` 限流和规范化 tag→commit 摘要，并排除 tagger、消息、签名、archive URL 与原始 payload。
+- 新增 proposal-only Collector 观察 tag 集合、已知 tag 身份、验证过期和限流；小红书 Collector 的 17 项 release watch 改为消费该已验证 Connector。完整可用闭环更新为 10（Information Source 3；Platform 6；Service 1），Subject 保持 8，Capability 更新为 10。

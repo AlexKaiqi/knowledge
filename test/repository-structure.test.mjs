@@ -43,6 +43,7 @@ test('canonical knowledge contains only probe-admitted platform and capability f
   assert.deepEqual(await markdownInstances('knowledge/services/'), ['go-module-services.md'])
   assert.deepEqual(await markdownInstances('knowledge/capabilities/'), [
     'douyin/read-open-platform-surface.md',
+    'github/list-public-repository-tags.md',
     'github/read-public-repository-file.md',
     'github/search-public-repositories.md',
     'go/read-authenticated-public-module-version.md',

@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "dsh.github-public-repository-tags-snapshot/v1",
+  "fixture": {
+    "expectedTags": {
+      "v0.1.0": "1508229cfa4b1437e0cb2e76b03dbfda42b23b4f",
+      "v0.2.0": "96743ceff24452073b3571c1b07f6ce75bb223bb"
+    }
+  },
+  "source": {
+    "id": "github-public-repository-tags",
+    "endpointTemplate": "https://api.github.com/repos/{owner}/{repository}/tags",
+    "apiVersion": "2026-03-10"
+  },
+  "request": {
+    "owner": "tamnd",
+    "repository": "xiaohongshu-cli",
+    "maxTags": 200
+  },
+  "repositoryUrl": "https://github.com/tamnd/xiaohongshu-cli",
+  "coverage": {
+    "representation": "bounded-tag-set",
+    "returnedCount": 2,
+    "requestsMade": 1,
+    "perRequestLimit": 100,
+    "maximumTags": 200,
+    "tagSetComplete": true,
+    "truncated": false,
+    "truncationReason": null
+  },
+  "tags": [
+    {
+      "name": "v0.1.0",
+      "commitSha": "1508229cfa4b1437e0cb2e76b03dbfda42b23b4f"
+    },
+    {
+      "name": "v0.2.0",
+      "commitSha": "96743ceff24452073b3571c1b07f6ce75bb223bb"
+    }
+  ],
+  "tagSetDigest": "712da6fa52f07b83d83003277d8ecc8306ed95b019ec1da31094071987c32b91",
+  "rateLimit": {
+    "resource": "core",
+    "limit": 60,
+    "remaining": 37,
+    "resetAt": "2026-08-26T19:54:57.000Z"
+  },
+  "observedAt": "2026-08-26T19:04:40.396Z",
+  "resultDigest": "0773f30d3ca0df3f6b53729722174d032d31dba715ae0536ce63f73d0adb0c14",
+  "conformance": {
+    "status": "passed",
+    "assertions": [
+      { "id": "response-shape", "passed": true },
+      { "id": "api-version", "passed": true },
+      { "id": "core-rate-bucket", "passed": true },
+      { "id": "bounded-requests", "passed": true },
+      { "id": "unique-tag-names", "passed": true },
+      { "id": "commit-identities", "passed": true },
+      { "id": "coverage-declared", "passed": true }
+    ]
+  }
+}

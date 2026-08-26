@@ -40,6 +40,9 @@ test('control-plane instances match their schemas', async () => {
     ['../spec/connector-definition.schema.json', '../connectors/github-public-repository-file/connector.json'],
     ['../spec/collector-definition.schema.json', '../collectors/github-public-repository-file-maintainer/collector.json'],
     ['../spec/probe-definition.schema.json', '../probes/definitions/github-public-repository-file-live.json'],
+    ['../spec/connector-definition.schema.json', '../connectors/github-public-repository-tags/connector.json'],
+    ['../spec/collector-definition.schema.json', '../collectors/github-public-repository-tags-maintainer/collector.json'],
+    ['../spec/probe-definition.schema.json', '../probes/definitions/github-public-repository-tags-live.json'],
     ['../spec/connector-definition.schema.json', '../connectors/npm-public-package-version/connector.json'],
     ['../spec/collector-definition.schema.json', '../collectors/npm-public-package-version-maintainer/collector.json'],
     ['../spec/probe-definition.schema.json', '../probes/definitions/npm-public-package-version-live.json'],
@@ -75,6 +78,7 @@ test('Connector configuration schemas compile', async () => {
     '../connectors/douyin-open-platform-docs/config.schema.json',
     '../connectors/github-public-repository-search/config.schema.json',
     '../connectors/github-public-repository-file/config.schema.json',
+    '../connectors/github-public-repository-tags/config.schema.json',
     '../connectors/npm-public-package-version/config.schema.json',
     '../connectors/pypi-public-project-release/config.schema.json',
     '../connectors/go-public-module-version/config.schema.json',
@@ -96,6 +100,13 @@ test('GitHub live snapshot payload matches its product output schema', async () 
 test('GitHub public repository file live snapshot matches its product output schema', async () => {
   const validate = await validator('../knowledge/schemas/github/read-public-repository-file-output.schema.json')
   const snapshot = JSON.parse(await readFile(new URL('../knowledge/verifications/github/public-repository-file/snapshot.json', import.meta.url), 'utf8'))
+  const { schemaVersion: _schemaVersion, fixture: _fixture, ...payload } = snapshot
+  assert.equal(validate(payload), true, JSON.stringify(validate.errors))
+})
+
+test('GitHub public repository tags live snapshot matches its product output schema', async () => {
+  const validate = await validator('../knowledge/schemas/github/list-public-repository-tags-output.schema.json')
+  const snapshot = JSON.parse(await readFile(new URL('../knowledge/verifications/github/public-repository-tags/snapshot.json', import.meta.url), 'utf8'))
   const { schemaVersion: _schemaVersion, fixture: _fixture, ...payload } = snapshot
   assert.equal(validate(payload), true, JSON.stringify(validate.errors))
 })

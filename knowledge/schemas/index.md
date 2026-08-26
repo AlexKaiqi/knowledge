@@ -2,12 +2,14 @@
 
 保存 Capability 引用的产品输入输出 JSON Schema。不同产品可以完全不同，不强制统一业务字段；公共层只统一 Capability envelope。
 
-当前：18。
+当前：20。
 
 - [抖音开放平台接口面输入](douyin/open-platform-surface-input.schema.json)
 - [抖音开放平台接口面输出](douyin/open-platform-surface-output.schema.json)
 - [GitHub 公共仓库文件输入](github/read-public-repository-file-input.schema.json)
 - [GitHub 公共仓库文件输出](github/read-public-repository-file-output.schema.json)
+- [GitHub 公共仓库 Tag 集合输入](github/list-public-repository-tags-input.schema.json)
+- [GitHub 公共仓库 Tag 集合输出](github/list-public-repository-tags-output.schema.json)
 - [GitHub 公共仓库搜索输入](github/search-public-repositories-input.schema.json)
 - [GitHub 公共仓库搜索输出](github/search-public-repositories-output.schema.json)
 - [Go 公共模块精确版本输入](go/read-authenticated-public-module-version-input.schema.json)
