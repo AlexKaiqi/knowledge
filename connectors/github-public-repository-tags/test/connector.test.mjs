@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { createHash } from 'node:crypto'
 import test from 'node:test'
-import { API_VERSION, GitHubPublicRepositoryTagsError, listPublicRepositoryTags, normalizeRepositoryTagPage } from '../src/index.mjs'
+import { API_VERSION, GitHubPublicRepositoryTagsError, listPublicRepositoryTags, normalizeRepositoryTagPage, parsePublicGitHubRepositoryUrl } from '../src/index.mjs'
 
 const input = { owner: 'tamnd', repository: 'xiaohongshu-cli', maxTags: 200 }
 
@@ -39,6 +39,13 @@ test('normalizes a complete public repository tag set and compatible digest', as
   assert.equal(result.coverage.requestsMade, 1)
   assert.deepEqual(result.tags.map((entry) => entry.name), ['v0.1.0', 'v0.2.0'])
   assert.equal(result.tagSetDigest, createHash('sha256').update(normalized).digest('hex'))
+})
+
+test('parses only canonical public GitHub repository URLs', () => {
+  assert.deepEqual(parsePublicGitHubRepositoryUrl('https://github.com/tamnd/xiaohongshu-cli.git'), { owner: 'tamnd', repository: 'xiaohongshu-cli' })
+  assert.throws(() => parsePublicGitHubRepositoryUrl('https://example.com/tamnd/xiaohongshu-cli.git'), /public GitHub/)
+  assert.throws(() => parsePublicGitHubRepositoryUrl('https://github.com:8443/tamnd/xiaohongshu-cli.git'), /public GitHub/)
+  assert.throws(() => parsePublicGitHubRepositoryUrl('https://github.com/tamnd/xiaohongshu-cli/issues'), /public GitHub/)
 })
 
 test('serially follows pagination up to the caller tag budget', async () => {

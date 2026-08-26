@@ -14,6 +14,23 @@
     "douyin openapi sdk",
     "抖音 视频 信息 解析"
   ],
+  "releaseTagBaselines": {
+    "chronoai-broadcast-kit": { "tagCount": 0, "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" },
+    "nanmicoder-mediacrawler": { "tagCount": 0, "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" },
+    "kuhakucai-douyin-mcp": { "tagCount": 0, "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" },
+    "lancelin111-douyin-mcp-server": { "tagCount": 0, "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" },
+    "dreammis-social-auto-upload": { "tagCount": 5, "digest": "3a4445a1f95dc7f3e10a64373988c35bb89d1db91c0780ab636538a233450605" },
+    "wjz-douyin-upload-mcp-skill": { "tagCount": 0, "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" },
+    "xiaoliangliang-auto-publish": { "tagCount": 0, "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" },
+    "evil0ctal-douyin-tiktok-download-api": { "tagCount": 52, "digest": "989520810fbdbe5bbe910791af7c3da9dad90fe4668030305631405f92d79793" },
+    "pazwusimple-douyin-mcp": { "tagCount": 0, "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" },
+    "oil-oil-video-publisher-skill": { "tagCount": 0, "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" },
+    "lincwang-humanized-social-publisher": { "tagCount": 0, "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" },
+    "fkzn10-douyin-rpa-publisher": { "tagCount": 0, "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" },
+    "dabao-douyin-image-publisher": { "tagCount": 0, "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" },
+    "joeanamier-tiktok-downloader": { "tagCount": 26, "digest": "a0fed141a01f7d4efdb36e5d33609552b175e83457c679a2a35122af48c83a59" },
+    "iszhouhua-social-media-copilot": { "tagCount": 0, "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" }
+  },
   "projects": [
     {
       "id": "chronoai-broadcast-kit",

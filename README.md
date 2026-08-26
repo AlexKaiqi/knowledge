@@ -83,7 +83,7 @@ Connector：9 个已验证；xiaohongshu-browser 为 mixed（读取已验证、�
 
 抖音已有一个真实闭环：无需身份读取并语义校验官方开放平台文档。它只是一条 Information Source 能力；应用审核、scope、用户授权和真实业务调用尚未验证，所以抖音 Platform 能力仍为 0。
 
-抖音维护 Collector 当前管理 24 个固定提交的开源项目和 10 条访问路线，区分官方 OpenAPI、创作者中心发布、草稿准备、公开 Web 研究、自有创作者数据与人工恢复。每次串行查询 2 个关键词、5 天覆盖 10 个查询；同时观察项目和路线 HEAD。所有路线仍为 `researching`/`degraded`，自动选择数为 0。MediaCrawler 的受限许可证、`social-media-copilot` 的许可证冲突、无许可证项目和“点击即成功”实现都被显式阻断，Collector 不会自动安装、登录、接受许可证或升级路线。
+抖音维护 Collector 当前管理 24 个固定提交的开源项目和 10 条访问路线，区分官方 OpenAPI、创作者中心发布、草稿准备、公开 Web 研究、自有创作者数据与人工恢复。每次串行查询 2 个关键词、5 天覆盖 10 个查询；同时观察项目和路线 HEAD。对 15 个声明关注 release 的项目，另消费已验证的 GitHub Tag Connector，每次串行观察 4 个、4 天覆盖一轮。所有路线仍为 `researching`/`degraded`，自动选择数为 0。MediaCrawler 的受限许可证、`social-media-copilot` 的许可证冲突、无许可证项目和“点击即成功”实现都被显式阻断，Collector 不会自动安装、登录、接受许可证或升级路线。
 
 GitHub 已有三个真实 Platform 闭环：通过官方 REST API、无需身份搜索公共仓库；串行分页读取最多 500 个 tag 名称与目标 commit SHA，并明确集合是否完整；以及在完整不可变 commit ID 下读取一个不超过 256 KiB 的 UTF-8 公共仓库文件。三者组合可以发现候选、观察 release tag 面，并核验固定 revision 的 README、LICENSE、manifest 和实现证据，但仍不能证明生态完整、许可证有效、tag 不会移动、发行物完整或项目能力可执行。
 

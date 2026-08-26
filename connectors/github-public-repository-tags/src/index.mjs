@@ -34,6 +34,17 @@ function assertInput(input) {
   return { owner: input.owner, repository: input.repository, maxTags }
 }
 
+export function parsePublicGitHubRepositoryUrl(repositoryUrl) {
+  let url
+  try { url = new URL(repositoryUrl) } catch { throw new Error('repositoryUrl must be a public GitHub repository URL') }
+  const segments = url.pathname.replace(/\.git$/i, '').split('/').filter(Boolean)
+  if (url.protocol !== 'https:' || url.hostname !== 'github.com' || url.port || url.username || url.password || url.search || url.hash || segments.length !== 2) {
+    throw new Error('repositoryUrl must be a public GitHub repository URL')
+  }
+  const { owner, repository } = assertInput({ owner: segments[0], repository: segments[1] })
+  return { owner, repository }
+}
+
 function parseIntegerHeader(headers, name) {
   const value = headers.get(name)
   return value !== null && /^\d+$/.test(value) ? Number(value) : null

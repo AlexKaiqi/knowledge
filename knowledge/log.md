@@ -48,3 +48,4 @@ title: Knowledge bundle history
 - 通过 production-public live probe 准入“读取 GitHub 公共仓库 Tag 集合”Capability；官方 Tags API 匿名返回 `tamnd/xiaohongshu-cli` 的完整 2-tag 集合，两个 tag 的目标 commit 均命中固定证据。
 - Connector 内部串行处理官方分页，每页最多 100、总计最多 500、单页 2 MiB；输出明确完整/截断、`core` 限流和规范化 tag→commit 摘要，并排除 tagger、消息、签名、archive URL 与原始 payload。
 - 新增 proposal-only Collector 观察 tag 集合、已知 tag 身份、验证过期和限流；小红书 Collector 的 17 项 release watch 改为消费该已验证 Connector。完整可用闭环更新为 10（Information Source 3；Platform 6；Service 1），Subject 保持 8，Capability 更新为 10。
+- 抖音 Collector 补齐 15 个 `release` watch 的实际执行：保存规范化 tag→commit 基线，每次串行调用已验证的 GitHub Tag Connector 观察 4 个、4 天覆盖一轮；变化、限流、截断和契约漂移分别生成 proposal，不自动升级候选路线。

@@ -6,7 +6,9 @@ import process from 'node:process'
 import { promisify } from 'node:util'
 import { fileURLToPath } from 'node:url'
 import { searchPublicRepositories } from '../../../connectors/github-public-repository-search/src/index.mjs'
-import { listPublicRepositoryTags } from '../../../connectors/github-public-repository-tags/src/index.mjs'
+import { observeProjectReleaseTags, selectReleaseWatchProjects } from '../../lib/github-release-watch.mjs'
+
+export { observeProjectReleaseTags, selectReleaseWatchProjects } from '../../lib/github-release-watch.mjs'
 
 const exec = promisify(execFile)
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..')
@@ -70,15 +72,6 @@ export function selectDiscoveryQueries(searchQueries, observedAt, count = DISCOV
   const dayIndex = Math.floor(observedAt.getTime() / (24 * 60 * 60 * 1000))
   const start = (dayIndex * count) % searchQueries.length
   return Array.from({ length: Math.min(count, searchQueries.length) }, (_, offset) => searchQueries[(start + offset) % searchQueries.length])
-}
-
-export function selectReleaseWatchProjects(projectCatalog, observedAt, count = RELEASE_TAG_PROJECTS_PER_RUN) {
-  const eligible = projectCatalog.projects.filter((project) =>
-    project.watch.reviewOn.includes('release') && projectCatalog.releaseTagBaselines?.[project.id])
-  if (eligible.length === 0) return []
-  const dayIndex = Math.floor(observedAt.getTime() / (24 * 60 * 60 * 1000))
-  const start = (dayIndex * count) % eligible.length
-  return Array.from({ length: Math.min(count, eligible.length) }, (_, offset) => eligible[(start + offset) % eligible.length])
 }
 
 function canonicalRepositoryUrl(url) {
@@ -179,53 +172,6 @@ async function defaultUpstreamHead(repository, branch = 'main') {
   return result.stdout.trim().split(/\s+/)[0] ?? ''
 }
 
-export function parseGitHubRepositoryUrl(repository) {
-  let url
-  try { url = new URL(repository) } catch { throw new Error('release watch repository URL is invalid') }
-  const segments = url.pathname.replace(/\.git$/i, '').split('/').filter(Boolean)
-  if (url.protocol !== 'https:' || url.hostname !== 'github.com' || url.username || url.password || url.search || url.hash || segments.length !== 2) throw new Error('release watch requires a public GitHub repository URL')
-  return { owner: segments[0], repository: segments[1] }
-}
-
-async function defaultReleaseTagState(repository) {
-  const input = { ...parseGitHubRepositoryUrl(repository), maxTags: 200 }
-  const result = await listPublicRepositoryTags(input)
-  if (result.conformance.status !== 'passed') throw new Error('GitHub repository tag Connector requires contract review')
-  if (!result.coverage.tagSetComplete) {
-    const error = new Error('GitHub repository tag set exceeds the 200-tag maintenance budget')
-    error.code = 'tag-set-truncated'
-    throw error
-  }
-  return { tagCount: result.coverage.returnedCount, digest: result.tagSetDigest }
-}
-
-export async function observeProjectReleaseTags({ projects, baselines, releaseTags = defaultReleaseTagState }) {
-  const observations = []
-  for (const project of projects) {
-    const baseline = baselines[project.id]
-    try {
-      const current = await releaseTags(project.repository, project)
-      observations.push({
-        projectId: project.id,
-        repository: project.repository,
-        status: current.tagCount === baseline.tagCount && current.digest === baseline.digest ? 'current' : 'review-required',
-        baseline,
-        current,
-      })
-    } catch (error) {
-      observations.push({
-        projectId: project.id,
-        repository: project.repository,
-        status: error?.code === 'rate-limited' ? 'deferred' : error?.code === 'tag-set-truncated' ? 'budget-review' : 'unreachable',
-        baseline,
-        detail: error.message,
-        ...(error?.retryAt ? { notBefore: error.retryAt } : {}),
-      })
-    }
-  }
-  return observations
-}
-
 async function defaultArtifactCheck(runtimeRoot) {
   const binaries = ['xiaohongshu-mcp', 'xiaohongshu-login']
   const checks = []
@@ -250,7 +196,7 @@ export async function collectXiaohongshuMaintenance({
   runtimeRoot = path.join(repositoryRoot, '.runtime/xiaohongshu-browser'),
   renderedSourceObservations = {},
   repositorySearch = searchPublicRepositories,
-  releaseTags = defaultReleaseTagState,
+  releaseTags,
 } = {}) {
   const upstream = JSON.parse(await readFile(path.join(repositoryRoot, 'connectors/xiaohongshu-browser/upstream.json'), 'utf8'))
   const connector = JSON.parse(await readFile(path.join(repositoryRoot, 'connectors/xiaohongshu-browser/connector.json'), 'utf8'))
@@ -259,7 +205,7 @@ export async function collectXiaohongshuMaintenance({
   const upstreamRoutes = routeCatalog.routes.filter((route) => route.upstream)
   const observedAtDate = now()
   const discoveryQueries = selectDiscoveryQueries(projectCatalog.searchQueries, observedAtDate)
-  const releaseWatchProjects = selectReleaseWatchProjects(projectCatalog, observedAtDate)
+  const releaseWatchProjects = selectReleaseWatchProjects(projectCatalog, observedAtDate, RELEASE_TAG_PROJECTS_PER_RUN)
   const [sources, routeUpstreams, projects, artifacts, discovery, releaseTagObservations] = await Promise.all([
     Promise.all(officialSources.map((source) => sourceCheck(source, fetchImpl, renderedSourceObservations[source.id]))),
     Promise.all(upstreamRoutes.map(async (route) => {
@@ -365,6 +311,7 @@ export async function collectXiaohongshuMaintenance({
   if (releaseTagObservations.some((observation) => observation.status === 'unreachable')) blockers.push('ecosystem-release-watch-unreachable')
   if (releaseTagObservations.some((observation) => observation.status === 'deferred')) blockers.push('ecosystem-release-watch-deferred')
   if (releaseTagObservations.some((observation) => observation.status === 'budget-review')) blockers.push('ecosystem-release-watch-budget-exceeded')
+  if (releaseTagObservations.some((observation) => observation.status === 'contract-review')) blockers.push('ecosystem-release-watch-contract-review')
   if (releaseTagObservations.some((observation) => observation.status === 'review-required')) blockers.push('ecosystem-release-tags-changed')
   const verificationProposals = []
   for (const binding of capabilityConformance) {
@@ -412,6 +359,8 @@ export async function collectXiaohongshuMaintenance({
       projectProposals.push({ kind: 'verification-report', projectId: observation.projectId, action: 'rerun-project-release-observation', ...(observation.notBefore ? { notBefore: observation.notBefore } : {}) })
     } else if (observation.status === 'budget-review') {
       projectProposals.push({ kind: 'connector-change-proposal', projectId: observation.projectId, action: 'expand-project-release-tag-budget' })
+    } else if (observation.status === 'contract-review') {
+      projectProposals.push({ kind: 'connector-change-proposal', projectId: observation.projectId, action: 'review-project-release-tag-connector-contract' })
     }
   }
   return {

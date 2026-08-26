@@ -1,6 +1,9 @@
 import assert from 'node:assert/strict'
+import { readFile } from 'node:fs/promises'
 import test from 'node:test'
-import { collectDouyinMaintenance, discoverEcosystemProjects, isRelevantDiscoveryCandidate, selectDiscoveryQueries } from '../src/index.mjs'
+import { collectDouyinMaintenance, discoverEcosystemProjects, isRelevantDiscoveryCandidate, observeProjectReleaseTags, selectDiscoveryQueries, selectReleaseWatchProjects } from '../src/index.mjs'
+
+const projectCatalog = JSON.parse(await readFile(new URL('../projects.json', import.meta.url), 'utf8'))
 
 const currentDiscovery = async ({ query, page, perPage }) => ({
   query: { query, page, perPage, sort: 'best-match', order: 'desc' },
@@ -15,6 +18,8 @@ const officialCurrent = async () => ({
   conformance: { status: 'passed', assertions: [{ id: 'capability-families', passed: true }] },
 })
 
+const currentReleaseTags = async (_repository, project) => projectCatalog.releaseTagBaselines[project.id]
+
 test('discovery rotation covers all ten queries in five UTC days', () => {
   const queries = Array.from({ length: 10 }, (_, index) => `query-${index}`)
   const selected = new Set()
@@ -22,6 +27,37 @@ test('discovery rotation covers all ten queries in five UTC days', () => {
     for (const query of selectDiscoveryQueries(queries, new Date(Date.UTC(2026, 7, 20 + day)))) selected.add(query)
   }
   assert.deepEqual([...selected].sort(), queries)
+})
+
+test('release watch baselines exactly cover declarations and rotate in four UTC days', () => {
+  const declared = projectCatalog.projects.filter((project) => project.watch.reviewOn.includes('release')).map((project) => project.id)
+  assert.deepEqual(Object.keys(projectCatalog.releaseTagBaselines).sort(), declared.sort())
+  const selected = new Set()
+  for (let day = 0; day < 4; day += 1) {
+    for (const project of selectReleaseWatchProjects(projectCatalog, new Date(Date.UTC(2026, 7, 20 + day)), 4)) selected.add(project.id)
+  }
+  assert.deepEqual([...selected].sort(), declared.sort())
+})
+
+test('release observations are serial and detect a changed tag set', async () => {
+  const projects = selectReleaseWatchProjects(projectCatalog, new Date('2026-08-27T00:00:00Z'), 4)
+  let inFlight = 0
+  let maximumInFlight = 0
+  const observations = await observeProjectReleaseTags({
+    projects,
+    baselines: projectCatalog.releaseTagBaselines,
+    releaseTags: async (_repository, project) => {
+      inFlight += 1
+      maximumInFlight = Math.max(maximumInFlight, inFlight)
+      await Promise.resolve()
+      inFlight -= 1
+      if (project.id === projects[0].id) return { tagCount: 999, digest: 'f'.repeat(64) }
+      return currentReleaseTags(_repository, project)
+    },
+  })
+  assert.equal(maximumInFlight, 1)
+  assert.equal(observations[0].status, 'review-required')
+  assert.equal(observations.slice(1).every((observation) => observation.status === 'current'), true)
 })
 
 test('discovery relevance rejects TikTok-only and unrelated name collisions', () => {
@@ -61,12 +97,16 @@ test('maintainer keeps every route non-automatic until a real capability probe p
     officialReader: officialCurrent,
     projectHead: async (_repository, _branch, project) => project.observedRevision,
     repositorySearch: currentDiscovery,
+    releaseTags: currentReleaseTags,
   })
   assert.equal(report.mode, 'proposal-only')
   assert.equal(report.officialOpenPlatform.status, 'current')
   assert.equal(report.ecosystemProjects.total, 24)
   assert.equal(report.ecosystemProjects.discovery.queries.length, 2)
   assert.equal(report.ecosystemProjects.discovery.fullCycleDays, 5)
+  assert.equal(report.ecosystemProjects.releaseWatch.eligibleProjects, 15)
+  assert.equal(report.ecosystemProjects.releaseWatch.observations.length, 4)
+  assert.equal(report.ecosystemProjects.releaseWatch.fullCycleDays, 4)
   assert.deepEqual(report.accessRoutes.automaticEligible, [])
   assert.ok(report.accessRoutes.fullWriteCandidates.includes('official-open-platform'))
   assert.ok(report.accessRoutes.fullWriteCandidates.includes('creator-browser-broadcast-kit'))
@@ -83,6 +123,7 @@ test('maintainer reports project and route drift without repinning', async () =>
     officialReader: officialCurrent,
     projectHead: async (_repository, _branch, project) => project.id === 'chronoai-broadcast-kit' ? 'f'.repeat(40) : project.observedRevision,
     repositorySearch: currentDiscovery,
+    releaseTags: currentReleaseTags,
   })
   assert.ok(report.blockers.includes('route-upstream-changed:creator-browser-broadcast-kit'))
   assert.ok(report.proposals.some((proposal) => proposal.projectId === 'chronoai-broadcast-kit' && proposal.action === 'review-research-project-update'))
@@ -94,7 +135,25 @@ test('maintainer turns official semantic drift into a knowledge proposal', async
     officialReader: async () => ({ conformance: { status: 'review-required', assertions: [{ id: 'security-requirements', passed: false }] } }),
     projectHead: async (_repository, _branch, project) => project.observedRevision,
     repositorySearch: currentDiscovery,
+    releaseTags: currentReleaseTags,
   })
   assert.ok(report.blockers.includes('official-source-semantic-change'))
   assert.deepEqual(report.proposals, [{ kind: 'knowledge-proposal', action: 'review-official-douyin-semantic-change', failures: ['security-requirements'] }])
+})
+
+test('maintainer turns release tag drift into a proposal without promoting a route', async () => {
+  const observedAt = new Date('2026-08-27T09:00:00Z')
+  const changedProject = selectReleaseWatchProjects(projectCatalog, observedAt, 4)[0]
+  const report = await collectDouyinMaintenance({
+    now: () => observedAt,
+    officialReader: officialCurrent,
+    projectHead: async (_repository, _branch, project) => project.observedRevision,
+    repositorySearch: currentDiscovery,
+    releaseTags: async (_repository, project) => project.id === changedProject.id
+      ? { tagCount: 999, digest: 'f'.repeat(64) }
+      : currentReleaseTags(_repository, project),
+  })
+  assert.ok(report.blockers.includes('ecosystem-release-tags-changed'))
+  assert.ok(report.proposals.some((proposal) => proposal.projectId === changedProject.id && proposal.action === 'review-project-release-tags'))
+  assert.deepEqual(report.accessRoutes.automaticEligible, [])
 })

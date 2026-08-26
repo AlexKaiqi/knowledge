@@ -10,7 +10,7 @@
   "scripts": {
     "knowledge:check": "node scripts/check-okf-knowledge.mjs",
     "test": "node --test test/*.test.mjs connectors/*/test/*.test.mjs collectors/*/test/*.test.mjs",
-    "check": "node --check scripts/*.mjs connectors/*/src/*.mjs collectors/*/src/*.mjs && npm run knowledge:check && npm test",
+    "check": "node --check scripts/*.mjs connectors/*/src/*.mjs collectors/lib/*.mjs collectors/*/src/*.mjs && npm run knowledge:check && npm test",
     "xhs:bootstrap": "node scripts/bootstrap-xiaohongshu.mjs",
     "xhs:login": "node scripts/run-xiaohongshu.mjs login",
     "xhs:serve": "node scripts/run-xiaohongshu.mjs serve",

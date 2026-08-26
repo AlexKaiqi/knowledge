@@ -6,11 +6,15 @@ import { promisify } from 'node:util'
 import { fileURLToPath } from 'node:url'
 import { readDouyinOpenPlatformSurface } from '../../../connectors/douyin-open-platform-docs/src/index.mjs'
 import { searchPublicRepositories } from '../../../connectors/github-public-repository-search/src/index.mjs'
+import { observeProjectReleaseTags, selectReleaseWatchProjects } from '../../lib/github-release-watch.mjs'
+
+export { observeProjectReleaseTags, selectReleaseWatchProjects } from '../../lib/github-release-watch.mjs'
 
 const exec = promisify(execFile)
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..')
 
 export const DISCOVERY_QUERIES_PER_RUN = 2
+export const RELEASE_TAG_PROJECTS_PER_RUN = 4
 const DISCOVERY_RESULTS_PER_QUERY = 10
 const DISCOVERY_CANDIDATES_PER_QUERY = 5
 
@@ -154,21 +158,24 @@ export async function collectDouyinMaintenance({
   officialReader = readDouyinOpenPlatformSurface,
   projectHead = defaultProjectHead,
   repositorySearch = searchPublicRepositories,
+  releaseTags,
 } = {}) {
   const observedAtDate = now()
   const observedAt = observedAtDate.toISOString()
   const projectCatalog = await readJson(path.join(repositoryRoot, 'collectors/douyin-maintainer/projects.json'))
   const routeCatalog = await readJson(path.join(repositoryRoot, 'connectors/douyin-candidate-routes/routes.json'))
   const discoveryQueries = selectDiscoveryQueries(projectCatalog.searchQueries, observedAtDate)
+  const releaseWatchProjects = selectReleaseWatchProjects(projectCatalog, observedAtDate, RELEASE_TAG_PROJECTS_PER_RUN)
 
   const officialPromise = officialReader()
     .then((surface) => ({ status: surface.conformance.status === 'passed' ? 'current' : 'review-required', surface }))
     .catch((error) => ({ status: 'unreachable', detail: error.message }))
-  const [official, projects, discovery, capabilities] = await Promise.all([
+  const [official, projects, discovery, capabilities, releaseTagObservations] = await Promise.all([
     officialPromise,
     observeProjects(projectCatalog, observedAtDate, projectHead),
     discoverEcosystemProjects({ queries: discoveryQueries, repositorySearch, projectCatalog }),
     canonicalCapabilityStatus(routeCatalog.capabilityRefs),
+    observeProjectReleaseTags({ projects: releaseWatchProjects, baselines: projectCatalog.releaseTagBaselines, releaseTags }),
   ])
 
   const projectByRepository = new Map(projects.map((project) => [`${canonicalRepositoryUrl(project.repository)}#${project.branch}`, project]))
@@ -194,6 +201,11 @@ export async function collectDouyinMaintenance({
   else if (official.status !== 'current') blockers.push('official-source-semantic-change')
   if (discovery.status === 'unreachable') blockers.push('ecosystem-discovery-unreachable')
   else if (discovery.status !== 'current') blockers.push('ecosystem-discovery-review-required')
+  if (releaseTagObservations.some((observation) => observation.status === 'unreachable')) blockers.push('ecosystem-release-watch-unreachable')
+  if (releaseTagObservations.some((observation) => observation.status === 'deferred')) blockers.push('ecosystem-release-watch-deferred')
+  if (releaseTagObservations.some((observation) => observation.status === 'budget-review')) blockers.push('ecosystem-release-watch-budget-exceeded')
+  if (releaseTagObservations.some((observation) => observation.status === 'contract-review')) blockers.push('ecosystem-release-watch-contract-review')
+  if (releaseTagObservations.some((observation) => observation.status === 'review-required')) blockers.push('ecosystem-release-tags-changed')
   for (const route of routeUpstreams) {
     if (route.status === 'review-required') blockers.push(`route-upstream-changed:${route.routeId}`)
     else if (route.status === 'unreachable') blockers.push(`route-upstream-unreachable:${route.routeId}`)
@@ -210,6 +222,13 @@ export async function collectDouyinMaintenance({
   if (discovery.status === 'unreachable') proposals.push({ kind: 'connector-change-proposal', action: 'restore-ecosystem-discovery', queries: discovery.queries })
   else if (discovery.status === 'review-required') proposals.push({ kind: 'connector-change-proposal', action: 'review-ecosystem-discovery-contract', queries: discovery.queries })
   if (discovery.newCandidates.length > 0) proposals.push({ kind: 'connector-change-proposal', action: 'triage-new-ecosystem-projects', candidates: discovery.newCandidates })
+  for (const observation of releaseTagObservations) {
+    if (observation.status === 'review-required') proposals.push({ kind: 'connector-change-proposal', projectId: observation.projectId, action: 'review-project-release-tags' })
+    else if (observation.status === 'unreachable') proposals.push({ kind: 'connector-change-proposal', projectId: observation.projectId, action: 'restore-project-release-observation' })
+    else if (observation.status === 'deferred') proposals.push({ kind: 'verification-report', projectId: observation.projectId, action: 'rerun-project-release-observation', ...(observation.notBefore ? { notBefore: observation.notBefore } : {}) })
+    else if (observation.status === 'budget-review') proposals.push({ kind: 'connector-change-proposal', projectId: observation.projectId, action: 'expand-project-release-tag-budget' })
+    else if (observation.status === 'contract-review') proposals.push({ kind: 'connector-change-proposal', projectId: observation.projectId, action: 'review-project-release-tag-connector-contract' })
+  }
 
   return {
     schemaVersion: 'knowledge.maintenance-report/v1',
@@ -236,6 +255,14 @@ export async function collectDouyinMaintenance({
       falseSuccessBlocked: projectCatalog.projects.filter((project) => project.failureDomains.includes('false-success')).map((project) => project.id),
       observations: projects,
       discovery: { connectorId: 'github-public-repository-search', queriesPerRun: DISCOVERY_QUERIES_PER_RUN, fullCycleDays: Math.ceil(projectCatalog.searchQueries.length / DISCOVERY_QUERIES_PER_RUN), ...discovery },
+      releaseWatch: {
+        method: 'github-public-repository-tags',
+        connectorId: 'github-public-repository-tags',
+        projectsPerRun: RELEASE_TAG_PROJECTS_PER_RUN,
+        eligibleProjects: Object.keys(projectCatalog.releaseTagBaselines).length,
+        fullCycleDays: Math.ceil(Object.keys(projectCatalog.releaseTagBaselines).length / RELEASE_TAG_PROJECTS_PER_RUN),
+        observations: releaseTagObservations,
+      },
     },
     capabilities,
     blockers: [...new Set(blockers)],

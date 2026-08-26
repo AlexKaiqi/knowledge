@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import { readFile } from 'node:fs/promises'
 import test from 'node:test'
 import { GitHubPublicRepositoryTagsError } from '../../../connectors/github-public-repository-tags/src/index.mjs'
-import { collectXiaohongshuMaintenance, discoverEcosystemProjects, evaluateRenderedSemanticObservation, isProjectReviewDue, isRelevantDiscoveryCandidate, observeProjectReleaseTags, officialSources, parseGitHubRepositoryUrl, selectDiscoveryQueries, selectReleaseWatchProjects } from '../src/index.mjs'
+import { collectXiaohongshuMaintenance, discoverEcosystemProjects, evaluateRenderedSemanticObservation, isProjectReviewDue, isRelevantDiscoveryCandidate, observeProjectReleaseTags, officialSources, selectDiscoveryQueries, selectReleaseWatchProjects } from '../src/index.mjs'
 
 const projectCatalog = JSON.parse(await readFile(new URL('../projects.json', import.meta.url), 'utf8'))
 
@@ -56,12 +56,6 @@ test('release watch rotation covers all eligible projects in five UTC days', () 
     for (const project of selectReleaseWatchProjects(projectCatalog, new Date(Date.UTC(2026, 7, 20 + day)))) selected.add(project.id)
   }
   assert.deepEqual([...selected].sort(), Object.keys(projectCatalog.releaseTagBaselines).sort())
-})
-
-test('release watch only accepts canonical public GitHub repository URLs', () => {
-  assert.deepEqual(parseGitHubRepositoryUrl('https://github.com/tamnd/xiaohongshu-cli.git'), { owner: 'tamnd', repository: 'xiaohongshu-cli' })
-  assert.throws(() => parseGitHubRepositoryUrl('https://example.com/tamnd/xiaohongshu-cli.git'), /public GitHub/)
-  assert.throws(() => parseGitHubRepositoryUrl('https://github.com/tamnd/xiaohongshu-cli/issues'), /public GitHub/)
 })
 
 test('release observations are serial, bounded and proposal-safe', async () => {

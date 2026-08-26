@@ -1,7 +1,7 @@
 {
   "schemaVersion": "dsh.collector-definition/v1",
   "id": "douyin-maintainer",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "projectCatalogRef": "repo:/collectors/douyin-maintainer/projects.json",
   "scope": {
     "knowledgeGlobs": [
@@ -10,7 +10,7 @@
       "knowledge/capabilities/douyin/*.md",
       "knowledge/verifications/douyin/**/*.json"
     ],
-    "connectorIds": ["douyin-open-platform-docs", "github-public-repository-search"],
+    "connectorIds": ["douyin-open-platform-docs", "github-public-repository-search", "github-public-repository-tags"],
     "capabilityRefs": [
       "/capabilities/douyin/read-open-platform-surface.md",
       "/capabilities/douyin/prepare-video-draft.md",
@@ -18,7 +18,8 @@
       "/capabilities/douyin/search-public-content.md",
       "/capabilities/douyin/read-owned-creator-analytics.md",
       "/capabilities/douyin/read-public-video-metadata.md",
-      "/capabilities/github/search-public-repositories.md"
+      "/capabilities/github/search-public-repositories.md",
+      "/capabilities/github/list-public-repository-tags.md"
     ]
   },
   "triggers": [
