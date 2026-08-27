@@ -56,12 +56,13 @@ P0 按下面顺序一次只推进一个。前一项没有真实 probe 结论，�
 | --- | --- | --- | --- | --- | --- |
 | 1 | **小红书私密发布并对账初次观测** | 把已有读取原语补成第一个最小内容发布闭环 | 已固定的浏览器辅助候选路线；官方创作平台作为人工 recovery | 对冻结 revision 一次确认后仅自己可见发布；必须从本人主页重发现、详情核对、取得稳定 note ID/URL 并读取去身份化初次反馈 | 平台写入；需要用户明确批准、受控自有账号、可见浏览器和未知结果禁重发 |
 | 2 | **小红书自有笔记反馈与指标增量** | 持续观察发布后的传播和需求信号 | 本人主页/创作服务平台的只读浏览器路线；多 route 只做对账不盲目 fallback | 对已知 note ID 从 checkpoint 读取指标和新评论；验证去身份化、编辑/删除语义和空窗口 | 需先证明详情/评论路线的新鲜度；不得采集跨笔记身份图谱 |
-| 3 | **App Store 公开应用检索与对比快照** | 竞品发现、版本/定价/评分变化、市场调研 | Apple 公开 Search/Lookup API；按国家和 software entity 固定查询 | 无账号 live 查询一个固定应用和一个固定关键词；验证 ID、版本、价格、评分、结果边界和 checkpoint 可复现 | 官方文档已归档，必须先验证当前端点、限流和字段漂移；不能承诺榜单或全量搜索 |
-| 4 | **App Store Connect 自有 App 评论增量** | 直接收集需求和版本反馈 | App Store Connect API `customerReviews`；JWT 只读 key | 使用自有测试/生产 App 从 checkpoint 读取评论或合法空集；按 territory/rating/version 归一化，输出不含作者身份 | 需要最小权限 API key、opaque credential ref 和一个归属明确的 App |
-| 5 | **Google Play 自有 App 评论增量** | 直接收集需求、设备/版本问题和回复状态 | Android Publisher Reviews API；月度历史回填可另用受控 GCS report | 使用自有 App 读取增量或合法空集；保留版本、设备类别、语言、星级、正文和回复状态，删除作者身份 | 需要 Play Console 权限与受控 probe App；API 增量和月报回填必须是两个内部 route、一个稳定输出 |
-| 6 | **App Store Connect / Google Play 自有发布状态读取** | 统一判断 build、审核、track、分阶段发布是否真实生效 | 两个平台各自官方 API，公共输出使用同一 `OwnedAppReleaseState` 概念但不强行统一原始字段 | 各用一个自有 App 只读查询当前版本、build、审核/track 状态和更新时间；保存平台原生状态及规范化大类 | 必须分成两个 Connector 和两个 probe；先读后写，不把平台差异抹掉 |
+| 3 | **闲鱼公开商品市场信号快照** | 从真实出售语境发现价格带、出售原因、故障、兼容性、配件和替代需求 | 官方 Web 可见浏览器、小样本只读路线；两个 Apache-2.0 浏览器项目只作为待审计原语 | 一个产品关键词、首屏/最多 20 项、不翻页；返回明确不完整的去身份化信号，并重新打开一个样本核对 | 官方协议确认匿名浏览/搜索基础服务，但没有公共市场研究 API；自动化、个性化、登录和数据保留边界仍需 live probe 与条款审阅 |
+| 4 | **App Store 公开应用检索与对比快照** | 竞品发现、版本/定价/评分变化、市场调研 | Apple 公开 Search/Lookup API；按国家和 software entity 固定查询 | 无账号 live 查询一个固定应用和一个固定关键词；验证 ID、版本、价格、评分、结果边界和 checkpoint 可复现 | 官方文档已归档，必须先验证当前端点、限流和字段漂移；不能承诺榜单或全量搜索 |
+| 5 | **App Store Connect 自有 App 评论增量** | 直接收集需求和版本反馈 | App Store Connect API `customerReviews`；JWT 只读 key | 使用自有测试/生产 App 从 checkpoint 读取评论或合法空集；按 territory/rating/version 归一化，输出不含作者身份 | 需要最小权限 API key、opaque credential ref 和一个归属明确的 App |
+| 6 | **Google Play 自有 App 评论增量** | 直接收集需求、设备/版本问题和回复状态 | Android Publisher Reviews API；月度历史回填可另用受控 GCS report | 使用自有 App 读取增量或合法空集；保留版本、设备类别、语言、星级、正文和回复状态，删除作者身份 | 需要 Play Console 权限与受控 probe App；API 增量和月报回填必须是两个内部 route、一个稳定输出 |
+| 7 | **App Store Connect / Google Play 自有发布状态读取** | 统一判断 build、审核、track、分阶段发布是否真实生效 | 两个平台各自官方 API，公共输出使用同一 `OwnedAppReleaseState` 概念但不强行统一原始字段 | 各用一个自有 App 只读查询当前版本、build、审核/track 状态和更新时间；保存平台原生状态及规范化大类 | 必须分成两个 Connector 和两个 probe；先读后写，不把平台差异抹掉 |
 
-说明：顺序 1 不是最容易的 API，而是当前最接近第一个完整平台闭环、且已经投入实现的切片。它有真实平台写入，所以不能为了赶进度绕过一次性确认。App Store 公开检索可作为并行 research，但在小红书 probe 完成前不抢占 active build；App Store Connect 和 Google Play 私有切片还需要用户提供自有开发者身份。
+说明：顺序 1 不是最容易的 API，而是当前最接近第一个完整平台闭环、且已经投入实现的切片。它有真实平台写入，所以不能为了赶进度绕过一次性确认。闲鱼公开市场信号和 App Store 公开检索占用两个 active research 槽位，但在小红书 probe 完成前不抢占 active build；App Store Connect 和 Google Play 私有切片还需要用户提供自有开发者身份。
 
 ## P1：P0 之后按实际渠道激活
 
@@ -113,6 +114,7 @@ P1 不是“全部都接”。某个平台只有在存在实际账号、内容�
 
 | Schema 概念 | 最小稳定字段 | 不应强行统一的字段 |
 | --- | --- | --- |
+| `PublicMarketSignalSnapshot` | platform、query、filters、observedAt、sampleCount、sampleComplete、price observations、deidentified themes、evidence refs | 排名算法、供需总量、成交事实、卖家画像、跨查询用户关联 |
 | `PublicAppListingSnapshot` | platform、app ID、territory、observedAt、title、version、price、rating、source URL | 榜单算法、分类体系、兼容设备、平台推荐理由 |
 | `OwnedAppReviewDelta` | platform、app ID、checkpoint、observedAt、rating、text、locale、app version、reply state | 评论者身份、设备精确标识、平台翻译/摘要内部字段 |
 | `OwnedAppReleaseState` | platform、app ID、observedAt、native state、normalized phase、build/version、lastTransitionAt | Apple 审核状态与 Google track/edit 的一一映射 |
@@ -152,4 +154,6 @@ Collector 不积累“某平台所有 API”，不自动安装第三方项目、
 - Product Hunt API v2：<https://www.producthunt.com/v2/docs>
 - Hacker News 官方 API：<https://github.com/HackerNews/API>
 - Reddit Data API Terms：<https://redditinc.com/policies/data-api-terms>
+- 闲鱼社区用户服务协议：<https://terms.alicdn.com/legal-agreement/terms/suit_bu1_other/suit_bu1_other201708081618_51146.html>
+- 淘宝开放平台闲鱼电商 SaaS API 目录：<https://developer.alibaba.com/docs/api.htm?apiId=73221&source=search>
 - 快手视频发布接口：<https://open.kuaishou.com/platform/openApi?menu=20>
