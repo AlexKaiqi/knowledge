@@ -66,16 +66,38 @@ P0 按下面顺序一次只推进一个。前一项没有真实 probe 结论，�
 
 ## P1：P0 之后按实际渠道激活
 
+### P1A：社交与内容传播
+
+| 候选对象 | 值得接入的切片 | 为什么不是当前 P0 |
+| --- | --- | --- |
+| 抖音 | 自有内容发布、平台 receipt、评论/指标增量 | 比继续维护文档面更有价值，但需要开放平台应用、scope、授权账号和对应审核；现有两个能力不能证明可调用 |
+| YouTube | 公开视频/频道/评论研究；自有频道上传、评论管理和 Analytics | 官方 Data/Analytics API 能覆盖研究、发布、反馈和影响力，但需要先确定海外视频渠道是实际目标并准备 OAuth/channel identity |
+| 微信公众号 | 自有账号草稿、发布结果、评论/阅读数据 | 对中文图文传播价值高；先核实账号类型、接口权限、IP 白名单和新版 API 的真实可用范围，再建立候选 Connector |
+| 微博 | 关键词/话题需求研究；自有账号发布、互动管理和影响力统计 | 官方开放平台与 `weibo-cli` 已覆盖搜索、发布、互动和统计，但套餐、额度、OAuth identity 和 CLI 实际返回语义仍需独立 probe；不能因官方 CLI 存在就算已接入 |
+| B 站 | 自有视频/专栏发布、状态、评论和稿件指标；公开内容研究另立切片 | 官方开放平台有账号授权、视频/专栏管理、数据开放、沙盒和 webhook；需要实名认证应用、授权 UP 主和数据用途/保留约束，公开搜索不能混入自有账号能力 |
+| TikTok | 自有账号视频/图片 Direct Post 或草稿上传、状态 webhook、本人视频指标 | 官方 Content Posting API 可用，但需要 app review、`video.publish` scope 和用户授权；未审计客户端只能私密发布 |
+| Instagram | Professional 账号内容发布、评论和 Insights | 官方路线只面向 Business/Creator 等专业账号，依赖 Meta app、权限和可能的 app review |
+| Facebook Pages | 自有 Page 内容发布、评论/提及回收和 Page Insights | 只考虑 Page，不考虑个人主页或未授权 Group；Graph API 路线需要 Meta app、Page token、权限和 app review，先做权限面与版本 live audit |
+| X | 关键词/话题/提及研究；自有账号发帖、回复和指标增量 | 官方 API 有 recent/full-archive search、发帖、mentions、webhook 和指标，但当前按量计费、读量上限和 endpoint 价格必须由 Connector 做预算门；公开研究与自有账号运营分开验证 |
+| LinkedIn | 公司页或成员内容发布、评论/反应和分析 | B2B 渠道成立时价值高；Community Management API 需要 vetted access，且公司页与成员权限、统计 Schema 和版本迁移必须拆开 |
+| 快手 | 自有账号视频发布、发布状态和数据回读 | 官方开放平台存在视频发布接口；仍需核实申请范围、数据/评论接口和 probe identity 后再排期 |
+
+### P1B：游戏分发、玩家反馈与传播
+
+| 候选对象 | 值得接入的切片 | 为什么不是当前 P0 |
+| --- | --- | --- |
+| Steam | 固定游戏的公开评论增量；自有游戏审核/发布状态、商店流量、愿望单和 release handoff | 官方评论 API 与 Steamworks 报告价值很高；自有发布依赖 Partner/appID/权限，正式 release 是不可逆高影响人工确认，公开评论还必须删除 SteamID 等作者字段 |
+| TapTap | 中国移动/PC 游戏发现和玩家反馈；自有游戏预约、测试、上架、版本与数据回读 | 官方开发者中心覆盖创建、审核、定时/立即发布和经营数据，但评论、评分、帖子等属于平台/用户数据，公共研究路线必须先做条款与数据授权审阅 |
+| itch.io | 独立游戏 build/channel 发布 receipt 与发现/下载/游玩 Analytics | 官方 butler CLI 可可靠上传且上传完成即可 live，适合小团队；只有实际选择 itch.io 分发时才准备自有测试页、不可变 build 和写入确认 |
+| Epic Games Store | 自有 PC 游戏提交、审核和 release-state 对账 | 有自助发布工具，但需要组织账号、协议、每个产品的提交费用，并满足多人游戏 crossplay、成就等要求；只有明确 PC 商店策略时激活 |
+| Twitch | 自有频道直播状态、观众互动、视频/Clip 和游戏/频道 Analytics | 它是游戏传播和反馈渠道，不是游戏商店；OAuth、EventSub 和授权 broadcaster 存在后才有闭环价值 |
+
+### P1C：App 发布与研究底座
+
 | 候选对象 | 值得接入的切片 | 为什么不是当前 P0 |
 | --- | --- | --- |
 | App Store Connect | TestFlight 提交、处理状态、测试反馈与发布 receipt | App 不能通过 App Store Connect API 创建，build 上传还需 Xcode/Transporter；应先完成只读发布状态和受控测试 App |
 | Google Play | Internal testing track 上传、提交、状态对账；生产发布另立能力 | 官方 Edits/Bundle/Track 路线清晰，但写操作要有受控测试 App、不可变 revision、显式确认和防重复提交 |
-| 抖音 | 自有内容发布、平台 receipt、评论/指标增量 | 比继续维护文档面更有价值，但需要开放平台应用、scope、授权账号和对应审核；现有两个能力不能证明可调用 |
-| YouTube | 公开视频/频道/评论研究；自有频道上传、评论管理和 Analytics | 官方 Data/Analytics API 能覆盖研究、发布、反馈和影响力，但需要先确定海外视频渠道是实际目标并准备 OAuth/channel identity |
-| 微信公众号 | 自有账号草稿、发布结果、评论/阅读数据 | 对中文图文传播价值高；先核实账号类型、接口权限、IP 白名单和新版 API 的真实可用范围，再建立候选 Connector |
-| TikTok | 自有账号视频/图片 Direct Post 或草稿上传、状态 webhook、本人视频指标 | 官方 Content Posting API 可用，但需要 app review、`video.publish` scope 和用户授权；未审计客户端只能私密发布 |
-| Instagram | Professional 账号内容发布、评论和 Insights | 官方路线只面向 Business/Creator 等专业账号，依赖 Meta app、权限和可能的 app review |
-| 快手 | 自有账号视频发布、发布状态和数据回读 | 官方开放平台存在视频发布接口；仍需核实申请范围、数据/评论接口和 probe identity 后再排期 |
 | Hugging Face | 前沿模型、数据集、评测集的新发布/趋势候选 Collector | 只作为研究发现底座；精确 revision 原语已经存在，不新增公共百科能力 |
 
 P1 不是“全部都接”。某个平台只有在存在实际账号、内容形态、目标受众和未来 30 天发布计划时，才提升为 active research。
@@ -87,17 +109,17 @@ P1 不是“全部都接”。某个平台只有在存在实际账号、内容�
 | Product Hunt | 新产品、launch 反馈、评论与主题趋势 | 产品确实面向 Product Hunt 受众；先解决 API 非商业使用限制，不能假设 API 支持代替人工 launch |
 | Hacker News | 技术产品讨论、Show HN 反馈和链接传播 | 产品面向开发者；官方 Firebase API 只提供 item/user/update，不把第三方搜索能力冒充官方能力 |
 | Reddit | subreddit 需求、评论主题和发布反馈 | 有明确社区与合规 OAuth 用途，重新核验 Data API 访问政策、限额和保留规则后才启用 |
-| LinkedIn | 公司页/成员内容发布、评论、反应和分析 | B2B 渠道成立且 Community Management API vetted access 获批；版本迁移成本可接受 |
 | Discord / Slack 自有社区 | 已授权社区内的需求、支持问题和反馈闭环 | 用户拥有或管理相应 workspace/server，并明确频道、保留期和成员隐私边界 |
 | 国内其他安卓商店 | 上架状态、评论、下载与渠道效果 | 小米、OPPO、vivo、应用宝成为明确发布目标时逐个研究；不为“覆盖完整”预建空 Connector |
+| Xbox / PlayStation / Nintendo eShop | 自有主机游戏准入、认证、提交和 release-state 对账 | 都是 gated partner 路线；只有存在目标游戏、硬件/认证计划和获批开发者身份时逐个平台建 Connector，不先做“主机商店统一层” |
+| GOG / Game Jolt 等其他游戏商店 | 特定玩家群的发布和反馈 | 有明确受众、可验证自助/合作准入路线和未来发布计划后再研究，不为补齐平台名单占用维护预算 |
 
 ## Watch：只观察，不做实现承诺
 
 - **Google Play 公开竞品搜索/详情/评论**：公开商店页面有价值，但本轮未发现面向第三方竞品检索和评论的正式 Google Play Developer API。继续观察官方能力；浏览器或第三方数据路线必须单独审查条款、地域/设备个性化和可重复性。
-- **B 站、知乎、微博**：传播价值可能很高，但先找到当前官方、可申请、可验证的发布/反馈范围。没有稳定路线前不以非官方脚本数量替代可用性。
+- **知乎**：传播与专业需求信号可能有价值，但当前还没有完成官方、可申请、可验证的发布/反馈范围审计。没有稳定路线前不以非官方脚本数量替代可用性。
 - **小红书、抖音的公开搜索与大规模评论采集**：需求真实，但涉及登录、反自动化、身份与数据最小化。只研究有界、小样本、明确用途的路线，不维护身份池规避风控。
 - **TikTok Research API**：公开内容研究能力强，但有研究资格和用途限制；商业需求研究不能默认借用学术研究权限。
-- **X / Twitter**：接入价值取决于实际受众；API 套餐、权限和政策波动在建立任何候选前重新核实。
 
 ## Reject：明确不再进入候选池
 
@@ -157,3 +179,14 @@ Collector 不积累“某平台所有 API”，不自动安装第三方项目、
 - 闲鱼社区用户服务协议：<https://terms.alicdn.com/legal-agreement/terms/suit_bu1_other/suit_bu1_other201708081618_51146.html>
 - 淘宝开放平台闲鱼电商 SaaS API 目录：<https://developer.alibaba.com/docs/api.htm?apiId=73221&source=search>
 - 快手视频发布接口：<https://open.kuaishou.com/platform/openApi?menu=20>
+- X API 搜索、指标与定价：<https://docs.x.com/x-api/posts/search/introduction>、<https://docs.x.com/x-api/fundamentals/metrics>、<https://docs.x.com/x-api/getting-started/pricing>
+- LinkedIn Community Management 与成员内容统计：<https://learn.microsoft.com/en-us/linkedin/marketing/community-management/community-management-overview>、<https://learn.microsoft.com/en-us/linkedin/marketing/community-management/members/post-statistics>
+- Meta 官方 Facebook Graph API workspace：<https://www.postman.com/meta/facebook/overview>
+- 微博开放平台与官方 CLI：<https://weibo.com/openapi>、<https://open.weibo.com/cli/index>
+- 哔哩哔哩开放平台：<https://openhome.bilibili.com/doc>
+- Steam 发布、评论与流量：<https://partner.steamgames.com/doc/store/releasing?language=english>、<https://partner.steamgames.com/doc/store/getreviews>、<https://partner.steamgames.com/doc/marketing/traffic_reporting>
+- TapTap 开发者中心：<https://developer.taptap.cn/docs/store/>、<https://developer.taptap.cn/docs/store/release/publish/create-game/>、<https://developer.taptap.cn/docs/agreement/>
+- itch.io butler 发布与 Analytics：<https://itch.io/docs/butler/pushing.html>、<https://itch.io/docs/general/about>
+- Epic Games Store 分发：<https://store.epicgames.com/distribution/>
+- Twitch API 与 EventSub：<https://dev.twitch.tv/docs/api/>、<https://dev.twitch.tv/docs/eventsub/>
+- Nintendo Developer Portal：<https://developer.nintendo.com/>
