@@ -23,7 +23,7 @@
 
 候选必须先通过五个硬门：
 
-1. **结果**：直接推进需求发现、产品研究、内容/App 发布、分发、反馈或影响力测量。
+1. **结果**：直接推进需求发现、产品/前沿研究、内容/App/研究成果发布、分发、反馈或影响力测量。
 2. **缺口**：没有这项接入时，现有模型和工具不能稳定完成对应任务。
 3. **合法路线**：至少存在一条可授权、可说明使用边界的路线；逆向或浏览器路线不能冒充官方 API。
 4. **可验证**：能定义一个有界的 live/sandbox probe、断言、checkpoint、失败语义和必要清理。
@@ -92,7 +92,20 @@ P0 按下面顺序一次只推进一个。前一项没有真实 probe 结论，�
 | Epic Games Store | 自有 PC 游戏提交、审核和 release-state 对账 | 有自助发布工具，但需要组织账号、协议、每个产品的提交费用，并满足多人游戏 crossplay、成就等要求；只有明确 PC 商店策略时激活 |
 | Twitch | 自有频道直播状态、观众互动、视频/Clip 和游戏/频道 Analytics | 它是游戏传播和反馈渠道，不是游戏商店；OAuth、EventSub 和授权 broadcaster 存在后才有闭环价值 |
 
-### P1C：App 发布与研究底座
+### P1C：前沿研究发现与研究成果发布
+
+| 候选对象 | 值得接入的切片 | 为什么不是当前 P0 |
+| --- | --- | --- |
+| arXiv | 按明确技术主题读取新论文/新版本增量；自有预印本提交前检查、状态观察和最终人工 handoff | 公开 Atom API、RSS/OAI 路线清晰，适合低频 Collector；但最终投稿要求注册作者自助提交、可能 endorsement、许可确认和 moderation，不能抽象成无人值守 `publish-paper` |
+| OpenAlex | 跨 arXiv、期刊和会议的 work/topic/citation 增量与研究脉络 | 官方图谱 API 可搜索、过滤、聚合和语义检索，但它是派生索引，不替代论文原文、发布平台或同行评审事实；需要与 arXiv ID/DOI 做证据对账 |
+| OpenReview | AI/ML 会议的公开投稿、评审、rebuttal、decision 变化；自有 venue-specific submission state | API 能读取 Notes/Reviews/Decisions，但提交由具体 venue 的 Invitation、字段、读者、截止时间和身份决定；不能建立一个跨会议通用写入 Schema |
+| Semantic Scholar | 基于种子论文的相关工作推荐、citation/reference 增量和补充检索 | 官方 Academic Graph/Recommendations API 有价值，但与 OpenAlex 重叠且属于派生排序；只在它能提高召回或关联质量时作为第二 route，不单独建立学术百科 |
+| Crossref / DataCite | DOI 元数据、license、资助、版本、修正/撤回和发布后对账 | 更适合作为隐藏 Collector 与证据解析底座；通常不是作者直接发布论文的入口，普通 DOI 查询也无需暴露成 OKF 能力 |
+| Zenodo | 论文配套数据、代码、模型、报告或预印本的 sandbox deposit、文件上传、DOI 预留和最终发布 receipt | 官方 REST API 有独立 sandbox，但正式 publish 后记录不可删除；必须使用不可变 revision、元数据/license 预检和最终人工确认 |
+
+研究发现的价值不在“搜索一篇论文”——模型和 Web 已能做一次性检索。值得维护的是：针对明确研究问题持续发现新作/新版本，跨 arXiv ID、DOI、OpenReview ID 去重，保留一手证据，并把“论文声称什么”和“我们的推断/重要性判断”分层。
+
+### P1D：App 发布与研究底座
 
 | 候选对象 | 值得接入的切片 | 为什么不是当前 P0 |
 | --- | --- | --- |
@@ -113,6 +126,8 @@ P1 不是“全部都接”。某个平台只有在存在实际账号、内容�
 | 国内其他安卓商店 | 上架状态、评论、下载与渠道效果 | 小米、OPPO、vivo、应用宝成为明确发布目标时逐个研究；不为“覆盖完整”预建空 Connector |
 | Xbox / PlayStation / Nintendo eShop | 自有主机游戏准入、认证、提交和 release-state 对账 | 都是 gated partner 路线；只有存在目标游戏、硬件/认证计划和获批开发者身份时逐个平台建 Connector，不先做“主机商店统一层” |
 | GOG / Game Jolt 等其他游戏商店 | 特定玩家群的发布和反馈 | 有明确受众、可验证自助/合作准入路线和未来发布计划后再研究，不为补齐平台名单占用维护预算 |
+| PubMed / Europe PMC / bioRxiv / medRxiv | 生命科学与医学的新论文、预印本、版本和撤回信号 | 只有相关产品进入生命科学/医学领域时激活；医疗结论必须回到原始研究、指南与专业审查，不能把聚合摘要当建议 |
+| SSRN 等领域预印本平台 | 社会科学、经济、法律等领域的新研究 | 目标研究领域明确且存在可维护的官方访问路线时再研究，不为覆盖学科建立空 Connector |
 
 ## Watch：只观察，不做实现承诺
 
@@ -120,6 +135,7 @@ P1 不是“全部都接”。某个平台只有在存在实际账号、内容�
 - **知乎**：传播与专业需求信号可能有价值，但当前还没有完成官方、可申请、可验证的发布/反馈范围审计。没有稳定路线前不以非官方脚本数量替代可用性。
 - **小红书、抖音的公开搜索与大规模评论采集**：需求真实，但涉及登录、反自动化、身份与数据最小化。只研究有界、小样本、明确用途的路线，不维护身份池规避风控。
 - **TikTok Research API**：公开内容研究能力强，但有研究资格和用途限制；商业需求研究不能默认借用学术研究权限。
+- **Google Scholar、ResearchGate、Academia.edu**：检索/学术传播价值存在，但没有完成稳定、可申请、可验证的官方自动化路线审计。优先组合 arXiv/OpenAlex/OpenReview/Crossref 等正式接口，不维护网页抓取来追求“全库”。
 
 ## Reject：明确不再进入候选池
 
@@ -143,6 +159,8 @@ P1 不是“全部都接”。某个平台只有在存在实际账号、内容�
 | `PublicationReceipt` | platform、operation/revision ID、submittedAt、confirmedAt、platform content ID、stable URL、checks | 各平台上传协议、临时 token、内部 route 和原始 response |
 | `FeedbackDelta` | platform、content/app ID、checkpoint、observedAt、feedback entries、aggregate counts | 用户身份图谱、跨平台用户合并、无限期原文保留 |
 | `InfluenceSnapshot` | platform、content/account ID、observedAt、平台原生指标和少量规范化指标 | 对不同平台曝光、播放、阅读和互动含义做虚假等价 |
+| `ResearchWorkDelta` | source、source work ID、canonical identifiers、title、authors、published/updated/version、topics、abstract/evidence refs、checkpoint | 把派生推荐分数当事实、跨源作者强制合并、无证据的“突破性”判断、未经许可的全文副本 |
+| `ResearchSubmissionState` | platform、owned submission ID、source revision/digest、metadata digest、native state、submitted/announced timestamps、record URL、license/DOI（若已有） | arXiv moderation、OpenReview venue workflow 与 Zenodo deposition 状态的一一映射；endorsement/审稿结果预测 |
 
 每个平台仍拥有自己的输入/输出 Schema；公共概念只是外界可理解的稳定投影。Connector 负责翻译和隔离差异，Collector 负责发现字段/规则漂移并提出 proposal。
 
@@ -190,3 +208,9 @@ Collector 不积累“某平台所有 API”，不自动安装第三方项目、
 - Epic Games Store 分发：<https://store.epicgames.com/distribution/>
 - Twitch API 与 EventSub：<https://dev.twitch.tv/docs/api/>、<https://dev.twitch.tv/docs/eventsub/>
 - Nintendo Developer Portal：<https://developer.nintendo.com/>
+- arXiv API、投稿规则与 endorsement：<https://info.arxiv.org/help/api/index.html>、<https://info.arxiv.org/help/submit/index.html>、<https://info.arxiv.org/help/endorsement.html>
+- OpenAlex API：<https://help.openalex.org/api/>
+- OpenReview API 与 Invitation：<https://docs.openreview.net/getting-started/using-the-api>、<https://docs.openreview.net/getting-started/using-the-api/objects-in-openreview/introductions-to-invitations>
+- Semantic Scholar Academic Graph API：<https://api.semanticscholar.org/api-docs/graph>
+- Crossref 与 DataCite REST API：<https://support.crossref.org/hc/en-us/articles/214320426-REST-API>、<https://support.datacite.org/docs/rest-api>
+- Zenodo REST API 与 sandbox：<https://developers.zenodo.org/>

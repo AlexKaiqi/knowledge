@@ -23,7 +23,7 @@
           "type": "array",
           "minItems": 1,
           "uniqueItems": true,
-          "items": { "enum": ["demand-discovery", "product-research", "content-publishing", "app-publishing", "distribution", "feedback-collection", "influence-measurement"] }
+          "items": { "enum": ["demand-discovery", "product-research", "content-publishing", "app-publishing", "research-publishing", "distribution", "feedback-collection", "influence-measurement"] }
         },
         "rejectGenericInfrastructure": { "const": true }
       }

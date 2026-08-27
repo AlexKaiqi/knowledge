@@ -1,6 +1,6 @@
 # Admission workflow
 
-先过价值门：Capability 必须用 `outcomes` 声明它直接推进需求发现、产品研究、内容发布、App 发布、分发、反馈收集或影响力测量。模型或已有工具已经能可靠完成的普通开发操作，优先直接使用或只作为隐藏 Collector 手段；不能因为容易 live probe 就进入 OKF。
+先过价值门：Capability 必须用 `outcomes` 声明它直接推进需求发现、产品/前沿研究、内容发布、App 发布、研究成果发布、分发、反馈收集或影响力测量。模型或已有工具已经能可靠完成的普通开发操作，优先直接使用或只作为隐藏 Collector 手段；不能因为容易 live probe 就进入 OKF。
 
 一次只处理一个真实 Capability：
 

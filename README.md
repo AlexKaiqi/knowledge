@@ -3,7 +3,7 @@
 一个普通、独立的 Git repository，不是插件。它服务一个明确闭环：
 
 ```text
-发现需求 → 研究产品与渠道 → 制作/发布内容或 App → 分发增长 → 收集反馈 → 复盘影响力
+发现需求 → 研究产品、渠道与前沿技术 → 制作/发布内容、App 或研究成果 → 分发增长 → 收集反馈 → 复盘影响力
 ```
 
 ```text
@@ -20,10 +20,11 @@ probes/      可重复验证定义与无秘密控制面
 真实 probe 是准入必要条件，但不是价值证明。Subject 或 Capability 还必须直接服务至少一个结果域：
 
 - 需求发现与用户反馈；
-- 产品、竞品、模型、数据集与评测研究；
+- 产品、竞品、论文、模型、数据集与评测研究；
 - 自媒体内容制作、发布与账号运营；
 - 渠道分发、增长与影响力测量；
 - App Store、Google Play 等应用发布与评论反馈。
+- 论文、预印本、数据集和研究制品的受控提交、发布与引用追踪。
 
 模型本来就会使用、且只作为内部维护手段的通用开发基础设施，不因“能做 live probe”进入 OKF。需要时由隐藏 Collector 直接消费。
 
@@ -62,13 +63,14 @@ Connector：10 个已验证；xiaohongshu-browser 为 mixed（读取已验证、
 
 候选不再按“平台是否有 API”排列，而按可验证的结果切片排队。当前 active build 是小红书私密发布、平台侧对账和持续反馈；闲鱼公开市场信号与 App Store 公开应用检索占用两个并行 research 槽位。随后是自有 App Store/Google Play 评论、发布状态和受控测试发布。
 
-完整的 P0/P1/P2、Watch、Reject 和最小 Schema 见 [有价值的候选接入对象](docs/INTEGRATION_CANDIDATES.md)。候选组合现在明确覆盖微博、B 站、X、LinkedIn、Facebook Pages 等社交传播渠道，以及 Steam、TapTap、itch.io、Epic 和有条件的主机商店；它们仍按结果切片激活，不按平台名批量接入。同一时刻只实施一个切片，避免再次积累一批只有文档、没有闭环的“接入”。
+完整的 P0/P1/P2、Watch、Reject 和最小 Schema 见 [有价值的候选接入对象](docs/INTEGRATION_CANDIDATES.md)。候选组合现在明确覆盖社交传播、游戏分发，以及 arXiv、OpenAlex、OpenReview、Zenodo 等前沿研究发现与成果发布渠道；它们仍按结果切片激活，不按平台名批量接入。同一时刻只实施一个切片，避免再次积累一批只有文档、没有闭环的“接入”。
 
 ## 文档
 
 - [产品范围与价值门](docs/PRODUCT_SCOPE.md)
 - [有价值的候选接入对象](docs/INTEGRATION_CANDIDATES.md)
 - [社交传播与游戏分发候选调研](docs/research/social-and-game-distribution.md)
+- [前沿研究发现与研究成果发布候选调研](docs/research/scholarly-information-and-research-publishing.md)
 - [闲鱼公开市场信号接入调研](docs/research/xianyu-market-signals.md)
 - [小红书接入调研](docs/research/xiaohongshu-integration.md)
 - [GitHub Work Item 变更调研](docs/research/github-public-work-item-changes.md)
