@@ -25,6 +25,19 @@
 
 第 1 或第 2 问没有具体答案，不进入仓库。第 3 问没有额外复杂度、安全或稳定性收益时，只使用现有工具；最多保留隐藏 Collector，不建立公共 Subject/Capability。
 
+平台、API 和开源项目是证据与执行路线，不是顶层目标。研究顺序固定为：
+
+```text
+Goal
+→ User Workflow
+→ evidenced Difficulty
+→ independently testable Opportunity
+→ required source/capability route
+→ Connector + Probe
+```
+
+只有某个目标研究任务需要 GitHub、arXiv、应用商店或社交平台的稳定增量时，才激活对应候选 Connector。不能因为平台热门、数据多或容易接入就反向制造需求。
+
 ## 优先域
 
 - 自媒体平台：发布、搜索、账号内容、评论、指标、规则与回执。
@@ -43,6 +56,6 @@
 
 ## 候选治理
 
-候选以“可单独验证的结果切片”为单位，不以整个平台或 API 目录为单位。公开研究、私有反馈和平台写入必须拆开验证；未经 live/sandbox probe 的候选不进入 `knowledge/`。
+候选以“目标下可单独验证的工作流/难点切片”为单位，不以整个平台或 API 目录为单位。公开研究、私有反馈和平台写入必须拆开验证；未经 live/sandbox probe 的候选不进入 `knowledge/`。
 
 实施队列最多同时保留一个 active build 和两个 active research。当前排序、验证切片、Watch 与 Reject 清单见 [有价值的候选接入对象](INTEGRATION_CANDIDATES.md)。

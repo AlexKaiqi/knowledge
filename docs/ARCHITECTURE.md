@@ -495,7 +495,28 @@ CapabilityStatusRecommendation
 
 其中 `CapabilityStatusRecommendation` 只是建议；当前 availability 仍由 Capability Gateway 根据已发布知识和已部署 Connector 动态解析。
 
-### 7.3 原“采集编排”放回 Connector
+### 7.3 目标驱动的知识研究
+
+“发现哪些问题值得解决”不能由平台目录驱动。Agentic Collector 可以接受内部 `GoalResearchProfile`，维护目标相关的 Workflow、Difficulty 和 Opportunity 候选：
+
+```text
+GoalResearchProfile
+  goal / target users / contexts / success / boundaries
+  → workflow decomposition
+  → source-specific research questions
+  → bounded Connector reads
+  → EvidenceItems
+  → cross-source synthesis
+  → KnowledgeProposal
+```
+
+不同来源承担不同证据角色：GitHub issue/repository 证明实现摩擦、workaround 和工程可行性；arXiv/OpenReview 证明被明确描述和评测的能力缺口；应用评论与社区证明用户语境、频率和后果；官方文档证明访问与执行边界。单一来源不能独立证明一个产品机会。
+
+Collector 中的 Agent 负责把 source-native evidence 聚合为候选 Difficulty/Opportunity，但必须保留来源、原始主张、推断和反证。它不能从 star、citation、热榜或模型摘要直接生成 canonical 知识。目标研究结果仍是 proposal，只有对应的工作流、能力或产品实验通过验证后才进入 OKF。
+
+`GoalResearchProfile` 是内部研究控制面，不泄露 query 轮换、checkpoint、模型 prompt 或 source route。外部若需要理解已证实的问题，只看到 OKF 中经准入的 Goal、Workflow、Difficulty、Evidence 和 Capability 关系。
+
+### 7.4 原“采集编排”放回 Connector
 
 分页、checkpoint、增量同步、webhook、去重、coverage 和 tombstone 是某项能力如何被执行的逻辑，应属于 Connector 内部 workflow 或独立的 execution library，不再称为 Collector。
 

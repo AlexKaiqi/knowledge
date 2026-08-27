@@ -1,6 +1,6 @@
 # Knowledge
 
-一个普通、独立的 Git repository，不是插件。它服务一个明确闭环：
+一个普通、独立的 Git repository，不是插件。它从产品目标出发，服务一个明确闭环：
 
 ```text
 发现需求 → 研究产品、渠道与前沿技术 → 制作/发布内容、App 或研究成果 → 分发增长 → 收集反馈 → 复盘影响力
@@ -61,14 +61,16 @@ Connector：10 个已验证；xiaohongshu-browser 为 mixed（读取已验证、
 
 ## 下一优先级
 
-候选不再按“平台是否有 API”排列，而按可验证的结果切片排队。当前 active build 是小红书私密发布、平台侧对账和持续反馈；闲鱼公开市场信号与 App Store 公开应用检索占用两个并行 research 槽位。随后是自有 App Store/Google Play 评论、发布状态和受控测试发布。
+平台不再拥有顶层优先级。当前首个 active research goal 是“个人助理/宠物”：从用户工作流出发，用 GitHub、arXiv 及后续应用评论/社区证据持续发现可独立实现和验证的难点。当前 active build 仍是小红书私密发布、平台侧对账和持续反馈；闲鱼公开市场信号保留另一个 research 槽位，App Store 公开检索退回候选队列，等待具体 goal/query 激活。
 
 完整的 P0/P1/P2、Watch、Reject 和最小 Schema 见 [有价值的候选接入对象](docs/INTEGRATION_CANDIDATES.md)。候选组合现在明确覆盖社交传播、游戏分发，以及 arXiv、OpenAlex、OpenReview、Zenodo 等前沿研究发现与成果发布渠道；它们仍按结果切片激活，不按平台名批量接入。同一时刻只实施一个切片，避免再次积累一批只有文档、没有闭环的“接入”。
 
 ## 文档
 
 - [产品范围与价值门](docs/PRODUCT_SCOPE.md)
+- [目标驱动的研究闭环](docs/GOAL_DRIVEN_RESEARCH.md)
 - [有价值的候选接入对象](docs/INTEGRATION_CANDIDATES.md)
+- [个人助理/宠物目标研究](docs/research/personal-assistant-pet-goal.md)
 - [社交传播与游戏分发候选调研](docs/research/social-and-game-distribution.md)
 - [前沿研究发现与研究成果发布候选调研](docs/research/scholarly-information-and-research-publishing.md)
 - [闲鱼公开市场信号接入调研](docs/research/xianyu-market-signals.md)

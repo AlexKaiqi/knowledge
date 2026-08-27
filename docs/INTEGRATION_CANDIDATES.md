@@ -5,19 +5,22 @@
 
 ## 结论
 
-候选单位不是“一个平台”，而是一条能单独验证的结果切片：
+候选单位不是“一个平台”，而是某个产品目标下能单独验证的工作流或难点切片：
 
 ```text
-明确输入
-→ 合法、可维护的访问路线
-→ 一个真实动作或观测
-→ 平台侧 receipt / checkpoint
-→ 对产品决策有用的稳定输出
+Goal
+→ User Workflow
+→ evidenced Difficulty
+→ independently testable Opportunity
+→ 合法、可维护的 source/capability route
+→ Probe / receipt / checkpoint
 ```
 
 例如，“接入 Google Play”过大；“读取自有 App 自 checkpoint 以来的新评论并去除评论者身份”才是候选。公开研究、私有反馈和平台写入必须拆开，分别验证、授权和维护。
 
-候选不会进入 `knowledge/`，也不会因为有官方文档、能返回 HTTP 200 或有开源实现就算可用。只有完成 live/sandbox probe 的单个切片，才按准入流程建立最小 Subject、Capability、Schema、Connector 与 Verification。
+候选不会进入 `knowledge/`，也不会因为有官方文档、能返回 HTTP 200 或有开源实现就算可用。平台表只回答“目标需要时有哪些路线”；它不自行决定建设顺序。只有某个 Goal 需要、证据支持且完成 live/sandbox probe 的单个切片，才按准入流程建立最小 Subject、Capability、Schema、Connector 与 Verification。
+
+当前首个目标研究任务是[个人助理/宠物](research/personal-assistant-pet-goal.md)。GitHub 用于发现真实实现摩擦、bug、workaround 和可运行项目；arXiv 用于发现经过定义的能力缺口、benchmark 和方法。两类证据必须交叉解释，不能用 star/citation 数量替代问题价值。
 
 ## 排序规则
 
@@ -62,7 +65,7 @@ P0 按下面顺序一次只推进一个。前一项没有真实 probe 结论，�
 | 6 | **Google Play 自有 App 评论增量** | 直接收集需求、设备/版本问题和回复状态 | Android Publisher Reviews API；月度历史回填可另用受控 GCS report | 使用自有 App 读取增量或合法空集；保留版本、设备类别、语言、星级、正文和回复状态，删除作者身份 | 需要 Play Console 权限与受控 probe App；API 增量和月报回填必须是两个内部 route、一个稳定输出 |
 | 7 | **App Store Connect / Google Play 自有发布状态读取** | 统一判断 build、审核、track、分阶段发布是否真实生效 | 两个平台各自官方 API，公共输出使用同一 `OwnedAppReleaseState` 概念但不强行统一原始字段 | 各用一个自有 App 只读查询当前版本、build、审核/track 状态和更新时间；保存平台原生状态及规范化大类 | 必须分成两个 Connector 和两个 probe；先读后写，不把平台差异抹掉 |
 
-说明：顺序 1 不是最容易的 API，而是当前最接近第一个完整平台闭环、且已经投入实现的切片。它有真实平台写入，所以不能为了赶进度绕过一次性确认。闲鱼公开市场信号和 App Store 公开检索占用两个 active research 槽位，但在小红书 probe 完成前不抢占 active build；App Store Connect 和 Google Play 私有切片还需要用户提供自有开发者身份。
+说明：顺序 1 不是最容易的 API，而是当前最接近第一个完整平台闭环、且已经投入实现的切片。它有真实平台写入，所以不能为了赶进度绕过一次性确认。个人助理/宠物目标研究和闲鱼公开市场信号占用两个 active research 槽位，但在小红书 probe 完成前不抢占 active build；App Store 公开检索退回队列，等待目标研究生成具体竞品/query 后激活。App Store Connect 和 Google Play 私有切片还需要用户提供自有开发者身份。
 
 ## P1：P0 之后按实际渠道激活
 
