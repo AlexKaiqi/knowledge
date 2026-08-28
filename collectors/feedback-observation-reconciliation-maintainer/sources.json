@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "feedback-observation-reconciliation",
+  "sources": [
+    {
+      "id": "feedback-contract-pinned",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-social-workbench/0bb63b6f6963992e121d719f9a671637f6ab6c7f/spec/feedback-item.schema.json",
+      "role": "production-feedback-contract",
+      "acceptedDocumentDigest": "747b925d8cacdb7fdd29d65b13dadc0802053da12687afd4cd32a6b7e029141a",
+      "observation": { "mode": "static-text-semantic", "assertions": [{ "id": "privacy", "includes": "platform-local-no-cross-platform-identity" }, { "id": "evidence", "includes": "evidenceRefs" }] }
+    },
+    {
+      "id": "feedback-contract-main",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-social-workbench/main/spec/feedback-item.schema.json",
+      "role": "feedback-contract-change-surface",
+      "acceptedDocumentDigest": "747b925d8cacdb7fdd29d65b13dadc0802053da12687afd4cd32a6b7e029141a",
+      "observation": { "mode": "static-text-semantic", "assertions": [{ "id": "privacy", "includes": "platform-local-no-cross-platform-identity" }, { "id": "external-id", "includes": "\"externalId\"" }] }
+    },
+    {
+      "id": "feedback-ledger-pinned",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-social-workbench/0bb63b6f6963992e121d719f9a671637f6ab6c7f/runtime/src/loop-control.mjs",
+      "role": "production-feedback-ledger",
+      "acceptedDocumentDigest": "c49fdf9df8ac9f08a3560334cc8cedfb6930b13e19cbc51a45f73c058efff6f0",
+      "observation": { "mode": "static-text-semantic", "assertions": [{ "id": "immutable-ledger", "includes": "writeImmutable('feedback-items'" }, { "id": "feedback-source", "includes": "source: { kind: sourceKind, evidenceRefs" }] }
+    },
+    {
+      "id": "feedback-ledger-main",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-social-workbench/main/runtime/src/loop-control.mjs",
+      "role": "feedback-ledger-change-surface",
+      "acceptedDocumentDigest": "c49fdf9df8ac9f08a3560334cc8cedfb6930b13e19cbc51a45f73c058efff6f0",
+      "observation": { "mode": "static-text-semantic", "assertions": [{ "id": "record-feedback", "includes": "async recordFeedback(input" }, { "id": "feedback-id", "includes": "const feedbackId = digestId('feedback', payload)" }] }
+    }
+  ]
+}

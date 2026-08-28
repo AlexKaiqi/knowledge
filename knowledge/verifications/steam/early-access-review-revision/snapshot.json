@@ -1,0 +1,187 @@
+{
+  "fixture": "owned-game-early-access-plan",
+  "schemaVersion": "dsh.steam-early-access-review-revision/v1",
+  "gameRef": "game:clockwork-familiar",
+  "sourceRevisionRef": "design:early-access-plan-v2",
+  "buildRevisionRef": "build:steam-early-access-candidate-v4",
+  "questionnaireRevisionRef": "steam-early-access-qa:observed-2026-08-27",
+  "policyRevision": "steam-early-access-2026-08-27",
+  "manualReview": {
+    "required": true,
+    "checks": [
+      {
+        "id": "current-questionnaire-and-platform-fields",
+        "status": "pending"
+      },
+      {
+        "id": "answers-detailed-transparent-and-consistent",
+        "status": "pending"
+      },
+      {
+        "id": "current-build-is-playable-and-worth-current-price",
+        "status": "pending"
+      },
+      {
+        "id": "gameplay-trailer-represents-current-build",
+        "status": "pending"
+      },
+      {
+        "id": "current-state-and-limitations-match-build",
+        "status": "pending"
+      },
+      {
+        "id": "future-language-avoids-specific-promises",
+        "status": "pending"
+      },
+      {
+        "id": "funding-plan-does-not-rely-on-sales",
+        "status": "pending"
+      },
+      {
+        "id": "pricing-parity-and-transparency",
+        "status": "pending"
+      },
+      {
+        "id": "third-party-branding-and-disclosure",
+        "status": "pending"
+      },
+      {
+        "id": "community-involvement-is-material",
+        "status": "pending"
+      },
+      {
+        "id": "owned-target-and-submitter-authority",
+        "status": "pending"
+      }
+    ]
+  },
+  "platformValidated": false,
+  "buildValidatedByConnector": false,
+  "priceValidated": false,
+  "savedToSteamworks": false,
+  "published": false,
+  "markedReadyForReview": false,
+  "releasedAsEarlyAccess": false,
+  "executionAuthorized": false,
+  "preparedAt": "2026-08-27T11:30:00.000Z",
+  "status": "ready-for-human-review",
+  "revisionHash": "sha256:e613ec2d3b7ac66d1c5bb280bb5526f2f45e55dfbec04797865b30915bcd95e9",
+  "answers": [
+    {
+      "questionRef": "why-early-access",
+      "text": "We are using Early Access to develop the remaining game structure with informed player feedback while keeping the current playable loop available.",
+      "evidenceRefs": [
+        "evidence:early-access-goal-v2"
+      ]
+    },
+    {
+      "questionRef": "approximate-duration",
+      "text": "Our current estimate is a bounded development range, but it may change as we learn from the playable build and community feedback.",
+      "evidenceRefs": [
+        "evidence:development-range-v2"
+      ]
+    },
+    {
+      "questionRef": "planned-full-version-differences",
+      "text": "We plan to expand content and polish the existing systems. These are changeable plans, not guarantees, and the current build is sold on what it contains today.",
+      "evidenceRefs": [
+        "evidence:nonbinding-roadmap-v3"
+      ]
+    },
+    {
+      "questionRef": "current-early-access-state",
+      "text": "The current build contains the exploration and companion-dialogue loops; chapter count is limited and some updates may require save migration.",
+      "evidenceRefs": [
+        "evidence:current-build-audit-v4"
+      ]
+    },
+    {
+      "questionRef": "pricing-during-and-after",
+      "text": "The current price reflects the playable build. We presently plan a possible increase as content grows and will communicate any change before it takes effect.",
+      "evidenceRefs": [
+        "evidence:pricing-copy-v1"
+      ]
+    },
+    {
+      "questionRef": "community-involvement",
+      "text": "We will review structured bug reports and design feedback through declared community channels and publish decisions or changed plans on a regular cadence.",
+      "evidenceRefs": [
+        "evidence:community-loop-v2"
+      ]
+    }
+  ],
+  "currentBuild": {
+    "playabilityState": "playable-current-build",
+    "playableEvidenceRefs": [
+      "test:full-run-v4"
+    ],
+    "gameplayTrailerEvidenceRefs": [
+      "media:gameplay-trailer-v2"
+    ],
+    "currentFeatureRefs": [
+      "feature:companion-dialogue",
+      "feature:exploration-loop"
+    ],
+    "currentLimitationRefs": [
+      "limitation:chapter-count",
+      "limitation:save-break-risk"
+    ]
+  },
+  "eligibility": {
+    "developmentState": "actively-in-development",
+    "fundingDependency": "not-dependent-on-early-access-sales",
+    "futurePlanCommitment": "non-binding-and-changeable",
+    "communityInfluence": "planned-and-material"
+  },
+  "pricePlan": {
+    "currentPriceRevisionRef": "price-plan:early-access-v1",
+    "futurePriceDirection": "higher",
+    "steamPriceParity": "confirmed-no-higher",
+    "transparencyEvidenceRefs": [
+      "copy:pricing-answer-v1"
+    ],
+    "otherServiceAvailability": "planned-or-active",
+    "otherServicePriceEvidenceRefs": [
+      "price-proof:other-store-v1"
+    ]
+  },
+  "thirdPartyDistribution": {
+    "mode": "steam-key-sites",
+    "disclosureEvidenceRefs": [
+      "disclosure:key-site-v1"
+    ]
+  },
+  "preflight": {
+    "checks": [
+      {
+        "id": "six-question-answer-set",
+        "status": "passed"
+      },
+      {
+        "id": "current-build-playable-declared",
+        "status": "passed"
+      },
+      {
+        "id": "playability-and-trailer-evidence-bound",
+        "status": "passed"
+      },
+      {
+        "id": "future-plans-non-binding",
+        "status": "passed"
+      },
+      {
+        "id": "development-and-funding-eligible",
+        "status": "passed"
+      },
+      {
+        "id": "community-influence-planned",
+        "status": "passed"
+      },
+      {
+        "id": "pricing-and-third-party-boundaries",
+        "status": "passed"
+      }
+    ],
+    "blockers": []
+  }
+}

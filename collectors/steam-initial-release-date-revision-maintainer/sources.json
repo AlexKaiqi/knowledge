@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "steam-initial-release-date-review-revision",
+  "sources": [
+    {
+      "id": "steam-release-dates",
+      "url": "https://partner.steamgames.com/doc/store/release_dates?language=english",
+      "role": "official-exact-date-display-precision-list-position-and-change-lock-boundary",
+      "observation": { "mode": "static-html-semantic", "assertions": [
+        { "id": "exact-intended-date", "includes": "set an exact intended release date" },
+        { "id": "five-display-options", "includes": "store display from five options" },
+        { "id": "last-possible-date", "includes": "last possible date of that time range" },
+        { "id": "two-week-change-lock", "includes": "change the release date of your game up to two weeks prior" }
+      ] }
+    },
+    {
+      "id": "steam-coming-soon",
+      "url": "https://partner.steamgames.com/doc/store/coming_soon?language=english",
+      "role": "official-coming-soon-minimum-and-wishlist-notification-boundary",
+      "observation": { "mode": "static-html-semantic", "assertions": [
+        { "id": "minimum-two-weeks", "includes": "must have a Coming Soon page up for at least two weeks before releasing" },
+        { "id": "wishlist-notification", "includes": "Steam will automatically send an e-mail" }
+      ] }
+    },
+    {
+      "id": "steam-release-process",
+      "url": "https://partner.steamgames.com/doc/store/releasing?language=english",
+      "role": "official-review-permission-and-manual-release-boundary",
+      "observation": { "mode": "static-html-semantic", "assertions": [
+        { "id": "two-permissions", "includes": "requires two specific Steamworks permissions" },
+        { "id": "publish-permission", "includes": "Publish app changes to Steam" },
+        { "id": "pricing-permission", "includes": "Manage pricing and discounts" },
+        { "id": "store-and-build-review", "includes": "store page has been approved" },
+        { "id": "manual-release", "includes": "Approved titles will not release themselves" }
+      ] }
+    }
+  ]
+}

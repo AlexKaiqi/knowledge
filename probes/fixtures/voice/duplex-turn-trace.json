@@ -1,0 +1,12 @@
+{
+  "trace": [
+    { "kind": "assistant-output", "atMs": 0, "state": "started" },
+    { "kind": "speech-candidate", "atMs": 100, "candidateId": "noise-1", "state": "started" },
+    { "kind": "speech-candidate", "atMs": 180, "candidateId": "noise-1", "state": "released" },
+    { "kind": "speech-candidate", "atMs": 300, "candidateId": "ack-1", "state": "started" },
+    { "kind": "speech-confirmation", "atMs": 420, "candidateId": "ack-1", "intent": "backchannel" },
+    { "kind": "speech-candidate", "atMs": 600, "candidateId": "turn-1", "state": "started" },
+    { "kind": "speech-confirmation", "atMs": 984, "candidateId": "turn-1", "intent": "take-turn" },
+    { "kind": "user-turn", "atMs": 1400, "state": "ended" }
+  ]
+}

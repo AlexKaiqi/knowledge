@@ -1,0 +1,76 @@
+{
+  "fixture": "isolated-production-pkb-upsert",
+  "productionRevision": "c8e181adcf3904f47fd33b85ffc1e97126cbbd66",
+  "productionReceipt": {
+    "ok": true,
+    "operation": "upsert",
+    "path": "knowledge/preferences.md",
+    "recovered": false,
+    "committed": true
+  },
+  "conflictObserved": true,
+  "schemaVersion": "dsh.durable-memory-change-review-revision/v1",
+  "ownerScopeRef": "owner:primary",
+  "repositoryRevisionRef": "git:a490a9310b7d87c39600a2fba760af44cc26ca7c",
+  "target": {
+    "path": "knowledge/preferences.md",
+    "exists": false,
+    "contentDigest": null
+  },
+  "change": {
+    "operation": "upsert",
+    "baseContentDigest": null,
+    "content": "# Preferences\n\n- Quiet hours: 22:00–08:00.\n",
+    "reason": "Stable confirmed preference",
+    "sourceRefs": [
+      "session:fixture-1"
+    ],
+    "evidenceRefs": [
+      "confirmation:fixture-1"
+    ],
+    "desiredContentDigest": "sha256:f2fb57304f3078bc16b3dd106e72b89c0fdd002ad2045197d5f4699023ac3828"
+  },
+  "implementationSemanticsRevision": "dsh-personal-knowledge-base@c8e181adcf3904f47fd33b85ffc1e97126cbbd66",
+  "status": "ready-for-human-review",
+  "reviewRevisionHash": "sha256:673878324485f20559c9f17bc8eabca10377628be24ca9e079fbf199c4da2213",
+  "reviewItems": [
+    {
+      "id": "exact-target-and-content",
+      "status": "pending"
+    },
+    {
+      "id": "durable-after-current-task",
+      "status": "pending"
+    },
+    {
+      "id": "source-and-provenance",
+      "status": "pending"
+    },
+    {
+      "id": "sensitive-data-and-secrets",
+      "status": "pending"
+    },
+    {
+      "id": "unsupported-inference",
+      "status": "pending"
+    },
+    {
+      "id": "conflict-and-supersession",
+      "status": "pending"
+    },
+    {
+      "id": "forget-scope-and-consequences",
+      "status": "pending"
+    }
+  ],
+  "preflight": {
+    "blockers": []
+  },
+  "reviewerDecision": null,
+  "proposalCreated": false,
+  "applied": false,
+  "committed": false,
+  "receiptIssued": false,
+  "executionAuthorized": false,
+  "preparedAt": "2026-08-27T06:00:00.000Z"
+}

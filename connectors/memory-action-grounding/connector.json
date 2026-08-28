@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "memory-action-grounding",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/assistant/ground-memory-into-action-candidate.md"],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "connectors/memory-action-grounding/src/index.mjs"
+  },
+  "configSchema": "repo:/connectors/memory-action-grounding/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [
+    {
+      "capabilityRef": "/capabilities/assistant/ground-memory-into-action-candidate.md",
+      "operation": "groundMemoryIntoActionCandidate"
+    }
+  ],
+  "conformance": {
+    "status": "verified",
+    "probeReportRef": "/verifications/assistant/memory-action-grounding/report.json"
+  }
+}

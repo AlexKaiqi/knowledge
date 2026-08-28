@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "appfigures-public-app-reviews-live",
+  "version": "0.1.0",
+  "capabilityRef": "/capabilities/research/read-public-app-review-snapshot.md",
+  "connectorId": "appfigures-public-app-reviews",
+  "environment": "production-public",
+  "identity": { "required": true, "poolRef": "identity-pool:appfigures-provider-probes" },
+  "effect": "financial",
+  "steps": [
+    { "id": "resolve-store-product", "operation": "resolveStoreProduct", "inputRef": "repo:/probes/fixtures/appfigures-public-app-reviews-probe.json" },
+    { "id": "read-bounded-review-snapshot", "operation": "readPublicAppReviewSnapshot" },
+    { "id": "reconcile-credit-ledger", "operation": "reconcilePublicDataCredits" },
+    { "id": "redact-durable-review-text", "operation": "redactReviewTextForVerification" },
+    { "id": "write-staging-report", "operation": "writeCandidateProbeReport" }
+  ],
+  "assertions": [
+    "The fixed Apple store ID resolves to the expected store-native product without exposing the provider-assigned product ID.",
+    "One newest-first review request returns at most 25 US reviews from a 30-day window; a legitimate empty set remains allowed if coverage is explicit.",
+    "Normalized reviews retain rating, app version, territory, predicted language, date and content digest while removing author, provider review ID, original duplicate fields and unreliable competitor response state.",
+    "The provider credit ledger is recorded before and after the run; no more than five credits and USD 1 equivalent are consumed.",
+    "The standard account is used only for approved internal product research; client processing, resale, public data products and AI training remain blocked pending separate written commercial terms.",
+    "The Git verification candidate stores text length and SHA-256 only; promotion still requires public Schema review and human admission."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 150, "maxCost": 1, "currency": "USD" }
+}

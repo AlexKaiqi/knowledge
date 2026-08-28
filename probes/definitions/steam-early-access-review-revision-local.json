@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "steam-early-access-review-revision-local",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/steam/prepare-early-access-review-revision.md",
+  "connectorId": "steam-early-access-revision",
+  "environment": "local",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "verify-official-early-access-rules", "operation": "verifyOfficialSteamEarlyAccessSemantics" },
+    { "id": "prepare-early-access-revision", "operation": "prepareSteamEarlyAccessReviewRevision", "inputRef": "repo:/probes/fixtures/game-build/steam-early-access.json" },
+    { "id": "verify-revision-mutation-binding", "operation": "verifyEarlyAccessRevisionMutationBinding" },
+    { "id": "verify-eligibility-and-disclosure-blockers", "operation": "verifyEarlyAccessBlockers" },
+    { "id": "validate-public-schema", "operation": "validateInputAndOutputSchema" },
+    { "id": "verify-no-platform-effect", "operation": "verifyNoSteamworksEffect" }
+  ],
+  "assertions": [
+    "Steam Early Access is for an unfinished but playable and currently valuable alpha/beta build, not crowdfunding, pre-purchase or final bug testing.",
+    "The six current public Q&A prompts are all bound to evidence, with current state separated from non-binding future plans.",
+    "A non-playable or finished build, completion dependent on Early Access sales, specific future promises, absent community influence or unresolved price parity is blocked.",
+    "Third-party Steam-key distribution requires Early Access branding/current-state/questionnaire disclosure evidence.",
+    "The capability excludes the separate planned V1.0 date field because current official documentation contains conflicting statements about its availability.",
+    "Changing questionnaire, build, answer, evidence, eligibility, pricing or disclosure changes or blocks the revision.",
+    "Actual playability, value, copy truthfulness, pricing, trailer, community plan, platform fields and owned-target authority remain pending human review.",
+    "The result cannot claim Steamworks save, publication, review handoff, Early Access release or execution authorization."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 45, "maxCost": 0, "currency": "CNY" }
+}

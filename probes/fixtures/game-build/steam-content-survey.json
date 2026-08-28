@@ -1,0 +1,40 @@
+{
+  "gameRef": "game:clockwork-familiar",
+  "sourceRevisionRef": "design:content-audit-v1",
+  "buildRevisionRef": "build:steam-public-candidate-v7",
+  "questionnaireRevisionRef": "steam-content-survey:observed-2026-08-27",
+  "sections": [
+    {
+      "section": "general-content",
+      "expectedQuestionRefs": ["survey-question:general-gambling", "survey-question:general-violence"],
+      "answers": [
+        { "questionRef": "survey-question:general-gambling", "response": { "kind": "boolean", "value": false }, "evidenceRefs": ["evidence:general-gambling"], "contentRefs": ["content:general-gambling"] },
+        { "questionRef": "survey-question:general-violence", "response": { "kind": "single-choice", "value": "choice:fantasy-violence-occasional" }, "evidenceRefs": ["evidence:general-violence"], "contentRefs": ["content:general-violence"] }
+      ]
+    },
+    {
+      "section": "mature-content",
+      "expectedQuestionRefs": ["survey-question:mature-adult-sexual-content", "survey-question:mature-language"],
+      "answers": [
+        { "questionRef": "survey-question:mature-adult-sexual-content", "response": { "kind": "boolean", "value": false }, "evidenceRefs": ["evidence:mature-adult-sexual-content"], "contentRefs": ["content:mature-adult-sexual-content"] },
+        { "questionRef": "survey-question:mature-language", "response": { "kind": "single-choice", "value": "choice:mild" }, "evidenceRefs": ["evidence:mature-language"], "contentRefs": ["content:mature-language"] }
+      ]
+    },
+    {
+      "section": "generative-ai-content",
+      "expectedQuestionRefs": ["survey-question:ai-live-generated", "survey-question:ai-pre-generated"],
+      "answers": [
+        { "questionRef": "survey-question:ai-live-generated", "response": { "kind": "boolean", "value": true }, "evidenceRefs": ["evidence:ai-live-generated"], "contentRefs": ["content:ai-live-generated"] },
+        { "questionRef": "survey-question:ai-pre-generated", "response": { "kind": "boolean", "value": true }, "evidenceRefs": ["evidence:ai-pre-generated"], "contentRefs": ["content:ai-pre-generated"] }
+      ]
+    }
+  ],
+  "declarations": { "allUploadedAdultContentDisclosed": true, "answersMatchCurrentBuildAndStorePage": true },
+  "aiDisclosure": {
+    "mode": "both",
+    "shippedContentRefs": ["content:ai-assisted-localization"],
+    "runtimeContentRefs": ["system:dynamic-npc-dialogue"],
+    "rightsEvidenceRefs": ["rights:ai-content-audit-v1"],
+    "guardrailEvidenceRefs": ["guardrail:runtime-generation-policy-v3"]
+  }
+}

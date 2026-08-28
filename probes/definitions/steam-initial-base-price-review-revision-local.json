@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "steam-initial-base-price-review-revision-local",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/steam/prepare-initial-base-price-review-revision.md",
+  "connectorId": "steam-initial-base-price-revision",
+  "environment": "local",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "verify-official-pricing-rules", "operation": "verifyOfficialSteamInitialBasePriceSemantics" },
+    { "id": "prepare-initial-base-price-revision", "operation": "prepareSteamInitialBasePriceReviewRevision", "inputRef": "repo:/probes/fixtures/game-build/steam-initial-base-prices.json" },
+    { "id": "verify-market-coverage-and-increments", "operation": "verifyLiveCurrencyRegionGroupAndIncrementCoverage" },
+    { "id": "verify-mutation-binding", "operation": "verifyInitialBasePriceRevisionMutationBinding" },
+    { "id": "verify-initial-state-blockers", "operation": "verifyInitialPricingStateBlockers" },
+    { "id": "validate-public-schema", "operation": "validateInputAndOutputSchema" },
+    { "id": "verify-no-platform-effect", "operation": "verifyNoSteamworksEffect" }
+  ],
+  "assertions": [
+    "The revision covers exactly the current 37 live currencies and four USD region groups.",
+    "Every amount and caller-observed minimum is expressed in minor units and respects documented currency increments.",
+    "Missing markets, amounts below caller-observed minimums, invalid increments, stale state, an absent standard package, an existing schedule, a submitted schedule or conflicting discount state are blocked.",
+    "The revision binds package, build, source/catalog/threshold revisions, all prices, market research, value evidence and publish mode.",
+    "Authenticated pricing catalog, actual per-market minimums, owned package, payout partner, permission, commercial value and Steamworks preview remain pending human review.",
+    "The result cannot claim CSV generation, Valve submission/approval, Steam publication, discount configuration or execution authorization."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 60, "maxCost": 0, "currency": "CNY" }
+}

@@ -1,0 +1,42 @@
+{
+  "suiteRef": "fixture:assistant-response-repetition-v1",
+  "cases": [
+    {
+      "caseRef": "english-planning",
+      "locale": "en-US",
+      "responses": [
+        { "responseRef": "turn-one", "text": "Your appointment is Monday at four." },
+        { "responseRef": "turn-two", "text": "YOUR APPOINTMENT IS MONDAY AT FOUR!" },
+        { "responseRef": "turn-three", "text": "Let's look at the train options together." },
+        { "responseRef": "turn-four", "text": "Let's look at the train options together." },
+        { "responseRef": "turn-five", "text": "Let's look at the train options and compare prices." },
+        { "responseRef": "turn-six", "text": "Okay." }
+      ],
+      "repeatContexts": [
+        {
+          "currentResponseRef": "turn-two",
+          "priorResponseRef": "turn-one",
+          "kind": "confirmation-readback",
+          "evidenceRefs": ["fixture:event/user-requested-readback"]
+        }
+      ]
+    },
+    {
+      "caseRef": "chinese-planning",
+      "locale": "zh-CN",
+      "responses": [
+        { "responseRef": "reply-one", "text": "我会陪你一起整理今天的计划。" },
+        { "responseRef": "reply-two", "text": "我会陪你一起整理今天的计划！" },
+        { "responseRef": "reply-three", "text": "我们先整理今天的计划，再决定下一步。" }
+      ],
+      "repeatContexts": [
+        {
+          "currentResponseRef": "reply-two",
+          "priorResponseRef": "reply-one",
+          "kind": "persona-catchphrase",
+          "evidenceRefs": ["fixture:persona/declared-catchphrase"]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "google-places-public-reviews",
+  "version": "0.1.0",
+  "capabilityRefs": ["/capabilities/research/read-public-place-review-snapshot.md"],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "connectors/google-places-public-reviews/src/index.mjs"
+  },
+  "configSchema": "repo:/connectors/google-places-public-reviews/config.schema.json",
+  "credentialSlots": [
+    {
+      "name": "google-maps-platform-api-key",
+      "required": true,
+      "purpose": "Resolve a restricted Google Maps Platform API key for an approved billing-enabled Places API (New) research project outside Git."
+    }
+  ],
+  "handlers": [
+    {
+      "capabilityRef": "/capabilities/research/read-public-place-review-snapshot.md",
+      "operation": "readPublicPlaceReviewSnapshot"
+    }
+  ],
+  "conformance": {
+    "status": "candidate",
+    "probeDefinitionRef": "repo:/probes/definitions/google-places-public-reviews-live.json"
+  }
+}

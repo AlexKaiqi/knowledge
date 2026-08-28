@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "feedback-observation-reconciliation-local",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/feedback/reconcile-feedback-observations.md",
+  "connectorId": "feedback-observation-reconciler",
+  "environment": "local",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "verify-production-feedback-boundaries", "operation": "verifyPinnedProductionSources" },
+    { "id": "reconcile-observation-windows", "operation": "reconcileFeedbackObservations", "inputRef": "repo:/probes/fixtures/feedback/observation-reconciliation.json" },
+    { "id": "replay-ordering", "operation": "reconcileFeedbackObservations", "inputRef": "repo:/probes/fixtures/feedback/observation-reconciliation.json" },
+    { "id": "validate-public-schema", "operation": "validateOutputSchema" }
+  ],
+  "assertions": [
+    "The public input accepts opaque item refs, digests, lifecycle and reply state but no feedback text or person fields.",
+    "New, edited, explicit deleted/hidden, resurfaced, reply-state-changed and unchanged observations remain distinct.",
+    "An item absent from the current bounded window is missing-unresolved and never inferred deleted.",
+    "A complete window may only propose checkpoint advancement; the capability never mutates a checkpoint.",
+    "Equivalent unordered input yields the same ordered result and digest."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 30, "maxCost": 0, "currency": "CNY" }
+}

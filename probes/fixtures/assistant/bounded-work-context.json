@@ -1,0 +1,7 @@
+{
+  "query": "projection",
+  "currentSessionRef": "session:current-fixture",
+  "workspaceRef": "workspace:primary",
+  "maxChars": 2400,
+  "includePriorSessions": true
+}

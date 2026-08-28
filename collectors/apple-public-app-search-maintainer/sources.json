@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "apple-public-app-search",
+  "sources": [
+    {
+      "id": "search-api-overview",
+      "url": "https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/index.html",
+      "role": "official-api-purpose",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "app-store-search", "includes": "search for content within the iTunes Store, App Store, iBooks Store and Mac App Store" },
+          { "id": "promo-content-boundary", "includes": "App icons only to promote store content" }
+        ]
+      }
+    },
+    {
+      "id": "search-api-contract",
+      "url": "https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/Searching.html",
+      "role": "official-api-contract",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "software-entities", "includes": "software, iPadSoftware, macSoftware" },
+          { "id": "result-limit", "includes": "1 to 200" },
+          { "id": "rate-limit", "includes": "approximately 20 calls per minute" }
+        ]
+      }
+    },
+    {
+      "id": "app-review-guidelines",
+      "url": "https://developer.apple.com/app-store/review/guidelines/",
+      "role": "official-data-use-policy",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "approved-rss-only", "includes": "approved Apple RSS feeds" },
+          { "id": "no-site-scraping", "includes": "may not scrape any information from Apple sites" },
+          { "id": "no-derived-rankings", "includes": "create rankings using this information" }
+        ]
+      }
+    }
+  ]
+}

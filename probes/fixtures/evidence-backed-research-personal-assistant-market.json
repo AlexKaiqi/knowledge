@@ -1,0 +1,276 @@
+{
+  "input": {
+    "scenario": "market-competitive",
+    "goal": "从个人助理、AI 陪伴和虚拟宠物的公开目录信号与一手实现中，审计 persona continuity 独立切片及其下一验证门，而不是估算市场规模或继续堆功能",
+    "decision": "persona continuity 契约准入后，下一步是否应转向真实 evaluator L3，并继续与 trajectory memory、重复率和长期陪伴结果拆开",
+    "questions": [
+      "US iPhone 公开目录中的 personal assistant、AI companion 和 virtual pet 是否是一个可直接合并的稳定品类？",
+      "开源方案实际用什么机制维持角色与宠物表现，而不只是怎样定位自己？",
+      "哪些指标能由 effect-free probe 独立验证，哪些必须保留为长期用户研究或另一能力？"
+    ],
+    "constraints": {
+      "cutoffAt": "2026-08-27T08:00:00Z",
+      "geographies": ["US App Store storefront"],
+      "versions": ["Apple Search API observations at cutoff", "pet-mochi@efa76839cb31ecf7c126ec0a833d514ac94a92e2", "YuriOS@c131bb7776c8c961d462e30dacc69c4023497aa8", "AnchorBench@41bd0e20b9524ce484db301ac15dc14121bf06ad", "current local verified capability catalog"],
+      "exclusions": ["从目录顺序或返回条数推断市场规模", "把评分数直接当活跃用户或收入", "从 README 定位推断实现完成度", "把 persona、记忆、重复率和长期陪伴压成一个总分", "安装或运行第三方项目"]
+    },
+    "budget": { "maxSources": 9, "maxQueries": 10 }
+  },
+  "agentObservation": {
+    "scenario": "market-competitive",
+    "performedAt": "2026-08-27T08:00:00Z",
+    "openedSourceCount": 7,
+    "counterSearchPerformed": true,
+    "humanReviewRequired": true
+  },
+  "sourceChecks": [
+    {
+      "id": "apple-ai-companion",
+      "kind": "apple-public-app-search",
+      "input": { "query": "AI companion", "country": "US", "surface": "iphone", "limit": 10 },
+      "expectedReturnedCount": 10,
+      "requiredItems": [
+        { "appId": "1158555867", "name": "Replika - AI Companion Chat", "primaryGenre": "Health & Fitness" },
+        { "appId": "6451038161", "name": "Kindroid: Your Personal AI", "primaryGenre": "Entertainment" },
+        { "appId": "6450270929", "name": "Nomi: AI Companion with a Soul", "primaryGenre": "Lifestyle" }
+      ],
+      "digest": "112e1f0d990d6970176fa520805904e90fc570a95d83322efa7e348927641d06"
+    },
+    {
+      "id": "apple-personal-assistant",
+      "kind": "apple-public-app-search",
+      "input": { "query": "personal AI assistant", "country": "US", "surface": "iphone", "limit": 10 },
+      "expectedReturnedCount": 10,
+      "requiredItems": [
+        { "appId": "6746845735", "name": "Pocket - AI Personal Assistant", "primaryGenre": "Utilities" },
+        { "appId": "6453473083", "name": "Martin: Personal Assistant", "primaryGenre": "Productivity" },
+        { "appId": "6445815935", "name": "Pi, your personal AI", "primaryGenre": "Lifestyle" }
+      ],
+      "digest": "e51817288223c01ff08d517cef73556dfa08af75eea33b4450df91b76440cb67"
+    },
+    {
+      "id": "apple-virtual-pet",
+      "kind": "apple-public-app-search",
+      "input": { "query": "virtual pet", "country": "US", "surface": "iphone", "limit": 10 },
+      "expectedReturnedCount": 9,
+      "requiredItems": [
+        { "appId": "6443760470", "name": "Pokipet - Raise virtual pets", "primaryGenre": "Games" },
+        { "appId": "1641107226", "name": "Widgetable: Besties & Couples", "primaryGenre": "Social Networking" },
+        { "appId": "1267861706", "name": "My Tamagotchi Forever", "primaryGenre": "Games" }
+      ],
+      "digest": "d7357ad5f36191e2d8ce4956a4c209669739711a06ab7f8af4e21c611241d904"
+    },
+    {
+      "id": "pet-mochi-character-bounds",
+      "kind": "html-semantic",
+      "url": "https://raw.githubusercontent.com/cskwork/pet-mochi/efa76839cb31ecf7c126ec0a833d514ac94a92e2/src-tauri/src/llm/prompts.rs",
+      "assertions": [
+        "Stay in character. Reply in one short message under 25 words.",
+        "Reply (max 25 words, in character):",
+        "rejected by the validator and trigger the deterministic fallback (REQ-098)."
+      ],
+      "digest": "4c93564162bd28150d99e442f7d0e5fc16d07c01b5a4b6556b5799d7e2b9b9c0"
+    },
+    {
+      "id": "yurios-versioned-soul",
+      "kind": "html-semantic",
+      "url": "https://raw.githubusercontent.com/yuri-os/YuriOS/c131bb7776c8c961d462e30dacc69c4023497aa8/yurios/app/core/soul.py",
+      "assertions": [
+        "persona is always whatever the files say *right now*",
+        "personality: str           # PERSONA.md@personality",
+        "hard_limits=mac(reader.resolve_field(fields[\"post_history_instructions\"]))"
+      ],
+      "digest": "790865be5c4821cce09248b9ef3757684c4ed4a98bd76def07c1cd3d270dbf66"
+    },
+    {
+      "id": "anchor-long-horizon",
+      "kind": "html-semantic",
+      "url": "https://raw.githubusercontent.com/SalesforceAIResearch/AnchorBench/41bd0e20b9524ce484db301ac15dc14121bf06ad/README.md",
+      "assertions": [
+        "**Persona continuity:** does the companion continue to follow its assigned role, boundaries, values, and communication style?",
+        "ANCHOR therefore keeps behavioral continuity and trajectory recall separate.",
+        "Judge choice materially affects some conclusions",
+        "avoiding one composite \"companion quality\" score."
+      ],
+      "digest": "6dc9ab7ba0bcdfc64578a62e3e2f554d51c5f31f1d90087f5c0809cb7ca93d01"
+    },
+    {
+      "id": "local-assistant-pet-boundary",
+      "kind": "repository-manifest",
+      "resource": "repo:/knowledge/capabilities/",
+      "files": [
+        "knowledge/capabilities/index.md",
+        "docs/research/product-goal-capability-map.md",
+        "knowledge/verifications/assistant/versioned-memory-use-evaluation/snapshot.json",
+        "knowledge/verifications/pet/public-state-behavior/snapshot.json"
+      ],
+      "digest": "39aa1a6ca973674892a2e84d68bef4e6f6ef33489a27081e07b39189b12d45d4"
+    }
+  ],
+  "candidate": {
+    "scenario": "market-competitive",
+    "question": "个人助理、AI 陪伴和虚拟宠物的公开方案形态支持下一步优先验证哪项独立能力？",
+    "decision": "保留已实验准入的 effect-free persona continuity contract；下一验证门转向真实 evaluator L3，同时把 trajectory memory、repetition、宠物真实状态和长期陪伴效果保持为不同能力或研究，不创建 companion quality 总分。",
+    "answer": "三个 Apple US/iPhone 关键词小页只显示 personal assistant、AI companion 与 virtual pet 的重叠定位，不能推出稳定市场。固定源码证明 persona 文件、hard limits、短回复和封闭行为词表等机制存在；ANCHOR 则要求把 role、boundaries、values、style 与 trajectory recall 分开，保留 judge provenance 并避免 companion quality 总分。本地现已实验准入冻结 revision/七类情境、四轴、system truth、unknown 和 evaluator disagreement 的契约，但 scripted evaluator 只证明规范化与边界。下一缺口不是再加字段，而是用真实版本化 evaluator 跑 blind fixture、对抗反例、多语言与校准 L3；重复率、trajectory memory 和长期陪伴仍独立。",
+    "confidence": "medium",
+    "findings": [
+      {
+        "id": "category-overlap-not-market-size",
+        "claim": "personal assistant、AI companion 与 virtual pet 在当前 US/iPhone 公开目录里是交叉且多 genre 的定位集合，不能由三个搜索页合并出市场规模或稳定竞争排名。",
+        "status": "supported",
+        "confidence": "high",
+        "evidenceIds": ["ai-companion-page", "personal-assistant-page", "virtual-pet-page"],
+        "counterEvidenceIds": [],
+        "applicability": "只适用于 2026-08-27 的三个关键词、US storefront、iPhone surface 和各自最多十条 metadata；Apple 未声明排序语义，也未提供完整 corpus。",
+        "inference": true
+      },
+      {
+        "id": "persona-is-an-implemented-mechanism",
+        "claim": "开源个人助理/宠物方案已把角色表现拆成 persona revision、逐轮加载、hard limits、短回复和封闭动作词表等具体机制，而不只是营销文案。",
+        "status": "supported",
+        "confidence": "high",
+        "evidenceIds": ["mochi-character-bounds", "yurios-soul-loader"],
+        "counterEvidenceIds": ["anchor-audit"],
+        "applicability": "证明固定 commit 中存在这些机制；本轮未安装、运行或比较其模型、延迟、资源、UI 和实际用户体验。",
+        "inference": false
+      },
+      {
+        "id": "mechanism-is-not-continuity",
+        "claim": "persona 文件或 stay-in-character prompt 不能证明长程角色连续性；role、boundary、value、style 与 trajectory memory 必须分别观察，并记录 evaluator provenance。",
+        "status": "supported",
+        "confidence": "high",
+        "evidenceIds": ["anchor-audit", "mochi-character-bounds", "yurios-soul-loader"],
+        "counterEvidenceIds": [],
+        "applicability": "ANCHOR 是合成对话与有限模型/设置下的 benchmark；其完整 test set 非公开，公开 development banks 也不具统计代表性。",
+        "inference": true
+      },
+      {
+        "id": "next-slice-persona-continuity",
+        "claim": "effect-free persona continuity 契约已作为独立切片实验准入；下一最小验证是带版本真实 evaluator 的 blind fixture、反例、多语言和校准 L3，而不是另一个总分。",
+        "status": "supported",
+        "confidence": "medium",
+        "evidenceIds": ["anchor-audit", "current-local-boundary", "mochi-character-bounds", "yurios-soul-loader"],
+        "counterEvidenceIds": ["current-local-boundary"],
+        "applicability": "只排序本仓库下一能力切片；不代表所有产品团队或用户会把 persona continuity 排在行动 approval、语音或真实发布反馈之前。",
+        "inference": true
+      },
+      {
+        "id": "repetition-and-outcome-remain-separate",
+        "claim": "重复率、trajectory recall、长期陪伴安全、留存和收入都不能从本轮 persona 机制或 App Store metadata 推导，应保留为独立指标、能力或纵向研究。",
+        "status": "supported",
+        "confidence": "high",
+        "evidenceIds": ["anchor-audit", "ai-companion-page", "personal-assistant-page", "virtual-pet-page"],
+        "counterEvidenceIds": [],
+        "applicability": "本轮没有公开 review 文本、自有 analytics、付费数据或获同意的纵向用户样本。",
+        "inference": true
+      }
+    ],
+    "evidence": [
+      {
+        "id": "ai-companion-page", "role": "market-signal", "sourceType": "official-document", "weight": "primary",
+        "title": "Apple public App Store search — AI companion / US / iPhone",
+        "resource": "https://itunes.apple.com/search?term=AI+companion&country=us&media=software&entity=software&limit=10&explicit=No&version=2",
+        "claim": "有界页返回 10 条；选中 Replika、Kindroid 与 Nomi 分别落在 Health & Fitness、Entertainment 与 Lifestyle，且页面排序语义未声明、不是完整 corpus。",
+        "locator": "normalized bounded search page; selected app IDs 1158555867, 6451038161, 6450270929",
+        "observedAt": "2026-08-27T08:00:00Z", "digest": "112e1f0d990d6970176fa520805904e90fc570a95d83322efa7e348927641d06"
+      },
+      {
+        "id": "personal-assistant-page", "role": "market-signal", "sourceType": "official-document", "weight": "primary",
+        "title": "Apple public App Store search — personal AI assistant / US / iPhone",
+        "resource": "https://itunes.apple.com/search?term=personal+AI+assistant&country=us&media=software&entity=software&limit=10&explicit=No&version=2",
+        "claim": "有界页返回 10 条；选中 Pocket、Martin 与 Pi 分别落在 Utilities、Productivity 与 Lifestyle，并与 companion 结果发生类别交叉。",
+        "locator": "normalized bounded search page; selected app IDs 6746845735, 6453473083, 6445815935",
+        "observedAt": "2026-08-27T08:00:00Z", "digest": "e51817288223c01ff08d517cef73556dfa08af75eea33b4450df91b76440cb67"
+      },
+      {
+        "id": "virtual-pet-page", "role": "market-signal", "sourceType": "official-document", "weight": "primary",
+        "title": "Apple public App Store search — virtual pet / US / iPhone",
+        "resource": "https://itunes.apple.com/search?term=virtual+pet&country=us&media=software&entity=software&limit=10&explicit=No&version=2",
+        "claim": "有界页返回 9 条；选中 Pokipet、Widgetable 与 My Tamagotchi Forever 横跨 Games 与 Social Networking，不能与 AI companion 页按返回数直接相加。",
+        "locator": "normalized bounded search page; selected app IDs 6443760470, 1641107226, 1267861706",
+        "observedAt": "2026-08-27T08:00:00Z", "digest": "d7357ad5f36191e2d8ce4956a4c209669739711a06ab7f8af4e21c611241d904"
+      },
+      {
+        "id": "mochi-character-bounds", "role": "solution-evidence", "sourceType": "repository", "weight": "primary",
+        "title": "pet-mochi bounded character and choreography implementation",
+        "resource": "https://github.com/cskwork/pet-mochi/blob/efa76839cb31ecf7c126ec0a833d514ac94a92e2/src-tauri/src/llm/prompts.rs",
+        "claim": "固定源码要求宠物保持角色、回复不超过 25 words，并对动作 preset 与 bubble 使用封闭词表和拒绝后的 deterministic fallback。",
+        "locator": "PET_REPLY_SYSTEM; pet_reply_prompt; CHOREOGRAPHY_PRESET_KEYS; validate_choreography_json",
+        "observedAt": "2026-08-27T08:00:00Z", "digest": "4c93564162bd28150d99e442f7d0e5fc16d07c01b5a4b6556b5799d7e2b9b9c0"
+      },
+      {
+        "id": "yurios-soul-loader", "role": "solution-evidence", "sourceType": "repository", "weight": "primary",
+        "title": "YuriOS versioned Soul loader",
+        "resource": "https://github.com/yuri-os/YuriOS/blob/c131bb7776c8c961d462e30dacc69c4023497aa8/yurios/app/core/soul.py",
+        "claim": "固定源码把 voice law、backbone、personality、scenario、hard limits、examples 与 versioned card identity 分栏，并在每轮从文件解析当前 persona。",
+        "locator": "Soul dataclass; SoulLoader.load",
+        "observedAt": "2026-08-27T08:00:00Z", "digest": "790865be5c4821cce09248b9ef3757684c4ed4a98bd76def07c1cd3d270dbf66"
+      },
+      {
+        "id": "anchor-audit", "role": "counter-evidence", "sourceType": "dataset", "weight": "independent",
+        "title": "ANCHOR long-horizon companion audit",
+        "resource": "https://github.com/SalesforceAIResearch/AnchorBench/tree/41bd0e20b9524ce484db301ac15dc14121bf06ad",
+        "claim": "研究仓库将 persona continuity 与 trajectory recall 分开，角色行为再拆 role、boundaries、values、style；它报告 judge provenance 会改变部分结论，并明确避免一个 companion quality 总分。",
+        "locator": "README: Why ANCHOR; Identity Probe; Judge disagreement; artifact boundary",
+        "observedAt": "2026-08-27T08:00:00Z", "digest": "6dc9ab7ba0bcdfc64578a62e3e2f554d51c5f31f1d90087f5c0809cb7ca93d01"
+      },
+      {
+        "id": "current-local-boundary", "role": "counter-evidence", "sourceType": "experiment", "weight": "primary",
+        "title": "Current verified assistant and pet capability boundary",
+        "resource": "repo:/knowledge/capabilities/",
+        "claim": "本地已验证 memory-use evaluation 与 public-state pet behavior，并实验准入 persona continuity 契约；目标图继续把真实 judge L3、trajectory memory、重复率和长期 companionship safety 分开。",
+        "locator": "capability index; product goal map; admitted memory-use and pet-state snapshots",
+        "observedAt": "2026-08-27T11:06:50.000Z", "digest": "39aa1a6ca973674892a2e84d68bef4e6f6ef33489a27081e07b39189b12d45d4"
+      }
+    ],
+    "conflicts": [
+      {
+        "claim": "persona 文件和 stay-in-character prompt 是否已经足以说明 companion 保持角色。",
+        "evidenceIds": ["mochi-character-bounds", "yurios-soul-loader", "anchor-audit"],
+        "resolution": "前两项证明输入与输出机制存在；ANCHOR 证明长程行为与轨迹记忆仍会分离且 evaluator 会影响结论。因此把机制作为 solution evidence，把实际连续性留给独立 probe。"
+      },
+      {
+        "claim": "个人助理、AI 陪伴和虚拟宠物是否能作为一个市场直接比较。",
+        "evidenceIds": ["ai-companion-page", "personal-assistant-page", "virtual-pet-page"],
+        "resolution": "三个页只用来发现候选和观察定位交叉；保持各 query/surface/genre 原生边界，不计算份额、排名或总规模。"
+      }
+    ],
+    "gaps": [
+      "Apple Search API 仅提供可变的 metadata 小页；没有排名语义、完整 corpus、评论文本、收入、留存或活跃用户。",
+      "未取得任何自有 App analytics、公开评论 provider 凭据、访谈或获同意的纵向用户样本。",
+      "没有安装或运行 pet-mochi、YuriOS 或 ANCHOR；源码机制与 benchmark 结果均未在本机复现。",
+      "ANCHOR 使用 CC BY-NC 4.0 且完整 test set 非公开；本轮只吸收测量边界，不复制数据或宣称可直接商用。",
+      "重复率的 corpus、n-gram/semantic 阈值与合理复述豁免尚未调研到足以准入，不能与 persona continuity 强行绑定。"
+    ],
+    "counterEvidenceSearch": {
+      "performed": true,
+      "queries": [
+        "AI companion persona consistency repetition open source",
+        "virtual pet AI companion personality memory open source",
+        "personal AI assistant proactive memory personality open source",
+        "AI companion issue repetitive responses character consistency",
+        "long horizon companion persona continuity benchmark",
+        "current local assistant pet capability persona boundary"
+      ],
+      "outcome": "found",
+      "evidenceIds": ["anchor-audit", "current-local-boundary"]
+    },
+    "nextProbes": [
+      {
+        "hypothesis": "带版本的真实 evaluator 能在 blind fixture、对抗覆盖与多语言情境中稳定遵守四轴和 system-truth 契约，并把不确定与分歧显式暴露。",
+        "method": "冻结现有七类 suite，加入隐藏标注、语义等价改写和至少两种语言；运行多个记录 revision/family 的真实 evaluator，分别计算逐轴一致性、与人工标注的混淆矩阵和重复运行漂移，不生成总分。",
+        "success": "各轴、system truth、unknown 和 disagreement 均可校准；模型/版本差异可追溯，输入顺序与语言变化不会静默改变系统事实结论。",
+        "failure": "judge 把 style 与 truth 混合、用多数票隐藏系统性偏差、无法在重复运行中复现，或未记录模型/策略版本。",
+        "effect": "none"
+      },
+      {
+        "hypothesis": "重复率可以作为 persona continuity 之后的独立 deterministic observation，而不等同于角色偏移。",
+        "method": "另行调研并冻结 exact/normalized n-gram/semantic repetition、必要确认复述、错误恢复 read-back 和短词口癖豁免；只在有代表性的 frozen response corpus 后提出 Schema。",
+        "success": "重复、允许复述和 persona catchphrase 被区分，阈值/窗口/语言显式；结果不推断用户依恋或留存。",
+        "failure": "把任何相似文本算坏、跨语言阈值不明、或将低重复率直接包装成更好陪伴。",
+        "effect": "none"
+      }
+    ],
+    "coverage": { "queryCount": 8, "stoppedBecause": "decision-sufficient", "complete": true }
+  }
+}

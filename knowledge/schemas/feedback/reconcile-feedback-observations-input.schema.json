@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/schemas/feedback/reconcile-feedback-observations-input.schema.json",
+  "title": "Reconcile feedback observations input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["sourceRef", "targetRef", "priorWindow", "currentWindow"],
+  "properties": {
+    "sourceRef": { "$ref": "#/$defs/opaqueRef" },
+    "targetRef": { "$ref": "#/$defs/opaqueRef" },
+    "priorWindow": { "$ref": "#/$defs/window" },
+    "currentWindow": { "$ref": "#/$defs/window" }
+  },
+  "$defs": {
+    "opaqueRef": { "type": "string", "minLength": 1, "maxLength": 500 },
+    "itemRef": { "type": "string", "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:/-]{0,255}$" },
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["itemRef"],
+      "properties": {
+        "itemRef": { "$ref": "#/$defs/itemRef" },
+        "contentDigest": { "$ref": "#/$defs/digest" },
+        "lifecycle": { "enum": ["visible", "deleted", "hidden"], "default": "visible" },
+        "replyState": { "enum": ["unanswered", "replied", "unknown"], "default": "unknown" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "lifecycle": { "enum": ["deleted", "hidden"] } }, "required": ["lifecycle"] },
+          "then": { "not": { "required": ["contentDigest"] } },
+          "else": { "required": ["contentDigest"] }
+        }
+      ]
+    },
+    "window": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["observedAt", "completeness", "items"],
+      "properties": {
+        "observedAt": { "type": "string", "format": "date-time" },
+        "completeness": { "enum": ["partial", "complete"] },
+        "checkpointRef": { "$ref": "#/$defs/opaqueRef" },
+        "items": { "type": "array", "maxItems": 500, "items": { "$ref": "#/$defs/item" } }
+      }
+    }
+  }
+}

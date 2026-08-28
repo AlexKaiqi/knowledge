@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "steam-store-description-review-revision-local",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/steam/prepare-store-description-review-revision.md",
+  "connectorId": "steam-store-description-revision",
+  "environment": "local",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "observe-official-description-rules", "operation": "verifySteamStoreDescriptionSources" },
+    { "id": "prepare-localized-copy", "operation": "prepareSteamStoreDescriptionReviewRevision" },
+    { "id": "replay-and-mutate-copy", "operation": "verifyRevisionBinding" },
+    { "id": "exercise-fallback-link-markup-and-language-blockers", "operation": "exerciseUnsafeCopyFixtures" },
+    { "id": "validate-public-schema", "operation": "validateOutputSchema" }
+  ],
+  "assertions": [
+    "Steam official documentation is observed for plain short descriptions, time-sensitive copy, links, detailed/coherent review, launch-content consistency and English fallback.",
+    "Owned English and Simplified Chinese text plus feature, translation and rights evidence refs produce a deterministic revision hash.",
+    "Missing English, unknown store languages, formatting, obvious links and local text budgets block preparation.",
+    "Value proposition, time-sensitive meaning, launch-feature accuracy, implied links, translation accuracy and rights remain pending human checks.",
+    "The result never claims Steam upload, publication, review submission, approval, release or execution authorization."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 60, "maxCost": 0, "currency": "CNY" }
+}

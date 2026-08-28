@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "persona-continuity-evaluation",
+  "sources": [
+    {
+      "id": "pet-mochi-persona-main", "url": "https://raw.githubusercontent.com/cskwork/pet-mochi/main/src-tauri/src/llm/prompts.rs", "role": "bounded-persona-implementation",
+      "acceptedDocumentDigest": "d7e5e01b4239a60cf433b4c848592fa9c9ebadf02ccf29e561a5a42eaff68964",
+      "observation": { "mode": "static-text-semantic", "assertions": [
+        { "id": "bounded-character", "includes": "Stay in character. Reply in one short message under 25 words." },
+        { "id": "deterministic-fallback", "includes": "deterministic fallback (REQ-098)" }
+      ] }
+    },
+    {
+      "id": "yurios-soul-main", "url": "https://raw.githubusercontent.com/yuri-os/YuriOS/main/yurios/app/core/soul.py", "role": "versioned-persona-implementation",
+      "acceptedDocumentDigest": "7e2a833f53da8b3a3f744f46a46b3282b7b6c8da52365e17e2e24ed143bb5cb3",
+      "observation": { "mode": "static-text-semantic", "assertions": [
+        { "id": "per-turn-persona", "includes": "persona is always whatever the files say *right now*" },
+        { "id": "hard-limits", "includes": "post_history_instructions" }
+      ] }
+    },
+    {
+      "id": "anchorbench-main", "url": "https://raw.githubusercontent.com/SalesforceAIResearch/AnchorBench/main/README.md", "role": "continuity-evaluation-counter-evidence",
+      "acceptedDocumentDigest": "f8d78016f2d96b54040e13818dbf9c4f64f77070db00d8d104a50d3ae1eed0b9",
+      "observation": { "mode": "static-text-semantic", "assertions": [
+        { "id": "separate-continuity-and-recall", "includes": "keeps behavioral continuity and trajectory recall separate" },
+        { "id": "judge-provenance", "includes": "Judge choice materially affects some conclusions" },
+        { "id": "no-composite", "includes": "avoiding one composite \"companion quality\" score." }
+      ] }
+    }
+  ]
+}

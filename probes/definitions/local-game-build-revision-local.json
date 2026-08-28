@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "local-game-build-revision-local",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/game/prepare-local-build-revision.md",
+  "connectorId": "local-game-build-revision",
+  "environment": "local",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "verify-production-primitives", "operation": "verifyPinnedProductionSources" },
+    { "id": "prepare-build-revision", "operation": "prepareLocalGameBuildRevision", "inputRef": "repo:/probes/fixtures/game-build/revision-input.json" },
+    { "id": "replay-frozen-bytes", "operation": "prepareLocalGameBuildRevision", "inputRef": "repo:/probes/fixtures/game-build/revision-input.json" },
+    { "id": "exercise-blockers", "operation": "exerciseUnsafeBuildFixtures" },
+    { "id": "validate-public-schema", "operation": "validateOutputSchema" }
+  ],
+  "assertions": [
+    "Every regular file is streamed into a SHA-256 artifact manifest using relative paths only.",
+    "The same frozen bytes and publication intent produce the same revision hash regardless of observation time.",
+    "A byte change produces a different artifact digest and revision hash.",
+    "Symlinks, special files, secret-like filenames, missing entrypoints and exceeded budgets block readiness.",
+    "The result never claims upload, platform acceptance, execution authorization or public availability."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 30, "maxCost": 0, "currency": "CNY" }
+}

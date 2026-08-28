@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/steam/prepare-store-tag-review-revision-input.schema.json",
+  "title": "PrepareSteamStoreTagReviewRevisionInput",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["gameRef", "sourceRevisionRef", "catalogRevisionRef", "tags", "audienceEvidenceRefs"],
+  "properties": {
+    "gameRef": { "type": "string", "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,191}$" },
+    "sourceRevisionRef": { "$ref": "#/$defs/ref" },
+    "catalogRevisionRef": { "$ref": "#/$defs/ref" },
+    "tags": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 25,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["tagRef", "displayName", "launchEvidenceRefs"],
+        "properties": {
+          "tagRef": { "$ref": "#/$defs/ref" },
+          "displayName": { "type": "string", "minLength": 1, "maxLength": 160 },
+          "launchEvidenceRefs": { "$ref": "#/$defs/refs" }
+        }
+      }
+    },
+    "audienceEvidenceRefs": { "$ref": "#/$defs/refs" }
+  },
+  "$defs": {
+    "ref": { "type": "string", "minLength": 1, "maxLength": 500 },
+    "refs": { "type": "array", "minItems": 1, "maxItems": 30, "uniqueItems": true, "items": { "$ref": "#/$defs/ref" } }
+  }
+}

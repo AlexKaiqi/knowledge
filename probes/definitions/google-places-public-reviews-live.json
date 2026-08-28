@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "google-places-public-reviews-live",
+  "version": "0.1.0",
+  "capabilityRef": "/capabilities/research/read-public-place-review-snapshot.md",
+  "connectorId": "google-places-public-reviews",
+  "environment": "production-public",
+  "identity": { "required": true, "poolRef": "identity-pool:google-maps-platform-probes" },
+  "effect": "financial",
+  "steps": [
+    { "id": "confirm-attribution-surface", "operation": "confirmEphemeralAttributionSurface", "inputRef": "repo:/probes/fixtures/google-places-public-reviews-probe.json" },
+    { "id": "read-bounded-place-review-sample", "operation": "readPublicPlaceReviewSnapshot" },
+    { "id": "verify-transient-display", "operation": "verifyAttributedTransientObservation" },
+    { "id": "redact-provider-content", "operation": "redactForVerification" },
+    { "id": "reconcile-google-cloud-billing", "operation": "reconcileSingleDetailsRequest" },
+    { "id": "write-staging-report", "operation": "writeCandidateProbeReport" }
+  ],
+  "assertions": [
+    "One fixed Text Search (New) request uses only places.id, pageSize one and the declared language, region and location bias; it is followed serially by exactly one Place Details (New) request with a fixed field mask and no retry.",
+    "The result contains no more than five provider relevance-selected reviews and explicitly declares complete=false, first-result place resolution and unconfirmed caller place identity.",
+    "Every displayed review retains all available author attribution and a direct googleMapsUri; the UI also shows Google Maps attribution, relevance ordering and France visitDate when present.",
+    "Review text, author attribution, place name/address, review links, ratings, timestamps, place ID and the raw result digest exist only during the active attributed display and are absent from the Git verification candidate.",
+    "No Places content is cached or durably stored, no identity graph is constructed, and any later Research Dossier keeps only reviewed deidentified paraphrases and evidence references rather than provider content.",
+    "The ID-only Text Search request and single Place Details Enterprise + Atmosphere request are reconciled against the current Google Cloud billing surface with a hard maximum of USD 0.03.",
+    "Passing output remains candidate-only until the public Schema, terms/privacy/attribution surface, identity metadata and human knowledge admission are approved."
+  ],
+  "cleanup": ["Destroy any in-memory review and author content after the attributed probe display closes."],
+  "budget": { "timeoutSeconds": 60, "maxCost": 0.03, "currency": "USD" }
+}

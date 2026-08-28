@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "steam-public-game-reviews",
+  "sources": [
+    {
+      "id": "review-list-api",
+      "url": "https://partner.steamgames.com/doc/store/getreviews?l=english&language=english",
+      "role": "official-api-contract",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "appreviews-endpoint", "includes": "store.steampowered.com/appreviews" },
+          { "id": "updated-filter", "includes": "updated" },
+          { "id": "cursor-pagination", "includes": "cursor" }
+        ]
+      }
+    },
+    {
+      "id": "review-semantics",
+      "url": "https://partner.steamgames.com/doc/store/reviews?l=english&language=english",
+      "role": "feedback-and-usage-rules",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "feedback-channel", "includes": "feedback channel" },
+          { "id": "no-review-manipulation", "includes": "artificially manipulate the review system" }
+        ]
+      }
+    }
+  ]
+}

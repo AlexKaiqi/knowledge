@@ -1,0 +1,14 @@
+{
+  "gameRef": "game:clockwork-familiar",
+  "sourceRevisionRef": "design:launch-v1",
+  "catalogRevisionRef": "steam-tags:observed-2026-08-27",
+  "tags": [
+    { "tagRef": "steam-tag:puzzle", "displayName": "Puzzle", "launchEvidenceRefs": ["design:puzzle-loop-v1"] },
+    { "tagRef": "steam-tag:atmospheric", "displayName": "Atmospheric", "launchEvidenceRefs": ["art:atmosphere-v1"] },
+    { "tagRef": "steam-tag:exploration", "displayName": "Exploration", "launchEvidenceRefs": ["design:exploration-loop-v1"] },
+    { "tagRef": "steam-tag:singleplayer", "displayName": "Singleplayer", "launchEvidenceRefs": ["build:singleplayer-v1"] },
+    { "tagRef": "steam-tag:story-rich", "displayName": "Story Rich", "launchEvidenceRefs": ["narrative:launch-v1"] },
+    { "tagRef": "steam-tag:indie", "displayName": "Indie", "launchEvidenceRefs": ["rights:independent-production-v1"] }
+  ],
+  "audienceEvidenceRefs": ["research:comparable-tag-pages-v1"]
+}

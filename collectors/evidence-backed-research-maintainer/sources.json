@@ -1,0 +1,326 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "evidence-backed-research",
+  "sources": [
+    {
+      "id": "deep-research",
+      "url": "https://raw.githubusercontent.com/arjunprabhulal/agent-skills/42dd24080fce6d731d00e2a1134f398c3da4171b/skills/research/deep-research/SKILL.md",
+      "role": "general-method",
+      "acceptedDocumentDigest": "2646cdf3942d918e84febf020b289fbfb7b5cf601e43ee7e7349e6c5105941c5",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [{ "id": "uncertainty-discipline", "includes": "Research is the disciplined management of your own uncertainty" }]
+      }
+    },
+    {
+      "id": "literature-review",
+      "url": "https://raw.githubusercontent.com/msimchowitz/writing-skills/214981fe02326f27b0fc8790d00eb4b731607073/for-agents/literature-review/SKILL.md",
+      "role": "academic-method",
+      "acceptedDocumentDigest": "c8ab0a9ac2e643defc8b983ddd117e7886508e34c44fbe6c82cc18d129797da9",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [{ "id": "traceable-evidence-base", "includes": "Build the review from a traceable evidence base" }]
+      }
+    },
+    {
+      "id": "interview-to-jtbd",
+      "url": "https://raw.githubusercontent.com/lowwwbank/interview-to-jtbd/810e847b7d936a54bd090c4d0797efd576404152/SKILL.md",
+      "role": "demand-method",
+      "acceptedDocumentDigest": "6c3110250dfde15b7db51c6ecb7476bc173a145644f559730b80532dfdf6d3e1",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [{ "id": "evidence-backed-jtbd", "includes": "Every insight, JTBD, or opportunity you propose MUST be backed by evidence" }]
+      }
+    },
+    {
+      "id": "market-researcher",
+      "url": "https://raw.githubusercontent.com/xcrrr/claude-skills/145342ceff6318d2f5ffe8f95473fecc8b27d1e9/skills/business/market-researcher/SKILL.md",
+      "role": "market-method",
+      "acceptedDocumentDigest": "032099833781ff30844ec227b4d068209f61ac45c3d5b251fe5167527d49a340",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [{ "id": "dual-sizing-method", "includes": "Two approaches to triangulate" }]
+      }
+    },
+    {
+      "id": "research-router",
+      "url": "https://raw.githubusercontent.com/openai/plugins/33bd9529725fcee78c9e51fcbaa93cd963c3a47b/plugins/life-science-research/skills/research-router-skill/SKILL.md",
+      "role": "routing-method",
+      "acceptedDocumentDigest": "e9e39c6c411da80f9fd62a62e70cbedac2404bdcfb51ddb8fda1dc3332c7e357",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [{ "id": "minimum-skill-set", "includes": "Choose the smallest set of skills that can answer the question well" }]
+      }
+    },
+    {
+      "id": "openai-agents-hitl",
+      "url": "https://openai.github.io/openai-agents-js/guides/human-in-the-loop/",
+      "role": "technical-pattern",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "pause-before-execute", "includes": "the tool call does not execute" },
+          { "id": "pending-approvals", "includes": "returns all pending approvals" },
+          { "id": "ambiguous-resume-fail-closed", "includes": "fails closed with a UserError" }
+        ]
+      }
+    },
+    {
+      "id": "langgraph-interrupt-replay",
+      "url": "https://docs.langchain.com/oss/python/langgraph/interrupts",
+      "role": "technical-counter-evidence",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "same-thread", "includes": "same thread ID" },
+          { "id": "node-restart", "includes": "The node restarts from the beginning" },
+          { "id": "idempotent-side-effects", "includes": "Side effects called before interrupt must be idempotent" }
+        ]
+      }
+    },
+    {
+      "id": "hf-barge-in-demand",
+      "url": "https://github.com/huggingface/speech-to-speech/issues/433",
+      "role": "demand-problem-evidence",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "confirmation-latency", "includes": "default min_speech_ms=384" },
+          { "id": "noise-tradeoff", "includes": "short noise bursts would become real conversation turns" },
+          { "id": "reversible-release", "includes": "A false candidate restores normal output without losing buffered audio." }
+        ]
+      }
+    },
+    {
+      "id": "codex-pet-active-demand",
+      "url": "https://github.com/openai/codex/issues/23272",
+      "role": "demand-problem-evidence",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "false-idle", "includes": "active-state animation plays once, then falls back to idle" },
+          { "id": "state-lifetime", "includes": "keep looping while the app remains in that active state" }
+        ]
+      }
+    },
+    {
+      "id": "langgraph-duplicate-tool-demand",
+      "url": "https://github.com/langchain-ai/langgraph/issues/7417",
+      "role": "demand-problem-evidence",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "checkpoint-redispatch", "includes": "gets silently re-dispatched from the last checkpoint" },
+          { "id": "duplicate-cost", "includes": "2-3x redundant work and cost" }
+        ]
+      }
+    },
+    {
+      "id": "mem2act-demand",
+      "url": "https://arxiv.org/html/2601.19935",
+      "role": "demand-benchmark-evidence",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "parameter-grounding", "includes": "selecting appropriate tools and grounding their parameters" },
+          { "id": "framework-gap", "includes": "seven memory frameworks show that current systems remain inadequate" },
+          { "id": "task-count", "includes": "400 memory-dependent tool-use tasks derived from 2,029 long-context dialogue sessions" },
+          { "id": "human-memory-dependence", "includes": "Human verification confirms that 91.3% of the tasks" }
+        ]
+      }
+    },
+    {
+      "id": "evermem-frontier",
+      "url": "https://arxiv.org/html/2602.01313",
+      "role": "academic-frontier-version-and-retrieval-evidence",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "version-semantics", "includes": "version semantics, not just timestamps" },
+          { "id": "implicit-relevance", "includes": "similarity-based retrieval struggles to surface implicitly relevant information" },
+          { "id": "oracle-upper-bound", "includes": "best model reaches only 60%" }
+        ]
+      }
+    },
+    {
+      "id": "longmemeval-frontier",
+      "url": "https://arxiv.org/html/2410.10813",
+      "role": "academic-frontier-update-and-abstention-benchmark",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "knowledge-update", "includes": "Knowledge Updates (KU): Ability to recognize the changes in the user’s personal information" },
+          { "id": "abstention", "includes": "Abstention (ABS): Ability to identify questions seeking unknown information" },
+          { "id": "sustained-drop", "includes": "commercial chat assistants and long-context LLMs showing a 30% accuracy drop" }
+        ]
+      }
+    },
+    {
+      "id": "ifcmemorybench-frontier",
+      "url": "https://arxiv.org/html/2607.26072",
+      "role": "academic-frontier-domain-transfer-counter-evidence",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "deployment-accuracy", "includes": "strongest system achieves only 32.4% answer accuracy" },
+          { "id": "fragmented-facts", "includes": "often retrieve topically relevant context but store project knowledge as incomplete or fragmented facts" },
+          { "id": "deployment-scope", "includes": "deployment-realistic ingestion scope" }
+        ]
+      }
+    },
+    {
+      "id": "instruct-fd-demand",
+      "url": "https://arxiv.org/abs/2607.20460",
+      "role": "demand-benchmark-evidence",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "adherence-gap", "includes": "best model achieves only 64.4% adherence" },
+          { "id": "proactive-behavior-gap", "includes": "backchanneling and interruption remaining particularly challenging" }
+        ]
+      }
+    },
+    {
+      "id": "companion-longitudinal-demand",
+      "url": "https://arxiv.org/abs/2510.10079",
+      "role": "demand-counter-evidence",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "time-interaction", "includes": "how these factors interact and evolve over time" },
+          { "id": "interconnected-variables", "includes": "multiple interconnected variables" },
+          { "id": "longitudinal-model", "includes": "longitudinal model of AI companionship development" }
+        ]
+      }
+    },
+    {
+      "id": "dsh-web-self-approval-security",
+      "url": "https://github.com/deepseek-ai/deepseek-harness/discussions/250",
+      "role": "technical-security-counter-evidence",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "self-approval-proof", "includes": "SANDBOX_APPROVAL_PROOF" },
+          { "id": "real-web-transport", "includes": "workspace-write Landlock child" }
+        ]
+      }
+    },
+    {
+      "id": "dsh-web-cross-session-approval-security",
+      "url": "https://github.com/deepseek-ai/deepseek-harness/discussions/1220",
+      "role": "technical-security-counter-evidence",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "cross-session-hijack", "includes": "Cross-session approval hijack" },
+          { "id": "missing-authorization", "includes": "CWE-862" }
+        ]
+      }
+    },
+    {
+      "id": "dsh-approval-cancellation-hardening",
+      "url": "https://github.com/deepseek-ai/deepseek-harness/discussions/4104",
+      "role": "technical-security-counter-evidence",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "late-grant", "includes": "late grants survive cancellation" },
+          { "id": "withdrawal-path", "includes": "withdrawal path" }
+        ]
+      }
+    },
+    {
+      "id": "steam-utm-distribution-impact",
+      "url": "https://partner.steamgames.com/doc/marketing/utm_analytics",
+      "role": "distribution-impact-platform-semantics",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "native-visits", "includes": "Total Visits: The total number of visits to your product page that had a UTM code attached to the URL." },
+          { "id": "finalization-delay", "includes": "Conversions are finalized 4 days after the visit." },
+          { "id": "tracking-gap", "includes": "Some users will not be tracked based on their browser configuration or cookie preferences" }
+        ]
+      }
+    },
+    {
+      "id": "apple-campaign-distribution-impact",
+      "url": "https://developer.apple.com/help/app-store-connect-analytics/acquisition/campaign-links",
+      "role": "distribution-impact-platform-semantics",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "native-funnel", "includes": "Analytics captures the impressions, product page views, downloads, usage, sales, and subscriptions tied to each campaign token." },
+          { "id": "privacy-threshold", "includes": "minimum threshold of 5" },
+          { "id": "last-click-credit", "includes": "only the most recent link receives credit for subsequent sales" }
+        ]
+      }
+    },
+    {
+      "id": "apple-analytics-report-freshness",
+      "url": "https://developer.apple.com/help/app-store-connect-analytics/overview/analytics-reports-api",
+      "role": "distribution-impact-finalization-semantics",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "initial-delay", "includes": "first report approximately 24-48 hours later" },
+          { "id": "complete-after-two-days", "includes": "Data for a given day is considered complete two days after the reporting date" }
+        ]
+      }
+    },
+    {
+      "id": "google-play-distribution-impact",
+      "url": "https://support.google.com/googleplay/android-developer/answer/9859173?hl=en",
+      "role": "distribution-impact-counter-evidence",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "july-2026-semantic-change", "includes": "From July 2026, Google Play updated store listing performance reports to focus on user intent (clicks) rather than successful outcomes (acquisitions)." },
+          { "id": "unattributed", "includes": "Not attributed" },
+          { "id": "surface-exclusion", "includes": "Store listing reports do not include visitors or acquisitions from other surfaces on Google Play" }
+        ]
+      }
+    },
+    {
+      "id": "pet-mochi-persona-main",
+      "url": "https://raw.githubusercontent.com/cskwork/pet-mochi/main/src-tauri/src/llm/prompts.rs",
+      "role": "market-competitive-solution-semantics",
+      "acceptedDocumentDigest": "d7e5e01b4239a60cf433b4c848592fa9c9ebadf02ccf29e561a5a42eaff68964",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "bounded-character", "includes": "Stay in character. Reply in one short message under 25 words." },
+          { "id": "closed-choreography", "includes": "CHOREOGRAPHY_PRESET_KEYS" },
+          { "id": "deterministic-fallback", "includes": "deterministic fallback (REQ-098)" }
+        ]
+      }
+    },
+    {
+      "id": "yurios-soul-main",
+      "url": "https://raw.githubusercontent.com/yuri-os/YuriOS/main/yurios/app/core/soul.py",
+      "role": "market-competitive-solution-semantics",
+      "acceptedDocumentDigest": "7e2a833f53da8b3a3f744f46a46b3282b7b6c8da52365e17e2e24ed143bb5cb3",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "per-turn-persona", "includes": "persona is always whatever the files say *right now*" },
+          { "id": "versioned-card", "includes": "card_version" },
+          { "id": "hard-limits", "includes": "post_history_instructions" }
+        ]
+      }
+    },
+    {
+      "id": "anchorbench-main",
+      "url": "https://raw.githubusercontent.com/SalesforceAIResearch/AnchorBench/main/README.md",
+      "role": "market-competitive-counter-evidence",
+      "acceptedDocumentDigest": "f8d78016f2d96b54040e13818dbf9c4f64f77070db00d8d104a50d3ae1eed0b9",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "separate-continuity-and-recall", "includes": "ANCHOR therefore keeps behavioral continuity and trajectory recall separate." },
+          { "id": "judge-provenance", "includes": "Judge choice materially affects some conclusions" },
+          { "id": "no-composite", "includes": "avoiding one composite \"companion quality\" score." }
+        ]
+      }
+    }
+  ]
+}

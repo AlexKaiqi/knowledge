@@ -1,0 +1,172 @@
+{
+  "schemaVersion": "dsh.duplex-turn-action-plan/v1",
+  "fixture": "duplex-turn-trace",
+  "decisions": [
+    {
+      "kind": "assistant-output",
+      "atMs": 0,
+      "actions": [],
+      "state": {
+        "output": "playing",
+        "userTurn": "closed",
+        "activeCandidateId": null
+      }
+    },
+    {
+      "kind": "speech-candidate",
+      "atMs": 100,
+      "actions": [
+        {
+          "type": "duck-output",
+          "reason": "speech-candidate-pending",
+          "candidateId": "noise-1"
+        }
+      ],
+      "state": {
+        "output": "ducked",
+        "userTurn": "closed",
+        "activeCandidateId": "noise-1"
+      }
+    },
+    {
+      "kind": "speech-candidate",
+      "atMs": 180,
+      "actions": [
+        {
+          "type": "restore-output",
+          "reason": "speech-candidate-released",
+          "candidateId": "noise-1"
+        }
+      ],
+      "state": {
+        "output": "playing",
+        "userTurn": "closed",
+        "activeCandidateId": null
+      }
+    },
+    {
+      "kind": "speech-candidate",
+      "atMs": 300,
+      "actions": [
+        {
+          "type": "duck-output",
+          "reason": "speech-candidate-pending",
+          "candidateId": "ack-1"
+        }
+      ],
+      "state": {
+        "output": "ducked",
+        "userTurn": "closed",
+        "activeCandidateId": "ack-1"
+      }
+    },
+    {
+      "kind": "speech-confirmation",
+      "atMs": 420,
+      "actions": [
+        {
+          "type": "restore-output",
+          "reason": "backchannel-does-not-take-turn",
+          "candidateId": "ack-1"
+        },
+        {
+          "type": "record-backchannel",
+          "reason": "confirmed-backchannel",
+          "candidateId": "ack-1"
+        }
+      ],
+      "state": {
+        "output": "playing",
+        "userTurn": "closed",
+        "activeCandidateId": null
+      }
+    },
+    {
+      "kind": "speech-candidate",
+      "atMs": 600,
+      "actions": [
+        {
+          "type": "duck-output",
+          "reason": "speech-candidate-pending",
+          "candidateId": "turn-1"
+        }
+      ],
+      "state": {
+        "output": "ducked",
+        "userTurn": "closed",
+        "activeCandidateId": "turn-1"
+      }
+    },
+    {
+      "kind": "speech-confirmation",
+      "atMs": 984,
+      "actions": [
+        {
+          "type": "cancel-output",
+          "reason": "confirmed-turn-take",
+          "candidateId": "turn-1"
+        },
+        {
+          "type": "open-user-turn",
+          "reason": "confirmed-turn-take",
+          "candidateId": "turn-1"
+        }
+      ],
+      "state": {
+        "output": "inactive",
+        "userTurn": "open",
+        "activeCandidateId": null
+      }
+    },
+    {
+      "kind": "user-turn",
+      "atMs": 1400,
+      "actions": [
+        {
+          "type": "commit-user-turn",
+          "reason": "user-turn-ended"
+        }
+      ],
+      "state": {
+        "output": "inactive",
+        "userTurn": "closed",
+        "activeCandidateId": null
+      }
+    }
+  ],
+  "observations": [
+    {
+      "candidateId": "noise-1",
+      "outcome": "released",
+      "latencyMs": 80,
+      "outputCancelled": false
+    },
+    {
+      "candidateId": "ack-1",
+      "outcome": "backchannel",
+      "latencyMs": 120,
+      "outputCancelled": false
+    },
+    {
+      "candidateId": "turn-1",
+      "outcome": "take-turn",
+      "latencyMs": 384,
+      "outputCancelled": true
+    }
+  ],
+  "finalState": {
+    "output": "inactive",
+    "userTurn": "closed",
+    "activeCandidateId": null
+  },
+  "coverage": {
+    "eventsProcessed": 8,
+    "candidatesObserved": 3,
+    "reversibleReleases": 1,
+    "backchannels": 1,
+    "destructiveCancels": 1,
+    "rawAudioAccepted": false,
+    "transcriptAccepted": false
+  },
+  "resultDigest": "c7b37d02e834dc349520ad1f5c67d79058e9bed923313aa4ffd0c9338893e3d6"
+}

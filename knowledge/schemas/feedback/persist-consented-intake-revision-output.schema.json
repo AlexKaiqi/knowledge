@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/schemas/feedback/persist-consented-intake-revision-output.schema.json",
+  "title": "Feedback intake storage receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "status", "receiptRef", "storeRef", "intakeRevisionRef", "intakeRevisionHash", "recordDigest", "storedAt", "deleteAfter", "withdrawalMechanismRef", "reviewGrantReceiptRef", "idempotencyKey", "replayed", "stored", "withdrawalApplied", "replySent", "platformWritten", "knowledgeWritten", "executionAuthorized"],
+  "properties": {
+    "schemaVersion": { "const": "dsh.feedback-intake-storage-receipt/v1" },
+    "status": { "const": "stored" },
+    "receiptRef": { "$ref": "#/$defs/opaqueRef" },
+    "storeRef": { "type": "string", "pattern": "^[a-z][a-z0-9._:-]{0,127}$" },
+    "intakeRevisionRef": { "$ref": "#/$defs/opaqueRef" },
+    "intakeRevisionHash": { "$ref": "#/$defs/digest" },
+    "recordDigest": { "$ref": "#/$defs/digest" },
+    "storedAt": { "type": "string", "format": "date-time" },
+    "deleteAfter": { "type": "string", "format": "date-time" },
+    "withdrawalMechanismRef": { "$ref": "#/$defs/opaqueRef" },
+    "reviewGrantReceiptRef": { "$ref": "#/$defs/opaqueRef" },
+    "idempotencyKey": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$" },
+    "replayed": { "type": "boolean" },
+    "stored": { "const": true },
+    "withdrawalApplied": { "const": false },
+    "replySent": { "const": false },
+    "platformWritten": { "const": false },
+    "knowledgeWritten": { "const": false },
+    "executionAuthorized": { "const": false }
+  },
+  "$defs": {
+    "opaqueRef": { "type": "string", "minLength": 1, "maxLength": 500 },
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "dataforseo-google-organic-serp",
+  "sources": [
+    {
+      "id": "api-authentication",
+      "url": "https://docs.dataforseo.com/v3/auth/",
+      "role": "official-auth-contract",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "basic-auth-only", "includes": "Basic Authentication" },
+          { "id": "api-password-separate", "includes": "different from your account password" },
+          { "id": "header-only", "includes": "credentials should always be passed in the header" }
+        ]
+      }
+    },
+    {
+      "id": "live-organic-contract",
+      "url": "https://docs.dataforseo.com/v3/serp/google/organic/live/advanced/",
+      "role": "official-api-contract",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "live-advanced-path", "includes": "/organic/live/advanced" },
+          { "id": "location-code", "includes": "location_code" },
+          { "id": "depth-bound", "includes": "max value: 200" },
+          { "id": "single-live-task", "includes": "only one task" }
+        ]
+      }
+    },
+    {
+      "id": "organic-pricing",
+      "url": "https://dataforseo.com/pricing/google-serp/google-organic-serp-api",
+      "role": "official-pricing",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "live-unit-price", "includes": "$0.002" },
+          { "id": "ten-result-unit", "includes": "10 search results" },
+          { "id": "operator-multiplier", "includes": "Multiply by 5" },
+          { "id": "rectangle-surcharge", "includes": "calculate_rectangles" }
+        ]
+      }
+    },
+    {
+      "id": "provider-sandbox",
+      "url": "https://docs.dataforseo.com/v3/appendix/sandbox/",
+      "role": "official-sandbox-contract",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "sandbox-host", "includes": "sandbox.dataforseo.com" },
+          { "id": "dummy-results", "includes": "dummy data" },
+          { "id": "sandbox-free", "includes": "not be charged" }
+        ]
+      }
+    }
+  ]
+}

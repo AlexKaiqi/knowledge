@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "feedback-intake-local-storage",
+  "sources": [
+    {
+      "id": "node-filesystem-api",
+      "url": "https://nodejs.org/api/fs.html",
+      "role": "exclusive-write-link-sync-concurrency-semantics",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "atomic-link-primitive", "includes": "fsPromises.link(existingPath, newPath)" },
+          { "id": "file-sync-primitive", "includes": "filehandle.sync()" },
+          { "id": "concurrent-write-warning", "includes": "data corruption may occur" }
+        ]
+      }
+    },
+    {
+      "id": "w3c-privacy-principles",
+      "url": "https://www.w3.org/TR/privacy-principles/",
+      "role": "purpose-retention-withdrawal-storage-boundary",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "purpose-limitation", "includes": "Principle 2.10.1" },
+          { "id": "withdrawal-parity", "includes": "Principle 2.12.3" },
+          { "id": "directed-retention", "includes": "only retained, accessed, and used as directed" }
+        ]
+      }
+    }
+  ]
+}

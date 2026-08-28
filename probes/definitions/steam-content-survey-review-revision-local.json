@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "steam-content-survey-review-revision-local",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/steam/prepare-content-survey-review-revision.md",
+  "connectorId": "steam-content-survey-revision",
+  "environment": "local",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "verify-official-content-survey-rules", "operation": "verifyOfficialSteamContentSurveySemantics" },
+    { "id": "prepare-content-survey-revision", "operation": "prepareSteamContentSurveyReviewRevision", "inputRef": "repo:/probes/fixtures/game-build/steam-content-survey.json" },
+    { "id": "verify-questionnaire-and-build-binding", "operation": "verifyContentSurveyRevisionMutationBinding" },
+    { "id": "verify-completeness-and-ai-blockers", "operation": "verifyContentSurveyBlockers" },
+    { "id": "validate-public-schema", "operation": "validateInputAndOutputSchema" },
+    { "id": "verify-no-platform-effect", "operation": "verifyNoSteamworksEffect" }
+  ],
+  "assertions": [
+    "The official Content Survey is required before store-page and build review and has three mandatory primary sections.",
+    "All adult content uploaded in builds must be disclosed even when inaccessible or not presented.",
+    "Pre-generated and live-generated AI remain distinct, and live-generated AI requires guardrail disclosure.",
+    "The public contract binds an observed questionnaire revision and exact question set instead of reproducing a mutable Steam questionnaire.",
+    "Changing questionnaire, build, answer, evidence, declaration or AI disclosure changes or blocks the revision.",
+    "Missing questions/sections, unconfirmed declarations and incomplete or conflicting AI evidence are blocked.",
+    "Current questionnaire mapping, truthfulness, build/store consistency, AI rights, guardrail sufficiency and submitter authority remain pending human review.",
+    "The result cannot claim Steamworks submission, rating, storefront visibility change, review handoff, release or execution authorization."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 45, "maxCost": 0, "currency": "CNY" }
+}

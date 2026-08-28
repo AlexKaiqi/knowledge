@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "dsh.collector-definition/v1",
+  "id": "openconnector-upstream-maintainer",
+  "version": "0.1.0",
+  "projectCatalogRef": "repo:/collectors/openconnector-upstream-maintainer/projects.json",
+  "scope": {
+    "knowledgeGlobs": [
+      "docs/research/openconnector-upstream.md",
+      "docs/ARCHITECTURE.md",
+      "connectors/demand-signal-access-routes/routes.json"
+    ],
+    "connectorIds": ["openconnector-public-social-search"],
+    "capabilityRefs": ["/capabilities/research/search-public-social-content.md"]
+  },
+  "triggers": [
+    { "kind": "schedule", "schedule": "20 7 * * 1,4" },
+    { "kind": "source-change" },
+    { "kind": "connector-change" },
+    { "kind": "failed-execution" },
+    { "kind": "manual" }
+  ],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "collectors/openconnector-upstream-maintainer/src/index.mjs"
+  },
+  "outputs": ["knowledge-proposal", "connector-change-proposal", "verification-report"],
+  "writePolicy": {
+    "mode": "proposal-only",
+    "requiresApprovalFor": ["knowledge", "connector", "identity", "credential", "live-probe"]
+  },
+  "probePolicy": {
+    "allowedEnvironments": ["production-public"],
+    "identityPoolRefs": [],
+    "maximumEffect": "none"
+  },
+  "budgets": { "maxRunsPerDay": 2, "maxCostPerDay": 0, "currency": "USD" }
+}

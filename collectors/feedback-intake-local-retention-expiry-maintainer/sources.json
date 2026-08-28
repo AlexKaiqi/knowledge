@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "feedback-intake-local-retention-expiry",
+  "sources": [
+    {
+      "id": "w3c-privacy-principles",
+      "url": "https://www.w3.org/TR/privacy-principles/",
+      "role": "purpose-and-directed-retention-boundary",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "limit-retention", "includes": "limit retention" },
+          { "id": "directed-retention", "includes": "only retained, accessed, and used as directed" },
+          { "id": "purpose-limitation", "includes": "Principle 2.10.2" }
+        ]
+      }
+    },
+    {
+      "id": "ico-storage-limitation",
+      "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/data-protection-principles/a-guide-to-the-data-protection-principles/storage-limitation/",
+      "role": "end-of-retention-review-and-exception-boundary",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "retention-period-review", "includes": "at the end of any standard retention period" },
+          { "id": "erase-or-anonymise", "includes": "erase or anonymise it" },
+          { "id": "longer-retention-justification", "includes": "clear justification for keeping it for longer" }
+        ]
+      }
+    },
+    {
+      "id": "node-filesystem-api",
+      "url": "https://nodejs.org/api/fs.html",
+      "role": "unlink-and-durability-semantics",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "unlink-primitive", "includes": "fsPromises.unlink(path)" },
+          { "id": "sync-primitive", "includes": "filehandle.sync()" }
+        ]
+      }
+    },
+    {
+      "id": "nist-media-sanitization",
+      "url": "https://csrc.nist.gov/pubs/sp/800/88/r2/final",
+      "role": "logical-delete-versus-media-sanitization-boundary",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "current-revision", "includes": "SP 800-88 Rev. 2" },
+          { "id": "sanitization-definition", "includes": "renders access to target data on the media infeasible for a given level of effort" }
+        ]
+      }
+    }
+  ]
+}

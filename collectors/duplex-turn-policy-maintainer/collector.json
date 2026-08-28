@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "dsh.collector-definition/v1",
+  "id": "duplex-turn-policy-maintainer",
+  "version": "1.0.0",
+  "scope": {
+    "knowledgeGlobs": [
+      "knowledge/tools/duplex-turn-policy-projector.md",
+      "knowledge/concepts/voice/reversible-duplex-turn-plan.md",
+      "knowledge/capabilities/voice/project-duplex-turn-events-to-actions.md",
+      "knowledge/schemas/voice/*.schema.json",
+      "knowledge/verifications/voice/duplex-turn-policy/*.json"
+    ],
+    "connectorIds": ["duplex-turn-policy-projector"],
+    "capabilityRefs": ["/capabilities/voice/project-duplex-turn-events-to-actions.md"]
+  },
+  "triggers": [
+    { "kind": "schedule", "schedule": "40 9 * * 3" },
+    { "kind": "source-change" },
+    { "kind": "schema-change" },
+    { "kind": "connector-change" },
+    { "kind": "failed-execution" },
+    { "kind": "manual" }
+  ],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "collectors/duplex-turn-policy-maintainer/src/index.mjs"
+  },
+  "outputs": ["knowledge-proposal", "connector-change-proposal", "verification-report"],
+  "writePolicy": {
+    "mode": "proposal-only",
+    "requiresApprovalFor": ["knowledge", "connector", "live-probe"]
+  },
+  "probePolicy": {
+    "allowedEnvironments": ["local", "production-public"],
+    "identityPoolRefs": [],
+    "maximumEffect": "none"
+  },
+  "budgets": { "maxRunsPerDay": 2, "maxCostPerDay": 0, "currency": "CNY" }
+}

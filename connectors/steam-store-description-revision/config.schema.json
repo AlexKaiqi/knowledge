@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/connectors/steam-store-description-revision/config.schema.json",
+  "title": "SteamStoreDescriptionRevisionConnectorConfig",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "maxLocalizations": { "type": "integer", "minimum": 1, "maximum": 31, "default": 20 },
+    "maxShortDescriptionCodePoints": { "type": "integer", "minimum": 100, "maximum": 1000, "default": 500 },
+    "maxAboutThisGameCodePoints": { "type": "integer", "minimum": 1000, "maximum": 40000, "default": 20000 }
+  }
+}

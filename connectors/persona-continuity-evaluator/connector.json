@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "persona-continuity-evaluator",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/assistant/evaluate-persona-continuity-suite.md"],
+  "execution": {
+    "kind": "agentic",
+    "runtime": "DSH agent runtime",
+    "entrypoint": "connectors/persona-continuity-evaluator/src/index.mjs",
+    "modelRouteRef": "model-route:research.default",
+    "promptRef": "repo:/connectors/persona-continuity-evaluator/prompts/evaluate-persona-continuity.md",
+    "toolRefs": [],
+    "evalRefs": ["repo:/connectors/persona-continuity-evaluator/evals/contract.md"]
+  },
+  "configSchema": "repo:/connectors/persona-continuity-evaluator/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [
+    {
+      "capabilityRef": "/capabilities/assistant/evaluate-persona-continuity-suite.md",
+      "operation": "evaluatePersonaContinuitySuite"
+    }
+  ],
+  "conformance": {
+    "status": "verified",
+    "probeReportRef": "/verifications/assistant/persona-continuity-evaluation/report.json"
+  }
+}

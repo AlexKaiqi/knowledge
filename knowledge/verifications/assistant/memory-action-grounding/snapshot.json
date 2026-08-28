@@ -1,0 +1,59 @@
+{
+  "fixture": "grounded-reminder",
+  "schemaVersion": "dsh.memory-action-grounding/v1",
+  "actionName": "schedule-reminder",
+  "effect": "communication",
+  "scopeRef": "owner:primary",
+  "candidateArguments": {
+    "title": "Review feedback",
+    "targetChannel": "current",
+    "timezone": "Asia/Shanghai",
+    "quietMode": true
+  },
+  "bindings": [
+    {
+      "fieldPath": "quietMode",
+      "source": "memory",
+      "claimIds": [
+        "quiet-tool"
+      ],
+      "provenanceRefs": [
+        "settings:quiet-mode"
+      ]
+    },
+    {
+      "fieldPath": "targetChannel",
+      "source": "explicit",
+      "claimIds": [],
+      "provenanceRefs": []
+    },
+    {
+      "fieldPath": "timezone",
+      "source": "memory",
+      "claimIds": [
+        "timezone-shanghai"
+      ],
+      "provenanceRefs": [
+        "knowledge:user-preferences#timezone"
+      ]
+    },
+    {
+      "fieldPath": "title",
+      "source": "explicit",
+      "claimIds": [],
+      "provenanceRefs": []
+    }
+  ],
+  "unresolved": [],
+  "readiness": "grounded",
+  "requiredMissing": [],
+  "executionAuthorized": false,
+  "coverage": {
+    "fieldsDeclared": 4,
+    "fieldsBound": 4,
+    "memoryClaimsConsidered": 2,
+    "wrongScopeClaimsIgnored": 0,
+    "textInterpretationPerformed": false
+  },
+  "resultDigest": "2e79de34108c35250c52dc7a058c2046a42d6a8bf79ab0c06c734840270f3aa2"
+}

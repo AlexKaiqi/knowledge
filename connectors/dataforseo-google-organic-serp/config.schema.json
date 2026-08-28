@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/dataforseo-google-organic-serp-config.schema.json",
+  "title": "DataForSeoGoogleOrganicSerpConnectorConfig",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "environment": { "enum": ["sandbox", "production"], "default": "sandbox" },
+    "timeoutMs": { "type": "integer", "minimum": 1000, "maximum": 30000, "default": 15000 },
+    "maxResponseBytes": { "type": "integer", "minimum": 65536, "maximum": 4194304, "default": 2097152 },
+    "maxCostUsd": { "type": "number", "minimum": 0, "maximum": 0.05, "default": 0.01 },
+    "userAgent": { "type": "string", "minLength": 1, "maxLength": 128, "default": "dsh-knowledge-catalog/0.1" }
+  }
+}

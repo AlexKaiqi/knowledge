@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "dsh.collector-definition/v1",
+  "id": "bounded-work-context-maintainer",
+  "version": "1.0.0",
+  "scope": {
+    "knowledgeGlobs": [
+      "knowledge/tools/bounded-work-context-projection.md",
+      "knowledge/concepts/assistant/bounded-work-context-projection.md",
+      "knowledge/capabilities/assistant/read-bounded-work-context.md",
+      "knowledge/schemas/assistant/read-bounded-work-context-*.schema.json",
+      "knowledge/verifications/assistant/bounded-work-context/*.json"
+    ],
+    "connectorIds": ["bounded-work-context-projection"],
+    "capabilityRefs": ["/capabilities/assistant/read-bounded-work-context.md"]
+  },
+  "triggers": [
+    { "kind": "schedule", "schedule": "20 9 * * 3" },
+    { "kind": "source-change" },
+    { "kind": "schema-change" },
+    { "kind": "connector-change" },
+    { "kind": "failed-execution" },
+    { "kind": "manual" }
+  ],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "collectors/bounded-work-context-maintainer/src/index.mjs"
+  },
+  "outputs": ["knowledge-proposal", "connector-change-proposal", "verification-report"],
+  "writePolicy": {
+    "mode": "proposal-only",
+    "requiresApprovalFor": ["knowledge", "connector", "live-probe"]
+  },
+  "probePolicy": {
+    "allowedEnvironments": ["local", "production-public"],
+    "identityPoolRefs": [],
+    "maximumEffect": "none"
+  },
+  "budgets": { "maxRunsPerDay": 2, "maxCostPerDay": 0, "currency": "CNY" }
+}

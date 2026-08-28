@@ -1,0 +1,102 @@
+{
+  "fixture": "owned-localized-text-only-store-description",
+  "schemaVersion": "dsh.steam-store-description-review-revision/v1",
+  "gameRef": "game:clockwork-familiar",
+  "sourceRevisionRef": "fixture:steam-store-copy-v1",
+  "launchFeatureRefs": [
+    "build:probe-demo-v1",
+    "design:launch-feature-ledger-v1"
+  ],
+  "rightsBasisRefs": [
+    "rights:owned-game-copy-v1"
+  ],
+  "policyRevision": "steam-store-description-2026-08-27",
+  "manualReview": {
+    "required": true,
+    "checks": [
+      {
+        "id": "unique-value-proposition-and-genre",
+        "status": "pending"
+      },
+      {
+        "id": "time-sensitive-copy",
+        "status": "pending"
+      },
+      {
+        "id": "detailed-and-coherent-description",
+        "status": "pending"
+      },
+      {
+        "id": "launch-feature-consistency",
+        "status": "pending"
+      },
+      {
+        "id": "other-product-and-implied-link-review",
+        "status": "pending"
+      },
+      {
+        "id": "translation-accuracy-and-fallback",
+        "status": "pending"
+      },
+      {
+        "id": "rights-and-claim-substantiation",
+        "status": "pending"
+      }
+    ]
+  },
+  "uploaded": false,
+  "published": false,
+  "markedReadyForReview": false,
+  "released": false,
+  "executionAuthorized": false,
+  "preparedAt": "2026-08-27T04:00:00.000Z",
+  "status": "ready-for-human-review",
+  "revisionHash": "sha256:f96bad98b77341305ed0ffa1051f540c3f8b8da1a28c4ab914270cb680d3819c",
+  "localizations": [
+    {
+      "language": "english",
+      "shortDescription": "Guide a tiny clockwork familiar through shifting rooms where every sound changes the path.",
+      "aboutThisGame": "Guide a clockwork familiar through an ever-changing house. Listen for hidden mechanisms, solve compact spatial puzzles, and choose which memories the familiar carries into the next room.\n\nThe launch build contains a complete single-player journey with keyboard and controller support.",
+      "translationBasisRef": "copy:owned-english-draft-v1",
+      "shortDescriptionCodePoints": 90,
+      "aboutThisGameCodePoints": 284,
+      "shortDescriptionDigest": "sha256:077ecce6fa940d14a845d65906db8191c639f13820eca351fe08fcda9b38e9a9",
+      "aboutThisGameDigest": "sha256:5e7d9ba06e27fe77f4b90dadb50c02206f95b70b650a10c2634c9a566fb89d21"
+    },
+    {
+      "language": "schinese",
+      "shortDescription": "引导一只发条使魔穿过不断变化的房间，每一种声音都会改变前路。",
+      "aboutThisGame": "引导发条使魔探索一座不断变化的房屋。聆听隐藏机关，解开紧凑的空间谜题，并决定使魔要将哪些记忆带入下一个房间。\n\n首发版本包含完整的单人旅程，并支持键盘与控制器。",
+      "translationBasisRef": "translation:schinese-human-review-v1",
+      "shortDescriptionCodePoints": 30,
+      "aboutThisGameCodePoints": 80,
+      "shortDescriptionDigest": "sha256:275fdaa60a85f7704b916705c825e23c2ff871a912f0abfaf27fe1ef50ad1e6e",
+      "aboutThisGameDigest": "sha256:cda6e0dd40c00ebe365c5760706cfeb6284c5f984d05b87f8e5d4e891fa1eb0d"
+    }
+  ],
+  "preflight": {
+    "checks": [
+      {
+        "id": "english-fallback",
+        "status": "passed"
+      },
+      {
+        "id": "known-store-languages",
+        "status": "passed"
+      },
+      {
+        "id": "plain-text-short-description",
+        "status": "passed"
+      },
+      {
+        "id": "description-link-and-markup-boundary",
+        "status": "passed"
+      },
+      {
+        "id": "local-text-budgets",
+        "status": "passed"
+      }
+    ],
+    "blockers": []
+  }
+}

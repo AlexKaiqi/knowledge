@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "dsh.collector-definition/v1",
+  "id": "current-work-projection-reconciler-maintainer",
+  "version": "1.0.0",
+  "scope": {
+    "knowledgeGlobs": [
+      "knowledge/tools/current-work-projection-reconciler.md",
+      "knowledge/concepts/assistant/current-work-projection-reconciliation.md",
+      "knowledge/capabilities/assistant/reconcile-current-work-projection.md",
+      "knowledge/schemas/assistant/reconcile-current-work-projection-*.schema.json",
+      "knowledge/verifications/assistant/current-work-projection-reconciliation/*.json"
+    ],
+    "connectorIds": ["current-work-projection-reconciler"],
+    "capabilityRefs": ["/capabilities/assistant/reconcile-current-work-projection.md"]
+  },
+  "triggers": [
+    { "kind": "schedule", "schedule": "50 9 * * 3" },
+    { "kind": "source-change" },
+    { "kind": "schema-change" },
+    { "kind": "connector-change" },
+    { "kind": "failed-execution" },
+    { "kind": "manual" }
+  ],
+  "execution": { "kind": "deterministic", "runtime": "node >=22.19", "entrypoint": "collectors/current-work-projection-reconciler-maintainer/src/index.mjs" },
+  "outputs": ["knowledge-proposal", "connector-change-proposal", "verification-report"],
+  "writePolicy": { "mode": "proposal-only", "requiresApprovalFor": ["knowledge", "connector"] },
+  "probePolicy": { "allowedEnvironments": ["local", "production-public"], "identityPoolRefs": [], "maximumEffect": "local-write" },
+  "budgets": { "maxRunsPerDay": 2, "maxCostPerDay": 0, "currency": "CNY" }
+}

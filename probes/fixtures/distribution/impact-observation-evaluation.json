@@ -1,0 +1,72 @@
+{
+  "evaluationRef": "impact-eval:owned-game-launch-v1",
+  "targetRef": "game:owned-demo",
+  "publication": {
+    "revisionRef": "publication-revision:owned-demo-v1",
+    "receiptRef": "publication-receipt:owned-demo-v1",
+    "occurredAt": "2026-08-10T00:00:00Z"
+  },
+  "evaluatedAt": "2026-08-27T00:00:00Z",
+  "comparisons": [
+    {
+      "comparisonRef": "steam:tracked-visits-attributed",
+      "baseline": {
+        "sourceRef": "source:steam-utm", "platform": "steam", "surfaceRef": "surface:store-app", "metricRef": "metric:tracked-visits", "definitionRef": "definition:steam-utm-2026-08", "definitionDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "scopeDigest": "sha256:1111111111111111111111111111111111111111111111111111111111111111", "unit": "count", "windowStart": "2026-08-01T00:00:00Z", "windowEnd": "2026-08-08T00:00:00Z", "state": "observed", "value": 100, "completeness": "complete", "finalizedAt": "2026-08-12T00:00:00Z"
+      },
+      "current": {
+        "sourceRef": "source:steam-utm", "platform": "steam", "surfaceRef": "surface:store-app", "metricRef": "metric:tracked-visits", "definitionRef": "definition:steam-utm-2026-08", "definitionDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "scopeDigest": "sha256:1111111111111111111111111111111111111111111111111111111111111111", "unit": "count", "windowStart": "2026-08-10T00:00:00Z", "windowEnd": "2026-08-17T00:00:00Z", "state": "observed", "value": 130, "completeness": "complete", "finalizedAt": "2026-08-21T00:00:00Z"
+      },
+      "attribution": { "method": "platform-attributed", "evidenceRefs": ["evidence:steam-utm-campaign"] }
+    },
+    {
+      "comparisonRef": "apple:downloads-suppressed",
+      "baseline": {
+        "sourceRef": "source:apple-campaign", "platform": "apple-app-store", "surfaceRef": "surface:campaign", "metricRef": "metric:downloads", "definitionRef": "definition:apple-campaign-2026-08", "definitionDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "scopeDigest": "sha256:2222222222222222222222222222222222222222222222222222222222222222", "unit": "count", "windowStart": "2026-08-01T00:00:00Z", "windowEnd": "2026-08-08T00:00:00Z", "state": "observed", "value": 4, "completeness": "complete", "finalizedAt": "2026-08-10T00:00:00Z"
+      },
+      "current": {
+        "sourceRef": "source:apple-campaign", "platform": "apple-app-store", "surfaceRef": "surface:campaign", "metricRef": "metric:downloads", "definitionRef": "definition:apple-campaign-2026-08", "definitionDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "scopeDigest": "sha256:2222222222222222222222222222222222222222222222222222222222222222", "unit": "count", "windowStart": "2026-08-10T00:00:00Z", "windowEnd": "2026-08-17T00:00:00Z", "state": "suppressed", "completeness": "complete", "finalizedAt": "2026-08-19T00:00:00Z"
+      },
+      "attribution": { "method": "none", "evidenceRefs": [] }
+    },
+    {
+      "comparisonRef": "apple:views-not-finalized",
+      "baseline": {
+        "sourceRef": "source:apple-analytics", "platform": "apple-app-store", "surfaceRef": "surface:product-page", "metricRef": "metric:page-views", "definitionRef": "definition:apple-views-2026-08", "definitionDigest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "scopeDigest": "sha256:3333333333333333333333333333333333333333333333333333333333333333", "unit": "count", "windowStart": "2026-08-01T00:00:00Z", "windowEnd": "2026-08-08T00:00:00Z", "state": "observed", "value": 80, "completeness": "complete", "finalizedAt": "2026-08-10T00:00:00Z"
+      },
+      "current": {
+        "sourceRef": "source:apple-analytics", "platform": "apple-app-store", "surfaceRef": "surface:product-page", "metricRef": "metric:page-views", "definitionRef": "definition:apple-views-2026-08", "definitionDigest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "scopeDigest": "sha256:3333333333333333333333333333333333333333333333333333333333333333", "unit": "count", "windowStart": "2026-08-24T00:00:00Z", "windowEnd": "2026-08-31T00:00:00Z", "state": "not-finalized", "completeness": "unknown"
+      },
+      "attribution": { "method": "none", "evidenceRefs": [] }
+    },
+    {
+      "comparisonRef": "play:definition-drift",
+      "baseline": {
+        "sourceRef": "source:play-store-performance", "platform": "google-play", "surfaceRef": "surface:store-listing", "metricRef": "metric:listing-action", "definitionRef": "definition:play-acquisition-legacy", "definitionDigest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd", "scopeDigest": "sha256:4444444444444444444444444444444444444444444444444444444444444444", "unit": "count", "windowStart": "2026-06-01T00:00:00Z", "windowEnd": "2026-06-08T00:00:00Z", "state": "observed", "value": 50, "completeness": "complete", "finalizedAt": "2026-06-10T00:00:00Z"
+      },
+      "current": {
+        "sourceRef": "source:play-store-performance", "platform": "google-play", "surfaceRef": "surface:store-listing", "metricRef": "metric:listing-action", "definitionRef": "definition:play-clicks-2026-07", "definitionDigest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", "scopeDigest": "sha256:4444444444444444444444444444444444444444444444444444444444444444", "unit": "count", "windowStart": "2026-08-10T00:00:00Z", "windowEnd": "2026-08-17T00:00:00Z", "state": "observed", "value": 70, "completeness": "complete", "finalizedAt": "2026-08-19T00:00:00Z"
+      },
+      "attribution": { "method": "none", "evidenceRefs": [] }
+    },
+    {
+      "comparisonRef": "steam:total-visits-temporal",
+      "baseline": {
+        "sourceRef": "source:steam-utm", "platform": "steam", "surfaceRef": "surface:store-app", "metricRef": "metric:total-visits", "definitionRef": "definition:steam-utm-2026-08", "definitionDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "scopeDigest": "sha256:5555555555555555555555555555555555555555555555555555555555555555", "unit": "count", "windowStart": "2026-08-01T00:00:00Z", "windowEnd": "2026-08-08T00:00:00Z", "state": "observed", "value": 200, "completeness": "complete", "finalizedAt": "2026-08-12T00:00:00Z"
+      },
+      "current": {
+        "sourceRef": "source:steam-utm", "platform": "steam", "surfaceRef": "surface:store-app", "metricRef": "metric:total-visits", "definitionRef": "definition:steam-utm-2026-08", "definitionDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "scopeDigest": "sha256:5555555555555555555555555555555555555555555555555555555555555555", "unit": "count", "windowStart": "2026-08-10T00:00:00Z", "windowEnd": "2026-08-17T00:00:00Z", "state": "observed", "value": 250, "completeness": "complete", "finalizedAt": "2026-08-21T00:00:00Z"
+      },
+      "attribution": { "method": "temporal-only", "evidenceRefs": [] }
+    },
+    {
+      "comparisonRef": "play:clicks-unattributed",
+      "baseline": {
+        "sourceRef": "source:play-store-performance", "platform": "google-play", "surfaceRef": "surface:store-listing", "metricRef": "metric:unique-clicks", "definitionRef": "definition:play-clicks-2026-07", "definitionDigest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", "scopeDigest": "sha256:6666666666666666666666666666666666666666666666666666666666666666", "unit": "count", "windowStart": "2026-08-01T00:00:00Z", "windowEnd": "2026-08-08T00:00:00Z", "state": "observed", "value": 30, "completeness": "complete", "finalizedAt": "2026-08-10T00:00:00Z"
+      },
+      "current": {
+        "sourceRef": "source:play-store-performance", "platform": "google-play", "surfaceRef": "surface:store-listing", "metricRef": "metric:unique-clicks", "definitionRef": "definition:play-clicks-2026-07", "definitionDigest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", "scopeDigest": "sha256:6666666666666666666666666666666666666666666666666666666666666666", "unit": "count", "windowStart": "2026-08-10T00:00:00Z", "windowEnd": "2026-08-17T00:00:00Z", "state": "observed", "value": 45, "completeness": "complete", "finalizedAt": "2026-08-19T00:00:00Z"
+      },
+      "attribution": { "method": "none", "evidenceRefs": [] }
+    }
+  ]
+}

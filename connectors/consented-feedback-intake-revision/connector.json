@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "consented-feedback-intake-revision",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/feedback/prepare-consented-intake-review-revision.md"],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "connectors/consented-feedback-intake-revision/src/index.mjs"
+  },
+  "configSchema": "repo:/connectors/consented-feedback-intake-revision/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [
+    {
+      "capabilityRef": "/capabilities/feedback/prepare-consented-intake-review-revision.md",
+      "operation": "prepareConsentedFeedbackIntakeRevision"
+    }
+  ],
+  "conformance": {
+    "status": "verified",
+    "probeReportRef": "/verifications/feedback/consented-intake-review-revision/report.json"
+  }
+}

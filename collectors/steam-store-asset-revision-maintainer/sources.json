@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "steam-store-asset-review-revision",
+  "sources": [
+    {
+      "id": "steam-store-asset-overview",
+      "url": "https://partner.steamgames.com/doc/store/assets?l=english&language=english",
+      "role": "official-required-dimensions",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "old-dimensions-rejected", "includes": "Old dimensions are no longer accepted." },
+          { "id": "header-dimensions", "includes": "920px x 430px" },
+          { "id": "small-dimensions", "includes": "462px x 174px" },
+          { "id": "main-dimensions", "includes": "1232px x 706px" },
+          { "id": "vertical-dimensions", "includes": "748px x 896px" }
+        ]
+      }
+    },
+    {
+      "id": "steam-store-graphical-assets",
+      "url": "https://partner.steamgames.com/doc/store/assets/standard?l=english&language=english",
+      "role": "official-store-asset-semantics",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "five-screenshots", "includes": "at least 5 screenshots" },
+          { "id": "screenshot-minimum-size", "includes": "1920x1080 minimum" },
+          { "id": "screenshot-ratio", "includes": "16:9 aspect ratio" }
+        ]
+      }
+    },
+    {
+      "id": "steam-graphical-asset-rules",
+      "url": "https://partner.steamgames.com/doc/store/assets/rules?l=english&language=english",
+      "role": "official-human-review-rules",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "base-capsule-content", "includes": "limited to game artwork, the game name, and any official subtitle" },
+          { "id": "readable-name", "includes": "readable product logo/name and have accurate dimensions" },
+          { "id": "pg13-artwork", "includes": "PG-13 appropriate artwork" }
+        ]
+      }
+    },
+    {
+      "id": "steam-store-review-process",
+      "url": "https://partner.steamgames.com/doc/store/review_process?l=english&language=english",
+      "role": "official-review-boundary",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "human-review-action", "includes": "Mark as ready for review" },
+          { "id": "gameplay-only", "includes": "screenshots must only contain gameplay" },
+          { "id": "readable-title", "includes": "readable product title or logo" }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/steam/prepare-store-description-review-revision-input.schema.json",
+  "title": "PrepareSteamStoreDescriptionReviewRevisionInput",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["gameRef", "sourceRevisionRef", "localizations", "launchFeatureRefs", "rightsBasisRefs"],
+  "properties": {
+    "gameRef": { "type": "string", "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,191}$" },
+    "sourceRevisionRef": { "$ref": "#/$defs/ref" },
+    "localizations": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 31,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["language", "shortDescription", "aboutThisGame", "translationBasisRef"],
+        "properties": {
+          "language": { "type": "string", "pattern": "^[a-z][a-z0-9-]{1,31}$" },
+          "shortDescription": { "type": "string", "minLength": 1, "maxLength": 4000 },
+          "aboutThisGame": { "type": "string", "minLength": 1, "maxLength": 80000 },
+          "translationBasisRef": { "$ref": "#/$defs/ref" }
+        }
+      }
+    },
+    "launchFeatureRefs": { "$ref": "#/$defs/refs" },
+    "rightsBasisRefs": { "$ref": "#/$defs/refs" }
+  },
+  "$defs": {
+    "ref": { "type": "string", "minLength": 1, "maxLength": 500 },
+    "refs": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 50,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/ref" }
+    }
+  }
+}

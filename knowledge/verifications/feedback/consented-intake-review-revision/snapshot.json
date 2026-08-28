@@ -1,0 +1,102 @@
+{
+  "fixture": "pet-assistant-consented-feedback-intake",
+  "schemaVersion": "dsh.consented-feedback-intake-review-revision/v1",
+  "scope": {
+    "scopeRevisionRef": "feedback-scope:pet-onboarding-v3",
+    "productRef": "product:pet-assistant",
+    "productRevisionRef": "product-revision:0.2.0",
+    "decisionRef": "decision:improve-first-day-activation",
+    "purposeRefs": [
+      "purpose:product-improvement"
+    ],
+    "expectedFieldRefs": [
+      "difficulty",
+      "workaround"
+    ],
+    "noticeRevisionRef": "privacy-notice:feedback-v2"
+  },
+  "submission": {
+    "submissionRef": "submission:01J7PETFEEDBACK",
+    "channel": "product-form",
+    "submittedAt": "2026-08-27T08:00:00.000Z",
+    "purposeRefs": [
+      "purpose:product-improvement"
+    ],
+    "answers": [
+      {
+        "fieldRef": "difficulty",
+        "kind": "problem",
+        "statement": "The pet loses the current task after I switch sessions.",
+        "contentDigest": "sha256:8f9a0e2ef999b12e3d46a933fa77cb35ab738ec71e20377a55521f40f820f076"
+      },
+      {
+        "fieldRef": "workaround",
+        "kind": "workaround",
+        "statement": "I reopen the conversation before asking the pet to continue.",
+        "contentDigest": "sha256:aca573796974d4b0f8d83d3310ec21569179e3cb71bc7e71e95342ced0457299"
+      }
+    ]
+  },
+  "consent": {
+    "status": "given",
+    "noticeRevisionRef": "privacy-notice:feedback-v2",
+    "evidenceRef": "consent-receipt:01J7PETFEEDBACK",
+    "capturedAt": "2026-08-27T07:59:58.000Z",
+    "validUntil": "2027-08-27T08:00:00.000Z",
+    "withdrawalMechanismRef": "feedback-withdrawal:self-service-v1",
+    "otherPeopleData": "absent"
+  },
+  "privacyReview": {
+    "status": "passed",
+    "directIdentifiers": "removed",
+    "sensitiveData": "absent",
+    "reidentificationProhibited": true,
+    "evidenceRefs": [
+      "privacy-review:01J7PETFEEDBACK"
+    ]
+  },
+  "retention": {
+    "policyRef": "retention:product-feedback-180d",
+    "deleteAfter": "2027-02-23T08:00:00.000Z"
+  },
+  "preparedAt": "2026-08-27T08:01:00.000Z",
+  "evidenceRefs": [
+    "consent-receipt:01J7PETFEEDBACK",
+    "form-revision:pet-onboarding-v3"
+  ],
+  "reviewItems": [
+    {
+      "id": "exact-submission-and-fields",
+      "status": "pending"
+    },
+    {
+      "id": "purpose-and-notice",
+      "status": "pending"
+    },
+    {
+      "id": "consent-validity-and-third-party-data",
+      "status": "pending"
+    },
+    {
+      "id": "deidentification-and-sensitive-data",
+      "status": "pending"
+    },
+    {
+      "id": "retention-and-withdrawal",
+      "status": "pending"
+    }
+  ],
+  "humanReviewRequired": true,
+  "reviewerDecision": null,
+  "stored": false,
+  "receiptIssued": false,
+  "withdrawalApplied": false,
+  "replySent": false,
+  "knowledgeWritten": false,
+  "executionAuthorized": false,
+  "status": "ready-for-human-review",
+  "intakeRevisionHash": "sha256:a482c8408b4b824c71ef4589978756bc58671ad6e77f04d00aa33f0737fb47ab",
+  "preflight": {
+    "blockers": []
+  }
+}

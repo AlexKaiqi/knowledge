@@ -1,0 +1,261 @@
+{
+  "schemaVersion": "dsh.probe-report/v1",
+  "id": "evidence-backed-research-local-20260827",
+  "capabilityRef": "/capabilities/research/conduct-evidence-backed-research.md",
+  "connectorId": "evidence-backed-research-agent",
+  "probeDefinitionRef": "repo:/probes/definitions/evidence-backed-research-local.json",
+  "environment": "local",
+  "level": "local",
+  "outcome": "passed",
+  "startedAt": "2026-08-27T11:07:28.917Z",
+  "finishedAt": "2026-08-27T11:08:38.181Z",
+  "expiresAt": "2026-09-10T11:08:38.181Z",
+  "checks": [
+    {
+      "id": "pinned-evidence-readable",
+      "status": "passed"
+    },
+    {
+      "id": "pinned-evidence-digests",
+      "status": "passed"
+    },
+    {
+      "id": "output-schema",
+      "status": "passed"
+    },
+    {
+      "id": "finding-traceability",
+      "status": "passed"
+    },
+    {
+      "id": "scenario-role-coverage",
+      "status": "passed"
+    },
+    {
+      "id": "counter-evidence-search",
+      "status": "passed"
+    },
+    {
+      "id": "six-scenario-strategies",
+      "status": "passed"
+    },
+    {
+      "id": "platform-integration-official-boundary",
+      "status": "passed"
+    },
+    {
+      "id": "platform-integration-implementation-evidence",
+      "status": "passed"
+    },
+    {
+      "id": "platform-integration-counter-evidence",
+      "status": "passed"
+    },
+    {
+      "id": "platform-integration-agent-observation",
+      "status": "passed",
+      "detail": "Three interactive Agent research runs were observed and normalized; repeatability across runtimes remains unproven."
+    },
+    {
+      "id": "xianyu-paid-route-authorization-boundary",
+      "status": "passed"
+    },
+    {
+      "id": "xianyu-technical-feasibility-separated-from-platform-permission",
+      "status": "passed"
+    },
+    {
+      "id": "demand-source-route-agent-observation",
+      "status": "passed",
+      "detail": "One interactive route-selection run audited Google, Xianyu, 58 and BOSS official boundaries, paid provider claims and the exact local candidate implementations."
+    },
+    {
+      "id": "demand-source-paid-access-separated-from-platform-authorization",
+      "status": "passed"
+    },
+    {
+      "id": "demand-source-route-selection-is-probe-shaped",
+      "status": "passed"
+    },
+    {
+      "id": "demand-source-no-unverified-platform-coverage",
+      "status": "passed"
+    },
+    {
+      "id": "technical-solution-agent-observation",
+      "status": "passed",
+      "detail": "One interactive technical-solution research run compared the verified local action chain with two independent runtime approval/resume contracts."
+    },
+    {
+      "id": "assistant-approval-before-effect",
+      "status": "passed"
+    },
+    {
+      "id": "assistant-approval-execution-separation",
+      "status": "passed"
+    },
+    {
+      "id": "assistant-resume-replay-counter-evidence",
+      "status": "passed"
+    },
+    {
+      "id": "assistant-approval-transport-agent-observation",
+      "status": "passed",
+      "detail": "A second technical-solution run audited the current DSH approval contract, pinned Web transport source and three repository-native security reproductions."
+    },
+    {
+      "id": "assistant-web-approval-owner-binding-rejected",
+      "status": "passed"
+    },
+    {
+      "id": "assistant-web-approval-self-and-cross-session-counter-evidence",
+      "status": "passed"
+    },
+    {
+      "id": "assistant-approval-cancellation-counter-evidence",
+      "status": "passed"
+    },
+    {
+      "id": "demand-agent-observation",
+      "status": "passed",
+      "detail": "One interactive demand research run separated source-native failure evidence, already-admitted local slices, independent next probes, and longitudinal product outcomes."
+    },
+    {
+      "id": "demand-problem-evidence",
+      "status": "passed"
+    },
+    {
+      "id": "demand-counter-evidence",
+      "status": "passed"
+    },
+    {
+      "id": "demand-no-prevalence-inference",
+      "status": "passed"
+    },
+    {
+      "id": "demand-independent-slice-ranking",
+      "status": "passed"
+    },
+    {
+      "id": "academic-frontier-agent-observation",
+      "status": "passed",
+      "detail": "One interactive academic-frontier run compared four exact-version memory benchmarks, longitudinal companionship counter-evidence and the current local assistant slices."
+    },
+    {
+      "id": "academic-frontier-paper-version-and-locator",
+      "status": "passed"
+    },
+    {
+      "id": "academic-frontier-benchmark-and-counter-evidence",
+      "status": "passed"
+    },
+    {
+      "id": "academic-frontier-product-probe-boundary",
+      "status": "passed"
+    },
+    {
+      "id": "distribution-impact-agent-observation",
+      "status": "passed",
+      "detail": "One interactive distribution-impact run compared exact current Steam, App Store Connect and Google Play metric, finalization, suppression and attribution semantics."
+    },
+    {
+      "id": "distribution-impact-native-metric-boundary",
+      "status": "passed"
+    },
+    {
+      "id": "distribution-impact-finalization-and-suppression",
+      "status": "passed"
+    },
+    {
+      "id": "distribution-impact-no-causal-overclaim",
+      "status": "passed"
+    },
+    {
+      "id": "distribution-impact-next-probe-effect-free",
+      "status": "passed"
+    },
+    {
+      "id": "market-competitive-agent-observation",
+      "status": "passed",
+      "detail": "One interactive market-competitive run compared three bounded Apple catalog pages, two fixed source implementations, an independent long-horizon audit and the current local capability boundary."
+    },
+    {
+      "id": "market-competitive-category-boundary",
+      "status": "passed"
+    },
+    {
+      "id": "market-competitive-implementation-versus-outcome",
+      "status": "passed"
+    },
+    {
+      "id": "market-competitive-no-market-size-or-composite-score",
+      "status": "passed"
+    },
+    {
+      "id": "market-competitive-next-probe-effect-free",
+      "status": "passed"
+    },
+    {
+      "id": "hidden-execution-boundary",
+      "status": "passed"
+    }
+  ],
+  "evidence": [
+    {
+      "kind": "snapshot",
+      "ref": "repo:/knowledge/verifications/research/evidence-backed-research/snapshot.json",
+      "sha256": "733711c8b54484f299fa36c5fdd05d1a4caf1fc51323bee846109a2027efd6e8"
+    },
+    {
+      "kind": "snapshot",
+      "ref": "repo:/knowledge/verifications/research/evidence-backed-research/platform-integration-snapshot.json",
+      "sha256": "d1c6609ce49e4f32af5aa6029284a81f565121e7b1c3ed393734af664729b3c1"
+    },
+    {
+      "kind": "snapshot",
+      "ref": "repo:/knowledge/verifications/research/evidence-backed-research/xianyu-platform-integration-snapshot.json",
+      "sha256": "71813b96b8281e8f82a7ecf636da27531a86e1ceb932ced4c1382a99e27e331c"
+    },
+    {
+      "kind": "snapshot",
+      "ref": "repo:/knowledge/verifications/research/evidence-backed-research/demand-source-routes-platform-integration-snapshot.json",
+      "sha256": "6dc970c2a93790ebc48c0c4e9193b353a982925a3e08de4ebbc7281f65f1494e"
+    },
+    {
+      "kind": "snapshot",
+      "ref": "repo:/knowledge/verifications/research/evidence-backed-research/assistant-approval-technical-snapshot.json",
+      "sha256": "4d9fe5d8967fbe42a8cc028e248f852790ccddfe2a146ce3eae95e7340884f9b"
+    },
+    {
+      "kind": "snapshot",
+      "ref": "repo:/knowledge/verifications/research/evidence-backed-research/assistant-approval-transport-security-snapshot.json",
+      "sha256": "862b994ad597401213ecce7660d707b8f06e6b095f7ed81369b0afdcc43d6d26"
+    },
+    {
+      "kind": "snapshot",
+      "ref": "repo:/knowledge/verifications/research/evidence-backed-research/personal-assistant-demand-snapshot.json",
+      "sha256": "6c97a350d7920f37675111900f55c919cc8e7b3d2d18cc598ccc1954abf0cc1a"
+    },
+    {
+      "kind": "snapshot",
+      "ref": "repo:/knowledge/verifications/research/evidence-backed-research/assistant-memory-frontier-snapshot.json",
+      "sha256": "141137f2bf23bcbbb36c7bf94724d9e365dade77d0d36895cd9b20ab025a1234"
+    },
+    {
+      "kind": "snapshot",
+      "ref": "repo:/knowledge/verifications/research/evidence-backed-research/distribution-impact-snapshot.json",
+      "sha256": "048d407a33612b2a84a0de2132d3d9896073486147e11987b1137b74d2603d3d"
+    },
+    {
+      "kind": "snapshot",
+      "ref": "repo:/knowledge/verifications/research/evidence-backed-research/personal-assistant-market-competitive-snapshot.json",
+      "sha256": "97d9f56431330c0f4b8c0434cc17380ceeafe71829c6095e4bb255303fd2815d"
+    }
+  ],
+  "sideEffects": [
+    {
+      "effect": "none",
+      "status": "none"
+    }
+  ]
+}

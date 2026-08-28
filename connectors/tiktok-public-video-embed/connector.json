@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "tiktok-public-video-embed",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/tiktok/read-public-video-embed.md"],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "connectors/tiktok-public-video-embed/src/index.mjs"
+  },
+  "configSchema": "repo:/connectors/tiktok-public-video-embed/config.schema.json",
+  "accessRouteCatalog": "repo:/connectors/video-platform-access-routes/routes.json",
+  "credentialSlots": [],
+  "handlers": [
+    {
+      "capabilityRef": "/capabilities/tiktok/read-public-video-embed.md",
+      "operation": "readPublicVideoEmbed"
+    }
+  ],
+  "conformance": {
+    "status": "verified",
+    "probeReportRef": "/verifications/tiktok/public-video-embed/report.json"
+  }
+}

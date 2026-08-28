@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "dsh.probe-fixture/dataforseo-google-organic-serp/v1",
+  "maximumQueries": 3,
+  "maximumTotalCostUsd": 0.01,
+  "queries": [
+    {
+      "id": "assistant-memory-problems",
+      "input": { "query": "personal AI assistant memory problems", "locationCode": 2840, "languageCode": "en", "device": "desktop", "limit": 10 }
+    },
+    {
+      "id": "pet-task-feedback",
+      "input": { "query": "virtual pet task status feedback", "locationCode": 2840, "languageCode": "en", "device": "desktop", "limit": 10 }
+    },
+    {
+      "id": "indie-game-feedback",
+      "input": { "query": "indie game player feedback collection", "locationCode": 2840, "languageCode": "en", "device": "desktop", "limit": 10 }
+    }
+  ]
+}

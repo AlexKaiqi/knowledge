@@ -1,0 +1,305 @@
+{
+  "input": {
+    "scenario": "demand",
+    "goal": "从 GitHub 一手问题与 arXiv 评测中识别个人助理/宠物仍值得独立解决的工作流困难，而不是继续堆功能",
+    "decision": "在现有 memory grounding、impact review、proactive review 和 pet state projection 之后，下一批个人助理/宠物能力应优先验证什么",
+    "questions": [
+      "哪些困难同时具有用户或工程一手问题证据，并且能被一个有界 probe 独立验证？",
+      "哪些困难已经被当前本地能力覆盖，不应重复建设？",
+      "哪些产品结果依赖长期用户关系，不能冒充为局部工程能力？"
+    ],
+    "constraints": {
+      "cutoffAt": "2026-08-27T05:10:00Z",
+      "versions": ["public GitHub issues observed 2026-08-27", "arXiv versions current at cutoff", "current local verified capabilities"],
+      "exclusions": ["从 stars 或项目 README 推断需求", "从单条 issue 推断市场频率", "把陪伴时长或依恋强度直接当成功", "重复建设已通过本地 probe 的能力"]
+    },
+    "budget": { "maxSources": 10, "maxQueries": 8 }
+  },
+  "agentObservation": {
+    "scenario": "demand",
+    "performedAt": "2026-08-27T05:10:00Z",
+    "openedSourceCount": 7,
+    "counterSearchPerformed": true,
+    "humanReviewRequired": true
+  },
+  "sourceChecks": [
+    {
+      "id": "hf-barge-in",
+      "kind": "html-semantic",
+      "url": "https://github.com/huggingface/speech-to-speech/issues/433",
+      "assertions": [
+        "default min_speech_ms=384",
+        "short noise bursts would become real conversation turns",
+        "A false candidate restores normal output without losing buffered audio."
+      ],
+      "digest": "155021bd6a0e3cc7552689af4555cb0155d22a64a54f9f07f17dd25f4f7e02b8"
+    },
+    {
+      "id": "codex-pet-active",
+      "kind": "html-semantic",
+      "url": "https://github.com/openai/codex/issues/23272",
+      "assertions": [
+        "active-state animation plays once, then falls back to idle",
+        "keep looping while the app remains in that active state"
+      ],
+      "digest": "47b81c68fe87b608d3feb7f77952f847c99bb889635e28e7d69a647fefbd53c7"
+    },
+    {
+      "id": "langgraph-duplicate-tool",
+      "kind": "html-semantic",
+      "url": "https://github.com/langchain-ai/langgraph/issues/7417",
+      "assertions": [
+        "gets silently re-dispatched from the last checkpoint",
+        "2-3x redundant work and cost"
+      ],
+      "digest": "1afe7a918e055d2515cc895c6d469ce36dbd2a520be2c505f7fcb4dd91c60eab"
+    },
+    {
+      "id": "mem2act",
+      "kind": "html-semantic",
+      "url": "https://arxiv.org/abs/2601.19935",
+      "assertions": [
+        "selecting appropriate tools and grounding their parameters",
+        "seven memory frameworks show that current systems remain inadequate"
+      ],
+      "digest": "4118d444233485454fa1df103ef1aca50536a8f469519333cac34bca1106d4ca"
+    },
+    {
+      "id": "instruct-fd",
+      "kind": "html-semantic",
+      "url": "https://arxiv.org/abs/2607.20460",
+      "assertions": [
+        "best model achieves only 64.4% adherence",
+        "backchanneling and interruption remaining particularly challenging"
+      ],
+      "digest": "405afe0e387c6958b1c8ca974a633fb5ee0a0472f5289557bfa53a12efe1126a"
+    },
+    {
+      "id": "companion-longitudinal",
+      "kind": "html-semantic",
+      "url": "https://arxiv.org/abs/2510.10079",
+      "assertions": [
+        "how these factors interact and evolve over time",
+        "multiple interconnected variables",
+        "longitudinal model of AI companionship development"
+      ],
+      "digest": "9442ea36115bea439c9a4564ad9ef65f6433055bd125769e668baea9f67ce877"
+    },
+    {
+      "id": "local-assistant-pet-slices",
+      "kind": "repository-manifest",
+      "resource": "repo:/knowledge/verifications/",
+      "files": [
+        "connectors/memory-action-grounding/connector.json",
+        "connectors/memory-action-grounding/src/index.mjs",
+        "connectors/action-impact-review-revision/connector.json",
+        "connectors/action-impact-review-revision/src/index.mjs",
+        "connectors/public-state-pet-behavior-projector/connector.json",
+        "connectors/public-state-pet-behavior-projector/src/index.mjs",
+        "knowledge/verifications/assistant/memory-action-grounding/snapshot.json",
+        "knowledge/verifications/assistant/action-impact-review-revision/snapshot.json",
+        "knowledge/verifications/pet/public-state-behavior/snapshot.json"
+      ],
+      "digest": "54dc7d497b108a47418d885d02eb67cadcd7d5685551f070d5895c38e86b979c"
+    }
+  ],
+  "candidate": {
+    "scenario": "demand",
+    "question": "个人助理/宠物当前还有哪些可独立验证的真实困难，下一能力切片应该是什么？",
+    "decision": "先完成可信 approval/authorization 纵切；随后优先建立全双工 turn-policy eval。不要重复建设 memory grounding 或 pet state projection，也不要把长期陪伴效果包装成局部能力。",
+    "answer": "打开的一手材料支持四类不同结论。第一，记忆进入工具参数和长工具调用重复执行都是可观察的行动完整性问题；本地已经完成 memory grounding 与 impact review，但真实 approval、一次性授权消费和 unknown receipt 对账仍是当前助理闭环的首要缺口。第二，全双工语音存在约 384ms 确认等待与降低阈值导致噪声误取消的明确权衡，独立 benchmark 又显示最优系统的指令化 turn-taking adherence 仅 64.4%；因此在 approval 之后，最适合独立验证的新切片是 effect-free 的 turn-policy/audio-event eval，而不是直接更换语音模型。第三，宠物 active state 错回 idle 是真实状态表达问题，但当前仓库已经准入纯 state projection；下一步只能针对真实 renderer/animation lifecycle 补组合 probe，不能再复制一个同义 projection 能力。第四，长期陪伴由 agency、parasocial interaction、engagement 等变量随时间共同形成，不能用一次本地测试或更高互动时长证明。现有 issue 和论文样本只证明这些 failure mode 存在，不证明市场频率或所有用户的优先级。",
+    "confidence": "medium",
+    "findings": [
+      {
+        "id": "action-integrity-first",
+        "claim": "个人助理当前最先需要补齐的仍是 exact review 之后的可信 approval、一次性授权消费与 receipt 对账；继续增加记忆或动作候选输入面不能解决重复执行和未授权执行。",
+        "status": "supported",
+        "confidence": "high",
+        "evidenceIds": ["duplicate-execution", "memory-action-gap", "local-slices"],
+        "counterEvidenceIds": ["local-slices"],
+        "applicability": "只针对当前已经有结构化 Action Candidate 与 impact review 的窄路径；不代表所有个人助理需求都以动作执行为最高优先级。",
+        "inference": true
+      },
+      {
+        "id": "voice-turn-policy-independent",
+        "claim": "全双工语音的低打断延迟、噪声误触发和可配置 turn-taking 是一个可脱离模型训练、用冻结音频事件独立验证的困难。",
+        "status": "supported",
+        "confidence": "high",
+        "evidenceIds": ["barge-in-friction", "full-duplex-benchmark"],
+        "counterEvidenceIds": [],
+        "applicability": "适用于已有双工音频 transport 的个人助理；本次未验证真实设备、语言和噪声环境覆盖。",
+        "inference": true
+      },
+      {
+        "id": "pet-state-already-sliced",
+        "claim": "宠物 active task 被错误表现为 idle 是真实困难，但纯 task-state projection 已有本地通过能力；剩余缺口属于 renderer lifecycle 与产品组合验证，不应重复建立同义能力。",
+        "status": "supported",
+        "confidence": "high",
+        "evidenceIds": ["pet-false-idle", "local-slices"],
+        "counterEvidenceIds": ["local-slices"],
+        "applicability": "当前本地 projector 只覆盖已声明的 public task/assistant states；不证明任一桌面 renderer 已正确 loop、hold、fallback 或 dispose。",
+        "inference": true
+      },
+      {
+        "id": "companionship-longitudinal",
+        "claim": "‘形成长期陪伴感且有益’不是一个可由短时本地 probe 独立证明的能力，只能把控制权、重复率、角色一致性和安全退出拆成局部工程指标。",
+        "status": "supported",
+        "confidence": "medium",
+        "evidenceIds": ["longitudinal-counter"],
+        "counterEvidenceIds": [],
+        "applicability": "论文是作者的纵向研究结论，不建立本产品因果效果；真实结果仍需获同意的长期用户研究。",
+        "inference": true
+      },
+      {
+        "id": "frequency-unknown",
+        "claim": "当前材料能够证明多个具体 failure mode 和可复现条件，但不能证明它们在人群中的发生频率、付费意愿或相对市场规模。",
+        "status": "supported",
+        "confidence": "high",
+        "evidenceIds": ["barge-in-friction", "pet-false-idle", "duplicate-execution", "memory-action-gap", "full-duplex-benchmark", "longitudinal-counter"],
+        "counterEvidenceIds": [],
+        "applicability": "限制本次 GitHub issue、arXiv benchmark 与本地实验组成的便利样本。",
+        "inference": true
+      }
+    ],
+    "evidence": [
+      {
+        "id": "barge-in-friction",
+        "role": "problem-evidence",
+        "sourceType": "work-item",
+        "weight": "primary",
+        "title": "speech-to-speech #433 — reversible pre-confirmation audio ducking",
+        "resource": "https://github.com/huggingface/speech-to-speech/issues/433",
+        "claim": "报告默认 384ms speech confirmation 使用户插话后仍听到约四分之一秒输出；直接降低阈值会把短噪声变成真实 turn 并取消模型工作。",
+        "locator": "Problem; Proposed design; Acceptance criteria",
+        "publishedAt": "2026-08-06T00:00:00Z",
+        "observedAt": "2026-08-27T05:10:00Z",
+        "digest": "155021bd6a0e3cc7552689af4555cb0155d22a64a54f9f07f17dd25f4f7e02b8"
+      },
+      {
+        "id": "pet-false-idle",
+        "role": "problem-evidence",
+        "sourceType": "work-item",
+        "weight": "primary",
+        "title": "openai/codex #23272 — active pet animation falls back to idle",
+        "resource": "https://github.com/openai/codex/issues/23272",
+        "claim": "复现 active-state 动画播放一次后在任务仍 active 时回 idle，并要求生命周期绑定真实 app state。",
+        "locator": "Summary; Steps to reproduce; Expected behavior",
+        "publishedAt": "2026-05-18T00:00:00Z",
+        "observedAt": "2026-08-27T05:10:00Z",
+        "digest": "47b81c68fe87b608d3feb7f77952f847c99bb889635e28e7d69a647fefbd53c7"
+      },
+      {
+        "id": "duplicate-execution",
+        "role": "problem-evidence",
+        "sourceType": "work-item",
+        "weight": "primary",
+        "title": "langgraph #7417 — long tool calls re-executed from checkpoint",
+        "resource": "https://github.com/langchain-ai/langgraph/issues/7417",
+        "claim": "报告长工具调用从 checkpoint 被再次派发，原调用和重复调用同时完成，造成 2–3 倍重复工作与成本。",
+        "locator": "Problem; What we observe; What we tried",
+        "publishedAt": "2026-04-05T00:00:00Z",
+        "observedAt": "2026-08-27T05:10:00Z",
+        "digest": "1afe7a918e055d2515cc895c6d469ce36dbd2a520be2c505f7fcb4dd91c60eab"
+      },
+      {
+        "id": "memory-action-gap",
+        "role": "problem-evidence",
+        "sourceType": "paper",
+        "weight": "primary",
+        "title": "Mem2ActBench",
+        "resource": "https://arxiv.org/abs/2601.19935",
+        "claim": "论文把长期记忆用于选择工具和落地参数定义为独立缺口，并报告七种 memory framework 在其 400 个 tool-use task 上仍不足。",
+        "locator": "Abstract; arXiv:2601.19935v1",
+        "publishedAt": "2026-01-13T06:22:32Z",
+        "observedAt": "2026-08-27T05:10:00Z",
+        "digest": "4118d444233485454fa1df103ef1aca50536a8f469519333cac34bca1106d4ca"
+      },
+      {
+        "id": "full-duplex-benchmark",
+        "role": "problem-evidence",
+        "sourceType": "paper",
+        "weight": "primary",
+        "title": "Instruct-FD",
+        "resource": "https://arxiv.org/abs/2607.20460",
+        "claim": "论文定义 instruction-conditioned turn management benchmark；六个系统中最佳 adherence 为 64.4%，backchannel 与 interruption 尤其困难。",
+        "locator": "Abstract; arXiv:2607.20460v1",
+        "publishedAt": "2026-05-15T03:02:09Z",
+        "observedAt": "2026-08-27T05:10:00Z",
+        "digest": "405afe0e387c6958b1c8ca974a633fb5ee0a0472f5289557bfa53a12efe1126a"
+      },
+      {
+        "id": "longitudinal-counter",
+        "role": "counter-evidence",
+        "sourceType": "paper",
+        "weight": "primary",
+        "title": "How AI Companionship Develops",
+        "resource": "https://arxiv.org/abs/2510.10079",
+        "claim": "论文把 companionship 描述为 agency、parasocial interaction、engagement 等相互连接变量随时间形成的关系，并以纵向研究而非一次交互衡量。",
+        "locator": "Abstract; arXiv:2510.10079v1",
+        "publishedAt": "2025-10-11T07:36:47Z",
+        "observedAt": "2026-08-27T05:10:00Z",
+        "digest": "9442ea36115bea439c9a4564ad9ef65f6433055bd125769e668baea9f67ce877"
+      },
+      {
+        "id": "local-slices",
+        "role": "counter-evidence",
+        "sourceType": "experiment",
+        "weight": "primary",
+        "title": "Current verified assistant and pet slices",
+        "resource": "repo:/knowledge/verifications/",
+        "claim": "本地已验证 memory → action candidate、action impact review 和 public state → pet behavior，三者均冻结边界且不声称真实授权、执行或 renderer 装配。",
+        "locator": "connector implementations and admitted snapshots listed in source manifest",
+        "observedAt": "2026-08-27T05:10:00Z",
+        "digest": "54dc7d497b108a47418d885d02eb67cadcd7d5685551f070d5895c38e86b979c"
+      }
+    ],
+    "conflicts": [
+      {
+        "claim": "宠物状态问题是否意味着还要新建一个 task-state projection 能力。",
+        "evidenceIds": ["pet-false-idle", "local-slices"],
+        "resolution": "外部 issue 证明 renderer 会错误回 idle；本地实验只证明纯 public-state projection 正确。保留 renderer 组合 probe，但不复制已存在的 projection Capability。"
+      },
+      {
+        "claim": "记忆进入行动是否仍是下一未解决切片。",
+        "evidenceIds": ["memory-action-gap", "local-slices", "duplicate-execution"],
+        "resolution": "memory grounding 窄路径已经验证；未解决的是可信 approval、一次性 consume 与 ambiguous execution receipt。研究对象从‘更多记忆’推进到完整行动闭环。"
+      }
+    ],
+    "gaps": [
+      "GitHub issue 是报告者环境中的一手问题，不代表发生频率、用户规模或付费意愿。",
+      "论文摘要是作者主张；本轮没有复跑 Mem2ActBench 或 Instruct-FD benchmark。",
+      "尚未取得真实主人对 approval、全双工打断、宠物状态和主动提醒相对优先级的访谈或产品使用数据。",
+      "跨入口 owner resolution 缺少当前真实入口身份和故障样本，暂不能排序为独立下一切片。"
+    ],
+    "counterEvidenceSearch": {
+      "performed": true,
+      "queries": [
+        "personal assistant memory tool action parameter benchmark",
+        "agent long tool call duplicate execution checkpoint issue",
+        "full duplex voice interruption latency false positive issue",
+        "instruction conditioned full duplex turn taking benchmark",
+        "pet active task state falls back to idle issue",
+        "AI companionship longitudinal outcome interaction variables"
+      ],
+      "outcome": "found",
+      "evidenceIds": ["longitudinal-counter", "local-slices"]
+    },
+    "nextProbes": [
+      {
+        "hypothesis": "可信 Client/Host interaction 能把 exact impact review 变成一次性 approval record，且普通 Agent/caller 不能伪造或复用。",
+        "method": "在隔离 sandbox 展示 frozen review revision，注入错误 owner、revision mutation、过期、重复提交、并发 consume、崩溃与 timeout；approval、consume 和 execution receipt 分别记录。",
+        "success": "只有真实绑定交互能产生 decision；并发只消费一次；unknown 进入 reconcile-required 而不自动重发。",
+        "failure": "approved 字段可直接注入、授权跨 owner/revision 重用、重复副作用或 timeout 后盲重发。",
+        "effect": "local-write"
+      },
+      {
+        "hypothesis": "一个模型无关的 turn-policy 层能在降低可感知 barge-in 延迟时，不把短噪声升级为真实 turn，也能按场景执行 Listen、Backchannel、Interrupt、Continue 与 Acknowledge。",
+        "method": "用双通道冻结音频/VAD 时间线和 deterministic clock 建立 candidate→confirm/release fixture；比较 baseline 与 reversible pre-confirmation，逐行为测决策、延迟、误取消和恢复。",
+        "success": "false candidate 不创建 turn、不取消生成且恢复音频；confirmed interruption 在预算内；五类策略输出与 fixture 完全一致。",
+        "failure": "短噪声导致真实 turn/取消、确认插话仍超预算、策略跨场景漂移，或结果依赖不可复现的模型自由文本。",
+        "effect": "none"
+      }
+    ],
+    "coverage": { "queryCount": 6, "stoppedBecause": "decision-sufficient", "complete": true }
+  }
+}

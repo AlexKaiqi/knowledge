@@ -1,0 +1,206 @@
+{
+  "agentObservation": {
+    "scenario": "platform-integration",
+    "performedAt": "2026-08-27T15:44:00Z",
+    "openedSourceCount": 4,
+    "counterSearchPerformed": true,
+    "humanReviewRequired": true
+  },
+  "sourceChecks": [
+    {
+      "id": "xianyu-legal-statement",
+      "kind": "html-semantic",
+      "url": "https://terms.alicdn.com/legal-agreement/terms/suit_bu1_taobao/suit_bu1_taobao202103061039_91765.html",
+      "assertions": ["机器人、蜘蛛", "未经阿里巴巴集团及/或其关联公司许可", "擅自获取、使用闲鱼社区内的任何内容"],
+      "digest": "c0dac85ae4676ffec12138b6bd420f4f16650490b85445dc2d14da869c0a74e6"
+    },
+    {
+      "id": "xianyu-user-service",
+      "kind": "html-semantic",
+      "url": "https://terms.alicdn.com/legal-agreement/terms/suit_bu1_other/suit_bu1_other201708081618_51146.html",
+      "assertions": ["关键词检索", "搜索、浏览/便捷浏览及访问", "信息浏览、收藏、购买与评价"],
+      "digest": "7b82d4d3c53afdcc2f350d5cd654004ac2d83d576851d60e8fc24e757a71491b"
+    },
+    {
+      "id": "xianyu-community-actor",
+      "kind": "html-semantic",
+      "url": "https://apify.com/gantianca/xianyu-goofish-search",
+      "assertions": ["residential proxy rotation", "$0.01 / call", "No. Uses public search API only."],
+      "digest": "96d08113ae40053c4fe07b2e37345b1b5ed66449aa543d17f5c4c577066719a3"
+    },
+    {
+      "id": "xianyu-official-isv-api",
+      "kind": "html-semantic",
+      "url": "https://developer.alibaba.com/docs/api.htm?apiId=49488&source=search",
+      "assertions": ["alibaba.idle.isv.item.query", "需要授权", "聚石塔内调用"],
+      "digest": "ede3693e026b895267405db6944c03c1741374f6819abaeaffdfb3ab3bcf0dd2"
+    }
+  ],
+  "input": {
+    "scenario": "platform-integration",
+    "goal": "用闲鱼公开商品信号发现价格、替代方案和未满足需求，同时把平台授权、身份、供应商费用和去身份化复杂度隐藏在调研能力之后",
+    "decision": "是否把无需闲鱼登录的付费关键词搜索 Actor 提升为 candidate Connector",
+    "questions": [
+      "该 Actor 是否能以有界输入返回关键词搜索结果，且不需要导出闲鱼账号会话？",
+      "付费供应商的技术可达性是否同时满足闲鱼平台对自动获取内容的授权要求？",
+      "闲鱼官方开放 API 是否提供任意公开市场关键词搜索的替代路线？"
+    ],
+    "constraints": {
+      "cutoffAt": "2026-08-27T15:44:00Z",
+      "geographies": ["CN"],
+      "versions": ["current public actor page", "current official agreements and API documentation"],
+      "exclusions": ["创建或登录闲鱼账号", "接受第三方条款", "购买或消费 credits", "调用 Actor", "使用住宅代理", "保存卖家昵称、信用、位置、图片或联系信息"]
+    },
+    "budget": { "maxSources": 8, "maxQueries": 8 }
+  },
+  "candidate": {
+    "scenario": "platform-integration",
+    "question": "无需闲鱼登录的付费关键词搜索 Actor 是否已经足以成为可验证的 candidate Connector？",
+    "decision": "不提升。第三方 Actor 的输入、输出和低额计费已足以证明技术可行性，但其住宅代理与自动搜索路线没有闲鱼书面许可；官方 ISV API 又只覆盖经授权的服务商商品工作流，不是任意公开市场搜索。保留用户界面内的一页人工观察 proposal，并把书面授权或官方合作路线设为自动化 probe 的前置条件。",
+    "answer": "当前不能建立闲鱼自动关键词搜索 candidate Connector。第三方 Actor 宣称无需闲鱼账号，按 keyword/page/sort/price 输入，并以每次搜索 0.01 美元加结果事件收费；但同一页面说明它使用住宅代理轮换。闲鱼官方法律声明明确要求事先许可，并禁止通过机器人、蜘蛛等程序擅自获取或使用平台内容。付费给供应商不能替代目标平台授权。闲鱼用户协议允许用户在产品界面内关键词检索、搜索和浏览，因此一次用户主导、可见、至多一页且不保存身份字段的人工观察仍可继续调研；它不等于批量自动采集。淘宝开放平台确有闲鱼 ISV 商品查询，但需要授权、聚石塔内调用且按 item_id 查询服务商商品，不能作为公开市场关键词检索的官方替代。",
+    "confidence": "high",
+    "findings": [
+      {
+        "id": "manual-search-is-supported",
+        "claim": "闲鱼用户服务明确提供关键词检索、搜索和浏览功能，支持用户界面内的人工研究路径。",
+        "status": "supported",
+        "confidence": "high",
+        "evidenceIds": ["user-search-contract"],
+        "counterEvidenceIds": ["automation-restriction"],
+        "applicability": "只支持正常用户界面内的浏览，不推出批量导出、后台自动化、代理轮换或内容再利用权利。",
+        "inference": false
+      },
+      {
+        "id": "actor-is-technically-bounded",
+        "claim": "社区 Actor 提供无需闲鱼登录的 keyword/page/sort/price 搜索，并公开每次请求与结果事件价格。",
+        "status": "supported",
+        "confidence": "medium",
+        "evidenceIds": ["community-actor-route"],
+        "counterEvidenceIds": ["automation-restriction", "official-isv-boundary"],
+        "applicability": "仅证明供应商声明的技术表面；未运行、未核验结果 Schema、计费扣减、稳定性或平台授权。",
+        "inference": false
+      },
+      {
+        "id": "paid-route-lacks-platform-authorization",
+        "claim": "供应商付费和无需登录不能满足闲鱼对机器人或蜘蛛自动获取内容所要求的事先许可。",
+        "status": "supported",
+        "confidence": "high",
+        "evidenceIds": ["automation-restriction", "community-actor-route"],
+        "counterEvidenceIds": ["user-search-contract"],
+        "applicability": "适用于当前未取得闲鱼或阿里巴巴书面许可的内部产品研究。",
+        "inference": true
+      },
+      {
+        "id": "official-api-is-not-public-search",
+        "claim": "现有闲鱼官方 ISV 商品查询要求授权和聚石塔环境，并以 item_id 查询服务商商品，不提供任意公开市场关键词搜索。",
+        "status": "supported",
+        "confidence": "high",
+        "evidenceIds": ["official-isv-boundary"],
+        "counterEvidenceIds": ["community-actor-route"],
+        "applicability": "不排除未来官方合作、数据产品或新 API；Collector 必须持续复核。",
+        "inference": false
+      }
+    ],
+    "evidence": [
+      {
+        "id": "automation-restriction",
+        "role": "official-boundary",
+        "sourceType": "official-document",
+        "weight": "primary",
+        "title": "闲鱼社区法律声明",
+        "resource": "https://terms.alicdn.com/legal-agreement/terms/suit_bu1_taobao/suit_bu1_taobao202103061039_91765.html",
+        "claim": "未经阿里巴巴集团或关联公司许可，不得以机器人、蜘蛛等程序擅自获取或使用闲鱼社区内容。",
+        "locator": "信息限制",
+        "observedAt": "2026-08-27T15:44:00Z",
+        "digest": "c0dac85ae4676ffec12138b6bd420f4f16650490b85445dc2d14da869c0a74e6"
+      },
+      {
+        "id": "user-search-contract",
+        "role": "counter-evidence",
+        "sourceType": "official-document",
+        "weight": "primary",
+        "title": "闲鱼社区用户服务协议",
+        "resource": "https://terms.alicdn.com/legal-agreement/terms/suit_bu1_other/suit_bu1_other201708081618_51146.html",
+        "claim": "普通用户可在闲鱼社区使用信息浏览、关键词检索、筛选、搜索和访问功能。",
+        "locator": "4.1 闲置物品、商品/服务信息的浏览、收藏",
+        "observedAt": "2026-08-27T15:44:00Z",
+        "digest": "7b82d4d3c53afdcc2f350d5cd654004ac2d83d576851d60e8fc24e757a71491b"
+      },
+      {
+        "id": "community-actor-route",
+        "role": "implementation-evidence",
+        "sourceType": "official-document",
+        "weight": "secondary",
+        "title": "Apify community Xianyu keyword search Actor",
+        "resource": "https://apify.com/gantianca/xianyu-goofish-search",
+        "claim": "Actor 声明无需闲鱼账号，支持关键词、页码、排序和价格区间；按搜索请求与结果计费，并使用住宅代理轮换。",
+        "locator": "Features; Pricing; Input; Tips; FAQ",
+        "observedAt": "2026-08-27T15:44:00Z",
+        "digest": "96d08113ae40053c4fe07b2e37345b1b5ed66449aa543d17f5c4c577066719a3"
+      },
+      {
+        "id": "official-isv-boundary",
+        "role": "official-boundary",
+        "sourceType": "official-document",
+        "weight": "primary",
+        "title": "alibaba.idle.isv.item.query",
+        "resource": "https://developer.alibaba.com/docs/api.htm?apiId=49488&source=search",
+        "claim": "官方商品查询是需授权、聚石塔内调用的服务商 ISV 接口，输入为闲鱼 item_id。",
+        "locator": "API header and request parameters",
+        "observedAt": "2026-08-27T15:44:00Z",
+        "digest": "ede3693e026b895267405db6944c03c1741374f6819abaeaffdfb3ab3bcf0dd2"
+      }
+    ],
+    "conflicts": [
+      {
+        "claim": "公开可搜索是否等于允许第三方自动采集。",
+        "evidenceIds": ["user-search-contract", "automation-restriction", "community-actor-route"],
+        "resolution": "用户协议支持产品界面内的搜索和浏览；法律声明对机器人/蜘蛛自动获取另设事先许可门。按更窄权限解释，人工可见观察和自动采集必须分开。"
+      },
+      {
+        "claim": "社区 Actor 所称 public search API 是否等于闲鱼官方开放 API。",
+        "evidenceIds": ["community-actor-route", "official-isv-boundary"],
+        "resolution": "Actor 的说法只描述其实现使用的接口；淘宝开放平台公开的闲鱼 ISV API 需要授权且不是关键词市场搜索。没有官方证据证明 Actor 路线获得目标平台支持。"
+      }
+    ],
+    "gaps": [
+      "尚未获得闲鱼或阿里巴巴对内部自动关键词研究的书面许可。",
+      "尚未创建 Apify 研究身份、接受条款、购买 credits 或运行 Actor。",
+      "Actor 的实际输出、单页条数、内容新鲜度、失败模式和真实账单扣减均未验证。",
+      "用户界面内的一页人工观察仍缺少稳定页面、去身份化和重复性 probe。"
+    ],
+    "counterEvidenceSearch": {
+      "performed": true,
+      "queries": [
+        "闲鱼 官方 用户协议 关键词检索 搜索 浏览",
+        "闲鱼 官方 法律声明 机器人 蜘蛛 获取 内容",
+        "淘宝开放平台 闲鱼 关键词 搜索 API",
+        "Apify Xianyu keyword search no login pricing",
+        "Xianyu official public search API authorization"
+      ],
+      "outcome": "found",
+      "evidenceIds": ["user-search-contract", "community-actor-route"]
+    },
+    "nextProbes": [
+      {
+        "hypothesis": "闲鱼或阿里巴巴可为内部、低频、去身份化的关键词市场研究提供书面许可或官方数据合作路线。",
+        "method": "由人工提交用途、字段、频率、保留期和不联系卖家的书面说明，询问官方开放平台或商务合作入口；仅保存授权结论和 opaque relationship ref。",
+        "success": "获得可核验的授权范围、允许的数据字段、频率、保留与商业使用边界，且可设计不使用账号会话或规避风控的 live probe。",
+        "failure": "明确拒绝、无适用合作路径、授权范围不覆盖自动搜索，或必须采集卖家身份/使用规避手段。",
+        "effect": "identity-relationship"
+      },
+      {
+        "hypothesis": "在正常用户界面内的一页人工观察可以稳定生成不超过 20 条、去卖家身份的市场信号快照。",
+        "method": "经用户批准后，在现有登录/未登录浏览器会话中手动提交一个固定 query，只读取当前可见一页；不翻页、不处理验证码、不导出 session，并在落盘前删除卖家、位置、图片和联系信息。",
+        "success": "同一页面可复开，快照 schema-valid，保留 query、价格、标题主题、观察时间和 complete=false，且无身份字段或平台风险动作。",
+        "failure": "需要登录、验证码、代理、页面不可复开、结果字段无法去身份化，或平台出现限制提示。",
+        "effect": "none"
+      }
+    ],
+    "coverage": {
+      "queryCount": 5,
+      "stoppedBecause": "decision-sufficient",
+      "complete": true
+    }
+  }
+}

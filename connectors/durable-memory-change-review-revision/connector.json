@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "durable-memory-change-review-revision",
+  "version": "0.1.0",
+  "capabilityRefs": ["/capabilities/assistant/prepare-durable-memory-change-review-revision.md"],
+  "execution": { "kind": "deterministic", "runtime": "node >=22.19", "entrypoint": "connectors/durable-memory-change-review-revision/src/index.mjs" },
+  "configSchema": "repo:/connectors/durable-memory-change-review-revision/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [{ "capabilityRef": "/capabilities/assistant/prepare-durable-memory-change-review-revision.md", "operation": "prepareDurableMemoryChangeReviewRevision" }],
+  "conformance": { "status": "verified", "probeReportRef": "/verifications/assistant/durable-memory-change-review-revision/report.json" }
+}

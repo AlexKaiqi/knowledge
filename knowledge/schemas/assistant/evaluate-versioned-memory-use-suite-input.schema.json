@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/assistant/evaluate-versioned-memory-use-suite-input.schema.json",
+  "title": "EvaluateVersionedMemoryUseSuiteInput",
+  "type": "object", "additionalProperties": false,
+  "required": ["suiteRef", "fixtureRevisionRef", "cases"],
+  "properties": {
+    "suiteRef": { "$ref": "#/$defs/id" }, "fixtureRevisionRef": { "$ref": "#/$defs/id" },
+    "cases": { "type": "array", "minItems": 1, "maxItems": 50, "items": { "$ref": "#/$defs/case" } }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,191}$" },
+    "digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "ids10": { "type": "array", "maxItems": 10, "uniqueItems": true, "items": { "$ref": "#/$defs/id" } },
+    "memoryIds": { "type": "array", "maxItems": 100, "uniqueItems": true, "items": { "$ref": "#/$defs/id" } },
+    "memory": {
+      "type": "object", "additionalProperties": false,
+      "required": ["memoryRef", "factKey", "valueDigest", "state", "scopeRef", "effectiveAt", "expiresAt", "supersedesRefs"],
+      "properties": {
+        "memoryRef": { "$ref": "#/$defs/id" }, "factKey": { "$ref": "#/$defs/id" },
+        "valueDigest": { "type": ["string", "null"], "pattern": "^sha256:[a-f0-9]{64}$" },
+        "state": { "enum": ["confirmed", "contested", "revoked"] }, "scopeRef": { "$ref": "#/$defs/id" },
+        "effectiveAt": { "type": "string", "format": "date-time" }, "expiresAt": { "type": ["string", "null"], "format": "date-time" },
+        "supersedesRefs": { "$ref": "#/$defs/ids10" }
+      }
+    },
+    "field": {
+      "type": "object", "additionalProperties": false,
+      "required": ["fieldRef", "factKey", "required", "explicitValueDigest", "explicitEvidenceRefs"],
+      "properties": {
+        "fieldRef": { "$ref": "#/$defs/id" }, "factKey": { "$ref": "#/$defs/id" }, "required": { "type": "boolean" },
+        "explicitValueDigest": { "type": ["string", "null"], "pattern": "^sha256:[a-f0-9]{64}$" }, "explicitEvidenceRefs": { "$ref": "#/$defs/ids10" }
+      }
+    },
+    "observedField": {
+      "type": "object", "additionalProperties": false, "required": ["fieldRef", "valueDigest", "evidenceRefs"],
+      "properties": { "fieldRef": { "$ref": "#/$defs/id" }, "valueDigest": { "$ref": "#/$defs/digest" }, "evidenceRefs": { "type": "array", "minItems": 1, "maxItems": 10, "uniqueItems": true, "items": { "$ref": "#/$defs/id" } } }
+    },
+    "observed": {
+      "type": "object", "additionalProperties": false,
+      "required": ["ingestedMemoryRefs", "retrievedMemoryRefs", "selectedMemoryRefs", "decision", "fields"],
+      "properties": {
+        "ingestedMemoryRefs": { "$ref": "#/$defs/memoryIds" }, "retrievedMemoryRefs": { "$ref": "#/$defs/memoryIds" }, "selectedMemoryRefs": { "$ref": "#/$defs/memoryIds" },
+        "decision": { "enum": ["answer", "ask", "abstain", "action-candidate"] },
+        "fields": { "type": "array", "maxItems": 20, "items": { "$ref": "#/$defs/observedField" } }
+      }
+    },
+    "case": {
+      "type": "object", "additionalProperties": false,
+      "required": ["caseRef", "queryKind", "evaluatedAt", "targetScopeRef", "memories", "fields", "observed"],
+      "properties": {
+        "caseRef": { "$ref": "#/$defs/id" }, "queryKind": { "enum": ["recall", "action-parameters"] },
+        "evaluatedAt": { "type": "string", "format": "date-time" }, "targetScopeRef": { "$ref": "#/$defs/id" },
+        "memories": { "type": "array", "maxItems": 100, "items": { "$ref": "#/$defs/memory" } },
+        "fields": { "type": "array", "minItems": 1, "maxItems": 20, "items": { "$ref": "#/$defs/field" } },
+        "observed": { "$ref": "#/$defs/observed" }
+      }
+    }
+  }
+}

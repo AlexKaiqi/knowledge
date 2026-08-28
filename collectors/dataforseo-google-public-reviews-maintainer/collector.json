@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "dsh.collector-definition/v1",
+  "id": "dataforseo-google-public-reviews-maintainer",
+  "version": "0.1.0",
+  "scope": {
+    "knowledgeGlobs": [
+      "docs/research/demand-signal-access-routes.md",
+      "docs/INTEGRATION_CANDIDATES.md"
+    ],
+    "connectorIds": ["dataforseo-google-public-reviews"],
+    "capabilityRefs": ["/capabilities/research/read-public-place-review-snapshot.md"]
+  },
+  "triggers": [
+    { "kind": "schedule", "schedule": "25 7 * * 4" },
+    { "kind": "source-change" },
+    { "kind": "schema-change" },
+    { "kind": "connector-change" },
+    { "kind": "failed-execution" },
+    { "kind": "manual" }
+  ],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "collectors/dataforseo-google-public-reviews-maintainer/src/index.mjs"
+  },
+  "outputs": ["knowledge-proposal", "connector-change-proposal", "verification-report"],
+  "writePolicy": {
+    "mode": "proposal-only",
+    "requiresApprovalFor": ["knowledge", "connector", "identity", "credential", "live-probe"]
+  },
+  "probePolicy": {
+    "allowedEnvironments": ["sandbox", "production-public"],
+    "identityPoolRefs": ["identity-pool:dataforseo-google-review-probes"],
+    "maximumEffect": "financial"
+  },
+  "budgets": { "maxRunsPerDay": 1, "maxCostPerDay": 0.002, "currency": "USD" }
+}

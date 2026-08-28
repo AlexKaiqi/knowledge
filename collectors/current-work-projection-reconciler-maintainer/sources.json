@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "current-work-projection-reconciliation",
+  "sources": [
+    {
+      "id": "personal-knowledge-reconciler-pinned",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-personal-knowledge-base/c8e181adcf3904f47fd33b85ffc1e97126cbbd66/dsh/maintainer.js",
+      "role": "accepted-reconciliation-transaction-semantics",
+      "acceptedDocumentDigest": "dcd89672a70d559f8afb14e296879ca03a027027d98c91d79eed6ae42d454fe1",
+      "observation": { "mode": "static-text-semantic", "assertions": [
+        { "id": "mark-generation", "includes": "markReconcile()" },
+        { "id": "serial-prepare", "includes": "this.enqueue(() => this.reconcile(options))" },
+        { "id": "reconcile-entry", "includes": "async reconcile(options = {})" },
+        { "id": "recent-session-limit", "includes": ".slice(0, this.reconcileSessions)" },
+        { "id": "cursor-increment", "includes": "kind: 'seq', from: previous + 1" }
+      ] }
+    },
+    {
+      "id": "personal-knowledge-reconciler-main",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-personal-knowledge-base/main/dsh/maintainer.js",
+      "role": "production-reconciliation-change-surface",
+      "acceptedDocumentDigest": "dcd89672a70d559f8afb14e296879ca03a027027d98c91d79eed6ae42d454fe1",
+      "observation": { "mode": "static-text-semantic", "assertions": [
+        { "id": "exclude-current", "includes": "excludeSessionId" },
+        { "id": "oldest-first", "includes": "for (const record of sessions.reverse())" },
+        { "id": "per-session-cursor", "includes": "this.knowledge.cursor(id)?.seq" },
+        { "id": "serial-maintain", "includes": "await this.maintain(id, records" }
+      ] }
+    },
+    {
+      "id": "personal-knowledge-service-pinned",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-personal-knowledge-base/c8e181adcf3904f47fd33b85ffc1e97126cbbd66/dsh/service.js",
+      "role": "accepted-atomic-current-and-monotonic-cursor-semantics",
+      "acceptedDocumentDigest": "b849ae068d99070181b14f80eb2b0385a0f996253b8717d2331682d60a0e4bbf",
+      "observation": { "mode": "static-text-semantic", "assertions": [
+        { "id": "atomic-current", "includes": "atomicWrite(this.currentPath, value)" },
+        { "id": "atomic-cursor", "includes": "atomicWrite(this.cursorPath" },
+        { "id": "monotonic-cursor", "includes": "if (previous && Number(previous.seq) > seq) return previous" }
+      ] }
+    },
+    {
+      "id": "personal-knowledge-readme-main",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-personal-knowledge-base/main/README.md",
+      "role": "production-startup-and-flush-boundary",
+      "acceptedDocumentDigest": "9ecfb7641ada902f2b286b397fecefa7ec884dcefcb53ef927e2d9b6fb600fea",
+      "observation": { "mode": "static-text-semantic", "assertions": [
+        { "id": "startup-reconcile", "includes": "启动和 Session flush 会通过 `sessionQuery` 对最近 Session 做游标对账" },
+        { "id": "background-startup", "includes": "启动对账在后台执行" },
+        { "id": "rebuildable-current", "includes": ".pkb/current.md    目前进行到哪里；后台 Agent 维护、可重建" }
+      ] }
+    },
+    {
+      "id": "personal-knowledge-reconcile-test-pinned",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-personal-knowledge-base/c8e181adcf3904f47fd33b85ffc1e97126cbbd66/test/maintainer.test.mjs",
+      "role": "accepted-reconciliation-regression-evidence",
+      "acceptedDocumentDigest": "18bd8c450ac165493928057ec8ae5c59d5bde8ccf69a37d76756bcb22945c1b5",
+      "observation": { "mode": "static-text-semantic", "assertions": [
+        { "id": "startup-test", "includes": "startup reconciliation reads new semantic session events after the persisted cursor" },
+        { "id": "cursor-assertion", "includes": "knowledge.cursor('session-persisted').seq, 4" },
+        { "id": "replay-assertion", "includes": "(await maintainer.reconcile()).sessions, 0" },
+        { "id": "coalescing-test", "includes": "next-session context preparation coalesces persisted history exactly once" }
+      ] }
+    },
+    {
+      "id": "personal-knowledge-e2e-main",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-personal-knowledge-base/main/eval/evidence/latest.md",
+      "role": "production-e2e-change-surface",
+      "acceptedDocumentDigest": "79c458f4aacd3b31e8c1f58ab15fbfe65046d34e56bda151692372bf1ed56410",
+      "observation": { "mode": "static-text-semantic", "assertions": [
+        { "id": "overall-pass", "includes": "Result: **PASS**" },
+        { "id": "offline-restart", "includes": "Offline restart reconciliation (`reconcileOnStart`)" },
+        { "id": "current-state", "includes": "Session 事件驱动 current 投影" }
+      ] }
+    }
+  ]
+}

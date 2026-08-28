@@ -1,0 +1,107 @@
+{
+  "fixture": "device-persistence-theme",
+  "schemaVersion": "dsh.feedback-theme-evidence/v1",
+  "question": "Which workflow problem should the next revision address?",
+  "decision": "Choose one bounded product experiment.",
+  "targetRef": "release:demo-v1",
+  "answer": "Test whether persisting device selection removes repeated setup.",
+  "themes": [
+    {
+      "id": "device-selection-persistence",
+      "label": "Device selection persistence",
+      "problemStatement": "Some users must repeat device setup after restarting.",
+      "workflow": "Select a device, restart, and continue the prior task.",
+      "supportEvidenceRefs": [
+        "feedback:1",
+        "feedback:2"
+      ],
+      "counterEvidenceRefs": [
+        "feedback:3"
+      ],
+      "affectedRevisionRefs": [
+        "revision:v1"
+      ],
+      "confidence": "medium",
+      "frequency": {
+        "supportingEvidenceCount": 2,
+        "consideredEvidenceCount": 4,
+        "interpretation": "sample-only"
+      },
+      "inference": true
+    }
+  ],
+  "conflicts": [
+    {
+      "statement": "Persistence behavior differs across observed environments.",
+      "evidenceRefs": [
+        "feedback:1",
+        "feedback:3"
+      ],
+      "treatment": "Keep the environment dependency unresolved and test multiple configurations."
+    }
+  ],
+  "gaps": [
+    "The sample does not identify which environment property explains the difference."
+  ],
+  "counterSearch": {
+    "performed": true,
+    "evidenceRefs": [
+      "feedback:3"
+    ],
+    "outcome": "One contrary observation was found."
+  },
+  "unassignedEvidenceRefs": [
+    "feedback:4"
+  ],
+  "nextProbes": [
+    {
+      "hypothesis": "Persisting a stable device ref removes repeated setup.",
+      "method": "Replay restart fixtures across three device configurations.",
+      "success": "The selected device is restored in all supported fixtures.",
+      "failure": "Any supported fixture loses or misbinds the selected device.",
+      "effect": "none"
+    }
+  ],
+  "sample": {
+    "observedFrom": "2026-08-20T00:00:00.000Z",
+    "observedTo": "2026-08-27T00:00:00.000Z",
+    "completeness": "partial",
+    "sourceRefs": [
+      "source:owned-comments"
+    ],
+    "consideredEvidenceCount": 4
+  },
+  "observedAt": "2026-08-27T03:30:00.000Z",
+  "humanReviewRequired": true,
+  "executionAuthorized": false,
+  "resultDigest": "ffdeffdf7f8c25cdd34154638ea9f905bc912631aa1db542e46f7351418ad4e4",
+  "conformance": {
+    "status": "passed",
+    "assertions": [
+      {
+        "id": "themes-bounded",
+        "passed": true
+      },
+      {
+        "id": "themes-traceable",
+        "passed": true
+      },
+      {
+        "id": "counter-search-performed",
+        "passed": true
+      },
+      {
+        "id": "sample-frequency-only",
+        "passed": true
+      },
+      {
+        "id": "human-review-required",
+        "passed": true
+      },
+      {
+        "id": "execution-not-authorized",
+        "passed": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "dsh.probe-report/v1",
+  "id": "arxiv-public-metadata-search-live-20260827",
+  "capabilityRef": "/capabilities/arxiv/search-public-eprint-metadata.md",
+  "connectorId": "arxiv-public-metadata-search",
+  "probeDefinitionRef": "repo:/probes/definitions/arxiv-public-metadata-search-live.json",
+  "environment": "production-public",
+  "level": "live",
+  "outcome": "passed",
+  "startedAt": "2026-08-27T03:15:31.853Z",
+  "finishedAt": "2026-08-27T03:15:37.817Z",
+  "expiresAt": "2026-09-03T03:15:37.817Z",
+  "checks": [
+    {
+      "id": "official-endpoint-live",
+      "status": "passed"
+    },
+    {
+      "id": "fixed-query-page-bound",
+      "status": "passed"
+    },
+    {
+      "id": "submitted-date-order",
+      "status": "passed"
+    },
+    {
+      "id": "offset-not-stable-delta",
+      "status": "passed"
+    },
+    {
+      "id": "metadata-only-no-content-files",
+      "status": "passed"
+    },
+    {
+      "id": "hidden-route",
+      "status": "passed"
+    },
+    {
+      "id": "output-schema",
+      "status": "passed"
+    }
+  ],
+  "evidence": [
+    {
+      "kind": "snapshot",
+      "ref": "repo:/knowledge/verifications/arxiv/public-metadata-search/snapshot.json",
+      "sha256": "a1079501acd23af8db32717a6c563220a7a376a15f42b1354cd64e96f8f65cd0"
+    }
+  ],
+  "sideEffects": [
+    {
+      "effect": "none",
+      "status": "none"
+    }
+  ]
+}

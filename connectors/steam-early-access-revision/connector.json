@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "steam-early-access-revision",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/steam/prepare-early-access-review-revision.md"],
+  "execution": { "kind": "deterministic", "runtime": "node >=22.19", "entrypoint": "connectors/steam-early-access-revision/src/index.mjs" },
+  "configSchema": "repo:/connectors/steam-early-access-revision/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [{ "capabilityRef": "/capabilities/steam/prepare-early-access-review-revision.md", "operation": "prepareSteamEarlyAccessReviewRevision" }],
+  "conformance": { "status": "verified", "probeReportRef": "/verifications/steam/early-access-review-revision/report.json" }
+}

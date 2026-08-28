@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "feedback-intake-local-withdrawal-local",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/feedback/withdraw-consented-intake-record.md",
+  "connectorId": "feedback-intake-local-withdrawal",
+  "environment": "local",
+  "identity": { "required": false },
+  "effect": "local-write",
+  "steps": [
+    { "id": "verify-withdrawal-and-deletion-sources", "operation": "verifyOfficialWithdrawalSources" },
+    { "id": "create-isolated-stored-intake", "operation": "persistConsentedFeedbackIntakeRevision" },
+    { "id": "verify-exact-withdrawal-grant", "operation": "verifyWithdrawalGrant" },
+    { "id": "withdraw-and-inspect-journal", "operation": "withdrawConsentedFeedbackIntakeRecord" },
+    { "id": "verify-idempotent-and-concurrent-replay", "operation": "exerciseWithdrawalReplay" },
+    { "id": "verify-interruption-recovery", "operation": "exercisePendingTransactionRecovery" },
+    { "id": "verify-rejection-boundaries", "operation": "exerciseWithdrawalRejections" },
+    { "id": "validate-public-schema", "operation": "validateWithdrawalReceipt" },
+    { "id": "cleanup-isolated-stores", "operation": "removeTemporaryStores" }
+  ],
+  "assertions": [
+    "Public input references only an existing storage receipt, digest, withdrawal request and mechanism, trusted grant and idempotency key; it cannot select a path or self-approve.",
+    "The hidden Connector verifies the exact private stored envelope and an unexpired grant bound to capability, effect, store, receipt, digest, request and mechanism.",
+    "A durable pending journal makes interruption before or after unlink recoverable under the exact same request.",
+    "Exact and concurrent replay leaves no stored feedback record and one committed withdrawal receipt; changed requests and tampered records fail closed.",
+    "The receipt proves logical removal from this configured store only and explicitly denies media sanitization, backup purge and downstream-copy deletion.",
+    "The isolated local-write probe removes all temporary stores after verification."
+  ],
+  "cleanup": ["removeTemporaryStores"],
+  "budget": { "timeoutSeconds": 45, "maxCost": 0, "currency": "CNY" }
+}

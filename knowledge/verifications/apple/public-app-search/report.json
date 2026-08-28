@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "dsh.probe-report/v1",
+  "id": "apple-public-app-search-live-20260827",
+  "capabilityRef": "/capabilities/research/search-public-app-catalog.md",
+  "connectorId": "apple-public-app-search",
+  "probeDefinitionRef": "repo:/probes/definitions/apple-public-app-search-live.json",
+  "environment": "production-public",
+  "level": "live",
+  "outcome": "passed",
+  "startedAt": "2026-08-27T05:26:43.555Z",
+  "finishedAt": "2026-08-27T05:26:44.353Z",
+  "expiresAt": "2026-09-03T05:26:44.353Z",
+  "checks": [
+    {
+      "id": "official-search-api-live",
+      "status": "passed"
+    },
+    {
+      "id": "fixed-query-page-bound",
+      "status": "passed"
+    },
+    {
+      "id": "expected-app-identity",
+      "status": "passed"
+    },
+    {
+      "id": "ranking-and-count-boundary",
+      "status": "passed"
+    },
+    {
+      "id": "metadata-only",
+      "status": "passed"
+    },
+    {
+      "id": "hidden-route",
+      "status": "passed"
+    },
+    {
+      "id": "output-schema",
+      "status": "passed"
+    }
+  ],
+  "evidence": [
+    {
+      "kind": "snapshot",
+      "ref": "repo:/knowledge/verifications/apple/public-app-search/snapshot.json",
+      "sha256": "1f8f178634382e29360b490597eec6e4429777aa9e3a667f29c1f18154eb394f"
+    }
+  ],
+  "sideEffects": [
+    {
+      "effect": "none",
+      "status": "none"
+    }
+  ]
+}

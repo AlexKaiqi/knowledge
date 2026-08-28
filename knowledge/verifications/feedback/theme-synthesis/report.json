@@ -1,0 +1,71 @@
+{
+  "schemaVersion": "dsh.probe-report/v1",
+  "id": "feedback-theme-synthesis-local-20260827",
+  "capabilityRef": "/capabilities/feedback/synthesize-feedback-theme-evidence.md",
+  "connectorId": "feedback-theme-synthesis-agent",
+  "probeDefinitionRef": "repo:/probes/definitions/feedback-theme-synthesis-local.json",
+  "environment": "local",
+  "level": "local",
+  "outcome": "passed",
+  "startedAt": "2026-08-27T02:45:11.710Z",
+  "finishedAt": "2026-08-27T02:45:12.164Z",
+  "expiresAt": "2026-09-10T02:45:12.164Z",
+  "checks": [
+    {
+      "id": "production-feedback-lineage",
+      "status": "passed"
+    },
+    {
+      "id": "evidence-reference-integrity",
+      "status": "passed"
+    },
+    {
+      "id": "counterexample-and-conflict-retention",
+      "status": "passed"
+    },
+    {
+      "id": "sample-only-frequency",
+      "status": "passed"
+    },
+    {
+      "id": "unassigned-evidence-retention",
+      "status": "passed"
+    },
+    {
+      "id": "human-review-and-non-execution",
+      "status": "passed"
+    },
+    {
+      "id": "output-schema",
+      "status": "passed"
+    },
+    {
+      "id": "real-agent-l3-quality",
+      "status": "skipped",
+      "detail": "Scripted Agent response validates the contract only; real-Agent quality, recall, stability and multilingual behavior remain unverified."
+    }
+  ],
+  "evidence": [
+    {
+      "kind": "artifact",
+      "ref": "https://raw.githubusercontent.com/AlexKaiqi/dsh-social-workbench/0bb63b6f6963992e121d719f9a671637f6ab6c7f/runtime/src/loop-control.mjs",
+      "sha256": "c49fdf9df8ac9f08a3560334cc8cedfb6930b13e19cbc51a45f73c058efff6f0"
+    },
+    {
+      "kind": "artifact",
+      "ref": "https://raw.githubusercontent.com/AlexKaiqi/dsh-social-workbench/0bb63b6f6963992e121d719f9a671637f6ab6c7f/spec/hypothesis-review.schema.json",
+      "sha256": "074d959b2c92101c5d56c8727c2b57ce73d4768ec0e157686416278e7ee1e9b0"
+    },
+    {
+      "kind": "snapshot",
+      "ref": "repo:/knowledge/verifications/feedback/theme-synthesis/snapshot.json",
+      "sha256": "371297ef6eaa5710380a9a46631ebf639a27095048cde322cce9b101e06321a8"
+    }
+  ],
+  "sideEffects": [
+    {
+      "effect": "none",
+      "status": "none"
+    }
+  ]
+}

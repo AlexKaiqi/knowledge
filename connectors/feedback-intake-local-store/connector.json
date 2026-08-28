@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "feedback-intake-local-store",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/feedback/persist-consented-intake-revision.md"],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "connectors/feedback-intake-local-store/src/index.mjs"
+  },
+  "configSchema": "repo:/connectors/feedback-intake-local-store/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [
+    {
+      "capabilityRef": "/capabilities/feedback/persist-consented-intake-revision.md",
+      "operation": "persistConsentedFeedbackIntakeRevision"
+    }
+  ],
+  "conformance": {
+    "status": "verified",
+    "probeReportRef": "/verifications/feedback/intake-local-storage/report.json"
+  }
+}

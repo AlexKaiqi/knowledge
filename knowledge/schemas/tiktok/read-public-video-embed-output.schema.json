@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/tiktok/read-public-video-embed-output.schema.json",
+  "title": "TikTokPublicVideoEmbedResult",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["source", "request", "videoEmbed", "observedAt", "resultDigest", "conformance"],
+  "properties": {
+    "source": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "apiOrigin", "endpointTemplate", "accessClass"],
+      "properties": {
+        "id": { "const": "tiktok-public-video-embed" },
+        "apiOrigin": { "const": "https://www.tiktok.com" },
+        "endpointTemplate": { "const": "https://www.tiktok.com/oembed?url={videoUrl}" },
+        "accessClass": { "const": "official-public-no-account" }
+      }
+    },
+    "request": {
+      "type": "object", "additionalProperties": false, "required": ["videoUrl"],
+      "properties": { "videoUrl": { "type": "string", "format": "uri", "pattern": "^https://www\\.tiktok\\.com/@[A-Za-z0-9._-]{2,24}/video/[1-9][0-9]{0,19}$" } }
+    },
+    "videoEmbed": {
+      "type": "object", "additionalProperties": false,
+      "required": ["videoId", "canonicalUrl", "title", "thumbnailWidth", "thumbnailHeight"],
+      "properties": {
+        "videoId": { "type": "string", "pattern": "^[1-9][0-9]{0,19}$" },
+        "canonicalUrl": { "type": "string", "format": "uri", "pattern": "^https://www\\.tiktok\\.com/@[A-Za-z0-9._-]{2,24}/video/[1-9][0-9]{0,19}$" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 2200 },
+        "thumbnailWidth": { "type": "integer", "minimum": 1, "maximum": 32768 },
+        "thumbnailHeight": { "type": "integer", "minimum": 1, "maximum": 32768 }
+      }
+    },
+    "observedAt": { "type": "string", "format": "date-time" },
+    "resultDigest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "conformance": {
+      "type": "object", "additionalProperties": false, "required": ["status", "assertions"],
+      "properties": {
+        "status": { "enum": ["passed", "review-required"] },
+        "assertions": {
+          "type": "array", "minItems": 1,
+          "items": { "type": "object", "additionalProperties": false, "required": ["id", "passed"], "properties": { "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" }, "passed": { "type": "boolean" } } }
+        }
+      }
+    }
+  }
+}

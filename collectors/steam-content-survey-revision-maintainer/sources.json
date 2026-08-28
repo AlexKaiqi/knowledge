@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "steam-content-survey-review-revision",
+  "sources": [
+    {
+      "id": "steam-content-survey",
+      "url": "https://partner.steamgames.com/doc/gettingstarted/contentsurvey?language=english",
+      "role": "official-content-survey-section-disclosure-and-edit-boundary",
+      "observation": { "mode": "static-html-semantic", "assertions": [
+        { "id": "review-prerequisite", "includes": "Before submitting your store page and product build for review" },
+        { "id": "three-required-sections", "includes": "three primary sections that all must be completed" },
+        { "id": "all-uploaded-adult-content", "includes": "You must disclose all the adult content you've uploaded in your builds" },
+        { "id": "pre-generated-ai", "includes": "Pre-Generated:" },
+        { "id": "live-generated-ai", "includes": "Live-Generated:" },
+        { "id": "live-ai-guardrails", "includes": "what kind of guardrails you're putting on your AI" },
+        { "id": "post-approval-support-gate", "includes": "surveys cannot be edited without first contacting" }
+      ] }
+    },
+    {
+      "id": "steam-germany-age-rating",
+      "url": "https://partner.steamgames.com/doc/gettingstarted/contentsurvey/germany?language=english",
+      "role": "official-age-rating-and-regional-visibility-boundary",
+      "observation": { "mode": "static-html-semantic", "assertions": [
+        { "id": "missing-rating-hidden", "includes": "Steam will no longer display games to customers in Germany if the game is missing a valid age rating" },
+        { "id": "truthful-questionnaire", "includes": "truthfully complete Steam's built-in content questionnaire" },
+        { "id": "rating-not-visibility-guarantee", "includes": "If the generated rating allows" }
+      ] }
+    },
+    {
+      "id": "steam-review-process",
+      "url": "https://partner.steamgames.com/doc/store/review_process?language=english",
+      "role": "official-adult-content-and-review-handoff-boundary",
+      "observation": { "mode": "static-html-semantic", "assertions": [
+        { "id": "adult-only-survey", "includes": "Adult Only Sexual Content" },
+        { "id": "adult-store-and-build-review", "includes": "both the Store Page and Product Build must be completed and submitted for review" },
+        { "id": "review-handoff", "includes": "Mark as ready for review" }
+      ] }
+    }
+  ]
+}

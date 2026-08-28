@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "dsh.probe-report/v1",
+  "id": "tiktok-public-video-embed-live-20260827",
+  "capabilityRef": "/capabilities/tiktok/read-public-video-embed.md",
+  "connectorId": "tiktok-public-video-embed",
+  "probeDefinitionRef": "repo:/probes/definitions/tiktok-public-video-embed-live.json",
+  "environment": "production-public",
+  "level": "live",
+  "outcome": "passed",
+  "startedAt": "2026-08-27T12:59:42.812Z",
+  "finishedAt": "2026-08-27T12:59:43.599Z",
+  "expiresAt": "2026-09-03T12:59:43.599Z",
+  "checks": [{ "id": "exact-video-identity", "status": "passed" }, { "id": "bounded-public-fields", "status": "passed" }, { "id": "unsafe-upstream-fields-excluded", "status": "passed" }, { "id": "fixture-identity", "status": "passed" }, { "id": "fixture-descriptor", "status": "passed" }, { "id": "data-minimization", "status": "passed" }],
+  "evidence": [{ "kind": "snapshot", "ref": "repo:/knowledge/verifications/tiktok/public-video-embed/snapshot.json", "sha256": "7b5abe866c99642d2ccdb7886999e24a29067491ca8e0529699bef7daa5dbc3e" }],
+  "sideEffects": [{ "effect": "none", "status": "none" }]
+}

@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/schemas/assistant/prepare-proactive-contact-review-revision-input.schema.json",
+  "title": "Prepare proactive contact review revision input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["ownerScopeRef", "policy", "state", "candidate"],
+  "properties": {
+    "ownerScopeRef": { "$ref": "#/$defs/ref" },
+    "policy": { "$ref": "#/$defs/policy" },
+    "state": { "$ref": "#/$defs/state" },
+    "candidate": { "$ref": "#/$defs/candidate" }
+  },
+  "$defs": {
+    "ref": { "type": "string", "minLength": 1, "maxLength": 500 },
+    "refs": { "type": "array", "minItems": 1, "maxItems": 20, "uniqueItems": true, "items": { "$ref": "#/$defs/ref" } },
+    "dateOrNull": { "oneOf": [{ "type": "string", "format": "date-time" }, { "type": "null" }] },
+    "quietWindow": {
+      "type": "object", "additionalProperties": false, "required": ["start", "end"],
+      "properties": { "start": { "type": "string", "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d$" }, "end": { "type": "string", "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d$" } }
+    },
+    "policy": {
+      "type": "object", "additionalProperties": false,
+      "required": ["optedIn", "pausedUntil", "timeZone", "quietWindows", "minimumGapMinutes", "maximumPerDay", "maximumConsecutiveUnanswered", "recentActivitySuppressionMinutes", "dedupeWindowMinutes"],
+      "properties": {
+        "optedIn": { "type": "boolean" }, "pausedUntil": { "$ref": "#/$defs/dateOrNull" }, "timeZone": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "quietWindows": { "type": "array", "maxItems": 4, "uniqueItems": true, "items": { "$ref": "#/$defs/quietWindow" } },
+        "minimumGapMinutes": { "type": "integer", "minimum": 1, "maximum": 1440 }, "maximumPerDay": { "type": "integer", "minimum": 1, "maximum": 20 },
+        "maximumConsecutiveUnanswered": { "type": "integer", "minimum": 1, "maximum": 20 }, "recentActivitySuppressionMinutes": { "type": "integer", "minimum": 0, "maximum": 1440 },
+        "dedupeWindowMinutes": { "type": "integer", "minimum": 1, "maximum": 1440 }
+      }
+    },
+    "dedupeObservation": {
+      "type": "object", "additionalProperties": false, "required": ["key", "observedAt"],
+      "properties": { "key": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,191}$" }, "observedAt": { "type": "string", "format": "date-time" } }
+    },
+    "state": {
+      "type": "object", "additionalProperties": false,
+      "required": ["evaluatedAt", "sentToday", "consecutiveUnanswered", "lastProactiveContactAt", "lastUserActivityAt", "recentDedupeObservations"],
+      "properties": {
+        "evaluatedAt": { "type": "string", "format": "date-time" }, "sentToday": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "consecutiveUnanswered": { "type": "integer", "minimum": 0, "maximum": 100 }, "lastProactiveContactAt": { "$ref": "#/$defs/dateOrNull" },
+        "lastUserActivityAt": { "$ref": "#/$defs/dateOrNull" }, "recentDedupeObservations": { "type": "array", "maxItems": 100, "uniqueItems": true, "items": { "$ref": "#/$defs/dedupeObservation" } }
+      }
+    },
+    "candidate": {
+      "type": "object", "additionalProperties": false,
+      "required": ["candidateRef", "kind", "dedupeKey", "basis", "evidenceRefs", "consequenceRefs", "surfaceRefs", "availableFrom", "expiresAt", "visibleInSourceNow", "copy"],
+      "properties": {
+        "candidateRef": { "$ref": "#/$defs/ref" }, "kind": { "enum": ["reminder", "follow-up", "check-in", "briefing", "status-update"] },
+        "dedupeKey": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,191}$" }, "basis": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "evidenceRefs": { "$ref": "#/$defs/refs" }, "consequenceRefs": { "$ref": "#/$defs/refs" },
+        "surfaceRefs": { "type": "array", "minItems": 1, "maxItems": 5, "uniqueItems": true, "items": { "$ref": "#/$defs/ref" } },
+        "availableFrom": { "type": "string", "format": "date-time" }, "expiresAt": { "type": "string", "format": "date-time" }, "visibleInSourceNow": { "type": "boolean" },
+        "copy": { "type": "object", "additionalProperties": false, "required": ["title", "body"], "properties": { "title": { "type": "string", "minLength": 1, "maxLength": 120 }, "body": { "type": "string", "minLength": 1, "maxLength": 500 } } }
+      }
+    }
+  }
+}

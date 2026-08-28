@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "dsh.collector-definition/v1",
+  "id": "appfigures-public-app-reviews-maintainer",
+  "version": "0.1.0",
+  "scope": {
+    "knowledgeGlobs": [
+      "knowledge/capabilities/research/read-public-app-review-snapshot.md",
+      "knowledge/concepts/research/public-app-review-snapshot.md",
+      "knowledge/schemas/research/read-public-app-review-snapshot-*.schema.json",
+      "knowledge/verifications/research/public-app-review-snapshot/*.json"
+    ],
+    "connectorIds": ["appfigures-public-app-reviews"],
+    "capabilityRefs": ["/capabilities/research/read-public-app-review-snapshot.md"]
+  },
+  "triggers": [
+    { "kind": "schedule", "schedule": "45 8 * * 2,5" },
+    { "kind": "source-change" },
+    { "kind": "schema-change" },
+    { "kind": "connector-change" },
+    { "kind": "failed-execution" },
+    { "kind": "manual" }
+  ],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "collectors/appfigures-public-app-reviews-maintainer/src/index.mjs"
+  },
+  "outputs": ["knowledge-proposal", "connector-change-proposal", "verification-report"],
+  "writePolicy": {
+    "mode": "proposal-only",
+    "requiresApprovalFor": ["knowledge", "connector", "identity", "credential", "live-probe"]
+  },
+  "probePolicy": {
+    "allowedEnvironments": ["production-public"],
+    "identityPoolRefs": [],
+    "maximumEffect": "none"
+  },
+  "budgets": { "maxRunsPerDay": 2, "maxCostPerDay": 0, "currency": "USD" }
+}

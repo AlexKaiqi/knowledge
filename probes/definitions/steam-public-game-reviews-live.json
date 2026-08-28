@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "steam-public-game-reviews-live",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/steam/read-public-game-review-page.md",
+  "connectorId": "steam-public-game-reviews",
+  "environment": "production-public",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "read-portal-2-updated-reviews", "operation": "readPublicGameReviewPage" },
+    { "id": "remove-author-identity", "operation": "normalizeReviewResponse" },
+    { "id": "redact-durable-review-text", "operation": "redactReviewTextForVerification" }
+  ],
+  "assertions": [
+    "The documented public appreviews endpoint returns a bounded updated-time cursor page for Steam app 620 without an account or API key.",
+    "The page contains at most five reviews, a usable next cursor, and a first-page query summary whose count matches the page.",
+    "Normalized reviews retain recommendation ID, timestamps, recommendation, purchase context and playtime-at-review while removing SteamID, profile, name, avatar and cross-review author linkage.",
+    "The Git verification snapshot stores only review length and SHA-256, not user-generated review text.",
+    "Coverage states cursor-page, corpusComplete=false, off-topic filtering and transient runtime text retention."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 30, "maxCost": 0, "currency": "CNY" }
+}

@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/schemas/feedback/prepare-consented-intake-review-revision-input.schema.json",
+  "title": "Prepare consented feedback intake review revision input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["scope", "submission", "consent", "privacyReview", "retention", "preparedAt", "evidenceRefs"],
+  "properties": {
+    "scope": { "$ref": "#/$defs/scope" },
+    "submission": { "$ref": "#/$defs/submissionInput" },
+    "consent": { "$ref": "#/$defs/consent" },
+    "privacyReview": { "$ref": "#/$defs/privacyReview" },
+    "retention": { "$ref": "#/$defs/retention" },
+    "preparedAt": { "type": "string", "format": "date-time" },
+    "evidenceRefs": { "type": "array", "minItems": 1, "maxItems": 20, "uniqueItems": true, "items": { "$ref": "#/$defs/opaqueRef" } }
+  },
+  "$defs": {
+    "opaqueRef": { "type": "string", "minLength": 1, "maxLength": 500 },
+    "fieldRef": { "type": "string", "pattern": "^[a-z][a-z0-9._-]{0,127}$" },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scopeRevisionRef", "productRef", "productRevisionRef", "decisionRef", "purposeRefs", "expectedFieldRefs", "noticeRevisionRef"],
+      "properties": {
+        "scopeRevisionRef": { "$ref": "#/$defs/opaqueRef" },
+        "productRef": { "$ref": "#/$defs/opaqueRef" },
+        "productRevisionRef": { "$ref": "#/$defs/opaqueRef" },
+        "decisionRef": { "$ref": "#/$defs/opaqueRef" },
+        "purposeRefs": { "type": "array", "minItems": 1, "maxItems": 10, "uniqueItems": true, "items": { "$ref": "#/$defs/opaqueRef" } },
+        "expectedFieldRefs": { "type": "array", "minItems": 1, "maxItems": 50, "uniqueItems": true, "items": { "$ref": "#/$defs/fieldRef" } },
+        "noticeRevisionRef": { "$ref": "#/$defs/opaqueRef" }
+      }
+    },
+    "answerInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fieldRef", "kind", "statement"],
+      "properties": {
+        "fieldRef": { "$ref": "#/$defs/fieldRef" },
+        "kind": { "enum": ["problem", "request", "workaround", "praise", "context", "counterexample"] },
+        "statement": { "type": "string", "minLength": 1, "maxLength": 1200 }
+      }
+    },
+    "submissionInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["submissionRef", "channel", "submittedAt", "purposeRefs", "answers"],
+      "properties": {
+        "submissionRef": { "$ref": "#/$defs/opaqueRef" },
+        "channel": { "enum": ["product-form", "support-form", "interview", "user-study"] },
+        "submittedAt": { "type": "string", "format": "date-time" },
+        "purposeRefs": { "type": "array", "minItems": 1, "maxItems": 10, "uniqueItems": true, "items": { "$ref": "#/$defs/opaqueRef" } },
+        "answers": { "type": "array", "minItems": 1, "maxItems": 50, "items": { "$ref": "#/$defs/answerInput" } }
+      }
+    },
+    "consent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "noticeRevisionRef", "evidenceRef", "capturedAt", "validUntil", "withdrawalMechanismRef", "otherPeopleData"],
+      "properties": {
+        "status": { "enum": ["given", "withdrawn", "expired", "unknown"] },
+        "noticeRevisionRef": { "$ref": "#/$defs/opaqueRef" },
+        "evidenceRef": { "$ref": "#/$defs/opaqueRef" },
+        "capturedAt": { "type": "string", "format": "date-time" },
+        "validUntil": { "type": "string", "format": "date-time" },
+        "withdrawalMechanismRef": { "$ref": "#/$defs/opaqueRef" },
+        "otherPeopleData": { "enum": ["absent", "present", "unknown"] }
+      }
+    },
+    "privacyReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "directIdentifiers", "sensitiveData", "reidentificationProhibited", "evidenceRefs"],
+      "properties": {
+        "status": { "enum": ["passed", "requires-review", "not-performed"] },
+        "directIdentifiers": { "enum": ["absent", "removed", "present", "unknown"] },
+        "sensitiveData": { "enum": ["absent", "removed", "present", "unknown"] },
+        "reidentificationProhibited": { "type": "boolean" },
+        "evidenceRefs": { "type": "array", "minItems": 1, "maxItems": 20, "uniqueItems": true, "items": { "$ref": "#/$defs/opaqueRef" } }
+      }
+    },
+    "retention": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["policyRef", "deleteAfter"],
+      "properties": {
+        "policyRef": { "$ref": "#/$defs/opaqueRef" },
+        "deleteAfter": { "type": "string", "format": "date-time" }
+      }
+    }
+  }
+}

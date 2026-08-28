@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "steam-store-description-review-revision",
+  "sources": [
+    {
+      "id": "steam-store-written-description",
+      "url": "https://partner.steamgames.com/doc/store/page/description?l=english&language=english",
+      "role": "official-description-rules",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "plain-short-description", "includes": "No Formatting" },
+          { "id": "time-sensitive-copy", "includes": "No time based text" },
+          { "id": "short-copy-budget", "includes": "limited to a few hundred characters" },
+          { "id": "no-description-links", "includes": "No links" }
+        ]
+      }
+    },
+    {
+      "id": "steam-store-review-process",
+      "url": "https://partner.steamgames.com/doc/store/review_process?l=english&language=english",
+      "role": "official-review-boundary",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "launch-content-only", "includes": "store page should only contain features and content that will be available at launch" },
+          { "id": "coherent-description", "includes": "description will need to be detailed and coherent" },
+          { "id": "human-review-action", "includes": "Mark as ready for review" }
+        ]
+      }
+    },
+    {
+      "id": "steam-store-localization-languages",
+      "url": "https://partner.steamgames.com/doc/store/localization/languages?l=english&language=english",
+      "role": "official-language-boundary",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "english-fallback", "includes": "English is Steam's fallback language and needs to have content" },
+          { "id": "simplified-chinese-code", "includes": "schinese" },
+          { "id": "traditional-chinese-code", "includes": "tchinese" },
+          { "id": "korean-code", "includes": "koreana" },
+          { "id": "latin-american-spanish-code", "includes": "latam" }
+        ]
+      }
+    }
+  ]
+}

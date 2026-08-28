@@ -1,0 +1,88 @@
+{
+  "schemaVersion": "dsh.probe-report/v1",
+  "id": "versioned-memory-use-evaluation-local-20260827",
+  "capabilityRef": "/capabilities/assistant/evaluate-versioned-memory-use-suite.md",
+  "connectorId": "versioned-memory-use-evaluator",
+  "probeDefinitionRef": "repo:/probes/definitions/versioned-memory-use-evaluation-local.json",
+  "environment": "local",
+  "level": "local",
+  "outcome": "passed",
+  "startedAt": "2026-08-27T07:25:53.936Z",
+  "finishedAt": "2026-08-27T07:25:55.990Z",
+  "expiresAt": "2026-09-26T07:25:55.990Z",
+  "checks": [
+    {
+      "id": "current-memory-evaluation-research-semantics",
+      "status": "passed"
+    },
+    {
+      "id": "ten-case-suite",
+      "status": "passed"
+    },
+    {
+      "id": "deterministic-replay-and-order-independence",
+      "status": "passed"
+    },
+    {
+      "id": "semantic-mutation-binding",
+      "status": "passed"
+    },
+    {
+      "id": "stage-specific-failure-attribution",
+      "status": "passed"
+    },
+    {
+      "id": "scope-leakage-attribution",
+      "status": "passed"
+    },
+    {
+      "id": "unknown-abstention-and-ask",
+      "status": "passed"
+    },
+    {
+      "id": "input-output-schema",
+      "status": "passed"
+    },
+    {
+      "id": "opaque-digest-only-surface",
+      "status": "passed"
+    },
+    {
+      "id": "no-memory-knowledge-or-action-effect",
+      "status": "passed"
+    }
+  ],
+  "evidence": [
+    {
+      "kind": "artifact",
+      "ref": "https://arxiv.org/html/2602.01313",
+      "sha256": "824de51f4cfdd4ecbaf2af5125ba847264995537c2eff437633ac5eb7b024567"
+    },
+    {
+      "kind": "artifact",
+      "ref": "https://arxiv.org/html/2410.10813",
+      "sha256": "da4c3fa52b22496cb9b13b5a4e41b01a44f4542256a0e21a5bef094f18111053"
+    },
+    {
+      "kind": "artifact",
+      "ref": "https://arxiv.org/html/2601.19935",
+      "sha256": "5dcfd1a955e92947d7ebeb42fd1c5c3b86db6be81f3adb2c4d8f179022cee075"
+    },
+    {
+      "kind": "artifact",
+      "ref": "https://arxiv.org/html/2607.26072",
+      "sha256": "6167b7f34956e0ac8f3cab1ac62c883f6f089bc92c1816f20f3dd65fbc10811c"
+    },
+    {
+      "kind": "snapshot",
+      "ref": "repo:/knowledge/verifications/assistant/versioned-memory-use-evaluation/snapshot.json",
+      "sha256": "b6b15cd781d780ef0f86135fdf673a210a8c475326da1efc017c5fbbcfae9b23"
+    }
+  ],
+  "sideEffects": [
+    {
+      "effect": "none",
+      "status": "none"
+    }
+  ]
+}

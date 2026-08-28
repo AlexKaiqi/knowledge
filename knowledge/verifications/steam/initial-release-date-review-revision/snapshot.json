@@ -1,0 +1,126 @@
+{
+  "fixture": "owned-initial-release-date-plan",
+  "schemaVersion": "dsh.steam-initial-release-date-review-revision/v1",
+  "gameRef": "game:clockwork-familiar",
+  "sourceRevisionRef": "source:steam-release-rules-2026-08-27",
+  "storeRevisionRef": "revision:steam-store-page-v7",
+  "buildRevisionRef": "revision:owned-build-v4",
+  "policyRevision": "steam-initial-release-date-2026-08-27",
+  "observedReleaseState": {
+    "observedAt": "2026-08-27T08:00:00.000Z",
+    "releaseState": "not-released",
+    "specifiedReleaseDate": "2026-10-30",
+    "playerFacingDisplay": "coming-soon",
+    "comingSoonPublishedDate": "2026-08-01",
+    "storePresenceReviewState": "ready-for-release",
+    "buildReviewState": "ready-for-release",
+    "evidenceRefs": [
+      "evidence:build-review",
+      "evidence:coming-soon",
+      "evidence:store-review"
+    ]
+  },
+  "target": {
+    "specifiedReleaseDate": "2026-10-30",
+    "playerFacingDisplay": "month-year",
+    "decisionEvidenceRefs": [
+      "decision:launch-plan-v3"
+    ],
+    "display": {
+      "mode": "month-year",
+      "rangeStart": "2026-10-01",
+      "rangeEnd": "2026-10-31",
+      "upcomingListPlacementDate": "2026-10-31",
+      "upcomingListPlacementSemantics": "last-day-of-visible-range"
+    }
+  },
+  "timing": {
+    "observationMaximumAgeHours": 24,
+    "daysUntilTarget": 64,
+    "comingSoonLeadDays": 90,
+    "minimumComingSoonDays": 14,
+    "minimumComingSoonSatisfied": true,
+    "dateChangeRequested": false,
+    "dateChangeWindow": "open"
+  },
+  "manualReview": {
+    "required": true,
+    "checks": [
+      {
+        "id": "official-release-date-semantics-current",
+        "status": "pending"
+      },
+      {
+        "id": "owned-target-and-submitter-authority",
+        "status": "pending"
+      },
+      {
+        "id": "publish-app-changes-permission",
+        "status": "pending"
+      },
+      {
+        "id": "manage-pricing-and-discounts-permission",
+        "status": "pending"
+      },
+      {
+        "id": "store-and-build-review-state-still-current",
+        "status": "pending"
+      },
+      {
+        "id": "player-facing-date-specificity-intentional",
+        "status": "pending"
+      },
+      {
+        "id": "public-communications-consistent",
+        "status": "pending"
+      },
+      {
+        "id": "release-day-support-plan-ready",
+        "status": "pending"
+      },
+      {
+        "id": "wishlist-notification-impact-understood",
+        "status": "pending"
+      }
+    ]
+  },
+  "platformStateAuthenticated": false,
+  "savedToSteamworks": false,
+  "comingSoonChanged": false,
+  "releaseButtonPressed": false,
+  "released": false,
+  "wishlistNotificationsTriggered": false,
+  "executionAuthorized": false,
+  "preparedAt": "2026-08-27T12:00:00.000Z",
+  "status": "ready-for-human-review",
+  "revisionHash": "sha256:86b96ce3f5667ffcf1cd499b26739ead74a875a64316b1e8d78b3e12a05d8651",
+  "preflight": {
+    "checks": [
+      {
+        "id": "unreleased-state",
+        "status": "passed"
+      },
+      {
+        "id": "fresh-observed-state",
+        "status": "passed"
+      },
+      {
+        "id": "future-specified-date",
+        "status": "passed"
+      },
+      {
+        "id": "coming-soon-minimum-window",
+        "status": "passed"
+      },
+      {
+        "id": "store-and-build-ready-for-release",
+        "status": "passed"
+      },
+      {
+        "id": "specified-date-change-window",
+        "status": "passed"
+      }
+    ],
+    "blockers": []
+  }
+}

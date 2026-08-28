@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "durable-memory-change-review-revision",
+  "sources": [
+    {
+      "id": "personal-knowledge-service-pinned",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-personal-knowledge-base/c8e181adcf3904f47fd33b85ffc1e97126cbbd66/dsh/service.js",
+      "role": "production-proposal-conflict-apply-receipt-semantics",
+      "acceptedDocumentDigest": "b849ae068d99070181b14f80eb2b0385a0f996253b8717d2331682d60a0e4bbf",
+      "observation": { "mode": "static-text-semantic", "assertions": [
+        { "id": "base-hash", "includes": "baseHash: existsSync(target.full) ? hash(readFileSync(target.full, 'utf8')) : null" },
+        { "id": "explicit-confirmation", "includes": "confirmed=true is required to apply a knowledge change" },
+        { "id": "conflict", "includes": "knowledge changed after proposal creation; create a new proposal" },
+        { "id": "receipt", "includes": "const receipt = { ok: true, operation: proposal.operation, path: proposal.path, commit, recovered }" }
+      ] }
+    },
+    {
+      "id": "personal-knowledge-service-main",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-personal-knowledge-base/main/dsh/service.js",
+      "role": "production-service-change-surface",
+      "acceptedDocumentDigest": "b849ae068d99070181b14f80eb2b0385a0f996253b8717d2331682d60a0e4bbf",
+      "observation": { "mode": "static-text-semantic", "assertions": [
+        { "id": "durable-path", "includes": "path must be USER.md or a Markdown file directly inside knowledge/" },
+        { "id": "recovered", "includes": "const recovered = currentHash !== proposal.baseHash" }
+      ] }
+    },
+    {
+      "id": "personal-knowledge-layout-pinned",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-personal-knowledge-base/c8e181adcf3904f47fd33b85ffc1e97126cbbd66/spec/repository-layout.json",
+      "role": "production-durable-flow-contract",
+      "acceptedDocumentDigest": "5d2a81bda32184a2114c4ad525ce92c62302d5cf31074cc04ea0801bb2124bde",
+      "observation": { "mode": "static-text-semantic", "assertions": [
+        { "id": "proposal-flow", "includes": "\"flow\": [\"proposal\", \"explicit-confirmation\", \"atomic-write\", \"git-commit\", \"receipt\"]" },
+        { "id": "agent-cannot-confirm", "includes": "\"backgroundAgentMayConfirm\": false" }
+      ] }
+    },
+    {
+      "id": "personal-knowledge-layout-main",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-personal-knowledge-base/main/spec/repository-layout.json",
+      "role": "production-layout-change-surface",
+      "acceptedDocumentDigest": "5d2a81bda32184a2114c4ad525ce92c62302d5cf31074cc04ea0801bb2124bde",
+      "observation": { "mode": "static-text-semantic", "assertions": [
+        { "id": "explicit-confirmation", "includes": "explicit-confirmation" },
+        { "id": "git-commit", "includes": "git-commit" }
+      ] }
+    }
+  ]
+}

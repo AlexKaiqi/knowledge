@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "steam-store-tag-review-revision-local",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/steam/prepare-store-tag-review-revision.md",
+  "connectorId": "steam-store-tag-revision",
+  "environment": "local",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "verify-official-tag-rules", "operation": "verifyOfficialSteamTagSemantics" },
+    { "id": "prepare-tag-revision", "operation": "prepareSteamStoreTagReviewRevision", "inputRef": "repo:/probes/fixtures/game-build/steam-store-tags.json" },
+    { "id": "verify-mutation-binding", "operation": "verifyTagRevisionMutationBinding" },
+    { "id": "verify-blockers", "operation": "verifyTagCountAndUniquenessBlockers" },
+    { "id": "validate-public-schema", "operation": "validateInputAndOutputSchema" },
+    { "id": "verify-no-platform-effect", "operation": "verifyNoSteamworksEffect" }
+  ],
+  "assertions": [
+    "Current official documentation requires at least five tags, recommends up to twenty, and says order affects visibility and the top five should clearly describe the game.",
+    "Official review guidance requires selected store features to be implemented in the current build.",
+    "A valid ordered fixture produces a stable revision across preparation times.",
+    "Changing order, identity, name, launch evidence, audience evidence or catalog revision changes the revision hash.",
+    "Too few, too many and duplicate tags are blocked.",
+    "Platform availability, semantic relevance, launch consistency and owned-target authority remain pending human review.",
+    "The result cannot claim Steamworks save, publication, review submission, release or execution authorization."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 45, "maxCost": 0, "currency": "CNY" }
+}

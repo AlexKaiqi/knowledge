@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "dsh.collector-definition/v1",
+  "id": "feedback-intake-local-store-maintainer",
+  "version": "1.0.0",
+  "scope": {
+    "knowledgeGlobs": [
+      "knowledge/tools/feedback-intake-local-store.md",
+      "knowledge/concepts/feedback/feedback-intake-storage-receipt.md",
+      "knowledge/capabilities/feedback/persist-consented-intake-revision.md",
+      "knowledge/schemas/feedback/persist-consented-intake-revision-*.schema.json",
+      "knowledge/verifications/feedback/intake-local-storage/*.json"
+    ],
+    "connectorIds": ["feedback-intake-local-store"],
+    "capabilityRefs": ["/capabilities/feedback/persist-consented-intake-revision.md"]
+  },
+  "triggers": [
+    { "kind": "schedule", "schedule": "35 9 * * 3" },
+    { "kind": "source-change" },
+    { "kind": "schema-change" },
+    { "kind": "connector-change" },
+    { "kind": "failed-execution" },
+    { "kind": "manual" }
+  ],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "collectors/feedback-intake-local-store-maintainer/src/index.mjs"
+  },
+  "outputs": ["knowledge-proposal", "connector-change-proposal", "verification-report"],
+  "writePolicy": {
+    "mode": "proposal-only",
+    "requiresApprovalFor": ["knowledge", "connector", "live-probe"]
+  },
+  "probePolicy": {
+    "allowedEnvironments": ["local", "production-public"],
+    "identityPoolRefs": [],
+    "maximumEffect": "local-write"
+  },
+  "budgets": { "maxRunsPerDay": 2, "maxCostPerDay": 0, "currency": "CNY" }
+}

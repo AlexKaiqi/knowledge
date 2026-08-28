@@ -1,0 +1,162 @@
+{
+  "fixture": "generated-valid-png-store-asset-set",
+  "schemaVersion": "dsh.steam-store-asset-review-revision/v1",
+  "gameRef": "game:probe-demo",
+  "sourceRevisionRef": "fixture:steam-store-assets-v1",
+  "rightsBasisRefs": [
+    "fixture:generated-owned-assets"
+  ],
+  "manualReview": {
+    "required": true,
+    "checks": [
+      {
+        "id": "capsule-readable-product-name",
+        "status": "pending"
+      },
+      {
+        "id": "capsule-base-content-only",
+        "status": "pending"
+      },
+      {
+        "id": "capsule-pg13-artwork",
+        "status": "pending"
+      },
+      {
+        "id": "screenshots-gameplay-only",
+        "status": "pending"
+      },
+      {
+        "id": "screenshots-age-suitability-marking",
+        "status": "pending"
+      },
+      {
+        "id": "rights-and-launch-content",
+        "status": "pending"
+      }
+    ]
+  },
+  "uploaded": false,
+  "markedReadyForReview": false,
+  "released": false,
+  "executionAuthorized": false,
+  "preparedAt": "2026-08-27T04:00:00.000Z",
+  "status": "ready-for-human-review",
+  "revisionHash": "sha256:c3593120d4ccd7b552d7dbe0e6fa6c60df878027dd5ed386711858f8f18513b6",
+  "assets": [
+    {
+      "kind": "header-capsule",
+      "path": "header.png",
+      "format": "png",
+      "width": 920,
+      "height": 430,
+      "sizeBytes": 463,
+      "sha256": "sha256:5806e25e3ff2c6caea368f7a1e2f92638f04f714398c42dfce4440119e1636f7"
+    },
+    {
+      "kind": "main-capsule",
+      "path": "main.png",
+      "format": "png",
+      "width": 1232,
+      "height": 706,
+      "sizeBytes": 923,
+      "sha256": "sha256:2598cf15af3d0652d146aae96428023f6e1e7ad7d125216d44f40334395ccf0c"
+    },
+    {
+      "kind": "screenshot",
+      "path": "shot-1.png",
+      "format": "png",
+      "width": 1920,
+      "height": 1080,
+      "sizeBytes": 4269,
+      "sha256": "sha256:80563558df1cf2a873d1d1e22554bbe2d31803821a52ccc69b4765da5c826720"
+    },
+    {
+      "kind": "screenshot",
+      "path": "shot-2.png",
+      "format": "png",
+      "width": 1920,
+      "height": 1080,
+      "sizeBytes": 4269,
+      "sha256": "sha256:66eab5bd373fa78cf0afc95e5e93f51c89ccde145c9ad879060522eaf33f7a45"
+    },
+    {
+      "kind": "screenshot",
+      "path": "shot-3.png",
+      "format": "png",
+      "width": 1920,
+      "height": 1080,
+      "sizeBytes": 4269,
+      "sha256": "sha256:771f23667b8bef28196167de66a77b4bf7bf069c0f50cdeebc58a1ea3ab4192c"
+    },
+    {
+      "kind": "screenshot",
+      "path": "shot-4.png",
+      "format": "png",
+      "width": 1920,
+      "height": 1080,
+      "sizeBytes": 4269,
+      "sha256": "sha256:44619d749292bb8b4aec667c71eb230d3a74f3c3b3107f2f795aae95fd865270"
+    },
+    {
+      "kind": "screenshot",
+      "path": "shot-5.png",
+      "format": "png",
+      "width": 1920,
+      "height": 1080,
+      "sizeBytes": 4269,
+      "sha256": "sha256:e5ce83d0dae586fecf258e2075b81a21ccc1f60dd8562470bdfc46a7e7a11279"
+    },
+    {
+      "kind": "small-capsule",
+      "path": "small.png",
+      "format": "png",
+      "width": 462,
+      "height": 174,
+      "sizeBytes": 158,
+      "sha256": "sha256:b4689fbc8adec31ed6e013fa1a9a55699de9b7111392b6160b37acc431277c88"
+    },
+    {
+      "kind": "vertical-capsule",
+      "path": "vertical.png",
+      "format": "png",
+      "width": 748,
+      "height": 896,
+      "sizeBytes": 730,
+      "sha256": "sha256:f0871a9b26b13af13d020f14350fb886733b9f37be864a53cac1fab915558589"
+    }
+  ],
+  "summary": {
+    "assetCount": 9,
+    "screenshotCount": 5,
+    "totalBytes": 23619
+  },
+  "preflight": {
+    "checks": [
+      {
+        "id": "required-capsule-set",
+        "status": "passed"
+      },
+      {
+        "id": "minimum-screenshot-count",
+        "status": "passed"
+      },
+      {
+        "id": "screenshot-byte-uniqueness",
+        "status": "passed"
+      },
+      {
+        "id": "image-header-and-dimensions",
+        "status": "passed"
+      },
+      {
+        "id": "workspace-boundary",
+        "status": "passed"
+      },
+      {
+        "id": "asset-budgets",
+        "status": "passed"
+      }
+    ],
+    "blockers": []
+  }
+}

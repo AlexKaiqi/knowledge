@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "distribution-impact-observation-evaluation",
+  "sources": [
+    {
+      "id": "steam-utm-analytics",
+      "url": "https://partner.steamgames.com/doc/marketing/utm_analytics",
+      "role": "native-metric-finalization-and-tracking",
+      "observation": { "mode": "static-html-semantic", "assertions": [
+        { "id": "native-visits", "includes": "Total Visits: The total number of visits to your product page that had a UTM code attached to the URL." },
+        { "id": "finalization", "includes": "Conversions are finalized 4 days after the visit." },
+        { "id": "tracking-gap", "includes": "Some users will not be tracked based on their browser configuration or cookie preferences" }
+      ] }
+    },
+    {
+      "id": "apple-campaign-links",
+      "url": "https://developer.apple.com/help/app-store-connect-analytics/acquisition/campaign-links",
+      "role": "native-attribution-and-suppression",
+      "observation": { "mode": "static-html-semantic", "assertions": [
+        { "id": "native-funnel", "includes": "Analytics captures the impressions, product page views, downloads, usage, sales, and subscriptions tied to each campaign token." },
+        { "id": "threshold", "includes": "minimum threshold of 5" },
+        { "id": "last-click", "includes": "only the most recent link receives credit for subsequent sales" }
+      ] }
+    },
+    {
+      "id": "apple-analytics-reports",
+      "url": "https://developer.apple.com/help/app-store-connect-analytics/overview/analytics-reports-api",
+      "role": "report-finalization",
+      "observation": { "mode": "static-html-semantic", "assertions": [
+        { "id": "initial-delay", "includes": "first report approximately 24-48 hours later" },
+        { "id": "completeness", "includes": "Data for a given day is considered complete two days after the reporting date" }
+      ] }
+    },
+    {
+      "id": "google-play-store-performance",
+      "url": "https://support.google.com/googleplay/android-developer/answer/9859173?hl=en",
+      "role": "native-definition-drift-and-coverage",
+      "observation": { "mode": "static-html-semantic", "assertions": [
+        { "id": "definition-change", "includes": "From July 2026, Google Play updated store listing performance reports to focus on user intent (clicks) rather than successful outcomes (acquisitions)." },
+        { "id": "unattributed", "includes": "Not attributed" },
+        { "id": "surface-exclusion", "includes": "Store listing reports do not include visitors or acquisitions from other surfaces on Google Play" }
+      ] }
+    }
+  ]
+}

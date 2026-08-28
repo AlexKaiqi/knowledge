@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "dsh.collector-definition/v1",
+  "id": "feedback-theme-synthesis-maintainer",
+  "version": "1.0.0",
+  "scope": {
+    "knowledgeGlobs": ["knowledge/tools/feedback-theme-synthesis.md", "knowledge/concepts/feedback/feedback-theme-evidence.md", "knowledge/capabilities/feedback/synthesize-feedback-theme-evidence.md", "knowledge/schemas/feedback/synthesize-*.schema.json", "knowledge/verifications/feedback/theme-synthesis/*.json"],
+    "connectorIds": ["feedback-theme-synthesis-agent"],
+    "capabilityRefs": ["/capabilities/feedback/synthesize-feedback-theme-evidence.md"]
+  },
+  "triggers": [{ "kind": "schedule", "schedule": "0 11 * * 3" }, { "kind": "source-change" }, { "kind": "schema-change" }, { "kind": "connector-change" }, { "kind": "failed-execution" }, { "kind": "manual" }],
+  "execution": { "kind": "deterministic", "runtime": "node >=22.19", "entrypoint": "collectors/feedback-theme-synthesis-maintainer/src/index.mjs" },
+  "outputs": ["knowledge-proposal", "connector-change-proposal", "verification-report"],
+  "writePolicy": { "mode": "proposal-only", "requiresApprovalFor": ["knowledge", "connector", "live-probe"] },
+  "probePolicy": { "allowedEnvironments": ["local", "production-public"], "identityPoolRefs": [], "maximumEffect": "none" },
+  "budgets": { "maxRunsPerDay": 2, "maxCostPerDay": 0, "currency": "CNY" }
+}

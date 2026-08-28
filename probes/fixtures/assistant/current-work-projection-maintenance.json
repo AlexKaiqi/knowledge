@@ -1,0 +1,6 @@
+{
+  "currentSessionRef": "session:current-maintenance-fixture",
+  "workspaceRef": "workspace:primary",
+  "instruction": "Preserve the explicit current goal, progress, blocker and next step; propose only the accepted durable product boundary.",
+  "acceptUnconfirmedKnowledgeProposals": true
+}

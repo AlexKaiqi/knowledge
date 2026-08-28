@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "steam-system-requirements-review-revision-local",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/steam/prepare-system-requirements-review-revision.md",
+  "connectorId": "steam-system-requirements-revision",
+  "environment": "local",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "verify-official-platform-rules", "operation": "verifyOfficialSteamPlatformAndReviewSemantics" },
+    { "id": "prepare-system-requirements-revision", "operation": "prepareSteamSystemRequirementsReviewRevision", "inputRef": "repo:/probes/fixtures/steam/system-requirements-owned-game.json" },
+    { "id": "verify-mutation-binding", "operation": "verifySystemRequirementsMutationBinding" },
+    { "id": "verify-blockers", "operation": "verifySystemRequirementsBlockers" },
+    { "id": "validate-public-schema", "operation": "validateInputAndOutputSchema" },
+    { "id": "verify-no-platform-effect", "operation": "verifyNoSteamworksEffect" }
+  ],
+  "assertions": [
+    "Official guidance links every listed OS to build, depot, package, store checkbox, corresponding requirements, preview and release steps.",
+    "Official review requires the build to launch on every supported OS listed on the store page.",
+    "A three-platform fixture produces a stable revision independent of input ordering and preparation time.",
+    "Changing requirement text or evidence, build, depot, package or launch-test references changes the revision hash.",
+    "Missing minimum core fields, partial recommended tiers and DirectX on non-Windows platforms are blocked.",
+    "Configuration truth and platform consistency remain pending human review.",
+    "The result cannot claim Steamworks save, preview, publication, review submission, release or execution authorization."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 45, "maxCost": 0, "currency": "CNY" }
+}

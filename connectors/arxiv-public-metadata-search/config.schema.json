@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/arxiv-public-metadata-search-config.schema.json",
+  "title": "ArxivPublicMetadataSearchConnectorConfig",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "timeoutMs": { "type": "integer", "minimum": 1000, "maximum": 60000, "default": 30000 },
+    "maxResponseBytes": { "type": "integer", "minimum": 65536, "maximum": 2097152, "default": 1048576 },
+    "minimumIntervalMs": { "type": "integer", "minimum": 3000, "maximum": 60000, "default": 3000 },
+    "userAgent": { "type": "string", "minLength": 10, "maxLength": 256, "default": "dsh-knowledge-catalog/0.1 (https://github.com/AlexKaiqi/knowledge)" }
+  }
+}

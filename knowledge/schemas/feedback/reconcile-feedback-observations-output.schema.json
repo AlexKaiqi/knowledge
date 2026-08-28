@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/schemas/feedback/reconcile-feedback-observations-output.schema.json",
+  "title": "Feedback observation reconciliation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "sourceRef", "targetRef", "priorObservedAt", "currentObservedAt", "changes", "missingUnresolved", "counts", "checkpointRecommendation", "deletionInferencePolicy", "executionAuthorized", "resultDigest"],
+  "properties": {
+    "schemaVersion": { "const": "dsh.feedback-observation-reconciliation/v1" },
+    "sourceRef": { "$ref": "#/$defs/opaqueRef" },
+    "targetRef": { "$ref": "#/$defs/opaqueRef" },
+    "priorObservedAt": { "type": "string", "format": "date-time" },
+    "currentObservedAt": { "type": "string", "format": "date-time" },
+    "changes": {
+      "type": "array",
+      "maxItems": 500,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["itemRef", "prior", "current", "mutations"],
+        "properties": {
+          "itemRef": { "$ref": "#/$defs/itemRef" },
+          "prior": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/state" }] },
+          "current": { "$ref": "#/$defs/state" },
+          "mutations": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["new", "edited", "lifecycle-observed", "resurfaced", "deleted", "hidden", "reply-state-changed", "unchanged"] } }
+        }
+      }
+    },
+    "missingUnresolved": {
+      "type": "array",
+      "maxItems": 500,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["itemRef", "prior", "reason", "deletionInferred"],
+        "properties": {
+          "itemRef": { "$ref": "#/$defs/itemRef" },
+          "prior": { "$ref": "#/$defs/state" },
+          "reason": { "const": "not-observed-current-window" },
+          "deletionInferred": { "const": false }
+        }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["new", "edited", "lifecycleObserved", "resurfaced", "deleted", "hidden", "replyStateChanged", "unchanged", "missingUnresolved"],
+      "properties": {
+        "new": { "type": "integer", "minimum": 0 },
+        "edited": { "type": "integer", "minimum": 0 },
+        "lifecycleObserved": { "type": "integer", "minimum": 0 },
+        "resurfaced": { "type": "integer", "minimum": 0 },
+        "deleted": { "type": "integer", "minimum": 0 },
+        "hidden": { "type": "integer", "minimum": 0 },
+        "replyStateChanged": { "type": "integer", "minimum": 0 },
+        "unchanged": { "type": "integer", "minimum": 0 },
+        "missingUnresolved": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "checkpointRecommendation": {
+      "oneOf": [
+        {
+          "type": "object", "additionalProperties": false, "required": ["action", "checkpointRef", "reason"],
+          "properties": { "action": { "const": "propose-advance" }, "checkpointRef": { "$ref": "#/$defs/opaqueRef" }, "reason": { "const": "complete-current-window" } }
+        },
+        {
+          "type": "object", "additionalProperties": false, "required": ["action", "reason"],
+          "properties": { "action": { "const": "hold" }, "reason": { "enum": ["partial-current-window", "checkpoint-not-observed"] } }
+        }
+      ]
+    },
+    "deletionInferencePolicy": { "const": "explicit-lifecycle-only" },
+    "executionAuthorized": { "const": false },
+    "resultDigest": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+  },
+  "$defs": {
+    "opaqueRef": { "type": "string", "minLength": 1, "maxLength": 500 },
+    "itemRef": { "type": "string", "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:/-]{0,255}$" },
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lifecycle", "replyState"],
+      "properties": {
+        "lifecycle": { "enum": ["visible", "deleted", "hidden"] },
+        "replyState": { "enum": ["unanswered", "replied", "unknown"] },
+        "contentDigest": { "$ref": "#/$defs/digest" }
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "dataforseo-google-organic-serp-live",
+  "version": "0.1.0",
+  "capabilityRef": "/capabilities/research/read-web-result-page.md",
+  "connectorId": "dataforseo-google-organic-serp",
+  "environment": "production-public",
+  "identity": { "required": true, "poolRef": "identity-pool:dataforseo-provider-probes" },
+  "effect": "financial",
+  "steps": [
+    { "id": "read-fixed-query-pack", "operation": "readGoogleOrganicResultPage", "inputRef": "repo:/probes/fixtures/dataforseo-google-organic-serp-probe-pack.json" },
+    { "id": "reconcile-response-cost", "operation": "sumReportedTaskCost" },
+    { "id": "write-staging-report", "operation": "writeCandidateProbeReport" }
+  ],
+  "assertions": [
+    "Three fixed broad queries return one bounded current Google Organic page each for location code 2840, language en and desktop without retry.",
+    "Each result contains at most ten organic entries with rank, title, safe URL, domain, optional snippet, Google verification URL and provider observation time.",
+    "Query, location, language and device echo the request; mismatches fail closed rather than returning another task's result.",
+    "The summed response-reported charge is at most USD 0.01 and can be reconciled with the provider account ledger before admission.",
+    "The output declares complete=false, removes result-count estimates and leaks no provider route, task ID, credentials or internal trace.",
+    "Passing output remains in ignored staging until commercial-use terms, identity metadata, public Schema and knowledge admission receive human approval."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 60, "maxCost": 0.01, "currency": "USD" }
+}

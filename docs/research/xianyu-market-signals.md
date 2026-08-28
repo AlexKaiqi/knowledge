@@ -45,12 +45,13 @@
 | 路线 | 已确认事实 | 是否可承担候选切片 | 结论 |
 | --- | --- | --- | --- |
 | 闲鱼官方 Web 搜索/浏览 | 当前用户协议声明，未登录用户可以使用浏览、搜索等基础服务；`goofish.com/search` 当前匿名请求返回 200 页面 | 可能；但“用户可浏览”不等于授权自动化采集，且结果由浏览器渲染、可能个性化或触发登录/风控 | 首选为可见浏览器、小样本、低频、只读 research route；完成条款与 live 语义 probe 前不提升 |
+| Apify `gantianca/xianyu-goofish-search` | 无闲鱼登录；keyword/page/sort/price；`$0.01/search` 加 `$1/1K` results；住宅代理轮换 | 技术可达，但闲鱼法律声明要求自动获取内容事先许可，供应商付费不等于目标平台授权 | 暂停；不创建 Connector、不采购、不运行，除非先取得可核验的书面许可 |
 | 淘宝开放平台“闲鱼电商 SaaS” | 官方目录主要覆盖授权卖家/ISV 的商品、订单、评价、发布等经营能力 | 否；目录没有证明存在面向第三方公开市场研究的商品搜索 API | 只作为官方能力边界来源，不误用为公共搜索路线 |
 | `fancyboi999/goofish-cli` | Apache-2.0；审阅 HEAD `771382c2ea3fd281b78c015bf2bf8ed68cc873ff`；Playwright/System Chrome 提供商品搜索和详情，也同时暴露 Cookie、私信和多项写操作 | 原语可用，权限面过宽 | research route；未来 adapter 必须只允许 search/view，禁止 auth 导出、IM、发布、删除、擦亮和自动回复 |
 | `partme-ai/opencli` 闲鱼 adapter | Apache-2.0；审阅 HEAD `f802942c488368f2d65c16e638d7e32a74d2863b`；浏览器路线支持关键词、价格/地区过滤和详情，也支持 inbox、message、reply、publish | 原语可用，权限面过宽 | 独立 research route；只审计搜索/详情代码和浏览器权限，不安装、不启用其它命令 |
 | 其它爬虫、签名 API 与监控项目 | 已发现 Playwright 拦截、内部 API、Cookie、并发分页、自动回复和价格监控等多种实现 | 暂不接受 | 只进入后续发现池；高并发、验证码绕过、代理轮换、长期存卖家身份或缺许可证的实现直接排除 |
 
-开源许可证只说明代码许可，不代表闲鱼授权浏览器自动化或内部 API。任何真实 route 都必须继续遵守平台条款、数据最小化、限频和账号所有权边界。
+开源许可证或商业供应商条款只说明代码/服务关系，不代表闲鱼授权浏览器自动化、住宅代理或内部 API。任何真实 route 都必须继续遵守目标平台条款、数据最小化、限频和账号所有权边界。当前证据化调研结论是：正常用户界面内的一页人工观察仍可提 proposal，自动关键词路线在书面授权前暂停。
 
 ## 4. 最小 live probe 提案
 
@@ -80,7 +81,8 @@ Collector 不自动安装项目、不导入 Cookie、不登录、不翻页采集
 ## 6. 当前证据
 
 - 闲鱼社区用户服务协议：<https://terms.alicdn.com/legal-agreement/terms/suit_bu1_other/suit_bu1_other201708081618_51146.html>
+- 闲鱼社区法律声明：<https://terms.alicdn.com/legal-agreement/terms/suit_bu1_taobao/suit_bu1_taobao202103061039_91765.html>
+- Apify `gantianca/xianyu-goofish-search`：<https://apify.com/gantianca/xianyu-goofish-search>
 - 淘宝开放平台闲鱼电商 SaaS API 目录：<https://developer.alibaba.com/docs/api.htm?apiId=73221&source=search>
 - `fancyboi999/goofish-cli`：<https://github.com/fancyboi999/goofish-cli>
 - `partme-ai/opencli` 闲鱼 adapter：<https://github.com/partme-ai/opencli/blob/main/docs/adapters/browser/xianyu.md>
-

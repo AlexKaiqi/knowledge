@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/schemas/voice/project-duplex-turn-events-to-actions-output.schema.json",
+  "title": "Duplex turn action plan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "decisions", "observations", "finalState", "coverage", "resultDigest"],
+  "properties": {
+    "schemaVersion": { "const": "dsh.duplex-turn-action-plan/v1" },
+    "decisions": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 200,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["kind", "atMs", "actions", "state"],
+        "properties": {
+          "kind": { "enum": ["assistant-output", "speech-candidate", "speech-confirmation", "user-turn"] },
+          "atMs": { "type": "integer", "minimum": 0 },
+          "actions": { "type": "array", "maxItems": 2, "items": { "$ref": "#/$defs/action" } },
+          "state": { "$ref": "#/$defs/state" }
+        }
+      }
+    },
+    "observations": {
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["candidateId", "outcome", "latencyMs", "outputCancelled"],
+        "properties": {
+          "candidateId": { "type": "string", "pattern": "^[a-zA-Z0-9._:-]{1,128}$" },
+          "outcome": { "enum": ["released", "backchannel", "take-turn"] },
+          "latencyMs": { "type": "integer", "minimum": 0 },
+          "outputCancelled": { "type": "boolean" }
+        }
+      }
+    },
+    "finalState": { "$ref": "#/$defs/state" },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["eventsProcessed", "candidatesObserved", "reversibleReleases", "backchannels", "destructiveCancels", "rawAudioAccepted", "transcriptAccepted"],
+      "properties": {
+        "eventsProcessed": { "type": "integer", "minimum": 1, "maximum": 200 },
+        "candidatesObserved": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "reversibleReleases": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "backchannels": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "destructiveCancels": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "rawAudioAccepted": { "const": false },
+        "transcriptAccepted": { "const": false }
+      }
+    },
+    "resultDigest": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+  },
+  "$defs": {
+    "action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "reason"],
+      "properties": {
+        "type": { "enum": ["duck-output", "restore-output", "cancel-output", "open-user-turn", "record-backchannel", "commit-user-turn"] },
+        "reason": { "enum": ["speech-candidate-pending", "speech-candidate-released", "backchannel-does-not-take-turn", "confirmed-backchannel", "confirmed-turn-take", "user-turn-ended"] },
+        "candidateId": { "type": "string", "pattern": "^[a-zA-Z0-9._:-]{1,128}$" }
+      }
+    },
+    "state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["output", "userTurn", "activeCandidateId"],
+      "properties": {
+        "output": { "enum": ["inactive", "playing", "ducked"] },
+        "userTurn": { "enum": ["closed", "open"] },
+        "activeCandidateId": {
+          "oneOf": [
+            { "type": "null" },
+            { "type": "string", "pattern": "^[a-zA-Z0-9._:-]{1,128}$" }
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "xiaohongshu-android-observation",
+  "sources": [
+    {
+      "id": "mobilerun-portal-local-api",
+      "url": "https://raw.githubusercontent.com/droidrun/mobilerun-portal/d4cb7d6657385488239812e776df584f890e32fd/docs/local-api.md",
+      "role": "device-protocol-contract",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "bearer-auth", "includes": "Authorization: Bearer YOUR_TOKEN" },
+          { "id": "structured-tree", "includes": "/a11y_tree" },
+          { "id": "tap-action", "includes": "`tap` | `x`, `y`" },
+          { "id": "keyboard-action", "includes": "`keyboard/input` | `base64_text`, `clear`" },
+          { "id": "http-post-actions", "includes": "POST requests map to the same method names as WebSocket" }
+        ]
+      }
+    },
+    {
+      "id": "mobilerun-portal-license",
+      "url": "https://raw.githubusercontent.com/droidrun/mobilerun-portal/d4cb7d6657385488239812e776df584f890e32fd/LICENSE",
+      "role": "device-runtime-license",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "agpl-family", "includes": "GNU Affero General Public License" },
+          { "id": "agpl-version", "includes": "Version 3, 19 November 2007" }
+        ]
+      }
+    },
+    {
+      "id": "appium-mcp-tool-surface",
+      "url": "https://raw.githubusercontent.com/appium/appium-mcp/3ae19c07e63e4bc2ca7763bb7ed2ba6815bd9286/README.md",
+      "role": "secondary-runtime-contract",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "page-source", "includes": "appium_get_page_source" },
+          { "id": "native-webview-context", "includes": "NATIVE*APP and WEBVIEW" },
+          { "id": "no-ui-mode", "includes": "NO_UI Mode" },
+          { "id": "apache-license", "includes": "licensed under the Apache-2.0" }
+        ]
+      }
+    }
+  ]
+}

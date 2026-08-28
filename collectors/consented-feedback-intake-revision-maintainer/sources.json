@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "consented-feedback-intake-review-revision",
+  "sources": [
+    {
+      "id": "w3c-privacy-principles",
+      "url": "https://www.w3.org/TR/privacy-principles/",
+      "role": "purpose-consent-withdrawal-deidentification-boundary",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "purpose-limitation", "includes": "Principle 2.10.1" },
+          { "id": "withdrawal-parity", "includes": "Principle 2.12.3" },
+          { "id": "controlled-deidentification", "includes": "controlled de-identified data" }
+        ]
+      }
+    },
+    {
+      "id": "w3c-data-privacy-vocabulary",
+      "url": "https://www.w3.org/community/reports/dpvcg/CG-FINAL-dpv-20221205/",
+      "role": "consent-status-and-duration-vocabulary",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "consent-status", "includes": "Consent Status" },
+          { "id": "consent-withdrawn", "includes": "ConsentWithdrawn" },
+          { "id": "until-time-duration", "includes": "UntilTimeDuration" }
+        ]
+      }
+    },
+    {
+      "id": "owasp-logging-data-exclusion",
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html",
+      "role": "sensitive-data-recording-boundary",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "sensitive-personal-data", "includes": "Sensitive personal data" },
+          { "id": "expired-consent", "includes": "consent to collect has expired" },
+          { "id": "input-validation", "includes": "Perform input validation on event data" }
+        ]
+      }
+    }
+  ]
+}

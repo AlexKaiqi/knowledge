@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "bounded-work-context-local",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/assistant/read-bounded-work-context.md",
+  "connectorId": "bounded-work-context-projection",
+  "environment": "local",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "verify-production-projection-semantics", "operation": "observePinnedPersonalKnowledgeSources" },
+    { "id": "exercise-production-query-time-projection", "operation": "runIsolatedPersonalKnowledgeProjection", "inputRef": "repo:/probes/fixtures/assistant/bounded-work-context.json" },
+    { "id": "normalize-public-result", "operation": "readBoundedWorkContext" },
+    { "id": "exercise-prior-session-disable-and-budget", "operation": "verifyProjectionBounds" },
+    { "id": "validate-public-schema", "operation": "validateOutputSchema" }
+  ],
+  "assertions": [
+    "The pinned production repository keeps Session history, current work, durable knowledge and query-time model context as separate boundaries.",
+    "A real production Personal Knowledge Base projects current work, one relevant prior Session excerpt and matching durable Markdown from an isolated repository.",
+    "The current Session is excluded from prior-session source references, and disabling prior Sessions returns no session:* source.",
+    "The public projection stays within the caller character budget and contains only logical .pkb/current.md, session:* or knowledge/*.md references.",
+    "Real cwd, Git revision, provider fields and raw transcript are not exposed or retained.",
+    "Reading context does not mutate Session history or durable knowledge and never authorizes execution."
+  ],
+  "cleanup": ["removeTemporaryRepository"],
+  "budget": { "timeoutSeconds": 60, "maxCost": 0, "currency": "CNY" }
+}

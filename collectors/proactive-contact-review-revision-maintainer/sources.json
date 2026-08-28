@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "proactive-contact-review-revision",
+  "sources": [
+    {
+      "id": "mira-companion-policy-pinned",
+      "url": "https://raw.githubusercontent.com/Vexillon-ai/MIRA/91e128431c93d6efab5bcb450aa50b42df8f8a01/src/companion/policy.rs",
+      "role": "observed-proactive-policy-semantics-agpl-not-adopted",
+      "acceptedDocumentDigest": "26f860e0c0f259eecf34e4c2c8bdb6aaec4f08792a2aab04be7ebfb1c42e48d9",
+      "observation": { "mode": "static-text-semantic", "assertions": [
+        { "id": "recent-activity", "includes": "reason: \"recent_user_activity\"" }, { "id": "minimum-gap", "includes": "reason: \"min_gap\"" },
+        { "id": "daily-cap", "includes": "reason: \"daily_cap\"" }, { "id": "unanswered-cap", "includes": "reason: \"unanswered_cap\"" },
+        { "id": "quiet-hours", "includes": "reason: \"quiet_hours\"" }, { "id": "due-gate", "includes": "reason: \"not_due\"" }
+      ] }
+    },
+    {
+      "id": "mira-companion-policy-main",
+      "url": "https://raw.githubusercontent.com/Vexillon-ai/MIRA/main/src/companion/policy.rs",
+      "role": "moving-proactive-policy-change-surface",
+      "acceptedDocumentDigest": "26f860e0c0f259eecf34e4c2c8bdb6aaec4f08792a2aab04be7ebfb1c42e48d9",
+      "observation": { "mode": "static-text-semantic", "assertions": [
+        { "id": "pure-evaluate", "includes": "pub fn evaluate(inputs: &PolicyInputs) -> Decision" }, { "id": "quiet-window-wrap", "includes": "t >= start || t < end" }
+      ] }
+    },
+    {
+      "id": "vellum-notification-checks-pinned",
+      "url": "https://raw.githubusercontent.com/vellum-ai/vellum-assistant/bd79e0797681bfb2cf76f50d6f0bc2ad84e995e8/assistant/src/notifications/deterministic-checks.ts",
+      "role": "observed-deterministic-notification-dedupe-semantics",
+      "acceptedDocumentDigest": "9587739632d83cbe846023342937519cb92712cc5c2d1ba7e6585b447dd70aee",
+      "observation": { "mode": "static-text-semantic", "assertions": [
+        { "id": "dedupe-key", "includes": "decision.dedupeKey" }, { "id": "dedupe-window", "includes": "context.dedupeWindowMs" }, { "id": "suppression", "includes": "was already processed" }
+      ] }
+    },
+    {
+      "id": "vellum-notification-checks-main",
+      "url": "https://raw.githubusercontent.com/vellum-ai/vellum-assistant/main/assistant/src/notifications/deterministic-checks.ts",
+      "role": "moving-notification-check-change-surface",
+      "acceptedDocumentDigest": "9587739632d83cbe846023342937519cb92712cc5c2d1ba7e6585b447dd70aee",
+      "observation": { "mode": "static-text-semantic", "assertions": [
+        { "id": "dedupe-check", "includes": "function checkDedupe" }, { "id": "fail-closed-copy", "includes": "Fail-closed check that the rendered copy is real text" }
+      ] }
+    },
+    {
+      "id": "android-notification-control",
+      "url": "https://developer.android.com/develop/ui/compose/notifications?hl=en",
+      "role": "official-user-control-and-redundancy-guidance",
+      "observation": { "mode": "static-html-semantic", "assertions": [
+        { "id": "channel-control", "includes": "let users control notification behaviors" },
+        { "id": "redundancy", "includes": "avoid flooding your users with multiple or redundant notifications" },
+        { "id": "importance-control", "includes": "Users can change the importance of a notification channel" }
+      ] }
+    },
+    {
+      "id": "android-notification-permission",
+      "url": "https://developer.android.com/develop/ui/compose/notifications/notification-permission?hl=en",
+      "role": "official-notification-consent-boundary",
+      "observation": { "mode": "static-html-semantic", "assertions": [
+        { "id": "permission", "includes": "POST_NOTIFICATIONS" }, { "id": "user-choice", "includes": "App capabilities depend on user choice in permissions dialog" }
+      ] }
+    }
+  ]
+}

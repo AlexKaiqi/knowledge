@@ -1,0 +1,101 @@
+{
+  "fixture": "two-window-mutation-set",
+  "schemaVersion": "dsh.feedback-observation-reconciliation/v1",
+  "sourceRef": "source:owned-comment-surface",
+  "targetRef": "release:fixture-v1",
+  "priorObservedAt": "2026-08-26T00:00:00.000Z",
+  "currentObservedAt": "2026-08-27T00:00:00.000Z",
+  "changes": [
+    {
+      "itemRef": "comment:deleted",
+      "prior": {
+        "lifecycle": "visible",
+        "replyState": "replied",
+        "contentDigest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "current": {
+        "lifecycle": "deleted",
+        "replyState": "replied"
+      },
+      "mutations": [
+        "deleted"
+      ]
+    },
+    {
+      "itemRef": "comment:new",
+      "prior": null,
+      "current": {
+        "lifecycle": "visible",
+        "replyState": "unanswered",
+        "contentDigest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+      },
+      "mutations": [
+        "new"
+      ]
+    },
+    {
+      "itemRef": "comment:new-edit",
+      "prior": {
+        "lifecycle": "visible",
+        "replyState": "unanswered",
+        "contentDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "current": {
+        "lifecycle": "visible",
+        "replyState": "replied",
+        "contentDigest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+      },
+      "mutations": [
+        "edited",
+        "reply-state-changed"
+      ]
+    },
+    {
+      "itemRef": "comment:unchanged",
+      "prior": {
+        "lifecycle": "visible",
+        "replyState": "unknown",
+        "contentDigest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+      },
+      "current": {
+        "lifecycle": "visible",
+        "replyState": "unknown",
+        "contentDigest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+      },
+      "mutations": [
+        "unchanged"
+      ]
+    }
+  ],
+  "missingUnresolved": [
+    {
+      "itemRef": "comment:missing",
+      "prior": {
+        "lifecycle": "visible",
+        "replyState": "unknown",
+        "contentDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "reason": "not-observed-current-window",
+      "deletionInferred": false
+    }
+  ],
+  "counts": {
+    "new": 1,
+    "edited": 1,
+    "lifecycleObserved": 0,
+    "resurfaced": 0,
+    "deleted": 1,
+    "hidden": 0,
+    "replyStateChanged": 1,
+    "unchanged": 1,
+    "missingUnresolved": 1
+  },
+  "checkpointRecommendation": {
+    "action": "propose-advance",
+    "checkpointRef": "cursor:current",
+    "reason": "complete-current-window"
+  },
+  "deletionInferencePolicy": "explicit-lifecycle-only",
+  "executionAuthorized": false,
+  "resultDigest": "03b4d63c2ea3e1d837dcb6b428fa4e9333fb2524241a7641fae6880ed73c8361"
+}

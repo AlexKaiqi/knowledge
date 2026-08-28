@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "dsh.collector-definition/v1",
+  "id": "memory-action-grounding-maintainer",
+  "version": "1.0.0",
+  "scope": {
+    "knowledgeGlobs": [
+      "knowledge/tools/memory-action-grounding.md",
+      "knowledge/concepts/assistant/memory-grounded-action-candidate.md",
+      "knowledge/capabilities/assistant/ground-memory-into-action-candidate.md",
+      "knowledge/schemas/assistant/*.schema.json",
+      "knowledge/verifications/assistant/memory-action-grounding/*.json"
+    ],
+    "connectorIds": ["memory-action-grounding"],
+    "capabilityRefs": ["/capabilities/assistant/ground-memory-into-action-candidate.md"]
+  },
+  "triggers": [
+    { "kind": "schedule", "schedule": "50 9 * * 3" },
+    { "kind": "source-change" },
+    { "kind": "schema-change" },
+    { "kind": "connector-change" },
+    { "kind": "failed-execution" },
+    { "kind": "manual" }
+  ],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "collectors/memory-action-grounding-maintainer/src/index.mjs"
+  },
+  "outputs": ["knowledge-proposal", "connector-change-proposal", "verification-report"],
+  "writePolicy": {
+    "mode": "proposal-only",
+    "requiresApprovalFor": ["knowledge", "connector", "live-probe"]
+  },
+  "probePolicy": {
+    "allowedEnvironments": ["local", "production-public"],
+    "identityPoolRefs": [],
+    "maximumEffect": "none"
+  },
+  "budgets": { "maxRunsPerDay": 2, "maxCostPerDay": 0, "currency": "CNY" }
+}

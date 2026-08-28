@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/assistant/reconcile-current-work-projection-input.schema.json",
+  "title": "ReconcileCurrentWorkProjectionInput",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["currentSessionRef", "workspaceRef", "acceptUnconfirmedKnowledgeProposals"],
+  "properties": {
+    "currentSessionRef": { "type": "string", "pattern": "^session:[A-Za-z0-9._-]{1,128}$" },
+    "workspaceRef": { "type": "string", "pattern": "^workspace:[A-Za-z0-9._-]{1,128}$" },
+    "acceptUnconfirmedKnowledgeProposals": { "const": true }
+  }
+}

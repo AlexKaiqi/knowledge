@@ -1,0 +1,78 @@
+{
+  "suiteRef": "suite:assistant-memory-use-v1",
+  "fixtureRevisionRef": "fixture:assistant-memory-use-2026-08-27",
+  "cases": [
+    {
+      "caseRef": "case:confirmed-preference", "queryKind": "action-parameters", "evaluatedAt": "2026-08-27T08:00:00.000Z", "targetScopeRef": "scope:owner",
+      "memories": [{ "memoryRef": "memory:preference", "factKey": "fact:format", "valueDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "state": "confirmed", "scopeRef": "scope:owner", "effectiveAt": "2026-01-01T00:00:00.000Z", "expiresAt": null, "supersedesRefs": [] }],
+      "fields": [{ "fieldRef": "field:format", "factKey": "fact:format", "required": true, "explicitValueDigest": null, "explicitEvidenceRefs": [] }],
+      "observed": { "ingestedMemoryRefs": ["memory:preference"], "retrievedMemoryRefs": ["memory:preference"], "selectedMemoryRefs": ["memory:preference"], "decision": "action-candidate", "fields": [{ "fieldRef": "field:format", "valueDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "evidenceRefs": ["memory:preference"] }] }
+    },
+    {
+      "caseRef": "case:explicit-override", "queryKind": "action-parameters", "evaluatedAt": "2026-08-27T08:00:00.000Z", "targetScopeRef": "scope:owner",
+      "memories": [{ "memoryRef": "memory:old-format", "factKey": "fact:format", "valueDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "state": "confirmed", "scopeRef": "scope:owner", "effectiveAt": "2026-01-01T00:00:00.000Z", "expiresAt": null, "supersedesRefs": [] }],
+      "fields": [{ "fieldRef": "field:format", "factKey": "fact:format", "required": true, "explicitValueDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "explicitEvidenceRefs": ["request:current-turn"] }],
+      "observed": { "ingestedMemoryRefs": [], "retrievedMemoryRefs": [], "selectedMemoryRefs": [], "decision": "action-candidate", "fields": [{ "fieldRef": "field:format", "valueDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "evidenceRefs": ["request:current-turn"] }] }
+    },
+    {
+      "caseRef": "case:temporal-supersession", "queryKind": "recall", "evaluatedAt": "2026-08-27T08:00:00.000Z", "targetScopeRef": "scope:owner",
+      "memories": [
+        { "memoryRef": "memory:address-old", "factKey": "fact:address", "valueDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "state": "confirmed", "scopeRef": "scope:owner", "effectiveAt": "2026-01-01T00:00:00.000Z", "expiresAt": null, "supersedesRefs": [] },
+        { "memoryRef": "memory:address-current", "factKey": "fact:address", "valueDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "state": "confirmed", "scopeRef": "scope:owner", "effectiveAt": "2026-06-01T00:00:00.000Z", "expiresAt": null, "supersedesRefs": ["memory:address-old"] }
+      ],
+      "fields": [{ "fieldRef": "field:address", "factKey": "fact:address", "required": true, "explicitValueDigest": null, "explicitEvidenceRefs": [] }],
+      "observed": { "ingestedMemoryRefs": ["memory:address-old", "memory:address-current"], "retrievedMemoryRefs": ["memory:address-current"], "selectedMemoryRefs": ["memory:address-current"], "decision": "answer", "fields": [{ "fieldRef": "field:address", "valueDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "evidenceRefs": ["memory:address-current"] }] }
+    },
+    {
+      "caseRef": "case:unresolved-conflict", "queryKind": "action-parameters", "evaluatedAt": "2026-08-27T08:00:00.000Z", "targetScopeRef": "scope:owner",
+      "memories": [
+        { "memoryRef": "memory:account-a", "factKey": "fact:account", "valueDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "state": "confirmed", "scopeRef": "scope:owner", "effectiveAt": "2026-01-01T00:00:00.000Z", "expiresAt": null, "supersedesRefs": [] },
+        { "memoryRef": "memory:account-b", "factKey": "fact:account", "valueDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "state": "confirmed", "scopeRef": "scope:owner", "effectiveAt": "2026-01-02T00:00:00.000Z", "expiresAt": null, "supersedesRefs": [] }
+      ],
+      "fields": [{ "fieldRef": "field:account", "factKey": "fact:account", "required": true, "explicitValueDigest": null, "explicitEvidenceRefs": [] }],
+      "observed": { "ingestedMemoryRefs": ["memory:account-a", "memory:account-b"], "retrievedMemoryRefs": ["memory:account-a", "memory:account-b"], "selectedMemoryRefs": ["memory:account-a", "memory:account-b"], "decision": "ask", "fields": [] }
+    },
+    {
+      "caseRef": "case:missing-required-fact", "queryKind": "action-parameters", "evaluatedAt": "2026-08-27T08:00:00.000Z", "targetScopeRef": "scope:owner",
+      "memories": [],
+      "fields": [{ "fieldRef": "field:recipient", "factKey": "fact:recipient", "required": true, "explicitValueDigest": null, "explicitEvidenceRefs": [] }],
+      "observed": { "ingestedMemoryRefs": [], "retrievedMemoryRefs": [], "selectedMemoryRefs": [], "decision": "ask", "fields": [] }
+    },
+    {
+      "caseRef": "case:irrelevant-similar-memory", "queryKind": "action-parameters", "evaluatedAt": "2026-08-27T08:00:00.000Z", "targetScopeRef": "scope:owner",
+      "memories": [{ "memoryRef": "memory:delivery-address", "factKey": "fact:delivery-address", "valueDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "state": "confirmed", "scopeRef": "scope:owner", "effectiveAt": "2026-01-01T00:00:00.000Z", "expiresAt": null, "supersedesRefs": [] }],
+      "fields": [{ "fieldRef": "field:meeting-address", "factKey": "fact:meeting-address", "required": true, "explicitValueDigest": null, "explicitEvidenceRefs": [] }],
+      "observed": { "ingestedMemoryRefs": [], "retrievedMemoryRefs": [], "selectedMemoryRefs": [], "decision": "ask", "fields": [] }
+    },
+    {
+      "caseRef": "case:scope-isolation", "queryKind": "recall", "evaluatedAt": "2026-08-27T08:00:00.000Z", "targetScopeRef": "scope:owner",
+      "memories": [
+        { "memoryRef": "memory:owner-language", "factKey": "fact:language", "valueDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "state": "confirmed", "scopeRef": "scope:owner", "effectiveAt": "2026-01-01T00:00:00.000Z", "expiresAt": null, "supersedesRefs": [] },
+        { "memoryRef": "memory:other-language", "factKey": "fact:language", "valueDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "state": "confirmed", "scopeRef": "scope:other-owner", "effectiveAt": "2026-01-01T00:00:00.000Z", "expiresAt": null, "supersedesRefs": [] }
+      ],
+      "fields": [{ "fieldRef": "field:language", "factKey": "fact:language", "required": true, "explicitValueDigest": null, "explicitEvidenceRefs": [] }],
+      "observed": { "ingestedMemoryRefs": ["memory:owner-language"], "retrievedMemoryRefs": ["memory:owner-language"], "selectedMemoryRefs": ["memory:owner-language"], "decision": "answer", "fields": [{ "fieldRef": "field:language", "valueDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "evidenceRefs": ["memory:owner-language"] }] }
+    },
+    {
+      "caseRef": "case:expired-memory", "queryKind": "recall", "evaluatedAt": "2026-08-27T08:00:00.000Z", "targetScopeRef": "scope:owner",
+      "memories": [{ "memoryRef": "memory:expired-token", "factKey": "fact:temporary-code", "valueDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "state": "confirmed", "scopeRef": "scope:owner", "effectiveAt": "2026-01-01T00:00:00.000Z", "expiresAt": "2026-01-02T00:00:00.000Z", "supersedesRefs": [] }],
+      "fields": [{ "fieldRef": "field:temporary-code", "factKey": "fact:temporary-code", "required": true, "explicitValueDigest": null, "explicitEvidenceRefs": [] }],
+      "observed": { "ingestedMemoryRefs": ["memory:expired-token"], "retrievedMemoryRefs": ["memory:expired-token"], "selectedMemoryRefs": ["memory:expired-token"], "decision": "abstain", "fields": [] }
+    },
+    {
+      "caseRef": "case:revoked-memory", "queryKind": "recall", "evaluatedAt": "2026-08-27T08:00:00.000Z", "targetScopeRef": "scope:owner",
+      "memories": [
+        { "memoryRef": "memory:old-contact", "factKey": "fact:contact", "valueDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "state": "confirmed", "scopeRef": "scope:owner", "effectiveAt": "2026-01-01T00:00:00.000Z", "expiresAt": null, "supersedesRefs": [] },
+        { "memoryRef": "memory:contact-revoked", "factKey": "fact:contact", "valueDigest": null, "state": "revoked", "scopeRef": "scope:owner", "effectiveAt": "2026-02-01T00:00:00.000Z", "expiresAt": null, "supersedesRefs": ["memory:old-contact"] }
+      ],
+      "fields": [{ "fieldRef": "field:contact", "factKey": "fact:contact", "required": true, "explicitValueDigest": null, "explicitEvidenceRefs": [] }],
+      "observed": { "ingestedMemoryRefs": ["memory:old-contact", "memory:contact-revoked"], "retrievedMemoryRefs": ["memory:contact-revoked"], "selectedMemoryRefs": ["memory:contact-revoked"], "decision": "abstain", "fields": [] }
+    },
+    {
+      "caseRef": "case:contested-memory", "queryKind": "action-parameters", "evaluatedAt": "2026-08-27T08:00:00.000Z", "targetScopeRef": "scope:owner",
+      "memories": [{ "memoryRef": "memory:contested-time", "factKey": "fact:meeting-time", "valueDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "state": "contested", "scopeRef": "scope:owner", "effectiveAt": "2026-08-01T00:00:00.000Z", "expiresAt": null, "supersedesRefs": [] }],
+      "fields": [{ "fieldRef": "field:meeting-time", "factKey": "fact:meeting-time", "required": true, "explicitValueDigest": null, "explicitEvidenceRefs": [] }],
+      "observed": { "ingestedMemoryRefs": ["memory:contested-time"], "retrievedMemoryRefs": ["memory:contested-time"], "selectedMemoryRefs": ["memory:contested-time"], "decision": "ask", "fields": [] }
+    }
+  ]
+}

@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/steam/prepare-initial-release-date-review-revision-output.schema.json",
+  "title": "SteamInitialReleaseDateReviewRevision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "gameRef", "sourceRevisionRef", "storeRevisionRef", "buildRevisionRef", "policyRevision", "observedReleaseState", "target", "timing", "manualReview", "platformStateAuthenticated", "savedToSteamworks", "comingSoonChanged", "releaseButtonPressed", "released", "wishlistNotificationsTriggered", "executionAuthorized", "preparedAt", "status", "revisionHash", "preflight"],
+  "properties": {
+    "schemaVersion": { "const": "dsh.steam-initial-release-date-review-revision/v1" },
+    "gameRef": { "type": "string", "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,191}$" },
+    "sourceRevisionRef": { "$ref": "#/$defs/ref" },
+    "storeRevisionRef": { "$ref": "#/$defs/ref" },
+    "buildRevisionRef": { "$ref": "#/$defs/ref" },
+    "policyRevision": { "const": "steam-initial-release-date-2026-08-27" },
+    "status": { "enum": ["ready-for-human-review", "blocked"] },
+    "revisionHash": { "type": ["string", "null"], "pattern": "^sha256:[a-f0-9]{64}$" },
+    "observedReleaseState": { "$ref": "#/$defs/observed" },
+    "target": { "$ref": "#/$defs/target" },
+    "timing": { "$ref": "#/$defs/timing" },
+    "manualReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required", "checks"],
+      "properties": {
+        "required": { "const": true },
+        "checks": {
+          "type": "array", "minItems": 9, "maxItems": 9,
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["id", "status"],
+            "properties": {
+              "id": { "enum": ["official-release-date-semantics-current", "owned-target-and-submitter-authority", "publish-app-changes-permission", "manage-pricing-and-discounts-permission", "store-and-build-review-state-still-current", "player-facing-date-specificity-intentional", "public-communications-consistent", "release-day-support-plan-ready", "wishlist-notification-impact-understood"] },
+              "status": { "const": "pending" }
+            }
+          }
+        }
+      }
+    },
+    "preflight": {
+      "type": "object", "additionalProperties": false, "required": ["checks", "blockers"],
+      "properties": {
+        "checks": {
+          "type": "array", "minItems": 6, "maxItems": 6,
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["id", "status"],
+            "properties": {
+              "id": { "enum": ["unreleased-state", "fresh-observed-state", "future-specified-date", "coming-soon-minimum-window", "store-and-build-ready-for-release", "specified-date-change-window"] },
+              "status": { "enum": ["passed", "failed"] }
+            }
+          }
+        },
+        "blockers": {
+          "type": "array", "maxItems": 12,
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["code"],
+            "properties": {
+              "code": { "enum": ["already-released", "observed-state-from-future", "observed-state-stale", "target-date-not-future", "coming-soon-not-published", "coming-soon-date-in-future", "coming-soon-minimum-not-met", "store-presence-not-ready", "build-not-ready", "specified-date-change-locked"] }
+            }
+          }
+        }
+      }
+    },
+    "platformStateAuthenticated": { "const": false },
+    "savedToSteamworks": { "const": false },
+    "comingSoonChanged": { "const": false },
+    "releaseButtonPressed": { "const": false },
+    "released": { "const": false },
+    "wishlistNotificationsTriggered": { "const": false },
+    "executionAuthorized": { "const": false },
+    "preparedAt": { "type": "string", "format": "date-time" }
+  },
+  "allOf": [{
+    "if": { "properties": { "status": { "const": "ready-for-human-review" } } },
+    "then": { "properties": { "revisionHash": { "$ref": "#/$defs/digest" }, "preflight": { "properties": { "blockers": { "maxItems": 0 } } } } },
+    "else": { "properties": { "revisionHash": { "type": "null" }, "preflight": { "properties": { "blockers": { "minItems": 1 } } } } }
+  }],
+  "$defs": {
+    "ref": { "type": "string", "minLength": 1, "maxLength": 500 },
+    "refs": { "type": "array", "minItems": 1, "maxItems": 20, "uniqueItems": true, "items": { "$ref": "#/$defs/ref" } },
+    "digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "displayMode": { "enum": ["exact-date", "month-year", "quarter", "year", "coming-soon"] },
+    "reviewState": { "enum": ["not-submitted", "in-review", "changes-requested", "ready-for-release"] },
+    "observed": {
+      "type": "object", "additionalProperties": false,
+      "required": ["observedAt", "releaseState", "specifiedReleaseDate", "playerFacingDisplay", "comingSoonPublishedDate", "storePresenceReviewState", "buildReviewState", "evidenceRefs"],
+      "properties": {
+        "observedAt": { "type": "string", "format": "date-time" },
+        "releaseState": { "enum": ["not-released", "released"] },
+        "specifiedReleaseDate": { "type": "string", "format": "date" },
+        "playerFacingDisplay": { "$ref": "#/$defs/displayMode" },
+        "comingSoonPublishedDate": { "type": ["string", "null"], "format": "date" },
+        "storePresenceReviewState": { "$ref": "#/$defs/reviewState" },
+        "buildReviewState": { "$ref": "#/$defs/reviewState" },
+        "evidenceRefs": { "$ref": "#/$defs/refs" }
+      }
+    },
+    "display": {
+      "type": "object", "additionalProperties": false,
+      "required": ["mode", "rangeStart", "rangeEnd", "upcomingListPlacementDate", "upcomingListPlacementSemantics"],
+      "properties": {
+        "mode": { "$ref": "#/$defs/displayMode" },
+        "rangeStart": { "type": ["string", "null"], "format": "date" },
+        "rangeEnd": { "type": ["string", "null"], "format": "date" },
+        "upcomingListPlacementDate": { "type": ["string", "null"], "format": "date" },
+        "upcomingListPlacementSemantics": { "enum": ["exact-date", "last-day-of-visible-range", "behind-dated-displays"] }
+      }
+    },
+    "target": {
+      "type": "object", "additionalProperties": false,
+      "required": ["specifiedReleaseDate", "playerFacingDisplay", "decisionEvidenceRefs", "display"],
+      "properties": {
+        "specifiedReleaseDate": { "type": "string", "format": "date" },
+        "playerFacingDisplay": { "$ref": "#/$defs/displayMode" },
+        "decisionEvidenceRefs": { "$ref": "#/$defs/refs" },
+        "display": { "$ref": "#/$defs/display" }
+      }
+    },
+    "timing": {
+      "type": "object", "additionalProperties": false,
+      "required": ["observationMaximumAgeHours", "daysUntilTarget", "comingSoonLeadDays", "minimumComingSoonDays", "minimumComingSoonSatisfied", "dateChangeRequested", "dateChangeWindow"],
+      "properties": {
+        "observationMaximumAgeHours": { "const": 24 },
+        "daysUntilTarget": { "type": "integer", "minimum": -3660, "maximum": 3660 },
+        "comingSoonLeadDays": { "type": ["integer", "null"], "minimum": -3660, "maximum": 3660 },
+        "minimumComingSoonDays": { "const": 14 },
+        "minimumComingSoonSatisfied": { "type": "boolean" },
+        "dateChangeRequested": { "type": "boolean" },
+        "dateChangeWindow": { "enum": ["open", "locked"] }
+      }
+    }
+  }
+}

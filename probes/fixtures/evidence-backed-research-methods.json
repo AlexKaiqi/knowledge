@@ -1,0 +1,166 @@
+{
+  "input": {
+    "scenario": "technical-solution",
+    "goal": "把调研作为可复用、可验证且隐藏执行复杂度的 OKF 能力",
+    "decision": "选择可吸收的上游研究方法，并确定是原样安装还是组合成自己的能力契约",
+    "questions": [
+      "哪个 GitHub Skill 最适合作为通用调研内核？",
+      "需求、市场、技术、学术和平台接入场景有哪些不能被通用流程抹平的证据规则？"
+    ],
+    "constraints": {
+      "cutoffAt": "2026-08-27T00:43:05Z",
+      "versions": ["pinned Git commits"],
+      "exclusions": ["MCP server", "仅生成搜索 prompt 的工具", "没有可核验 SKILL.md 的项目"]
+    },
+    "budget": { "maxSources": 12, "maxQueries": 10 }
+  },
+  "candidate": {
+    "scenario": "technical-solution",
+    "question": "应该如何吸收 GitHub 上的调研 Skills，形成覆盖不同场景的可复用能力？",
+    "decision": "以通用深度调研方法为内核，加入场景证据策略和统一 Research Dossier；不把任一上游项目作为运行时依赖。",
+    "answer": "采用一个公共的证据化调研能力，而不是按来源或场景复制多个能力。通用内核负责问题收敛、多角度搜索、来源权重、反证和冲突处理；需求、市场、技术、学术、平台接入与传播场景分别增加不可省略的证据角色和验证门。上游 Skill 固定到已审计 commit 作为方法来源，不直接安装或暴露。",
+    "confidence": "high",
+    "findings": [
+      {
+        "id": "general-core",
+        "claim": "deep-research 提供了最完整的通用内核：决策化问题、反方搜索、来源加权、追溯原始 claim、解释冲突和结论置信度。",
+        "status": "supported",
+        "confidence": "high",
+        "evidenceIds": ["deep-research"],
+        "counterEvidenceIds": ["research-router"],
+        "applicability": "需要多来源综合并形成决策结论的通用研究。",
+        "inference": false
+      },
+      {
+        "id": "scenario-contracts",
+        "claim": "不同研究场景需要共享流程之外的证据契约：学术研究需要 cutoff 与 claim-evidence matrix，需求研究需要原始材料到 JTBD 的逐项追溯，市场研究需要口径与双方法估算。",
+        "status": "supported",
+        "confidence": "high",
+        "evidenceIds": ["literature-review", "interview-to-jtbd", "market-researcher"],
+        "counterEvidenceIds": ["deep-research"],
+        "applicability": "学术前沿、用户需求及市场/竞品研究。",
+        "inference": false
+      },
+      {
+        "id": "router-hidden",
+        "claim": "研究路由应选择最少的必要来源能力并负责最终综合，但来源选择和执行路线应隐藏在公共 Research Dossier 后面。",
+        "status": "supported",
+        "confidence": "high",
+        "evidenceIds": ["research-router", "deep-research"],
+        "counterEvidenceIds": [],
+        "applicability": "OKF Capability 到 Connector 的内部路由。",
+        "inference": true
+      },
+      {
+        "id": "adapt-not-install",
+        "claim": "没有一个被检查的上游 Skill 同时具备本仓库的 Goal→Workflow→Difficulty→Opportunity→Probe 门和隐藏 Connector/Collector 边界，因此组合成自己的契约比直接安装更符合目标。",
+        "status": "supported",
+        "confidence": "medium",
+        "evidenceIds": ["deep-research", "literature-review", "interview-to-jtbd", "market-researcher", "research-router"],
+        "counterEvidenceIds": ["research-router"],
+        "applicability": "当前五个已逐文件检查的上游方法，不代表 GitHub 全部项目。",
+        "inference": true
+      }
+    ],
+    "evidence": [
+      {
+        "id": "deep-research",
+        "role": "implementation-evidence",
+        "sourceType": "repository",
+        "weight": "primary",
+        "title": "arjunprabhulal/agent-skills — deep-research SKILL.md",
+        "resource": "https://github.com/arjunprabhulal/agent-skills/blob/42dd24080fce6d731d00e2a1134f398c3da4171b/skills/research/deep-research/SKILL.md",
+        "claim": "定义问题收敛、多角度搜索、来源权重、冲突消解、反证与结论优先的通用研究流程。",
+        "locator": "SKILL.md sections 1–5 and Rules that keep it honest",
+        "observedAt": "2026-08-27T00:43:05Z",
+        "digest": "2646cdf3942d918e84febf020b289fbfb7b5cf601e43ee7e7349e6c5105941c5"
+      },
+      {
+        "id": "literature-review",
+        "role": "benchmark",
+        "sourceType": "repository",
+        "weight": "primary",
+        "title": "msimchowitz/writing-skills — literature-review SKILL.md",
+        "resource": "https://github.com/msimchowitz/writing-skills/blob/214981fe02326f27b0fc8790d00eb4b731607073/for-agents/literature-review/SKILL.md",
+        "claim": "要求 review contract、检索截止日期、纳排规则、source ledger、claim-evidence matrix 和精确 locator。",
+        "locator": "Set The Review Contract; Build The Evidence Base; Audit And Build",
+        "observedAt": "2026-08-27T00:43:05Z",
+        "digest": "c8ab0a9ac2e643defc8b983ddd117e7886508e34c44fbe6c82cc18d129797da9"
+      },
+      {
+        "id": "interview-to-jtbd",
+        "role": "problem-evidence",
+        "sourceType": "repository",
+        "weight": "primary",
+        "title": "lowwwbank/interview-to-jtbd — SKILL.md",
+        "resource": "https://github.com/lowwwbank/interview-to-jtbd/blob/810e847b7d936a54bd090c4d0797efd576404152/SKILL.md",
+        "claim": "要求每个 JTBD 和机会逐项链接原始访谈或反馈，区分功能请求与用户要完成的工作。",
+        "locator": "Core Directives; Step 2 JTBD Extraction; Step 3 Opportunity Mapping",
+        "observedAt": "2026-08-27T00:43:05Z",
+        "digest": "6c3110250dfde15b7db51c6ecb7476bc173a145644f559730b80532dfdf6d3e1"
+      },
+      {
+        "id": "market-researcher",
+        "role": "market-signal",
+        "sourceType": "repository",
+        "weight": "primary",
+        "title": "xcrrr/claude-skills — market-researcher SKILL.md",
+        "resource": "https://github.com/xcrrr/claude-skills/blob/145342ceff6318d2f5ffe8f95473fecc8b27d1e9/skills/business/market-researcher/SKILL.md",
+        "claim": "区分市场规模、竞品、客户需求等方法，并要求 top-down 与 bottom-up 估算及口径差异解释。",
+        "locator": "Step 2 Market Sizing; Step 3 Primary vs Secondary Research; Common Mistakes",
+        "observedAt": "2026-08-27T00:43:05Z",
+        "digest": "032099833781ff30844ec227b4d068209f61ac45c3d5b251fe5167527d49a340"
+      },
+      {
+        "id": "research-router",
+        "role": "counter-evidence",
+        "sourceType": "repository",
+        "weight": "primary",
+        "title": "openai/plugins — life-science research-router SKILL.md",
+        "resource": "https://github.com/openai/plugins/blob/33bd9529725fcee78c9e51fcbaa93cd963c3a47b/plugins/life-science-research/skills/research-router-skill/SKILL.md",
+        "claim": "展示了场景路由、最少下游能力选择和证据综合可以统一在一个研究入口中，但其领域限定为生命科学。",
+        "locator": "Primary Responsibility; Research Task Classification; Skill Selection Heuristics; Output Contract",
+        "observedAt": "2026-08-27T00:43:05Z",
+        "digest": "e9e39c6c411da80f9fd62a62e70cbedac2404bdcfb51ddb8fda1dc3332c7e357"
+      }
+    ],
+    "conflicts": [
+      {
+        "claim": "通用研究方法是否足以覆盖所有场景。",
+        "evidenceIds": ["deep-research", "literature-review", "interview-to-jtbd", "market-researcher"],
+        "resolution": "通用方法适合作为共享内核；场景专属的证据单位、口径和验证条件必须作为策略保留，不能靠通用来源加权替代。"
+      }
+    ],
+    "gaps": [
+      "尚未对六个场景分别运行真实 Agent L3 eval；当前只完成一个技术方案研究实例和六类确定性契约检查。",
+      "GitHub 检索受关键词和索引限制，结论只覆盖已打开并固定版本的五个高信号项目。",
+      "真实用户访谈、付费市场数据库和平台私有分析数据不在本次范围内。"
+    ],
+    "counterEvidenceSearch": {
+      "performed": true,
+      "queries": [
+        "GitHub general deep research agent SKILL.md",
+        "GitHub user research JTBD agent SKILL.md",
+        "GitHub market competitive research agent SKILL.md",
+        "GitHub literature review agent SKILL.md",
+        "GitHub official research router SKILL.md"
+      ],
+      "outcome": "found",
+      "evidenceIds": ["literature-review", "interview-to-jtbd", "market-researcher", "research-router"]
+    },
+    "nextProbes": [
+      {
+        "hypothesis": "统一能力加场景策略可以在六类研究中同时保持公共输入简单和证据边界完整。",
+        "method": "为每个场景运行一个真实 Agent eval，使用同一输入/输出 Schema，并检查场景必需 evidence roles、反证、source locator、推断标记和可执行 next probe。",
+        "success": "六个 dossier 均 schema-valid、conformance=passed，且人工审阅未发现来源冒充、场景证据缺失或内部 Connector 泄漏。",
+        "failure": "任一场景必须破坏公共 Schema、无法表达关键证据边界或稳定地产生无来源结论。",
+        "effect": "none"
+      }
+    ],
+    "coverage": {
+      "queryCount": 10,
+      "stoppedBecause": "decision-sufficient",
+      "complete": true
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "steam-initial-release-date-revision",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/steam/prepare-initial-release-date-review-revision.md"],
+  "execution": { "kind": "deterministic", "runtime": "node >=22.19", "entrypoint": "connectors/steam-initial-release-date-revision/src/index.mjs" },
+  "configSchema": "repo:/connectors/steam-initial-release-date-revision/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [{ "capabilityRef": "/capabilities/steam/prepare-initial-release-date-review-revision.md", "operation": "prepareSteamInitialReleaseDateReviewRevision" }],
+  "conformance": { "status": "verified", "probeReportRef": "/verifications/steam/initial-release-date-review-revision/report.json" }
+}

@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/schemas/game/prepare-local-build-revision-output.schema.json",
+  "title": "Local game build revision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "status", "revisionHash", "gameRef", "version", "target", "releaseLane", "visibilityIntent", "sourceRevisionRef", "rightsBasisRefs", "entrypoints", "artifacts", "summary", "preflight", "uploaded", "executionAuthorized", "preparedAt"],
+  "properties": {
+    "schemaVersion": { "const": "dsh.game-build-revision/v1" },
+    "status": { "enum": ["ready", "blocked"] },
+    "revisionHash": { "oneOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }] },
+    "gameRef": { "type": "string", "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,191}$" },
+    "version": { "type": "string", "minLength": 1, "maxLength": 100 },
+    "target": { "enum": ["desktop-portable", "steam-content-root", "itch-portable", "web-build"] },
+    "releaseLane": { "enum": ["internal", "beta", "release-candidate", "production"] },
+    "visibilityIntent": { "enum": ["owner-only", "restricted", "public"] },
+    "sourceRevisionRef": { "$ref": "#/$defs/opaqueRef" },
+    "rightsBasisRefs": { "type": "array", "minItems": 1, "maxItems": 20, "uniqueItems": true, "items": { "$ref": "#/$defs/opaqueRef" } },
+    "releaseNotesRef": { "$ref": "#/$defs/opaqueRef" },
+    "entrypoints": { "type": "array", "maxItems": 20, "uniqueItems": true, "items": { "$ref": "#/$defs/relativePath" } },
+    "artifacts": {
+      "type": "array",
+      "maxItems": 20000,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "sizeBytes", "sha256", "entrypoint"],
+        "properties": {
+          "path": { "$ref": "#/$defs/relativePath" },
+          "sizeBytes": { "type": "integer", "minimum": 0 },
+          "sha256": { "$ref": "#/$defs/digest" },
+          "entrypoint": { "type": "boolean" }
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fileCount", "totalBytes"],
+      "properties": {
+        "fileCount": { "type": "integer", "minimum": 0 },
+        "totalBytes": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "preflight": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["checks", "blockers"],
+      "properties": {
+        "checks": {
+          "type": "array",
+          "minItems": 6,
+          "maxItems": 6,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "status"],
+            "properties": {
+              "id": { "enum": ["workspace-boundary", "regular-files-only", "secret-like-filenames-absent", "artifact-budget", "entrypoints-present", "nonempty-build"] },
+              "status": { "enum": ["passed", "failed"] }
+            }
+          }
+        },
+        "blockers": {
+          "type": "array",
+          "maxItems": 20,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["code"],
+            "properties": {
+              "code": { "enum": ["workspace-unavailable", "source-directory-unavailable", "source-directory-symlink", "source-not-directory", "source-directory-escape", "symlink-not-allowed", "special-file-not-allowed", "file-escape", "secret-like-filename", "build-empty", "artifact-budget-exceeded", "entrypoint-missing"] },
+              "path": { "$ref": "#/$defs/relativePath" }
+            }
+          }
+        }
+      }
+    },
+    "uploaded": { "const": false },
+    "executionAuthorized": { "const": false },
+    "preparedAt": { "type": "string", "format": "date-time" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "ready" } }, "required": ["status"] },
+      "then": {
+        "properties": {
+          "revisionHash": { "$ref": "#/$defs/digest" },
+          "artifacts": { "minItems": 1 },
+          "preflight": { "properties": { "blockers": { "maxItems": 0 } } }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "status": { "const": "blocked" } }, "required": ["status"] },
+      "then": {
+        "properties": {
+          "revisionHash": { "type": "null" },
+          "artifacts": { "maxItems": 0 },
+          "preflight": { "properties": { "blockers": { "minItems": 1 } } }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "relativePath": { "type": "string", "minLength": 1, "maxLength": 500, "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\)(?!.*//)[^\\u0000]+$" },
+    "opaqueRef": { "type": "string", "minLength": 1, "maxLength": 500 },
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+  }
+}

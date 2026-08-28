@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/evidence-backed-research-agent-config.schema.json",
+  "title": "EvidenceBackedResearchAgentConnectorConfig",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "modelRouteRef": { "type": "string", "minLength": 1, "default": "model-route:research.default" },
+    "timeoutMs": { "type": "integer", "minimum": 1000, "maximum": 1800000, "default": 600000 }
+  }
+}

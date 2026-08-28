@@ -1,0 +1,691 @@
+{
+  "fixture": "ten-case-versioned-memory-use-suite",
+  "schemaVersion": "dsh.versioned-memory-use-evaluation-suite/v1",
+  "suiteRef": "suite:assistant-memory-use-v1",
+  "fixtureRevisionRef": "fixture:assistant-memory-use-2026-08-27",
+  "policyRevision": "versioned-memory-use-eval-2026-08-27",
+  "status": "passed",
+  "summary": {
+    "caseCount": 10,
+    "passedCases": 10,
+    "failedCases": 0,
+    "stagePassCounts": [
+      {
+        "stage": "ingestion-coverage",
+        "passed": 10
+      },
+      {
+        "stage": "retrieval-precision-and-coverage",
+        "passed": 10
+      },
+      {
+        "stage": "version-and-scope-resolution",
+        "passed": 10
+      },
+      {
+        "stage": "abstention-or-action-decision",
+        "passed": 10
+      },
+      {
+        "stage": "evidence-grounded-utilization",
+        "passed": 10
+      }
+    ]
+  },
+  "cases": [
+    {
+      "caseRef": "case:confirmed-preference",
+      "queryKind": "action-parameters",
+      "evaluatedAt": "2026-08-27T08:00:00.000Z",
+      "targetScopeRef": "scope:owner",
+      "expected": {
+        "decision": "action-candidate",
+        "ingestedMemoryRefs": [
+          "memory:preference"
+        ],
+        "retrievedMemoryRefs": [
+          "memory:preference"
+        ],
+        "selectedMemoryRefs": [
+          "memory:preference"
+        ],
+        "fields": [
+          {
+            "fieldRef": "field:format",
+            "valueDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "evidenceRefs": [
+              "memory:preference"
+            ]
+          }
+        ]
+      },
+      "observed": {
+        "ingestedMemoryRefs": [
+          "memory:preference"
+        ],
+        "retrievedMemoryRefs": [
+          "memory:preference"
+        ],
+        "selectedMemoryRefs": [
+          "memory:preference"
+        ],
+        "decision": "action-candidate",
+        "fields": [
+          {
+            "fieldRef": "field:format",
+            "valueDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "evidenceRefs": [
+              "memory:preference"
+            ]
+          }
+        ]
+      },
+      "stages": [
+        {
+          "id": "ingestion-coverage",
+          "status": "passed",
+          "issues": []
+        },
+        {
+          "id": "retrieval-precision-and-coverage",
+          "status": "passed",
+          "issues": []
+        },
+        {
+          "id": "version-and-scope-resolution",
+          "status": "passed",
+          "issues": []
+        },
+        {
+          "id": "abstention-or-action-decision",
+          "status": "passed",
+          "issues": []
+        },
+        {
+          "id": "evidence-grounded-utilization",
+          "status": "passed",
+          "issues": []
+        }
+      ],
+      "status": "passed",
+      "resultDigest": "sha256:980e8a80b1083bb051b545de7d87050e62bc75a2cfaec202e78d25197b588d46"
+    },
+    {
+      "caseRef": "case:contested-memory",
+      "queryKind": "action-parameters",
+      "evaluatedAt": "2026-08-27T08:00:00.000Z",
+      "targetScopeRef": "scope:owner",
+      "expected": {
+        "decision": "ask",
+        "ingestedMemoryRefs": [
+          "memory:contested-time"
+        ],
+        "retrievedMemoryRefs": [
+          "memory:contested-time"
+        ],
+        "selectedMemoryRefs": [
+          "memory:contested-time"
+        ],
+        "fields": []
+      },
+      "observed": {
+        "ingestedMemoryRefs": [
+          "memory:contested-time"
+        ],
+        "retrievedMemoryRefs": [
+          "memory:contested-time"
+        ],
+        "selectedMemoryRefs": [
+          "memory:contested-time"
+        ],
+        "decision": "ask",
+        "fields": []
+      },
+      "stages": [
+        {
+          "id": "ingestion-coverage",
+          "status": "passed",
+          "issues": []
+        },
+        {
+          "id": "retrieval-precision-and-coverage",
+          "status": "passed",
+          "issues": []
+        },
+        {
+          "id": "version-and-scope-resolution",
+          "status": "passed",
+          "issues": []
+        },
+        {
+          "id": "abstention-or-action-decision",
+          "status": "passed",
+          "issues": []
+        },
+        {
+          "id": "evidence-grounded-utilization",
+          "status": "passed",
+          "issues": []
+        }
+      ],
+      "status": "passed",
+      "resultDigest": "sha256:f9aa7e1db9ea6597927b6cd471bc14a44d581b45a6cc9ecc253832ac7ccf4a61"
+    },
+    {
+      "caseRef": "case:expired-memory",
+      "queryKind": "recall",
+      "evaluatedAt": "2026-08-27T08:00:00.000Z",
+      "targetScopeRef": "scope:owner",
+      "expected": {
+        "decision": "abstain",
+        "ingestedMemoryRefs": [
+          "memory:expired-token"
+        ],
+        "retrievedMemoryRefs": [
+          "memory:expired-token"
+        ],
+        "selectedMemoryRefs": [
+          "memory:expired-token"
+        ],
+        "fields": []
+      },
+      "observed": {
+        "ingestedMemoryRefs": [
+          "memory:expired-token"
+        ],
+        "retrievedMemoryRefs": [
+          "memory:expired-token"
+        ],
+        "selectedMemoryRefs": [
+          "memory:expired-token"
+        ],
+        "decision": "abstain",
+        "fields": []
+      },
+      "stages": [
+        {
+          "id": "ingestion-coverage",
+          "status": "passed",
+          "issues": []
+        },
+        {
+          "id": "retrieval-precision-and-coverage",
+          "status": "passed",
+          "issues": []
+        },
+        {
+          "id": "version-and-scope-resolution",
+          "status": "passed",
+          "issues": []
+        },
+        {
+          "id": "abstention-or-action-decision",
+          "status": "passed",
+          "issues": []
+        },
+        {
+          "id": "evidence-grounded-utilization",
+          "status": "passed",
+          "issues": []
+        }
+      ],
+      "status": "passed",
+      "resultDigest": "sha256:63f566654b43360e03bfb329309af209d8900daec1d27e8ef1f31130781e54f8"
+    },
+    {
+      "caseRef": "case:explicit-override",
+      "queryKind": "action-parameters",
+      "evaluatedAt": "2026-08-27T08:00:00.000Z",
+      "targetScopeRef": "scope:owner",
+      "expected": {
+        "decision": "action-candidate",
+        "ingestedMemoryRefs": [],
+        "retrievedMemoryRefs": [],
+        "selectedMemoryRefs": [],
+        "fields": [
+          {
+            "fieldRef": "field:format",
+            "valueDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "evidenceRefs": [
+              "request:current-turn"
+            ]
+          }
+        ]
+      },
+      "observed": {
+        "ingestedMemoryRefs": [],
+        "retrievedMemoryRefs": [],
+        "selectedMemoryRefs": [],
+        "decision": "action-candidate",
+        "fields": [
+          {
+            "fieldRef": "field:format",
+            "valueDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "evidenceRefs": [
+              "request:current-turn"
+            ]
+          }
+        ]
+      },
+      "stages": [
+        {
+          "id": "ingestion-coverage",
+          "status": "passed",
+          "issues": []
+        },
+        {
+          "id": "retrieval-precision-and-coverage",
+          "status": "passed",
+          "issues": []
+        },
+        {
+          "id": "version-and-scope-resolution",
+          "status": "passed",
+          "issues": []
+        },
+        {
+          "id": "abstention-or-action-decision",
+          "status": "passed",
+          "issues": []
+        },
+        {
+          "id": "evidence-grounded-utilization",
+          "status": "passed",
+          "issues": []
+        }
+      ],
+      "status": "passed",
+      "resultDigest": "sha256:f6622a5e401acd80373e6a2c75fac222c6051835b52936a59581da8fbe377b86"
+    },
+    {
+      "caseRef": "case:irrelevant-similar-memory",
+      "queryKind": "action-parameters",
+      "evaluatedAt": "2026-08-27T08:00:00.000Z",
+      "targetScopeRef": "scope:owner",
+      "expected": {
+        "decision": "ask",
+        "ingestedMemoryRefs": [],
+        "retrievedMemoryRefs": [],
+        "selectedMemoryRefs": [],
+        "fields": []
+      },
+      "observed": {
+        "ingestedMemoryRefs": [],
+        "retrievedMemoryRefs": [],
+        "selectedMemoryRefs": [],
+        "decision": "ask",
+        "fields": []
+      },
+      "stages": [
+        {
+          "id": "ingestion-coverage",
+          "status": "passed",
+          "issues": []
+        },
+        {
+          "id": "retrieval-precision-and-coverage",
+          "status": "passed",
+          "issues": []
+        },
+        {
+          "id": "version-and-scope-resolution",
+          "status": "passed",
+          "issues": []
+        },
+        {
+          "id": "abstention-or-action-decision",
+          "status": "passed",
+          "issues": []
+        },
+        {
+          "id": "evidence-grounded-utilization",
+          "status": "passed",
+          "issues": []
+        }
+      ],
+      "status": "passed",
+      "resultDigest": "sha256:eb3d82257362652532e0fc1fc755814bf0e3d5c8deff619cbff029ba963fb888"
+    },
+    {
+      "caseRef": "case:missing-required-fact",
+      "queryKind": "action-parameters",
+      "evaluatedAt": "2026-08-27T08:00:00.000Z",
+      "targetScopeRef": "scope:owner",
+      "expected": {
+        "decision": "ask",
+        "ingestedMemoryRefs": [],
+        "retrievedMemoryRefs": [],
+        "selectedMemoryRefs": [],
+        "fields": []
+      },
+      "observed": {
+        "ingestedMemoryRefs": [],
+        "retrievedMemoryRefs": [],
+        "selectedMemoryRefs": [],
+        "decision": "ask",
+        "fields": []
+      },
+      "stages": [
+        {
+          "id": "ingestion-coverage",
+          "status": "passed",
+          "issues": []
+        },
+        {
+          "id": "retrieval-precision-and-coverage",
+          "status": "passed",
+          "issues": []
+        },
+        {
+          "id": "version-and-scope-resolution",
+          "status": "passed",
+          "issues": []
+        },
+        {
+          "id": "abstention-or-action-decision",
+          "status": "passed",
+          "issues": []
+        },
+        {
+          "id": "evidence-grounded-utilization",
+          "status": "passed",
+          "issues": []
+        }
+      ],
+      "status": "passed",
+      "resultDigest": "sha256:20bb0e49e413bf5b577ad2a4c5a546cbcb14fca8b38e629b4c0e2de84e73341c"
+    },
+    {
+      "caseRef": "case:revoked-memory",
+      "queryKind": "recall",
+      "evaluatedAt": "2026-08-27T08:00:00.000Z",
+      "targetScopeRef": "scope:owner",
+      "expected": {
+        "decision": "abstain",
+        "ingestedMemoryRefs": [
+          "memory:contact-revoked",
+          "memory:old-contact"
+        ],
+        "retrievedMemoryRefs": [
+          "memory:contact-revoked"
+        ],
+        "selectedMemoryRefs": [
+          "memory:contact-revoked"
+        ],
+        "fields": []
+      },
+      "observed": {
+        "ingestedMemoryRefs": [
+          "memory:contact-revoked",
+          "memory:old-contact"
+        ],
+        "retrievedMemoryRefs": [
+          "memory:contact-revoked"
+        ],
+        "selectedMemoryRefs": [
+          "memory:contact-revoked"
+        ],
+        "decision": "abstain",
+        "fields": []
+      },
+      "stages": [
+        {
+          "id": "ingestion-coverage",
+          "status": "passed",
+          "issues": []
+        },
+        {
+          "id": "retrieval-precision-and-coverage",
+          "status": "passed",
+          "issues": []
+        },
+        {
+          "id": "version-and-scope-resolution",
+          "status": "passed",
+          "issues": []
+        },
+        {
+          "id": "abstention-or-action-decision",
+          "status": "passed",
+          "issues": []
+        },
+        {
+          "id": "evidence-grounded-utilization",
+          "status": "passed",
+          "issues": []
+        }
+      ],
+      "status": "passed",
+      "resultDigest": "sha256:1800308ea3c9556765897c5366ff1b08e6397c4b056cf5a69e8a96ff4560490b"
+    },
+    {
+      "caseRef": "case:scope-isolation",
+      "queryKind": "recall",
+      "evaluatedAt": "2026-08-27T08:00:00.000Z",
+      "targetScopeRef": "scope:owner",
+      "expected": {
+        "decision": "answer",
+        "ingestedMemoryRefs": [
+          "memory:owner-language"
+        ],
+        "retrievedMemoryRefs": [
+          "memory:owner-language"
+        ],
+        "selectedMemoryRefs": [
+          "memory:owner-language"
+        ],
+        "fields": [
+          {
+            "fieldRef": "field:language",
+            "valueDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "evidenceRefs": [
+              "memory:owner-language"
+            ]
+          }
+        ]
+      },
+      "observed": {
+        "ingestedMemoryRefs": [
+          "memory:owner-language"
+        ],
+        "retrievedMemoryRefs": [
+          "memory:owner-language"
+        ],
+        "selectedMemoryRefs": [
+          "memory:owner-language"
+        ],
+        "decision": "answer",
+        "fields": [
+          {
+            "fieldRef": "field:language",
+            "valueDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "evidenceRefs": [
+              "memory:owner-language"
+            ]
+          }
+        ]
+      },
+      "stages": [
+        {
+          "id": "ingestion-coverage",
+          "status": "passed",
+          "issues": []
+        },
+        {
+          "id": "retrieval-precision-and-coverage",
+          "status": "passed",
+          "issues": []
+        },
+        {
+          "id": "version-and-scope-resolution",
+          "status": "passed",
+          "issues": []
+        },
+        {
+          "id": "abstention-or-action-decision",
+          "status": "passed",
+          "issues": []
+        },
+        {
+          "id": "evidence-grounded-utilization",
+          "status": "passed",
+          "issues": []
+        }
+      ],
+      "status": "passed",
+      "resultDigest": "sha256:6ee3c00451795a4e69007b9847e2ba38bef1c9a33ebd01fb7be684c7eb4dd21a"
+    },
+    {
+      "caseRef": "case:temporal-supersession",
+      "queryKind": "recall",
+      "evaluatedAt": "2026-08-27T08:00:00.000Z",
+      "targetScopeRef": "scope:owner",
+      "expected": {
+        "decision": "answer",
+        "ingestedMemoryRefs": [
+          "memory:address-current",
+          "memory:address-old"
+        ],
+        "retrievedMemoryRefs": [
+          "memory:address-current"
+        ],
+        "selectedMemoryRefs": [
+          "memory:address-current"
+        ],
+        "fields": [
+          {
+            "fieldRef": "field:address",
+            "valueDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "evidenceRefs": [
+              "memory:address-current"
+            ]
+          }
+        ]
+      },
+      "observed": {
+        "ingestedMemoryRefs": [
+          "memory:address-current",
+          "memory:address-old"
+        ],
+        "retrievedMemoryRefs": [
+          "memory:address-current"
+        ],
+        "selectedMemoryRefs": [
+          "memory:address-current"
+        ],
+        "decision": "answer",
+        "fields": [
+          {
+            "fieldRef": "field:address",
+            "valueDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "evidenceRefs": [
+              "memory:address-current"
+            ]
+          }
+        ]
+      },
+      "stages": [
+        {
+          "id": "ingestion-coverage",
+          "status": "passed",
+          "issues": []
+        },
+        {
+          "id": "retrieval-precision-and-coverage",
+          "status": "passed",
+          "issues": []
+        },
+        {
+          "id": "version-and-scope-resolution",
+          "status": "passed",
+          "issues": []
+        },
+        {
+          "id": "abstention-or-action-decision",
+          "status": "passed",
+          "issues": []
+        },
+        {
+          "id": "evidence-grounded-utilization",
+          "status": "passed",
+          "issues": []
+        }
+      ],
+      "status": "passed",
+      "resultDigest": "sha256:80e1b162b20e0c806d05564f1302e99a2c36b7806e8e608dbea731616060e441"
+    },
+    {
+      "caseRef": "case:unresolved-conflict",
+      "queryKind": "action-parameters",
+      "evaluatedAt": "2026-08-27T08:00:00.000Z",
+      "targetScopeRef": "scope:owner",
+      "expected": {
+        "decision": "ask",
+        "ingestedMemoryRefs": [
+          "memory:account-a",
+          "memory:account-b"
+        ],
+        "retrievedMemoryRefs": [
+          "memory:account-a",
+          "memory:account-b"
+        ],
+        "selectedMemoryRefs": [
+          "memory:account-a",
+          "memory:account-b"
+        ],
+        "fields": []
+      },
+      "observed": {
+        "ingestedMemoryRefs": [
+          "memory:account-a",
+          "memory:account-b"
+        ],
+        "retrievedMemoryRefs": [
+          "memory:account-a",
+          "memory:account-b"
+        ],
+        "selectedMemoryRefs": [
+          "memory:account-a",
+          "memory:account-b"
+        ],
+        "decision": "ask",
+        "fields": []
+      },
+      "stages": [
+        {
+          "id": "ingestion-coverage",
+          "status": "passed",
+          "issues": []
+        },
+        {
+          "id": "retrieval-precision-and-coverage",
+          "status": "passed",
+          "issues": []
+        },
+        {
+          "id": "version-and-scope-resolution",
+          "status": "passed",
+          "issues": []
+        },
+        {
+          "id": "abstention-or-action-decision",
+          "status": "passed",
+          "issues": []
+        },
+        {
+          "id": "evidence-grounded-utilization",
+          "status": "passed",
+          "issues": []
+        }
+      ],
+      "status": "passed",
+      "resultDigest": "sha256:2fdb9095f9d02c2ccf94f2839ee83bf5f95b592298013d7c8b599903f8bb7643"
+    }
+  ],
+  "retention": "opaque-digests-and-evaluation-only",
+  "memoryChanged": false,
+  "knowledgeWritten": false,
+  "actionExecuted": false,
+  "executionAuthorized": false,
+  "resultDigest": "sha256:e5f70b4a15a6233d4f3ed8d3482cb4663fd85af8f69a643b033267e9b947b330"
+}

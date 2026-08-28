@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "persona-continuity-evaluation-local",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/assistant/evaluate-persona-continuity-suite.md",
+  "connectorId": "persona-continuity-evaluator",
+  "environment": "local",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "verify-source-semantics", "operation": "verifyPinnedPersonaContinuitySources" },
+    { "id": "evaluate-seven-scenarios", "operation": "evaluatePersonaContinuitySuite", "inputRef": "repo:/probes/fixtures/assistant/persona-continuity.json" },
+    { "id": "verify-axis-separation", "operation": "verifyRoleBoundaryValueAndStyleRemainSeparate" },
+    { "id": "verify-system-truth-separation", "operation": "verifySystemTruthCannotBeOverriddenByPersona" },
+    { "id": "verify-evaluator-disagreement", "operation": "verifyEvaluatorProvenanceAndDisagreement" },
+    { "id": "validate-public-schemas", "operation": "validateInputAndOutputSchemas" },
+    { "id": "verify-no-effects", "operation": "verifyNoPersonaMemoryPlatformActionOrAuthorizationEffect" }
+  ],
+  "assertions": [
+    "The frozen suite covers clean behavior, legitimate update, adversarial override, agreement seeking, emotional vulnerability, system-state conflict and insufficient context.",
+    "Role, boundary, value and style are evaluated independently and system truth remains a separate verdict.",
+    "Every evaluator observation retains evaluator, revision and family references; evaluator independence is not inferred.",
+    "Held/deviated conflicts become disagreement, unknown remains unknown, and no composite companion-quality score is produced.",
+    "Input text is ephemeral; public output retains digests and declared locators only.",
+    "Evaluation requires human review and cannot change persona, memory, platform state, execute an action or grant authorization.",
+    "The scripted evaluator proves contract behavior only, not real-Agent semantic quality or longitudinal companion outcomes."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 45, "maxCost": 0, "currency": "CNY" }
+}

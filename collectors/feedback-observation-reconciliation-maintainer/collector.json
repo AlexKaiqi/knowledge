@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "dsh.collector-definition/v1",
+  "id": "feedback-observation-reconciliation-maintainer",
+  "version": "1.0.0",
+  "scope": {
+    "knowledgeGlobs": ["knowledge/tools/feedback-observation-reconciler.md", "knowledge/concepts/feedback/feedback-observation-reconciliation.md", "knowledge/capabilities/feedback/reconcile-feedback-observations.md", "knowledge/schemas/feedback/*.schema.json", "knowledge/verifications/feedback/observation-reconciliation/*.json"],
+    "connectorIds": ["feedback-observation-reconciler"],
+    "capabilityRefs": ["/capabilities/feedback/reconcile-feedback-observations.md"]
+  },
+  "triggers": [{ "kind": "schedule", "schedule": "40 10 * * 3" }, { "kind": "source-change" }, { "kind": "schema-change" }, { "kind": "connector-change" }, { "kind": "failed-execution" }, { "kind": "manual" }],
+  "execution": { "kind": "deterministic", "runtime": "node >=22.19", "entrypoint": "collectors/feedback-observation-reconciliation-maintainer/src/index.mjs" },
+  "outputs": ["knowledge-proposal", "connector-change-proposal", "verification-report"],
+  "writePolicy": { "mode": "proposal-only", "requiresApprovalFor": ["knowledge", "connector", "live-probe"] },
+  "probePolicy": { "allowedEnvironments": ["local", "production-public"], "identityPoolRefs": [], "maximumEffect": "none" },
+  "budgets": { "maxRunsPerDay": 2, "maxCostPerDay": 0, "currency": "CNY" }
+}

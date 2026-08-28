@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/schemas/steam/prepare-initial-base-price-review-revision-input.schema.json",
+  "title": "PrepareSteamInitialBasePriceReviewRevisionInput",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["gameRef", "sourceRevisionRef", "pricingCatalogRevisionRef", "minimumThresholdRevisionRef", "packageRef", "buildRevisionRef", "observedPricingState", "target"],
+  "properties": {
+    "gameRef": { "$ref": "#/$defs/safeId" },
+    "sourceRevisionRef": { "$ref": "#/$defs/ref" },
+    "pricingCatalogRevisionRef": { "$ref": "#/$defs/ref" },
+    "minimumThresholdRevisionRef": { "$ref": "#/$defs/ref" },
+    "packageRef": { "$ref": "#/$defs/ref" },
+    "buildRevisionRef": { "$ref": "#/$defs/ref" },
+    "observedPricingState": { "$ref": "#/$defs/observed" },
+    "target": { "$ref": "#/$defs/target" }
+  },
+  "$defs": {
+    "safeId": { "type": "string", "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,191}$" },
+    "ref": { "type": "string", "minLength": 1, "maxLength": 500, "pattern": "^[^\\u0000\\r\\n]+$" },
+    "refs": { "type": "array", "minItems": 1, "maxItems": 20, "uniqueItems": true, "items": { "$ref": "#/$defs/ref" } },
+    "point": {
+      "type": "object", "additionalProperties": false,
+      "required": ["marketCode", "amountMinorUnits", "observedMinimumBaseMinorUnits"],
+      "properties": {
+        "marketCode": { "type": "string", "pattern": "^[A-Z]{3}(?:_[A-Z]+)?$" },
+        "amountMinorUnits": { "type": "integer", "minimum": 1, "maximum": 1000000000 },
+        "observedMinimumBaseMinorUnits": { "type": "integer", "minimum": 1, "maximum": 1000000000 }
+      }
+    },
+    "observed": {
+      "type": "object", "additionalProperties": false,
+      "required": ["observedAt", "releaseState", "packageState", "pricingSubmissionState", "currentPriceScheduleDigest", "activeOrScheduledDiscount", "evidenceRefs"],
+      "properties": {
+        "observedAt": { "type": "string", "format": "date-time" },
+        "releaseState": { "enum": ["unreleased", "released"] },
+        "packageState": { "enum": ["standard-package-present", "missing"] },
+        "pricingSubmissionState": { "enum": ["not-submitted", "draft", "under-review", "approved"] },
+        "currentPriceScheduleDigest": { "oneOf": [{ "type": "null" }, { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" }] },
+        "activeOrScheduledDiscount": { "type": "boolean" },
+        "evidenceRefs": { "$ref": "#/$defs/refs" }
+      }
+    },
+    "target": {
+      "type": "object", "additionalProperties": false,
+      "required": ["packageKind", "publishMode", "pricePoints", "marketResearchEvidenceRefs", "valueEvidenceRefs"],
+      "properties": {
+        "packageKind": { "const": "standard-base-game" },
+        "publishMode": { "enum": ["valve-publish-after-review", "partner-manual-publish-after-review"] },
+        "pricePoints": { "type": "array", "minItems": 1, "maxItems": 45, "items": { "$ref": "#/$defs/point" } },
+        "marketResearchEvidenceRefs": { "$ref": "#/$defs/refs" },
+        "valueEvidenceRefs": { "$ref": "#/$defs/refs" }
+      }
+    }
+  }
+}

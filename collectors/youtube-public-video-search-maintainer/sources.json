@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "youtube-public-video-search",
+  "sources": [
+    { "id": "youtube-search-list", "url": "https://developers.google.com/youtube/v3/docs/search/list", "role": "official-api-contract", "observation": { "mode": "static-html-semantic", "assertions": [{ "id": "video-filter", "includes": "type" }, { "id": "keyword-query", "includes": "q" }, { "id": "approximate-total", "includes": "approximation" }] } },
+    { "id": "youtube-getting-started", "url": "https://developers.google.com/youtube/v3/getting-started", "role": "official-access-contract", "observation": { "mode": "static-html-semantic", "assertions": [{ "id": "project-required", "includes": "Google Account" }, { "id": "api-key", "includes": "API key" }, { "id": "oauth-authorized", "includes": "OAuth 2.0" }] } },
+    { "id": "youtube-quota", "url": "https://developers.google.com/youtube/v3/determine_quota_cost", "role": "official-quota-contract", "observation": { "mode": "static-html-semantic", "assertions": [{ "id": "search-bucket", "includes": "search" }, { "id": "quota-calculator", "includes": "Quota Calculator" }] } },
+    { "id": "youtube-policy", "url": "https://developers.google.com/youtube/terms/developer-policies", "role": "official-use-policy", "observation": { "mode": "static-html-semantic", "assertions": [{ "id": "thirty-day-refresh", "includes": "30 calendar days" }, { "id": "delete-or-refresh", "includes": "delete or refresh" }, { "id": "privacy", "includes": "privacy" }] } },
+    { "id": "youtube-revision-history", "url": "https://developers.google.com/youtube/v3/revision_history", "role": "official-change-log", "observation": { "mode": "static-html-semantic", "assertions": [{ "id": "granular-quota", "includes": "granular quota" }, { "id": "search-quota", "includes": "Search" }] } }
+  ]
+}

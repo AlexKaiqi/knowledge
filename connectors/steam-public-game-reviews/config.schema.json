@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/steam-public-game-reviews-config.schema.json",
+  "title": "SteamPublicGameReviewsConnectorConfig",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "timeoutMs": { "type": "integer", "minimum": 1000, "maximum": 60000, "default": 15000 },
+    "maxResponseBytes": { "type": "integer", "minimum": 65536, "maximum": 2097152, "default": 1048576 },
+    "userAgent": { "type": "string", "minLength": 1, "maxLength": 128, "default": "dsh-knowledge-catalog/0.1" }
+  }
+}

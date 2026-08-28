@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "dsh.collector-definition/v1",
+  "id": "current-work-projection-maintainer",
+  "version": "1.0.0",
+  "scope": {
+    "knowledgeGlobs": [
+      "knowledge/tools/current-work-projection-maintainer.md",
+      "knowledge/concepts/assistant/current-work-projection-maintenance.md",
+      "knowledge/capabilities/assistant/maintain-current-work-projection.md",
+      "knowledge/schemas/assistant/maintain-current-work-projection-*.schema.json",
+      "knowledge/verifications/assistant/current-work-projection-maintenance/*.json"
+    ],
+    "connectorIds": ["current-work-projection-maintainer"],
+    "capabilityRefs": ["/capabilities/assistant/maintain-current-work-projection.md"]
+  },
+  "triggers": [
+    { "kind": "schedule", "schedule": "35 9 * * 3" },
+    { "kind": "source-change" },
+    { "kind": "schema-change" },
+    { "kind": "connector-change" },
+    { "kind": "failed-execution" },
+    { "kind": "manual" }
+  ],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "collectors/current-work-projection-maintainer/src/index.mjs"
+  },
+  "outputs": ["knowledge-proposal", "connector-change-proposal", "verification-report"],
+  "writePolicy": {
+    "mode": "proposal-only",
+    "requiresApprovalFor": ["knowledge", "connector"]
+  },
+  "probePolicy": {
+    "allowedEnvironments": ["local", "production-public"],
+    "identityPoolRefs": [],
+    "maximumEffect": "local-write"
+  },
+  "budgets": { "maxRunsPerDay": 2, "maxCostPerDay": 0, "currency": "CNY" }
+}

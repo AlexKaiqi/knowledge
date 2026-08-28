@@ -1,0 +1,110 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "demand-signal-access-routes",
+  "sources": [
+    {
+      "id": "serpapi-pricing", "url": "https://serpapi.com/pricing", "role": "provider-pricing",
+      "observation": { "mode": "static-html-semantic", "assertions": [{ "id": "starter-price", "includes": "&quot;price&quot;:&quot;$25&quot;" }, { "id": "starter-volume", "includes": "&quot;searches&quot;:&quot;1,000&quot;" }, { "id": "free-plan", "includes": "Free" }] }
+    },
+    {
+      "id": "serpapi-api-contract", "url": "https://serpapi.com/search-api", "role": "provider-api-contract",
+      "observation": { "mode": "static-html-semantic", "assertions": [{ "id": "search-endpoint", "includes": "https://serpapi.com/search?engine=google" }, { "id": "api-key-required", "includes": "api_key" }, { "id": "demo-key-documented", "includes": "demo SerpApi key" }] }
+    },
+    {
+      "id": "google-custom-search-retirement", "url": "https://developers.google.com/custom-search/v1/overview?hl=en", "role": "official-access-contract",
+      "observation": { "mode": "static-html-semantic", "assertions": [{ "id": "closed-new-customers", "includes": "closed to new customers" }, { "id": "retirement-date", "includes": "January 1, 2027" }, { "id": "api-key", "includes": "API key" }] }
+    },
+    {
+      "id": "bright-data-serp", "url": "https://brightdata.com/pricing/serp", "role": "provider-pricing",
+      "observation": { "mode": "static-html-semantic", "assertions": [{ "id": "serp-pricing", "includes": "SERP API Pricing" }, { "id": "payg", "includes": "Pay as you go" }, { "id": "free-tier", "includes": "Free Tier" }] }
+    },
+    {
+      "id": "bright-data-58", "url": "https://brightdata.com/products/web-scraper/58-com", "role": "provider-route",
+      "observation": { "mode": "static-html-semantic", "assertions": [{ "id": "target-route", "includes": "58.com Scraper" }, { "id": "api-endpoint", "includes": "API endpoint" }, { "id": "contact-sales", "includes": "Contact sales" }] }
+    },
+    {
+      "id": "bright-data-boss", "url": "https://brightdata.com/products/web-scraper/boss-zhipin", "role": "provider-route",
+      "observation": { "mode": "static-html-semantic", "assertions": [{ "id": "target-route", "includes": "BOSS Zhipin Scraper" }, { "id": "free-credits", "includes": "5,000 free credits" }, { "id": "captcha", "includes": "CAPTCHA" }] }
+    },
+    {
+      "id": "bright-data-jobs", "url": "https://brightdata.com/products/data-feeds/jobs-data-api", "role": "provider-route",
+      "observation": { "mode": "static-html-semantic", "assertions": [{ "id": "job-volume", "includes": "200M+ job postings" }, { "id": "record-billing", "includes": "Pay per record retrieved" }, { "id": "filters", "includes": "Filter by title" }] }
+    },
+    {
+      "id": "google-trends-alpha", "url": "https://developers.google.com/search/apis/trends?hl=en", "role": "official-access-contract",
+      "observation": { "mode": "static-html-semantic", "assertions": [{ "id": "api-name", "includes": "Google Trends API" }, { "id": "alpha", "includes": "alpha" }, { "id": "history", "includes": "5 years" }] }
+    },
+    {
+      "id": "google-search-console", "url": "https://developers.google.com/webmaster-tools/v1/searchanalytics/query?hl=en", "role": "official-api-contract",
+      "observation": { "mode": "static-html-semantic", "assertions": [{ "id": "method", "includes": "searchanalytics.query" }, { "id": "row-limit", "includes": "rowLimit" }, { "id": "max-row-limit", "includes": "25,000" }] }
+    },
+    {
+      "id": "google-places", "url": "https://developers.google.com/maps/documentation/places/web-service/reference/rest/v1/places?hl=en", "role": "official-api-contract",
+      "observation": { "mode": "static-html-semantic", "assertions": [{ "id": "place-resource", "includes": "Place resource" }, { "id": "reviews", "includes": "reviews" }, { "id": "review-type", "includes": "Review" }] }
+    },
+    {
+      "id": "xianyu-legal-statement", "url": "https://terms.alicdn.com/legal-agreement/terms/suit_bu1_taobao/suit_bu1_taobao202103061039_91765.html", "role": "official-policy-surface",
+      "observation": { "mode": "static-html-semantic", "assertions": [{ "id": "prior-permission", "includes": "未经阿里巴巴集团及/或其关联公司许可" }, { "id": "automation", "includes": "机器人、蜘蛛" }, { "id": "content-retrieval", "includes": "擅自获取、使用闲鱼社区内的任何内容" }] }
+    },
+    {
+      "id": "xianyu-user-search", "url": "https://terms.alicdn.com/legal-agreement/terms/suit_bu1_other/suit_bu1_other201708081618_51146.html", "role": "official-access-contract",
+      "observation": { "mode": "static-html-semantic", "assertions": [{ "id": "keyword-search", "includes": "关键词检索" }, { "id": "search-and-browse", "includes": "搜索、浏览/便捷浏览及访问" }] }
+    },
+    {
+      "id": "xianyu-community-no-session-actor", "url": "https://apify.com/gantianca/xianyu-goofish-search", "role": "provider-route",
+      "observation": { "mode": "static-html-semantic", "assertions": [{ "id": "no-account-claim", "includes": "No. Uses public search API only." }, { "id": "residential-proxy", "includes": "residential proxy rotation" }, { "id": "request-price", "includes": "$0.01 / call" }] }
+    },
+    {
+      "id": "xianyu-official-isv-query", "url": "https://developer.alibaba.com/docs/api.htm?apiId=49488&source=search", "role": "official-api-contract",
+      "observation": { "mode": "static-html-semantic", "assertions": [{ "id": "method", "includes": "alibaba.idle.isv.item.query" }, { "id": "authorized", "includes": "需要授权" }, { "id": "jushita", "includes": "聚石塔内调用" }] }
+    },
+    {
+      "id": "58-open-platform", "url": "https://open.58.com/", "role": "official-partner-surface",
+      "observation": { "mode": "static-html-semantic", "assertions": [{ "id": "open-platform", "includes": "开放平台" }] }
+    },
+    {
+      "id": "58-policy", "url": "https://help.58.com/home/announcement.html", "role": "official-policy-surface",
+      "observation": { "mode": "static-html-semantic", "assertions": [{ "id": "written", "includes": "书面" }, { "id": "commercial", "includes": "商业" }, { "id": "data", "includes": "数据" }] }
+    },
+    {
+      "id": "boss-user-protocol", "url": "https://www.zhipin.com/web/common/protocol/protocol-2019-09-30.html", "role": "official-policy-surface",
+      "observation": { "mode": "static-html-semantic", "assertions": [{ "id": "crawler", "includes": "爬虫" }, { "id": "third-party", "includes": "第三方" }, { "id": "jobs", "includes": "职位" }] }
+    },
+    {
+      "id": "bosshi-api", "url": "https://histatic.zhipin.com/front/bosshi-mp-docs/service/ready/apiCall/callProcess/processOverview.html", "role": "official-api-surface",
+      "observation": { "mode": "static-html-semantic", "assertions": [{ "id": "rest", "includes": "REST" }, { "id": "token", "includes": "access_token" }, { "id": "api", "includes": "API" }] }
+    },
+    {
+      "id": "coresignal-multi-source-jobs", "url": "https://docs.coresignal.com/jobs-api/multi-source-jobs-api.md", "role": "provider-route",
+      "observation": { "mode": "static-text-semantic", "assertions": [{ "id": "search", "includes": "/v2/job_multi_source/search/es_dsl" }, { "id": "collect", "includes": "/v2/job_multi_source/collect/{job_id}" }, { "id": "multi-source", "includes": "Multi-source Jobs" }] }
+    },
+    {
+      "id": "coresignal-pricing", "url": "https://docs.coresignal.com/pricing/pricing.md", "role": "provider-pricing",
+      "observation": { "mode": "static-text-semantic", "assertions": [{ "id": "trial", "includes": "7-day free trial" }, { "id": "credits", "includes": "2,000" }, { "id": "jobs-credit", "includes": "1 Multi-source Jobs API record" }] }
+    },
+    {
+      "id": "appfigures-product-search", "url": "https://docs.appfigures.com/api/reference/v2/products-2", "role": "provider-api-contract",
+      "observation": { "mode": "static-html-semantic", "assertions": [{ "id": "search-route", "includes": "GET /products/search/{term}" }, { "id": "public-data-add-on", "includes": "Public Data API</a> add-on is required for this route" }, { "id": "public-read-scope", "includes": "public:read" }] }
+    },
+    {
+      "id": "42matters-ios-search", "url": "https://42matters.com/docs/app-market-data/ios/apps/search", "role": "provider-api-contract",
+      "observation": { "mode": "static-html-semantic", "assertions": [{ "id": "provider-ranking", "includes": "ranked based on 42matters' algorithms and do not match the order of the Apple App Store" }, { "id": "three-hits", "includes": "Hits per request:" }, { "id": "tiny-plan", "includes": "Tiny</a> or above" }] }
+    },
+    {
+      "id": "apple-owned-customer-reviews", "url": "https://developer.apple.com/help/app-store-connect/monitor-ratings-and-reviews/view-ratings-and-reviews/", "role": "official-owned-feedback-contract",
+      "observation": { "mode": "static-html-semantic", "assertions": [{ "id": "owned-app-reviews", "includes": "customer reviews of your app" }, { "id": "territory-filter", "includes": "specific country or region" }, { "id": "rating-filter", "includes": "specific rating" }] }
+    },
+    {
+      "id": "google-play-owned-review-list", "url": "https://developers.google.com/android-publisher/api-ref/rest/v3/reviews/list?hl=en", "role": "official-owned-feedback-contract",
+      "observation": { "mode": "static-html-semantic", "assertions": [{ "id": "review-list-route", "includes": "applications/{packageName}/reviews" }, { "id": "publisher-scope", "includes": "androidpublisher" }, { "id": "pagination", "includes": "tokenPagination" }] }
+    },
+    {
+      "id": "google-play-recent-review-window", "url": "https://developers.google.com/android-publisher/reply-to-reviews?hl=en", "role": "official-owned-feedback-boundary",
+      "observation": { "mode": "static-html-semantic", "assertions": [{ "id": "recent-window", "includes": "modified within the last week" }, { "id": "csv-history", "includes": "your reviews as a CSV file" }, { "id": "page-limit", "includes": "up to 100 reviews" }] }
+    },
+    {
+      "id": "google-play-monthly-review-export", "url": "https://support.google.com/googleplay/android-developer/answer/6135870?hl=en", "role": "official-owned-feedback-export",
+      "observation": { "mode": "static-html-semantic", "assertions": [{ "id": "monthly-file", "includes": "reviews_[package_name]_YYYYMM.csv" }, { "id": "review-language", "includes": "Reviewer Language" }, { "id": "review-text", "includes": "Review Text" }] }
+    }
+  ]
+}

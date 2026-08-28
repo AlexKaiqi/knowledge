@@ -1,0 +1,36 @@
+{
+  "gameRef": "game:clockwork-familiar",
+  "sourceRevisionRef": "design:early-access-plan-v2",
+  "buildRevisionRef": "build:steam-early-access-candidate-v4",
+  "questionnaireRevisionRef": "steam-early-access-qa:observed-2026-08-27",
+  "answers": [
+    { "questionRef": "why-early-access", "text": "We are using Early Access to develop the remaining game structure with informed player feedback while keeping the current playable loop available.", "evidenceRefs": ["evidence:early-access-goal-v2"] },
+    { "questionRef": "approximate-duration", "text": "Our current estimate is a bounded development range, but it may change as we learn from the playable build and community feedback.", "evidenceRefs": ["evidence:development-range-v2"] },
+    { "questionRef": "planned-full-version-differences", "text": "We plan to expand content and polish the existing systems. These are changeable plans, not guarantees, and the current build is sold on what it contains today.", "evidenceRefs": ["evidence:nonbinding-roadmap-v3"] },
+    { "questionRef": "current-early-access-state", "text": "The current build contains the exploration and companion-dialogue loops; chapter count is limited and some updates may require save migration.", "evidenceRefs": ["evidence:current-build-audit-v4"] },
+    { "questionRef": "pricing-during-and-after", "text": "The current price reflects the playable build. We presently plan a possible increase as content grows and will communicate any change before it takes effect.", "evidenceRefs": ["evidence:pricing-copy-v1"] },
+    { "questionRef": "community-involvement", "text": "We will review structured bug reports and design feedback through declared community channels and publish decisions or changed plans on a regular cadence.", "evidenceRefs": ["evidence:community-loop-v2"] }
+  ],
+  "currentBuild": {
+    "playabilityState": "playable-current-build",
+    "playableEvidenceRefs": ["test:full-run-v4"],
+    "gameplayTrailerEvidenceRefs": ["media:gameplay-trailer-v2"],
+    "currentFeatureRefs": ["feature:companion-dialogue", "feature:exploration-loop"],
+    "currentLimitationRefs": ["limitation:chapter-count", "limitation:save-break-risk"]
+  },
+  "eligibility": {
+    "developmentState": "actively-in-development",
+    "fundingDependency": "not-dependent-on-early-access-sales",
+    "futurePlanCommitment": "non-binding-and-changeable",
+    "communityInfluence": "planned-and-material"
+  },
+  "pricePlan": {
+    "currentPriceRevisionRef": "price-plan:early-access-v1",
+    "futurePriceDirection": "higher",
+    "steamPriceParity": "confirmed-no-higher",
+    "transparencyEvidenceRefs": ["copy:pricing-answer-v1"],
+    "otherServiceAvailability": "planned-or-active",
+    "otherServicePriceEvidenceRefs": ["price-proof:other-store-v1"]
+  },
+  "thirdPartyDistribution": { "mode": "steam-key-sites", "disclosureEvidenceRefs": ["disclosure:key-site-v1"] }
+}

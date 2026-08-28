@@ -1,0 +1,133 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "dataforseo-google-public-reviews",
+  "sources": [
+    {
+      "id": "dataforseo-api-auth",
+      "url": "https://docs.dataforseo.com/v3/auth/",
+      "role": "official-auth-contract",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "basic-auth", "includes": "Basic Authentication" },
+          { "id": "separate-api-password", "includes": "different from your account password" },
+          { "id": "credentials-in-header", "includes": "credentials should always be passed in the header" }
+        ]
+      }
+    },
+    {
+      "id": "google-reviews-task-post",
+      "url": "https://docs.dataforseo.com/v3/business_data-google-reviews-task_post/",
+      "role": "official-task-submission-contract",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "task-post-path", "includes": "/business_data/google/reviews/task_post" },
+          { "id": "ten-review-billing-unit", "includes": "charged for every 10 reviews" },
+          { "id": "depth-maximum", "includes": "maximum value: 4490" },
+          { "id": "newest-sort", "includes": "newest – sort by newest first" },
+          { "id": "normal-priority", "includes": "1 – normal execution priority" }
+        ]
+      }
+    },
+    {
+      "id": "google-reviews-task-get",
+      "url": "https://docs.dataforseo.com/v3/business_data-google-reviews-task_get/",
+      "role": "official-result-and-sensitive-field-contract",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "task-get-path", "includes": "/business_data/google/reviews/task_get/$id" },
+          { "id": "thirty-day-result-window", "includes": "within the next 30 days for free" },
+          { "id": "reviewer-name-field", "includes": "profile name of the reviewer" },
+          { "id": "reviewer-profile-field", "includes": "URL of the reviewer's profile" },
+          { "id": "review-text-field", "includes": "content of the review" },
+          { "id": "owner-answer-field", "includes": "text of the owner's response" }
+        ]
+      }
+    },
+    {
+      "id": "google-reviews-pricing",
+      "url": "https://dataforseo.com/pricing/business-data/google-reviews-api",
+      "role": "official-pricing-and-turnaround-contract",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "standard-turnaround", "includes": "up to 45 minutes" },
+          { "id": "standard-unit-price", "includes": "$0.00075" },
+          { "id": "priority-unit-price", "includes": "$0.0015" }
+        ]
+      }
+    },
+    {
+      "id": "dataforseo-sandbox",
+      "url": "https://docs.dataforseo.com/v3/appendix/sandbox/",
+      "role": "official-sandbox-contract",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "sandbox-host", "includes": "sandbox.dataforseo.com" },
+          { "id": "dummy-data", "includes": "dummy data" },
+          { "id": "sandbox-free", "includes": "not be charged" }
+        ]
+      }
+    },
+    {
+      "id": "dataforseo-error-lifecycle",
+      "url": "https://docs.dataforseo.com/v3/appendix/errors/",
+      "role": "official-async-and-failure-contract",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "task-created", "includes": "Task Created" },
+          { "id": "task-handed", "includes": "Task Handed" },
+          { "id": "task-in-queue", "includes": "task in queue" },
+          { "id": "duplicate-task-limit", "includes": "duplicate task limit" },
+          { "id": "insufficient-funds", "includes": "Insufficient Funds" }
+        ]
+      }
+    },
+    {
+      "id": "dataforseo-terms",
+      "url": "https://dataforseo.com/terms-of-service",
+      "role": "supplier-legal-and-target-rights-contract",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "data-usage-restrictions", "includes": "DATA USAGE RESTRICTIONS" },
+          { "id": "originating-provider-interest", "includes": "shall not be used to compete with or adversely affect" },
+          { "id": "target-rights-liability", "includes": "violates the terms of service or legal rights of the search engine providers" },
+          { "id": "duplicate-submission-no-refund", "includes": "repeated task submissions" }
+        ]
+      }
+    },
+    {
+      "id": "google-maps-end-user-terms",
+      "url": "https://www.google.com/intl/en-US/help/terms_maps/",
+      "role": "target-platform-content-use-boundary",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "third-party-integrations-covered", "includes": "third party products or services that integrate Google Maps Platform Services" },
+          { "id": "copy-restricted", "includes": "copy the content" },
+          { "id": "bulk-feed-restricted", "includes": "mass download or create bulk feeds" },
+          { "id": "conduct-responsibility", "includes": "responsible at all times for your conduct and its consequences" }
+        ]
+      }
+    },
+    {
+      "id": "dataforseo-account-and-payment",
+      "url": "https://dataforseo.com/faq",
+      "role": "official-account-credit-and-payment-contract",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "trial-credit", "includes": "$1 credit" },
+          { "id": "minimum-payment", "includes": "$50" },
+          { "id": "pay-as-you-go", "includes": "pay-as-you-go" },
+          { "id": "auto-recharge", "includes": "auto-recharge" }
+        ]
+      }
+    }
+  ]
+}

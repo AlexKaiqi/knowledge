@@ -1,0 +1,41 @@
+{
+  "fixture": "isolated-production-current-work-maintenance",
+  "productionRevision": "c8e181adcf3904f47fd33b85ffc1e97126cbbd66",
+  "productionReceipt": {
+    "currentProjectionSha256": "ba3ae86f1a260474716fc1961c355d7672f9bd3ddffdf1af941efdb228d4bbbd",
+    "currentSessionSource": "session:current-maintenance-fixture",
+    "cursorAdvanced": true,
+    "proposalCreated": true,
+    "proposalApplied": false,
+    "durableKnowledgeWritten": false,
+    "gitHeadChanged": false,
+    "modelCalls": 1,
+    "replayStatus": "no-new-session-text"
+  },
+  "schemaVersion": "dsh.current-work-projection-maintenance/v1",
+  "currentSessionRef": "session:current-maintenance-fixture",
+  "workspaceRef": "workspace:primary",
+  "status": "updated",
+  "currentProjectionRef": ".pkb/current.md",
+  "currentProjectionDigest": "sha256:ba3ae86f1a260474716fc1961c355d7672f9bd3ddffdf1af941efdb228d4bbbd",
+  "currentProjectionChars": 246,
+  "currentSessionSourceIncluded": true,
+  "checkpointAdvanced": true,
+  "proposalRefs": [
+    "knowledge-proposal:c23d56ad-4bd7-4978-9db6-3a3d76c9cd22"
+  ],
+  "coverage": {
+    "sessionInput": "unconsumed-current-session-events",
+    "rawSessionTextReturned": false,
+    "currentProjectionComplete": false,
+    "proposalsUnconfirmed": true,
+    "proposalLimit": 4,
+    "modelOutputHumanReviewed": false
+  },
+  "currentProjectionModified": true,
+  "sessionHistoryModified": false,
+  "durableKnowledgeModified": false,
+  "gitCommitted": false,
+  "executionAuthorized": false,
+  "resultDigest": "sha256:44f37ea1019e84055307f889b7575a58718632a3818e9a032bcaa7eaf8c2c639"
+}

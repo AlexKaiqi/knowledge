@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/connectors/local-game-build-revision/config.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["workspaceRoot"],
+  "properties": {
+    "workspaceRoot": { "type": "string", "minLength": 1 },
+    "maxFiles": { "type": "integer", "minimum": 1, "maximum": 100000, "default": 20000 },
+    "maxTotalBytes": { "type": "integer", "minimum": 1, "maximum": 1099511627776, "default": 68719476736 },
+    "maxSingleFileBytes": { "type": "integer", "minimum": 1, "maximum": 1099511627776, "default": 34359738368 }
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/schemas/pet/project-public-state-to-behavior-output.schema.json",
+  "title": "Pet behavior projection",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "decisions", "finalBaseline", "coverage", "resultDigest"],
+  "properties": {
+    "schemaVersion": { "const": "dsh.pet-behavior-projection/v1" },
+    "decisions": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["kind", "atMs", "baseline", "pulse"],
+        "properties": {
+          "kind": { "enum": ["session-snapshot", "assistant-state"] },
+          "atMs": { "type": "integer", "minimum": 0 },
+          "baseline": { "$ref": "#/$defs/baseline" },
+          "pulse": {
+            "oneOf": [
+              { "type": "null" },
+              { "$ref": "#/$defs/pulse" }
+            ]
+          }
+        }
+      }
+    },
+    "finalBaseline": { "$ref": "#/$defs/baseline" },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["eventsProcessed", "sessionStreamPrimed", "acceptedStateSurface", "privateTextAccepted"],
+      "properties": {
+        "eventsProcessed": { "type": "integer", "minimum": 1, "maximum": 100 },
+        "sessionStreamPrimed": { "type": "boolean" },
+        "acceptedStateSurface": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "enum": ["session-running", "pending-interaction", "job-status", "assistant-status", "assistant-phase"] }
+        },
+        "privateTextAccepted": { "const": false }
+      }
+    },
+    "resultDigest": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+  },
+  "$defs": {
+    "baseline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["action", "mode"],
+      "properties": {
+        "action": { "enum": ["idle", "running"] },
+        "mode": { "const": "loop" }
+      }
+    },
+    "pulse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["action", "mode", "priority", "reason"],
+      "properties": {
+        "action": { "enum": ["waiting", "review", "failed", "waving", "jumping"] },
+        "mode": { "const": "once" },
+        "priority": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "reason": { "enum": ["job-failed", "interaction-required", "task-finished", "assistant-error", "assistant-speaking", "assistant-editing", "assistant-ready", "assistant-waiting"] }
+      }
+    }
+  }
+}

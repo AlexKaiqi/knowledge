@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "dataforseo-google-organic-serp",
+  "version": "0.1.0",
+  "capabilityRefs": ["/capabilities/research/read-web-result-page.md"],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "connectors/dataforseo-google-organic-serp/src/index.mjs"
+  },
+  "configSchema": "repo:/connectors/dataforseo-google-organic-serp/config.schema.json",
+  "credentialSlots": [
+    {
+      "name": "api-basic",
+      "required": true,
+      "purpose": "Resolve the provider-issued API login and API password outside Git; the password is not the account password."
+    }
+  ],
+  "handlers": [
+    {
+      "capabilityRef": "/capabilities/research/read-web-result-page.md",
+      "operation": "readGoogleOrganicResultPage"
+    }
+  ],
+  "conformance": {
+    "status": "candidate",
+    "probeDefinitionRef": "repo:/probes/definitions/dataforseo-google-organic-serp-live.json"
+  }
+}

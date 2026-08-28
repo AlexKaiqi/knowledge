@@ -1,0 +1,69 @@
+{
+  "fixture": "portable-demo-build",
+  "schemaVersion": "dsh.game-build-revision/v1",
+  "gameRef": "game:fixture",
+  "version": "0.1.0",
+  "target": "itch-portable",
+  "releaseLane": "internal",
+  "visibilityIntent": "owner-only",
+  "sourceRevisionRef": "git:fixture-commit",
+  "rightsBasisRefs": [
+    "rights:self-authored-fixture"
+  ],
+  "releaseNotesRef": "repo:/probes/fixtures/game-build/release-notes.md",
+  "entrypoints": [
+    "demo.exe"
+  ],
+  "artifacts": [
+    {
+      "path": "data.pck",
+      "sizeBytes": 28,
+      "sha256": "sha256:6fa076f02794538f904fc91d130de40db39c8d5f267bddec8c1a4f0cfc3298e6",
+      "entrypoint": false
+    },
+    {
+      "path": "demo.exe",
+      "sizeBytes": 29,
+      "sha256": "sha256:6d47598988a1491038d888ad45d97705cb33574ab02d6092eacd7ab6d2d6dfe9",
+      "entrypoint": true
+    }
+  ],
+  "status": "ready",
+  "revisionHash": "sha256:44b55f620f5c593efa7f6b3f591b55e520ccce63137083b2046e691d15228396",
+  "summary": {
+    "fileCount": 2,
+    "totalBytes": 57
+  },
+  "preflight": {
+    "checks": [
+      {
+        "id": "workspace-boundary",
+        "status": "passed"
+      },
+      {
+        "id": "regular-files-only",
+        "status": "passed"
+      },
+      {
+        "id": "secret-like-filenames-absent",
+        "status": "passed"
+      },
+      {
+        "id": "artifact-budget",
+        "status": "passed"
+      },
+      {
+        "id": "entrypoints-present",
+        "status": "passed"
+      },
+      {
+        "id": "nonempty-build",
+        "status": "passed"
+      }
+    ],
+    "blockers": []
+  },
+  "uploaded": false,
+  "executionAuthorized": false,
+  "preparedAt": "2026-08-27T03:00:00.000Z"
+}

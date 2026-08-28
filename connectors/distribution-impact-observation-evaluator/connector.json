@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "distribution-impact-observation-evaluator",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/distribution/evaluate-impact-observation-set.md"],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "connectors/distribution-impact-observation-evaluator/src/index.mjs"
+  },
+  "configSchema": "repo:/connectors/distribution-impact-observation-evaluator/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [
+    {
+      "capabilityRef": "/capabilities/distribution/evaluate-impact-observation-set.md",
+      "operation": "evaluateDistributionImpactObservations"
+    }
+  ],
+  "conformance": {
+    "status": "verified",
+    "probeReportRef": "/verifications/distribution/impact-observation-evaluation/report.json"
+  }
+}

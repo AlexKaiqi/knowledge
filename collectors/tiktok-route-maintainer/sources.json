@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "tiktok-access-routes",
+  "sources": [
+    { "id": "tiktok-embed-videos", "url": "https://developers.tiktok.com/docs/en/embed-videos", "role": "official-api-contract", "observation": { "mode": "static-html-semantic", "assertions": [{ "id": "oembed-endpoint", "includes": "oembed" }, { "id": "public-video-url", "includes": "video URL" }] } },
+    { "id": "tiktok-research-product", "url": "https://developers.tiktok.com/products/research-api/", "role": "official-eligibility-contract", "observation": { "mode": "static-html-semantic", "assertions": [{ "id": "qualifying-researchers", "includes": "qualifying researchers" }, { "id": "non-commercial", "includes": "non-commercial" }] } },
+    { "id": "tiktok-research-faq", "url": "https://developers.tiktok.com/doc/research-api-faq/", "role": "official-eligibility-policy", "observation": { "mode": "static-html-semantic", "assertions": [{ "id": "commercial-exclusion", "includes": "commercial user" }, { "id": "developer-account-insufficient", "includes": "developer account" }] } },
+    { "id": "tiktok-display-api", "url": "https://developers.tiktok.com/docs/en/display-api-overview", "role": "official-owned-data-contract", "observation": { "mode": "static-html-semantic", "assertions": [{ "id": "video-list", "includes": "/v2/video/list/" }, { "id": "authorized-user", "includes": "authorization" }] } },
+    { "id": "tiktok-content-posting", "url": "https://developers.tiktok.com/docs/en/content-posting-api-get-started", "role": "official-platform-write-contract", "observation": { "mode": "static-html-semantic", "assertions": [{ "id": "video-publish", "includes": "video.publish" }, { "id": "app-approval", "includes": "approval" }, { "id": "user-authorization", "includes": "authorization" }] } },
+    { "id": "tiktok-direct-post", "url": "https://developers.tiktok.com/docs/en/content-posting-api-reference-direct-post", "role": "official-platform-write-contract", "observation": { "mode": "static-html-semantic", "assertions": [{ "id": "unaudited-private", "includes": "private viewing mode" }, { "id": "audit", "includes": "audit" }] } }
+  ]
+}

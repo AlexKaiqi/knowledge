@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "public-state-pet-behavior-local",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/pet/project-public-state-to-behavior.md",
+  "connectorId": "public-state-pet-behavior-projector",
+  "environment": "local",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "verify-production-provenance", "operation": "verifyPinnedProductionSource" },
+    { "id": "project-public-trace", "operation": "projectPublicStateToPetBehavior", "inputRef": "repo:/probes/fixtures/pet/public-state-trace.json" },
+    { "id": "validate-public-schema", "operation": "validateOutputSchema" },
+    { "id": "reject-private-surface", "operation": "verifyPrivateSurfaceRejected" }
+  ],
+  "assertions": [
+    "The pinned production client source is readable and matches its recorded SHA-256 digest.",
+    "Running, waiting, speaking, completion and failure map to the expected baseline or pulse actions.",
+    "The same trace returns the same result digest.",
+    "Transcript, prompt, tool arguments and hidden reasoning cannot enter the public input.",
+    "The output contains no Connector path, source repository path or DSH runtime object."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 30, "maxCost": 0, "currency": "CNY" }
+}

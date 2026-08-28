@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/schemas/assistant/prepare-action-impact-review-revision-input.schema.json",
+  "title": "Prepare action impact review revision input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["candidate", "impact", "requestedAt", "validForSeconds", "evidenceRefs"],
+  "properties": {
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["candidateRef", "candidateDigest", "actionName", "effect", "scopeRef", "targetRefs", "arguments", "readiness", "requiredMissing"],
+      "properties": {
+        "candidateRef": { "$ref": "#/$defs/opaqueRef" },
+        "candidateDigest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "actionName": { "$ref": "#/$defs/id" },
+        "effect": { "$ref": "#/$defs/effect" },
+        "scopeRef": { "$ref": "#/$defs/opaqueRef" },
+        "targetRefs": { "type": "array", "minItems": 1, "maxItems": 10, "uniqueItems": true, "items": { "$ref": "#/$defs/opaqueRef" } },
+        "arguments": { "type": "object", "maxProperties": 50, "propertyNames": { "$ref": "#/$defs/fieldPath" }, "additionalProperties": { "$ref": "#/$defs/scalar" } },
+        "readiness": { "enum": ["grounded", "needs-clarification"] },
+        "requiredMissing": { "type": "array", "maxItems": 50, "uniqueItems": true, "items": { "$ref": "#/$defs/fieldPath" } }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "readiness": { "const": "grounded" } }, "required": ["readiness"] },
+          "then": { "properties": { "requiredMissing": { "maxItems": 0 } } }
+        },
+        {
+          "if": { "properties": { "readiness": { "const": "needs-clarification" } }, "required": ["readiness"] },
+          "then": { "properties": { "requiredMissing": { "minItems": 1 } } }
+        }
+      ]
+    },
+    "impact": { "$ref": "#/$defs/impact" },
+    "requestedAt": { "type": "string", "format": "date-time" },
+    "validForSeconds": { "type": "integer", "minimum": 60, "maximum": 3600 },
+    "evidenceRefs": { "type": "array", "minItems": 1, "maxItems": 20, "uniqueItems": true, "items": { "$ref": "#/$defs/opaqueRef" } }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9._-]{0,127}$" },
+    "fieldPath": { "type": "string", "pattern": "^[a-z][a-zA-Z0-9_]{0,63}$" },
+    "opaqueRef": { "type": "string", "minLength": 1, "maxLength": 500 },
+    "effect": { "enum": ["none", "local-write", "platform-write", "financial", "communication", "identity-relationship"] },
+    "scalar": { "oneOf": [{ "type": "string", "maxLength": 2000 }, { "type": "number" }, { "type": "boolean" }] },
+    "impact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dataClasses", "audience", "reversibility", "cost", "consequenceRefs"],
+      "properties": {
+        "dataClasses": { "type": "array", "minItems": 1, "maxItems": 4, "uniqueItems": true, "items": { "enum": ["public", "personal", "confidential", "credential"] } },
+        "audience": { "enum": ["none", "single-recipient", "bounded-group", "public", "unknown"] },
+        "reversibility": { "enum": ["reversible", "conditional", "irreversible", "unknown"] },
+        "cost": {
+          "oneOf": [
+            { "type": "object", "additionalProperties": false, "required": ["kind"], "properties": { "kind": { "const": "none" } } },
+            { "type": "object", "additionalProperties": false, "required": ["kind"], "properties": { "kind": { "const": "unknown" } } },
+            { "type": "object", "additionalProperties": false, "required": ["kind", "maximumMinorUnits", "currency"], "properties": { "kind": { "const": "bounded" }, "maximumMinorUnits": { "type": "integer", "minimum": 0 }, "currency": { "type": "string", "pattern": "^[A-Z]{3}$" } } }
+          ]
+        },
+        "consequenceRefs": { "type": "array", "maxItems": 20, "uniqueItems": true, "items": { "$ref": "#/$defs/opaqueRef" } }
+      }
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "steam-supported-feature-review-revision-local",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/steam/prepare-supported-feature-review-revision.md",
+  "connectorId": "steam-supported-feature-revision",
+  "environment": "local",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "verify-official-feature-rules", "operation": "verifyOfficialSteamSupportedFeatureSemantics" },
+    { "id": "prepare-supported-feature-revision", "operation": "prepareSteamSupportedFeatureReviewRevision", "inputRef": "repo:/probes/fixtures/game-build/steam-supported-features.json" },
+    { "id": "verify-mutation-binding", "operation": "verifySupportedFeatureRevisionMutationBinding" },
+    { "id": "verify-future-feature-blockers", "operation": "verifyPlannedUnknownAndDuplicateFeatureBlockers" },
+    { "id": "validate-public-schema", "operation": "validateInputAndOutputSchema" },
+    { "id": "verify-no-platform-effect", "operation": "verifyNoSteamworksEffect" }
+  ],
+  "assertions": [
+    "Official review guidance requires every supported feature selected on the store page to be implemented in the current build.",
+    "A future feature must remain unselected until it is implemented and released.",
+    "A valid current-build fixture produces a stable revision across preparation times.",
+    "Changing build, catalog, feature identity, display name, implementation evidence or test evidence changes the revision hash.",
+    "Planned, unknown and duplicate feature declarations are blocked rather than silently accepted.",
+    "Current platform availability, catalog mapping, evidence quality, actual usability and owned-target authority remain pending human review.",
+    "The result cannot claim build validation, Steamworks save, preview, publication, review submission, release or execution authorization."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 45, "maxCost": 0, "currency": "CNY" }
+}

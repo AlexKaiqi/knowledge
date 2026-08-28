@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "public-state-pet-behavior",
+  "sources": [
+    {
+      "id": "production-pinned-client",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-codex-pet/ddacb3e40385db280930e93d350d3706a8656518/packages/dsh-codex-pet/lib/client.js",
+      "role": "production-implementation",
+      "acceptedDocumentDigest": "362d6112e3a2c14edd7077218ebad5a972751edd36de3e09c0a020d5ba5303d3",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "session-baseline", "includes": "actions.setBase(working ? \"running\" : \"idle\")" },
+          { "id": "failure-priority", "includes": "actions.play(\"failed\", 100)" },
+          { "id": "assistant-public-event", "includes": "dsh-pet-assistant:state" }
+        ]
+      }
+    },
+    {
+      "id": "production-main-client",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-codex-pet/main/packages/dsh-codex-pet/lib/client.js",
+      "role": "upstream-change-surface",
+      "acceptedDocumentDigest": "362d6112e3a2c14edd7077218ebad5a972751edd36de3e09c0a020d5ba5303d3",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "session-driver", "includes": "function useSessionDriver" },
+          { "id": "assistant-driver", "includes": "function useAssistantDriver" },
+          { "id": "private-reasoning-absent", "includes": "var transcript = typeof detail.transcript === \"string\" ? detail.transcript.slice(0, 180) : \"\"" }
+        ]
+      }
+    }
+  ]
+}

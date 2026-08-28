@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "steam-supported-feature-review-revision",
+  "sources": [
+    {
+      "id": "steam-review-process",
+      "url": "https://partner.steamgames.com/doc/store/review_process?l=english&language=english",
+      "role": "official-supported-feature-and-review-boundary",
+      "observation": { "mode": "static-html-semantic", "assertions": [
+        { "id": "current-build-required", "includes": "All supported features listed on the store page will need to be implemented in the current build" },
+        { "id": "future-feature-unselected", "includes": "remove the selected feature in the Basic Info tab until it is implemented and released" },
+        { "id": "review-handoff", "includes": "Mark as ready for review" }
+      ] }
+    },
+    {
+      "id": "steam-store-page",
+      "url": "https://partner.steamgames.com/doc/store/page?l=english&language=english",
+      "role": "official-store-page-preview-and-publish-boundary",
+      "observation": { "mode": "static-html-semantic", "assertions": [
+        { "id": "required-sections", "includes": "sections marked with a (*)" },
+        { "id": "beta-preview", "includes": "Store Beta Mode" },
+        { "id": "publishing-separate", "includes": "Prepare for Publishing" }
+      ] }
+    }
+  ]
+}

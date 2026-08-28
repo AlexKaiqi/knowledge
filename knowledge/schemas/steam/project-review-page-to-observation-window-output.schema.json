@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/schemas/steam/project-review-page-to-observation-window-output.schema.json",
+  "title": "Steam review page feedback observation window",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "sourceRef", "targetRef", "window", "coverage", "checkpointRecommendation", "executionAuthorized", "resultDigest"],
+  "properties": {
+    "schemaVersion": { "const": "dsh.steam-feedback-observation-window/v1" },
+    "sourceRef": { "const": "steam:public-game-reviews" },
+    "targetRef": { "type": "string", "pattern": "^steam:app:[1-9][0-9]*$" },
+    "window": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["observedAt", "completeness", "checkpointRef", "items"],
+      "properties": {
+        "observedAt": { "type": "string", "format": "date-time" },
+        "completeness": { "const": "partial" },
+        "checkpointRef": { "type": "string", "pattern": "^steam-review-cursor:sha256:[0-9a-f]{64}$" },
+        "items": {
+          "type": "array",
+          "maxItems": 20,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["itemRef", "contentDigest", "lifecycle", "replyState"],
+            "properties": {
+              "itemRef": { "type": "string", "pattern": "^steam-review:[1-9][0-9]*$" },
+              "contentDigest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+              "lifecycle": { "const": "visible" },
+              "replyState": { "const": "unknown" }
+            }
+          }
+        }
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["representation", "returnedCount", "currentCursor", "resumeCursor", "pageExhausted", "corpusComplete", "itemIdentity", "editDetection", "explicitLifecycleTombstones", "absenceDeletionInferenceAllowed", "checkpointSemantics"],
+      "properties": {
+        "representation": { "const": "cursor-page" },
+        "returnedCount": { "type": "integer", "minimum": 0, "maximum": 20 },
+        "currentCursor": { "type": "string", "minLength": 1, "maxLength": 1024 },
+        "resumeCursor": { "type": "string", "minLength": 1, "maxLength": 1024 },
+        "pageExhausted": { "type": "boolean" },
+        "corpusComplete": { "const": false },
+        "itemIdentity": { "const": "recommendation-id" },
+        "editDetection": { "const": "semantic-digest" },
+        "explicitLifecycleTombstones": { "const": false },
+        "absenceDeletionInferenceAllowed": { "const": false },
+        "checkpointSemantics": { "const": "resume-cursor-only-not-global-high-watermark" }
+      }
+    },
+    "checkpointRecommendation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["action", "reason"],
+      "properties": {
+        "action": { "const": "hold" },
+        "reason": { "const": "cursor-page-is-not-complete-window" }
+      }
+    },
+    "executionAuthorized": { "const": false },
+    "resultDigest": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+  }
+}

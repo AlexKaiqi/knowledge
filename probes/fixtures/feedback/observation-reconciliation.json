@@ -1,0 +1,26 @@
+{
+  "sourceRef": "source:owned-comment-surface",
+  "targetRef": "release:fixture-v1",
+  "priorWindow": {
+    "observedAt": "2026-08-26T00:00:00Z",
+    "completeness": "complete",
+    "checkpointRef": "cursor:previous",
+    "items": [
+      { "itemRef": "comment:new-edit", "contentDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "lifecycle": "visible", "replyState": "unanswered" },
+      { "itemRef": "comment:missing", "contentDigest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "lifecycle": "visible", "replyState": "unknown" },
+      { "itemRef": "comment:deleted", "contentDigest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "lifecycle": "visible", "replyState": "replied" },
+      { "itemRef": "comment:unchanged", "contentDigest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd", "lifecycle": "visible", "replyState": "unknown" }
+    ]
+  },
+  "currentWindow": {
+    "observedAt": "2026-08-27T00:00:00Z",
+    "completeness": "complete",
+    "checkpointRef": "cursor:current",
+    "items": [
+      { "itemRef": "comment:new", "contentDigest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", "lifecycle": "visible", "replyState": "unanswered" },
+      { "itemRef": "comment:new-edit", "contentDigest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "lifecycle": "visible", "replyState": "replied" },
+      { "itemRef": "comment:deleted", "lifecycle": "deleted", "replyState": "replied" },
+      { "itemRef": "comment:unchanged", "contentDigest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd", "lifecycle": "visible", "replyState": "unknown" }
+    ]
+  }
+}

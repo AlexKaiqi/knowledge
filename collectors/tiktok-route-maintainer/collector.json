@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "dsh.collector-definition/v1",
+  "id": "tiktok-route-maintainer",
+  "version": "0.1.0",
+  "scope": {
+    "knowledgeGlobs": ["knowledge/platforms/tiktok.md"],
+    "connectorIds": ["tiktok-public-video-embed"],
+    "capabilityRefs": ["/capabilities/tiktok/search-public-videos.md", "/capabilities/tiktok/list-owned-public-videos.md", "/capabilities/tiktok/publish-owned-content.md"]
+  },
+  "triggers": [{ "kind": "schedule", "schedule": "50 6 * * 1" }, { "kind": "source-change" }, { "kind": "connector-change" }, { "kind": "failed-execution" }, { "kind": "manual" }],
+  "execution": { "kind": "deterministic", "runtime": "node >=22.19", "entrypoint": "collectors/tiktok-route-maintainer/src/index.mjs" },
+  "outputs": ["knowledge-proposal", "connector-change-proposal", "verification-report"],
+  "writePolicy": { "mode": "proposal-only", "requiresApprovalFor": ["knowledge", "connector", "identity", "credential", "live-probe"] },
+  "probePolicy": { "allowedEnvironments": ["sandbox", "production-public", "production-private"], "identityPoolRefs": [], "maximumEffect": "platform-write" },
+  "budgets": { "maxRunsPerDay": 2, "maxCostPerDay": 0, "currency": "USD" }
+}

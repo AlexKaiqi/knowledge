@@ -25,7 +25,7 @@
             "additionalProperties": false,
             "required": ["mode", "assertions"],
             "properties": {
-              "mode": { "enum": ["static-html-semantic", "browser-rendered-semantic"] },
+              "mode": { "enum": ["static-html-semantic", "static-text-semantic", "browser-rendered-semantic"] },
               "assertions": {
                 "type": "array",
                 "minItems": 1,

@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "arxiv-public-metadata-search",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/arxiv/search-public-eprint-metadata.md"],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "connectors/arxiv-public-metadata-search/src/index.mjs"
+  },
+  "configSchema": "repo:/connectors/arxiv-public-metadata-search/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [
+    { "capabilityRef": "/capabilities/arxiv/search-public-eprint-metadata.md", "operation": "searchPublicEprintMetadata" }
+  ],
+  "conformance": {
+    "status": "verified",
+    "probeReportRef": "/verifications/arxiv/public-metadata-search/report.json"
+  }
+}

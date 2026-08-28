@@ -1,0 +1,12 @@
+{
+  "gameRef": "game:fixture",
+  "version": "0.1.0",
+  "target": "itch-portable",
+  "releaseLane": "internal",
+  "visibilityIntent": "owner-only",
+  "sourceDirectory": "probes/fixtures/game-build/demo",
+  "entrypoints": ["demo.exe"],
+  "sourceRevisionRef": "git:fixture-commit",
+  "rightsBasisRefs": ["rights:self-authored-fixture"],
+  "releaseNotesRef": "repo:/probes/fixtures/game-build/release-notes.md"
+}

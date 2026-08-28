@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "arxiv-public-metadata-search-live",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/arxiv/search-public-eprint-metadata.md",
+  "connectorId": "arxiv-public-metadata-search",
+  "environment": "production-public",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "read-fixed-personal-assistant-query", "operation": "searchPublicEprintMetadata" },
+    { "id": "validate-atom-metadata", "operation": "normalizeAtomResponse" },
+    { "id": "validate-public-schema", "operation": "validateOutputSchema" }
+  ],
+  "assertions": [
+    "The fixed public arXiv Metadata API endpoint returns at most five cs.AI phrase matches without an account or credential.",
+    "The Connector makes one serial request, enforces a process-local three-second minimum interval and never retries a failure.",
+    "Results preserve arXiv identifiers, descriptive metadata, version dates, categories and abstract/PDF links while downloading or retaining no e-print content files.",
+    "Offset pagination is explicitly mutable and is never represented as a stable delta checkpoint.",
+    "The live result matches its public product schema and contains no hidden Connector route, credential or raw Atom payload."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 60, "maxCost": 0, "currency": "USD" }
+}

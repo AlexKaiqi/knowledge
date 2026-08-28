@@ -1,0 +1,94 @@
+{
+  "fixture": "owner-opted-in-review-only-follow-up",
+  "schemaVersion": "dsh.proactive-contact-review-revision/v1",
+  "ownerScopeRef": "owner:primary",
+  "policy": {
+    "optedIn": true,
+    "pausedUntil": null,
+    "timeZone": "Asia/Shanghai",
+    "quietWindows": [
+      {
+        "start": "22:00",
+        "end": "08:00"
+      }
+    ],
+    "minimumGapMinutes": 90,
+    "maximumPerDay": 3,
+    "maximumConsecutiveUnanswered": 2,
+    "recentActivitySuppressionMinutes": 60,
+    "dedupeWindowMinutes": 120
+  },
+  "state": {
+    "evaluatedAt": "2026-08-27T06:00:00.000Z",
+    "sentToday": 1,
+    "consecutiveUnanswered": 0,
+    "lastProactiveContactAt": "2026-08-27T03:00:00.000Z",
+    "lastUserActivityAt": "2026-08-27T04:00:00.000Z",
+    "recentDedupeObservations": []
+  },
+  "candidate": {
+    "candidateRef": "proposal:feedback-follow-up-1",
+    "kind": "follow-up",
+    "dedupeKey": "feedback-follow-up:revision-1",
+    "basis": "The user explicitly asked to revisit the feedback synthesis today.",
+    "evidenceRefs": [
+      "request:fixture-1"
+    ],
+    "consequenceRefs": [
+      "contract:proactive-contact-review-only"
+    ],
+    "surfaceRefs": [
+      "surface:current-desktop"
+    ],
+    "availableFrom": "2026-08-27T05:00:00.000Z",
+    "expiresAt": "2026-08-27T10:00:00.000Z",
+    "visibleInSourceNow": false,
+    "copy": {
+      "title": "Feedback follow-up",
+      "body": "The feedback synthesis is ready to review when you have a moment."
+    }
+  },
+  "policySemanticsRevision": "proactive-contact-policy-2026-08-27",
+  "status": "eligible-for-human-review",
+  "reviewRevisionHash": "sha256:e4226d57c5fe2fe07985974c13d261b9a3bfe23c3e3a163bcbe3f16d6478a1b0",
+  "suppressionReasons": [],
+  "preflight": {
+    "blockers": []
+  },
+  "reviewItems": [
+    {
+      "id": "basis-and-user-benefit",
+      "status": "pending"
+    },
+    {
+      "id": "timing-and-interruption",
+      "status": "pending"
+    },
+    {
+      "id": "copy-and-sensitive-data",
+      "status": "pending"
+    },
+    {
+      "id": "exact-surfaces-and-audience",
+      "status": "pending"
+    },
+    {
+      "id": "duplicate-and-current-context",
+      "status": "pending"
+    },
+    {
+      "id": "snooze-dismiss-and-disable",
+      "status": "pending"
+    },
+    {
+      "id": "expiry-and-cancel",
+      "status": "pending"
+    }
+  ],
+  "reviewerDecision": null,
+  "notificationSent": false,
+  "messageCreated": false,
+  "deliveryAttempted": false,
+  "executionAuthorized": false,
+  "preparedAt": "2026-08-27T06:01:00.000Z"
+}

@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "versioned-memory-use-evaluation-local",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/assistant/evaluate-versioned-memory-use-suite.md",
+  "connectorId": "versioned-memory-use-evaluator",
+  "environment": "local",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "verify-research-evidence", "operation": "verifyMemoryEvaluationResearchSemantics" },
+    { "id": "evaluate-ten-case-suite", "operation": "evaluateVersionedMemoryUseSuite", "inputRef": "repo:/probes/fixtures/assistant/versioned-memory-use-suite.json" },
+    { "id": "verify-deterministic-replay", "operation": "verifyDeterministicReplayAndOrderIndependence" },
+    { "id": "verify-stage-attribution", "operation": "verifyIngestionRetrievalVersionDecisionAndUtilizationAttribution" },
+    { "id": "verify-safe-failure-cases", "operation": "verifyScopeConflictExpiryRevocationAndAbstention" },
+    { "id": "validate-public-schema", "operation": "validateInputAndOutputSchema" },
+    { "id": "verify-no-side-effects", "operation": "verifyNoMemoryKnowledgeOrActionEffect" }
+  ],
+  "assertions": [
+    "The evaluator derives current truth from explicit supersession, revocation, contest, expiry and scope relationships rather than latest-timestamp guessing.",
+    "Ten repository-native fixtures cover confirmed preference, explicit override, temporal supersession, conflict, missing facts, irrelevant similarity, scope isolation, expiry, revocation and contest.",
+    "A passing trace is deterministic and independent of case or reference ordering.",
+    "Missing ingestion, imprecise retrieval, wrong version selection, wrong decision and wrong utilization are attributed to separate stages.",
+    "Unknown or unresolved required facts produce abstain for recall and ask for action parameters.",
+    "The public surface contains only opaque references, digests, lifecycle metadata and normalized traces, not transcript, identity, provider route or natural-language answer text.",
+    "Evaluation never changes memory, writes knowledge, executes an action or grants authorization."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 45, "maxCost": 0, "currency": "CNY" }
+}

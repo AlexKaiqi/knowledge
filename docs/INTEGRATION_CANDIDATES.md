@@ -22,6 +22,10 @@ Goal
 
 当前首个目标研究任务是[个人助理/宠物](research/personal-assistant-pet-goal.md)。GitHub 用于发现真实实现摩擦、bug、workaround 和可运行项目；arXiv 用于发现经过定义的能力缺口、benchmark 和方法。两类证据必须交叉解释，不能用 star/citation 数量替代问题价值。
 
+需求信号的访问方式、付费供应商、授权边界和最小采购 probe 见[需求信号访问路线调研](research/demand-signal-access-routes.md)。其中 Google 被拆成 Web SERP、Trends、Search Console、自有 Business 评论、公开地点评论、自有 Play 评论和公开竞品 App 评论，不能作为一个 Connector。
+
+跨平台执行框架的采用规则见 [OpenConnector：借执行架构，不借目录真相](research/openconnector-upstream.md)：能直接、合法、无边际供应商费用并由我们验证的能力继续自有；付费或高运维复杂度路线才通过隐藏 Connector 接入。第三方 provider/action 目录不会批量进入 OKF。
+
 ## 排序规则
 
 候选必须先通过五个硬门：
@@ -50,6 +54,8 @@ Goal
 | 抖音 | 官方开放平台文档面、指定公开视频的嵌入描述 | 自有账号发布、回执、评论、指标和需求发现；平台完整闭环仍为 0 |
 | GitHub | 搜索、文件、tag、release、issue/PR 增量原语 | 已足够作为隐藏 Collector 底座；不再扩成通用公共知识 |
 | Hugging Face | 精确模型 revision 文件清单 | 只在前沿模型、数据集和评测发现有具体需求时增加隐藏 Collector；不做模型仓库百科 |
+| Apple App Store | 一个 US iPhone storefront 的无账号、最多 25 条公开应用元数据搜索；已验证 App ID/版本/价格/评分摘要和非排名边界 | 公开/自有评论、榜单/排名、历史变化、App Store Connect 发布与审核；官方 Search 文档已归档，需七天复验 |
+| Steam | 一个游戏的 `recent|updated` 公开评论 cursor page；去作者身份、正文瞬时返回 | 自有游戏审核/发布状态、流量、愿望单、开发者回复和稳定增量 reconcile；发布闭环仍为 0 |
 
 ## P0：下一批可执行候选
 
@@ -60,12 +66,11 @@ P0 按下面顺序一次只推进一个。前一项没有真实 probe 结论，�
 | 1 | **小红书私密发布并对账初次观测** | 把已有读取原语补成第一个最小内容发布闭环 | 已固定的浏览器辅助候选路线；官方创作平台作为人工 recovery | 对冻结 revision 一次确认后仅自己可见发布；必须从本人主页重发现、详情核对、取得稳定 note ID/URL 并读取去身份化初次反馈 | 平台写入；需要用户明确批准、受控自有账号、可见浏览器和未知结果禁重发 |
 | 2 | **小红书自有笔记反馈与指标增量** | 持续观察发布后的传播和需求信号 | 本人主页/创作服务平台的只读浏览器路线；多 route 只做对账不盲目 fallback | 对已知 note ID 从 checkpoint 读取指标和新评论；验证去身份化、编辑/删除语义和空窗口 | 需先证明详情/评论路线的新鲜度；不得采集跨笔记身份图谱 |
 | 3 | **闲鱼公开商品市场信号快照** | 从真实出售语境发现价格带、出售原因、故障、兼容性、配件和替代需求 | 官方 Web 可见浏览器、小样本只读路线；两个 Apache-2.0 浏览器项目只作为待审计原语 | 一个产品关键词、首屏/最多 20 项、不翻页；返回明确不完整的去身份化信号，并重新打开一个样本核对 | 官方协议确认匿名浏览/搜索基础服务，但没有公共市场研究 API；自动化、个性化、登录和数据保留边界仍需 live probe 与条款审阅 |
-| 4 | **App Store 公开应用检索与对比快照** | 竞品发现、版本/定价/评分变化、市场调研 | Apple 公开 Search/Lookup API；按国家和 software entity 固定查询 | 无账号 live 查询一个固定应用和一个固定关键词；验证 ID、版本、价格、评分、结果边界和 checkpoint 可复现 | 官方文档已归档，必须先验证当前端点、限流和字段漂移；不能承诺榜单或全量搜索 |
-| 5 | **App Store Connect 自有 App 评论增量** | 直接收集需求和版本反馈 | App Store Connect API `customerReviews`；JWT 只读 key | 使用自有测试/生产 App 从 checkpoint 读取评论或合法空集；按 territory/rating/version 归一化，输出不含作者身份 | 需要最小权限 API key、opaque credential ref 和一个归属明确的 App |
-| 6 | **Google Play 自有 App 评论增量** | 直接收集需求、设备/版本问题和回复状态 | Android Publisher Reviews API；月度历史回填可另用受控 GCS report | 使用自有 App 读取增量或合法空集；保留版本、设备类别、语言、星级、正文和回复状态，删除作者身份 | 需要 Play Console 权限与受控 probe App；API 增量和月报回填必须是两个内部 route、一个稳定输出 |
-| 7 | **App Store Connect / Google Play 自有发布状态读取** | 统一判断 build、审核、track、分阶段发布是否真实生效 | 两个平台各自官方 API，公共输出使用同一 `OwnedAppReleaseState` 概念但不强行统一原始字段 | 各用一个自有 App 只读查询当前版本、build、审核/track 状态和更新时间；保存平台原生状态及规范化大类 | 必须分成两个 Connector 和两个 probe；先读后写，不把平台差异抹掉 |
+| 4 | **App Store Connect 自有 App 评论增量** | 直接收集需求和版本反馈 | App Store Connect API `customerReviews`；JWT 只读 key | 使用自有测试/生产 App 从 checkpoint 读取评论或合法空集；按 territory/rating/version 归一化，输出不含作者身份 | 需要最小权限 API key、opaque credential ref 和一个归属明确的 App |
+| 5 | **Google Play 自有 App 评论增量** | 直接收集需求、设备/版本问题和回复状态 | Android Publisher Reviews API；月度历史回填可另用受控 GCS report | 使用自有 App 读取增量或合法空集；保留版本、设备类别、语言、星级、正文和回复状态，删除作者身份 | 需要 Play Console 权限与受控 probe App；API 增量和月报回填必须是两个内部 route、一个稳定输出 |
+| 6 | **App Store Connect / Google Play 自有发布状态读取** | 统一判断 build、审核、track、分阶段发布是否真实生效 | 两个平台各自官方 API，公共输出使用同一 `OwnedAppReleaseState` 概念但不强行统一原始字段 | 各用一个自有 App 只读查询当前版本、build、审核/track 状态和更新时间；保存平台原生状态及规范化大类 | 必须分成两个 Connector 和两个 probe；先读后写，不把平台差异抹掉 |
 
-说明：顺序 1 不是最容易的 API，而是当前最接近第一个完整平台闭环、且已经投入实现的切片。它有真实平台写入，所以不能为了赶进度绕过一次性确认。个人助理/宠物目标研究和闲鱼公开市场信号占用两个 active research 槽位，但在小红书 probe 完成前不抢占 active build；App Store 公开检索退回队列，等待目标研究生成具体竞品/query 后激活。App Store Connect 和 Google Play 私有切片还需要用户提供自有开发者身份。
+说明：顺序 1 不是最容易的 API，而是当前最接近第一个完整平台闭环、且已经投入实现的切片。它有真实平台写入，所以不能为了赶进度绕过一次性确认。个人助理/宠物目标研究和闲鱼公开市场信号占用两个 active research 槽位，但在小红书 probe 完成前不抢占 active build。App Store 公开检索已完成无账号 live 准入并从候选表移入当前基线；App Store Connect 和 Google Play 私有切片仍需要用户提供自有开发者身份。
 
 ## P1：P0 之后按实际渠道激活
 
@@ -89,7 +94,7 @@ P0 按下面顺序一次只推进一个。前一项没有真实 probe 结论，�
 
 | 候选对象 | 值得接入的切片 | 为什么不是当前 P0 |
 | --- | --- | --- |
-| Steam | 固定游戏的公开评论增量；自有游戏审核/发布状态、商店流量、愿望单和 release handoff | 官方评论 API 与 Steamworks 报告价值很高；自有发布依赖 Partner/appID/权限，正式 release 是不可逆高影响人工确认，公开评论还必须删除 SteamID 等作者字段 |
+| Steam | 自有游戏审核/发布状态、商店流量、愿望单和 release handoff | 公开评论有界读取已准入；剩余能力依赖 Partner/appID/权限，正式 release 是不可逆高影响人工确认，不能由公开评论能力背书 |
 | TapTap | 中国移动/PC 游戏发现和玩家反馈；自有游戏预约、测试、上架、版本与数据回读 | 官方开发者中心覆盖创建、审核、定时/立即发布和经营数据，但评论、评分、帖子等属于平台/用户数据，公共研究路线必须先做条款与数据授权审阅 |
 | itch.io | 独立游戏 build/channel 发布 receipt 与发现/下载/游玩 Analytics | 官方 butler CLI 可可靠上传且上传完成即可 live，适合小团队；只有实际选择 itch.io 分发时才准备自有测试页、不可变 build 和写入确认 |
 | Epic Games Store | 自有 PC 游戏提交、审核和 release-state 对账 | 有自助发布工具，但需要组织账号、协议、每个产品的提交费用，并满足多人游戏 crossplay、成就等要求；只有明确 PC 商店策略时激活 |
@@ -118,6 +123,24 @@ P0 按下面顺序一次只推进一个。前一项没有真实 probe 结论，�
 
 P1 不是“全部都接”。某个平台只有在存在实际账号、内容形态、目标受众和未来 30 天发布计划时，才提升为 active research。
 
+### P1E：需求信号的付费与自有数据路线
+
+| 候选结果切片 | 首选路线 | 激活条件与边界 |
+| --- | --- | --- |
+| 通用 Web SERP 小样本/增量 | DataForSEO candidate 已实现；SerpApi 或 Bright Data 作为第二故障域 | 固定 query pack/geo/locale 与三次调用、`$0.01` live 硬预算已落地；仍需账号/条款/credential/identity 与 sandbox+live 人工批准，结果必须声明不完整，不能用 result count 推断市场规模 |
+| 公共地点评论极小样本 | Google Places candidate 已实现 | 固定一次 ID-only Text Search + 一次 Place Details、最多 5 条 relevance sample、`$0.03` live 硬预算；原生评论必须瞬时完整署名并直链 Google Maps，Git 不留 Places 内容。仍需 Cloud/billing/key/identity、Maps Platform/EEA 条款、公开 Terms/Privacy 与归因界面批准 |
+| 公共地点评论较深样本 | DataForSEO Google Reviews candidate 已实现；SerpApi 保留另一故障域 | 固定一次 standard task、depth 20、newest-first、suspend/resume 且不自动重提；当前硬限 `$0.002`。删除 reviewer 身份/历史/图片、provider ID 与 owner reply 原文，verbatim 只瞬时。仍需账号/条款/API credential/identity、Google 内容使用与数据保护判断、sandbox 和 live probe；供应商访问不等于 Google 授权 |
+| 相对搜索兴趣序列 | Google Trends API alpha | 获得正式 alpha 资格后再建 Connector；兴趣指数不是绝对搜索量 |
+| 自有站点搜索词增量 | Google Search Console Search Analytics | 拥有 verified property 和只读 OAuth；接受 top rows 而非全量的官方语义 |
+| 公开地点评论小样本 | Google Places 官方最多 5 条；DataForSEO 固定 20 条 candidate | Google 官方路线保留完整作者 attribution 且不持久化；DataForSEO 路线删除作者身份但 verbatim 仍只瞬时，另审双方条款、用途、数据保护、异步重复付费与 `$0.002` 成本 |
+| 自有 Google Business 评论增量 | Google Business Profile Reviews API | 拥有 verified location、通过 API access 申请和只读 OAuth |
+| 公开竞品 App 评论/关键词研究 | Appfigures 评论 candidate 已实现；AppTweak/AppFollow 保留第二故障域 | 固定 ChatGPT Apple/US、30 天、最多 25 条、5 credits/`$1` 上限；仍需内部用途/商业许可判断、PAT、identity 与两阶段 ledger reconcile，author/内部 ID/response state 必须删除 |
+| 小红书/抖音公开内容关键词小样本 | OpenConnector self-hosted + TikHub component candidate；OOMOL 托管 Skill 保留商业故障域 | 只允许一个初始页、无 retry/pagination/media；OpenConnector v1.4.0 的 TikHub output 含 loose `results`、`rawData` 和 `raw`，必须先实测并建立去身份投影。账号/条款、目标平台内容用途、加密 runtime、scoped connection/token 和最高 `$1` probe 均未批准 |
+| 58 同城公开 listing 研究 | 先取得 58 书面用途许可，再考虑 Bright Data 58.com Scraper | 58 协议限制未经书面同意的商业数据使用；社区验证码/字体规避 Actor 拒绝 |
+| BOSS 职位研究 | 优先不绑定 BOSS 的合规 Jobs Data API；BOSS direct 只在书面许可后评估 | BOSS 协议明确限制第三方工具与爬虫；Bright Data 技术 route 不替代平台授权 |
+
+付费路线只隔离执行复杂度，不自动通过平台授权门。所有 trial、充值、接受条款、上传会话或创建 credential 都需要人工批准；Connector 必须设置金额/请求硬上限和原始数据短 retention。
+
 ## P2：有条件的需求与传播来源
 
 | 对象 | 可产生的信号 | 激活条件 |
@@ -135,6 +158,8 @@ P1 不是“全部都接”。某个平台只有在存在实际账号、内容�
 ## Watch：只观察，不做实现承诺
 
 - **Google Play 公开竞品搜索/详情/评论**：公开商店页面有价值，但本轮未发现面向第三方竞品检索和评论的正式 Google Play Developer API。继续观察官方能力；浏览器或第三方数据路线必须单独审查条款、地域/设备个性化和可重复性。
+- **58 同城公开 listing 研究**：官方开放平台面向合作方的发布与经营闭环，不证明任意公开市场研究权限；用户协议要求未经书面同意不得商业利用站内数据。书面授权前只研究路线，不执行爬虫 probe。
+- **BOSS 直聘职位直接采集**：BossHi 不是公开职位搜索 API；用户协议明确禁止未经许可用第三方工具或爬虫获取职位信息。即使第三方供应商可技术执行，也保持 Watch，优先使用合同覆盖清楚的聚合 Jobs Data。
 - **知乎**：传播与专业需求信号可能有价值，但当前还没有完成官方、可申请、可验证的发布/反馈范围审计。没有稳定路线前不以非官方脚本数量替代可用性。
 - **小红书、抖音的公开搜索与大规模评论采集**：需求真实，但涉及登录、反自动化、身份与数据最小化。只研究有界、小样本、明确用途的路线，不维护身份池规避风控。
 - **TikTok Research API**：公开内容研究能力强，但有研究资格和用途限制；商业需求研究不能默认借用学术研究权限。
@@ -176,6 +201,8 @@ P1 不是“全部都接”。某个平台只有在存在实际账号、内容�
 
 Collector 不积累“某平台所有 API”，不自动安装第三方项目、不申请权限、不登录、不执行平台写操作，也不把候选提升为 OKF。
 
+对 OpenConnector 这类上游，Collector 另外维护 catalog/local/live verification 声明、Provider Action Schema、安全默认值、HEAD、规范化 tag→commit 集和托管价格；provider 数量、下载量或 action guide 变化本身不会产生知识准入。
+
 ## 本轮官方证据
 
 以下来源只证明候选边界，不证明本仓库已接入：
@@ -188,6 +215,11 @@ Collector 不积累“某平台所有 API”，不自动安装第三方项目、
 - Google Play Reviews：<https://developers.google.com/android-publisher/api-ref/rest/v3/reviews>
 - Google Play 月度报告与 Reviews CSV：<https://support.google.com/googleplay/android-developer/answer/6135870>
 - Google Play Developer Reporting API：<https://developers.google.com/play/developer/reporting>
+- Google Custom Search JSON API 生命周期：<https://developers.google.com/custom-search/v1/overview>
+- Google Search Console Search Analytics：<https://developers.google.com/webmaster-tools/v1/searchanalytics/query>
+- Google Trends API alpha：<https://developers.google.com/search/apis/trends>
+- Google Business Profile Reviews：<https://developers.google.com/my-business/reference/rest/v4/accounts.locations.reviews/list>
+- Google Places resource/reviews 上限：<https://developers.google.com/maps/documentation/places/web-service/reference/rest/v1/places>
 - YouTube Data API：<https://developers.google.com/youtube/v3/docs>
 - YouTube Analytics API：<https://developers.google.com/youtube/analytics>
 - TikTok Content Posting API：<https://developers.tiktok.com/products/content-posting-api>
@@ -199,6 +231,8 @@ Collector 不积累“某平台所有 API”，不自动安装第三方项目、
 - Reddit Data API Terms：<https://redditinc.com/policies/data-api-terms>
 - 闲鱼社区用户服务协议：<https://terms.alicdn.com/legal-agreement/terms/suit_bu1_other/suit_bu1_other201708081618_51146.html>
 - 淘宝开放平台闲鱼电商 SaaS API 目录：<https://developer.alibaba.com/docs/api.htm?apiId=73221&source=search>
+- 58 开放平台与用户协议：<https://open.58.com/>、<https://help.58.com/home/announcement.html>
+- BOSS 直聘用户协议与 BossHi API：<https://www.zhipin.com/web/common/protocol/protocol-2019-09-30.html>、<https://histatic.zhipin.com/front/bosshi-mp-docs/service/ready/apiCall/callProcess/processOverview.html>
 - 快手视频发布接口：<https://open.kuaishou.com/platform/openApi?menu=20>
 - X API 搜索、指标与定价：<https://docs.x.com/x-api/posts/search/introduction>、<https://docs.x.com/x-api/fundamentals/metrics>、<https://docs.x.com/x-api/getting-started/pricing>
 - LinkedIn Community Management 与成员内容统计：<https://learn.microsoft.com/en-us/linkedin/marketing/community-management/community-management-overview>、<https://learn.microsoft.com/en-us/linkedin/marketing/community-management/members/post-statistics>

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/steam/read-public-game-review-page-input.schema.json",
+  "title": "ReadSteamPublicGameReviewPageInput",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["appId"],
+  "properties": {
+    "appId": { "type": "integer", "minimum": 1, "maximum": 2147483647 },
+    "filter": { "enum": ["recent", "updated"], "default": "updated" },
+    "language": { "type": "string", "pattern": "^(?:all|[a-z][a-z_]{1,31})$", "default": "all" },
+    "reviewType": { "enum": ["all", "positive", "negative"], "default": "all" },
+    "purchaseType": { "enum": ["all", "steam", "non_steam_purchase"], "default": "all" },
+    "cursor": { "type": "string", "minLength": 1, "maxLength": 1024, "pattern": "^[^\r\n]+$", "default": "*" },
+    "perPage": { "type": "integer", "minimum": 1, "maximum": 20, "default": 20 },
+    "includeOfftopic": { "type": "boolean", "default": false }
+  }
+}

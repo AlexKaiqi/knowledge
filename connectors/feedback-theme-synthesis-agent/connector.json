@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "feedback-theme-synthesis-agent",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/feedback/synthesize-feedback-theme-evidence.md"],
+  "execution": {
+    "kind": "agentic",
+    "runtime": "DSH agent runtime",
+    "entrypoint": "connectors/feedback-theme-synthesis-agent/src/index.mjs",
+    "modelRouteRef": "model-route:research.default",
+    "promptRef": "repo:/connectors/feedback-theme-synthesis-agent/prompts/synthesize-feedback-themes.md",
+    "toolRefs": [],
+    "evalRefs": ["repo:/connectors/feedback-theme-synthesis-agent/evals/contract.md"]
+  },
+  "configSchema": "repo:/connectors/feedback-theme-synthesis-agent/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [
+    {
+      "capabilityRef": "/capabilities/feedback/synthesize-feedback-theme-evidence.md",
+      "operation": "synthesizeFeedbackThemeEvidence"
+    }
+  ],
+  "conformance": {
+    "status": "verified",
+    "probeReportRef": "/verifications/feedback/theme-synthesis/report.json"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "fixture": "isolated-production-personal-knowledge-projection",
+  "productionRevision": "c8e181adcf3904f47fd33b85ffc1e97126cbbd66",
+  "schemaVersion": "dsh.bounded-work-context/v1",
+  "query": "projection",
+  "currentSessionRef": "session:current-fixture",
+  "workspaceRef": "workspace:primary",
+  "contextText": "# Work Context Projection\n\n## Current work\n\n# Current Work\n\nFinalize the bounded projection contract.\n\n## Sources\n\n- session:current-fixture\n\n## Relevant prior sessions\n\n- session:prior-fixture — Earlier context design — Earlier projection decision is still relevant.\n\n## Durable knowledge: Projection boundary\n\n# Projection boundary\n\nQuery-time context is ephemeral and never authorizes an action.\n",
+  "contextDigest": "sha256:f7d3fff2646e88ea89af9e49010c8b5798b2844483dc5e0f07c26593bb08af5e",
+  "sourceRefs": [
+    ".pkb/current.md",
+    "session:prior-fixture",
+    "knowledge/projection-boundary.md"
+  ],
+  "coverage": {
+    "budgetChars": 2400,
+    "renderedChars": 399,
+    "sourceCount": 3,
+    "priorSessionCount": 1,
+    "durableKnowledgeCount": 1,
+    "currentWorkIncluded": true,
+    "currentSessionTranscriptIncluded": false,
+    "rawTranscriptRetained": false,
+    "projectionComplete": false
+  },
+  "retention": "ephemeral-only",
+  "sessionHistoryModified": false,
+  "durableKnowledgeModified": false,
+  "executionAuthorized": false,
+  "resultDigest": "sha256:013e9a29552839d054d94eab367e7dfc0a193f424d04c8f89a4214b73668eedc"
+}

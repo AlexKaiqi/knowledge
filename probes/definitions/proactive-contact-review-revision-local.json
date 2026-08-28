@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "proactive-contact-review-revision-local",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/assistant/prepare-proactive-contact-review-revision.md",
+  "connectorId": "proactive-contact-review-revision",
+  "environment": "local",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "observe-pinned-proactive-policy-sources", "operation": "verifyProactivePolicySources" },
+    { "id": "prepare-review-only-contact", "operation": "prepareProactiveContactReviewRevision" },
+    { "id": "exercise-policy-suppressions", "operation": "exerciseOptInPauseQuietFrequencyActivityAndDedupe" },
+    { "id": "verify-revision-binding", "operation": "exerciseCopySurfaceTimingPolicyAndStateMutation" },
+    { "id": "validate-public-schema", "operation": "validateOutputSchema" }
+  ],
+  "assertions": [
+    "A contact candidate is eligible only after explicit opt-in, time-window, recent-activity, frequency, unanswered, source-visibility and dedupe checks pass.",
+    "Quiet windows are interpreted in the owner's IANA time zone and can wrap midnight.",
+    "Copy, surfaces, timing, policy or observed state changes invalidate the immutable review revision.",
+    "Suppression reasons remain explicit and no urgency field can bypass them.",
+    "The result never creates a message, attempts delivery, sends a notification, records a reviewer decision or authorizes execution."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 60, "maxCost": 0, "currency": "CNY" }
+}

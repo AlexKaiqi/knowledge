@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "dsh.collector-definition/v1",
+  "id": "steam-early-access-revision-maintainer",
+  "version": "1.0.0",
+  "scope": {
+    "knowledgeGlobs": [
+      "knowledge/tools/steam-early-access-revision.md",
+      "knowledge/concepts/steam/early-access-review-revision.md",
+      "knowledge/capabilities/steam/prepare-early-access-review-revision.md",
+      "knowledge/schemas/steam/prepare-early-access-review-revision-*.schema.json",
+      "knowledge/verifications/steam/early-access-review-revision/*.json"
+    ],
+    "connectorIds": ["steam-early-access-revision"],
+    "capabilityRefs": ["/capabilities/steam/prepare-early-access-review-revision.md"]
+  },
+  "triggers": [{ "kind": "schedule", "schedule": "40 10 * * 3" }, { "kind": "source-change" }, { "kind": "schema-change" }, { "kind": "connector-change" }, { "kind": "failed-execution" }, { "kind": "manual" }],
+  "execution": { "kind": "deterministic", "runtime": "node >=22.19", "entrypoint": "collectors/steam-early-access-revision-maintainer/src/index.mjs" },
+  "outputs": ["knowledge-proposal", "connector-change-proposal", "verification-report"],
+  "writePolicy": { "mode": "proposal-only", "requiresApprovalFor": ["knowledge", "connector", "live-probe"] },
+  "probePolicy": { "allowedEnvironments": ["local", "production-public"], "identityPoolRefs": [], "maximumEffect": "none" },
+  "budgets": { "maxRunsPerDay": 2, "maxCostPerDay": 0, "currency": "CNY" }
+}

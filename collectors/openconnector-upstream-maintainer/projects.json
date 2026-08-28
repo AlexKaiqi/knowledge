@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "dsh.ecosystem-project-catalog/v1",
+  "id": "openconnector-upstream-ecosystem",
+  "subject": "openconnector",
+  "searchQueries": [
+    "open connector agent connectors",
+    "openconnector self hosted",
+    "oomol open connector",
+    "open connector public social research"
+  ],
+  "releaseTagBaselines": {
+    "oomol-lab-open-connector": { "tagCount": 13, "digest": "2aa82d8c4977767b61a51346f2e2f87f8c738b5106ccdff68b70208c530eed9c" }
+  },
+  "projects": [
+    {
+      "id": "oomol-lab-open-connector",
+      "repository": "https://github.com/oomol-lab/open-connector.git",
+      "branch": "main",
+      "observedRevision": "0fa2c728dfbf957735da2843ec2b8a4f3425b105",
+      "status": "candidate",
+      "roles": ["connector-candidate", "reference-implementation", "orchestration-reference"],
+      "platformScope": "cross-platform",
+      "accessMechanisms": ["local-mcp", "multi-backend-routing"],
+      "capabilitySignals": ["search", "comments", "user-profile", "route-health"],
+      "failureDomains": ["openconnector-runtime", "openconnector-connection", "provider-action", "upstream-entitlement", "upstream-contract", "upstream-billing"],
+      "license": {
+        "status": "verified",
+        "spdx": "Apache-2.0",
+        "dependencyUse": "allowed",
+        "constraint": "The software license does not grant third-party API, content, privacy, trademark or platform-policy rights; each provider Action requires its own authorization and verification."
+      },
+      "evidenceRefs": [
+        "https://github.com/oomol-lab/open-connector",
+        "https://github.com/oomol-lab/open-connector/blob/v1.4.0/docs/verification.md",
+        "https://github.com/oomol-lab/open-connector/blob/v1.4.0/docs/runtime-api.md"
+      ],
+      "gaps": [
+        "Catalog presence and local executability do not prove external API conformance.",
+        "TikHub social outputs intentionally include rawData and raw; a live capability-specific deidentifying projection is still missing.",
+        "The TikHub provider has no provider-local test file at the audited v1.4.0 revision.",
+        "No account, credential, provider terms, content-use determination or paid live probe has been approved."
+      ],
+      "watch": { "priority": "high", "lastReviewedAt": "2026-08-27T10:00:00Z", "reviewCadenceDays": 7, "reviewOn": ["head-change", "release", "issue-change", "license-change", "archive", "cadence"] },
+      "notes": "Audited execution substrate. Reuse its Provider/Action/Connection and scoped-runtime-token contracts; never import its provider catalog as OKF knowledge."
+    },
+    {
+      "id": "openconnector-dev-placeholder",
+      "repository": "https://github.com/openconnector-dev/openconnector.git",
+      "branch": "main",
+      "observedRevision": "9ddc81703f2431cd7cb93217e5e8c862ab1b6fe7",
+      "status": "excluded",
+      "roles": ["evaluation-source"],
+      "platformScope": "cross-platform",
+      "accessMechanisms": ["manual-evaluation"],
+      "capabilitySignals": [],
+      "failureDomains": ["placeholder-repository", "unpublished-runtime", "marketing-contract"],
+      "license": {
+        "status": "verified",
+        "spdx": "AGPL-3.0-only",
+        "dependencyUse": "blocked",
+        "constraint": "The repository publishes a license and product pointer but no runnable connector implementation at the audited revision."
+      },
+      "evidenceRefs": ["https://github.com/openconnector-dev/openconnector/blob/main/README.md", "https://openconnector.dev/pricing/"],
+      "gaps": ["The README says source is still being prepared for public release; architecture and provider claims cannot be audited from this repository."],
+      "exclusionReason": "Same-name project is currently a product placeholder rather than an integrable open-source runtime.",
+      "watch": { "priority": "low", "lastReviewedAt": "2026-08-27T10:00:00Z", "reviewCadenceDays": 30, "reviewOn": ["head-change", "release", "license-change", "archive", "cadence"] }
+    }
+  ]
+}

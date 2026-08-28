@@ -1,0 +1,62 @@
+{
+  "fixture": "verified-redacted-steam-review-page",
+  "schemaVersion": "dsh.steam-feedback-observation-window/v1",
+  "sourceRef": "steam:public-game-reviews",
+  "targetRef": "steam:app:620",
+  "window": {
+    "observedAt": "2026-08-27T01:02:20.752Z",
+    "completeness": "partial",
+    "checkpointRef": "steam-review-cursor:sha256:dc8c7bf7d4eb510f39ebcd1cdfb025bfe7ad98c33ee07c78139baf655b79e25f",
+    "items": [
+      {
+        "itemRef": "steam-review:118010291",
+        "contentDigest": "sha256:c873f48e0a736a43ed39b5c41117d8687866fd10b3e1fede3c6f8e9fe07da12d",
+        "lifecycle": "visible",
+        "replyState": "unknown"
+      },
+      {
+        "itemRef": "steam-review:224224116",
+        "contentDigest": "sha256:fc461d9ebed34d42a02d13100a73b1004eb3227ea12421c206c9cb45ebc23940",
+        "lifecycle": "visible",
+        "replyState": "unknown"
+      },
+      {
+        "itemRef": "steam-review:232702850",
+        "contentDigest": "sha256:d399c421b4ed84515cdbfe8e1d3c47221141753fe726a79a87246f7e6bdcad6c",
+        "lifecycle": "visible",
+        "replyState": "unknown"
+      },
+      {
+        "itemRef": "steam-review:232753985",
+        "contentDigest": "sha256:e8ec6a06cb343767b16a3d814f1271214d3f214309400268b32906031908ad65",
+        "lifecycle": "visible",
+        "replyState": "unknown"
+      },
+      {
+        "itemRef": "steam-review:233775374",
+        "contentDigest": "sha256:d78930ef7fc182d8f9819d29fca3c32fe5b1bdff3f67f254976c7686d91e3981",
+        "lifecycle": "visible",
+        "replyState": "unknown"
+      }
+    ]
+  },
+  "coverage": {
+    "representation": "cursor-page",
+    "returnedCount": 5,
+    "currentCursor": "*",
+    "resumeCursor": "AoJws+H9n6ADfpDk+wY=",
+    "pageExhausted": false,
+    "corpusComplete": false,
+    "itemIdentity": "recommendation-id",
+    "editDetection": "semantic-digest",
+    "explicitLifecycleTombstones": false,
+    "absenceDeletionInferenceAllowed": false,
+    "checkpointSemantics": "resume-cursor-only-not-global-high-watermark"
+  },
+  "checkpointRecommendation": {
+    "action": "hold",
+    "reason": "cursor-page-is-not-complete-window"
+  },
+  "executionAuthorized": false,
+  "resultDigest": "2f5071b8b82476600cce0c09c799116e08fd18daf92918b2269b3cc6e28eaf7e"
+}

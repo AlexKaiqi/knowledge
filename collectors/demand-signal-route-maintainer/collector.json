@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "dsh.collector-definition/v1",
+  "id": "demand-signal-route-maintainer",
+  "version": "1.0.0",
+  "scope": {
+    "knowledgeGlobs": ["docs/research/demand-signal-access-routes.md", "docs/INTEGRATION_CANDIDATES.md"],
+    "connectorIds": ["dataforseo-google-organic-serp", "appfigures-public-app-reviews"],
+    "capabilityRefs": [
+      "/capabilities/research/read-web-result-page.md",
+      "/capabilities/research/read-search-interest-series.md",
+      "/capabilities/feedback/read-owned-search-query-delta.md",
+      "/capabilities/research/read-public-place-review-snapshot.md",
+      "/capabilities/feedback/read-owned-business-review-delta.md",
+      "/capabilities/research/read-public-app-review-snapshot.md",
+      "/capabilities/research/read-classified-listing-snapshot.md",
+      "/capabilities/research/read-job-posting-snapshot.md"
+    ]
+  },
+  "triggers": [{ "kind": "schedule", "schedule": "20 11 * * 3" }, { "kind": "source-change" }, { "kind": "connector-change" }, { "kind": "manual" }],
+  "execution": { "kind": "deterministic", "runtime": "node >=22.19", "entrypoint": "collectors/demand-signal-route-maintainer/src/index.mjs" },
+  "outputs": ["knowledge-proposal", "connector-change-proposal"],
+  "writePolicy": { "mode": "proposal-only", "requiresApprovalFor": ["knowledge", "connector", "live-probe"] },
+  "probePolicy": { "allowedEnvironments": ["sandbox", "production-public", "production-private"], "identityPoolRefs": [], "maximumEffect": "none" },
+  "budgets": { "maxRunsPerDay": 2, "maxCostPerDay": 0, "currency": "CNY" }
+}

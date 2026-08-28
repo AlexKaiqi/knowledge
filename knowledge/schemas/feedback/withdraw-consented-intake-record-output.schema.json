@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/schemas/feedback/withdraw-consented-intake-record-output.schema.json",
+  "title": "Feedback intake withdrawal receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "status", "withdrawalReceiptRef", "storeRef", "storageReceiptRef", "intakeRevisionHash", "recordDigest", "withdrawalRequestRef", "withdrawalMechanismRef", "withdrawalGrantReceiptRef", "withdrawnAt", "idempotencyKey", "replayed", "recordPresent", "logicalDeletionApplied", "mediaSanitized", "backupsPurged", "downstreamCopiesDeleted", "withdrawalApplied", "replySent", "platformWritten", "knowledgeWritten", "executionAuthorized"],
+  "properties": {
+    "schemaVersion": { "const": "dsh.feedback-intake-withdrawal-receipt/v1" },
+    "status": { "const": "withdrawn" },
+    "withdrawalReceiptRef": { "$ref": "#/$defs/opaqueRef" },
+    "storeRef": { "type": "string", "pattern": "^[a-z][a-z0-9._:-]{0,127}$" },
+    "storageReceiptRef": { "$ref": "#/$defs/opaqueRef" },
+    "intakeRevisionHash": { "$ref": "#/$defs/digest" },
+    "recordDigest": { "$ref": "#/$defs/digest" },
+    "withdrawalRequestRef": { "$ref": "#/$defs/opaqueRef" },
+    "withdrawalMechanismRef": { "$ref": "#/$defs/opaqueRef" },
+    "withdrawalGrantReceiptRef": { "$ref": "#/$defs/opaqueRef" },
+    "withdrawnAt": { "type": "string", "format": "date-time" },
+    "idempotencyKey": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$" },
+    "replayed": { "type": "boolean" },
+    "recordPresent": { "const": false },
+    "logicalDeletionApplied": { "const": true },
+    "mediaSanitized": { "const": false },
+    "backupsPurged": { "const": false },
+    "downstreamCopiesDeleted": { "const": false },
+    "withdrawalApplied": { "const": true },
+    "replySent": { "const": false },
+    "platformWritten": { "const": false },
+    "knowledgeWritten": { "const": false },
+    "executionAuthorized": { "const": false }
+  },
+  "$defs": {
+    "opaqueRef": { "type": "string", "minLength": 1, "maxLength": 500 },
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+  }
+}

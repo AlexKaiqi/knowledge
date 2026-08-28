@@ -1,0 +1,88 @@
+{
+  "schemaVersion": "dsh.pet-behavior-projection/v1",
+  "fixture": "public-state-trace",
+  "decisions": [
+    {
+      "kind": "session-snapshot",
+      "atMs": 0,
+      "baseline": {
+        "action": "running",
+        "mode": "loop"
+      },
+      "pulse": null
+    },
+    {
+      "kind": "session-snapshot",
+      "atMs": 100,
+      "baseline": {
+        "action": "running",
+        "mode": "loop"
+      },
+      "pulse": {
+        "action": "waiting",
+        "mode": "once",
+        "priority": 80,
+        "reason": "interaction-required"
+      }
+    },
+    {
+      "kind": "assistant-state",
+      "atMs": 200,
+      "baseline": {
+        "action": "running",
+        "mode": "loop"
+      },
+      "pulse": {
+        "action": "waving",
+        "mode": "once",
+        "priority": 65,
+        "reason": "assistant-speaking"
+      }
+    },
+    {
+      "kind": "session-snapshot",
+      "atMs": 300,
+      "baseline": {
+        "action": "idle",
+        "mode": "loop"
+      },
+      "pulse": {
+        "action": "review",
+        "mode": "once",
+        "priority": 70,
+        "reason": "task-finished"
+      }
+    },
+    {
+      "kind": "session-snapshot",
+      "atMs": 400,
+      "baseline": {
+        "action": "idle",
+        "mode": "loop"
+      },
+      "pulse": {
+        "action": "failed",
+        "mode": "once",
+        "priority": 100,
+        "reason": "job-failed"
+      }
+    }
+  ],
+  "finalBaseline": {
+    "action": "idle",
+    "mode": "loop"
+  },
+  "coverage": {
+    "eventsProcessed": 5,
+    "sessionStreamPrimed": true,
+    "acceptedStateSurface": [
+      "session-running",
+      "pending-interaction",
+      "job-status",
+      "assistant-status",
+      "assistant-phase"
+    ],
+    "privateTextAccepted": false
+  },
+  "resultDigest": "a758fc47935741e06bf75911793fb499ff8037669a3723fd0baaab4fc652b709"
+}

@@ -1,0 +1,22 @@
+{
+  "fixture": "isolated-consented-feedback-intake-storage",
+  "schemaVersion": "dsh.feedback-intake-storage-receipt/v1",
+  "status": "stored",
+  "receiptRef": "feedback-intake-storage:055bb8dcde2f4be89b9aec07409b449be7a13814897346d9709f08e7c630d102",
+  "storeRef": "feedback-store:owner-primary",
+  "intakeRevisionRef": "repo:/knowledge/verifications/feedback/consented-intake-review-revision/snapshot.json",
+  "intakeRevisionHash": "sha256:a482c8408b4b824c71ef4589978756bc58671ad6e77f04d00aa33f0737fb47ab",
+  "recordDigest": "sha256:58710f2d291cae66bb3ce0bb565ab1a364945b5e1f3bf14ee389a173472fd2c0",
+  "storedAt": "2026-08-27T09:40:00.000Z",
+  "deleteAfter": "2027-02-23T08:00:00.000Z",
+  "withdrawalMechanismRef": "feedback-withdrawal:self-service-v1",
+  "reviewGrantReceiptRef": "probe-review-receipt:feedback-intake-01",
+  "idempotencyKey": "probe-feedback-intake-01",
+  "replayed": false,
+  "stored": true,
+  "withdrawalApplied": false,
+  "replySent": false,
+  "platformWritten": false,
+  "knowledgeWritten": false,
+  "executionAuthorized": false
+}

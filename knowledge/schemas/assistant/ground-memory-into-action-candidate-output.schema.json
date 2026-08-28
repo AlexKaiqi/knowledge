@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/schemas/assistant/ground-memory-into-action-candidate-output.schema.json",
+  "title": "Memory-grounded action candidate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "actionName", "effect", "scopeRef", "candidateArguments", "bindings", "unresolved", "readiness", "requiredMissing", "executionAuthorized", "coverage", "resultDigest"],
+  "properties": {
+    "schemaVersion": { "const": "dsh.memory-action-grounding/v1" },
+    "actionName": { "$ref": "#/$defs/id" },
+    "effect": { "enum": ["none", "local-write", "platform-write", "financial", "communication", "identity-relationship"] },
+    "scopeRef": { "type": "string", "minLength": 1, "maxLength": 240 },
+    "candidateArguments": {
+      "type": "object",
+      "maxProperties": 50,
+      "additionalProperties": { "$ref": "#/$defs/scalar" }
+    },
+    "bindings": {
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["fieldPath", "source", "claimIds", "provenanceRefs"],
+        "properties": {
+          "fieldPath": { "$ref": "#/$defs/fieldPath" },
+          "source": { "enum": ["explicit", "memory"] },
+          "claimIds": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/id" } },
+          "provenanceRefs": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1, "maxLength": 500 } }
+        }
+      }
+    },
+    "unresolved": {
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["fieldPath", "required", "reason", "claimIds"],
+        "properties": {
+          "fieldPath": { "$ref": "#/$defs/fieldPath" },
+          "required": { "type": "boolean" },
+          "reason": { "enum": ["explicit-required", "missing", "conflicting-memory", "contested-memory", "inactive-memory", "unconfirmed-memory", "stale-memory", "invalid-memory"] },
+          "claimIds": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/id" } }
+        }
+      }
+    },
+    "readiness": { "enum": ["grounded", "needs-clarification"] },
+    "requiredMissing": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/fieldPath" } },
+    "executionAuthorized": { "const": false },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fieldsDeclared", "fieldsBound", "memoryClaimsConsidered", "wrongScopeClaimsIgnored", "textInterpretationPerformed"],
+      "properties": {
+        "fieldsDeclared": { "type": "integer", "minimum": 1, "maximum": 50 },
+        "fieldsBound": { "type": "integer", "minimum": 0, "maximum": 50 },
+        "memoryClaimsConsidered": { "type": "integer", "minimum": 0, "maximum": 200 },
+        "wrongScopeClaimsIgnored": { "type": "integer", "minimum": 0, "maximum": 200 },
+        "textInterpretationPerformed": { "const": false }
+      }
+    },
+    "resultDigest": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9._-]{0,127}$" },
+    "fieldPath": { "type": "string", "pattern": "^[a-z][a-zA-Z0-9_]{0,63}$" },
+    "scalar": {
+      "oneOf": [
+        { "type": "string", "maxLength": 2000 },
+        { "type": "number" },
+        { "type": "boolean" }
+      ]
+    }
+  }
+}

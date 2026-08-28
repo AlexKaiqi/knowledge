@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "youtube-public-video-search-live",
+  "version": "0.1.0",
+  "capabilityRef": "/capabilities/youtube/search-public-videos.md",
+  "connectorId": "youtube-public-video-search",
+  "environment": "production-public",
+  "identity": { "required": true, "poolRef": "identity-pool:youtube-data-api-probes" },
+  "effect": "none",
+  "steps": [
+    { "id": "search-one-bounded-video-page", "operation": "searchPublicVideos" },
+    { "id": "reconcile-search-bucket-usage", "operation": "reconcileQuota" }
+  ],
+  "assertions": [
+    "One current YouTube Data API key can execute a video-only keyword search within the default search bucket.",
+    "The output contains no API key, channel identity, description, thumbnail, transcript, metrics, approximate total result count, or pagination token.",
+    "The result is explicitly one incomplete metadata-only page and is subject to the 30-day refresh-or-delete policy for non-authorized API data.",
+    "No OAuth, upload, comment, analytics, media download, transcript retrieval, retry, or automatic pagination occurs."
+  ],
+  "cleanup": ["delete-or-refresh-retained-non-authorized-api-data-within-30-days"],
+  "budget": { "timeoutSeconds": 30, "maxCost": 0, "currency": "USD" }
+}

@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/connectors/xiaohongshu-android-observation/config.schema.json",
+  "title": "XiaohongshuAndroidObservationConnectorConfig",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["routeId", "runtimeOrigin"],
+  "properties": {
+    "routeId": {
+      "enum": ["portal-http", "appium-w3c"]
+    },
+    "runtimeOrigin": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^http://(?:127\\.0\\.0\\.1|localhost|\\[::1\\])(?::[0-9]+)?$"
+    },
+    "appiumSessionId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+    },
+    "timeoutMs": {
+      "type": "integer",
+      "minimum": 1000,
+      "maximum": 30000,
+      "default": 10000
+    },
+    "settleMs": {
+      "type": "integer",
+      "minimum": 100,
+      "maximum": 10000,
+      "default": 1000
+    },
+    "maxResponseBytes": {
+      "type": "integer",
+      "minimum": 65536,
+      "maximum": 4194304,
+      "default": 2097152
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "routeId": { "const": "appium-w3c" } },
+        "required": ["routeId"]
+      },
+      "then": { "required": ["appiumSessionId"] }
+    }
+  ]
+}

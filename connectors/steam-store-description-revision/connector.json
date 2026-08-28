@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "steam-store-description-revision",
+  "version": "0.1.0",
+  "capabilityRefs": ["/capabilities/steam/prepare-store-description-review-revision.md"],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "connectors/steam-store-description-revision/src/index.mjs"
+  },
+  "configSchema": "repo:/connectors/steam-store-description-revision/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [
+    {
+      "capabilityRef": "/capabilities/steam/prepare-store-description-review-revision.md",
+      "operation": "prepareSteamStoreDescriptionReviewRevision"
+    }
+  ],
+  "conformance": {
+    "status": "verified",
+    "probeReportRef": "/verifications/steam/store-description-review-revision/report.json"
+  }
+}

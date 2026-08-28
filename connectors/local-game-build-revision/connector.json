@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "local-game-build-revision",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/game/prepare-local-build-revision.md"],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "connectors/local-game-build-revision/src/index.mjs"
+  },
+  "configSchema": "repo:/connectors/local-game-build-revision/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [
+    {
+      "capabilityRef": "/capabilities/game/prepare-local-build-revision.md",
+      "operation": "prepareLocalGameBuildRevision"
+    }
+  ],
+  "conformance": {
+    "status": "verified",
+    "probeReportRef": "/verifications/game/local-build-revision/report.json"
+  }
+}

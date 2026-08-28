@@ -1,0 +1,35 @@
+{
+  "trace": [
+    {
+      "kind": "session-snapshot",
+      "atMs": 0,
+      "sessions": [{ "id": "session.alpha", "running": true, "pendingInteraction": false }],
+      "jobStatuses": ["running"]
+    },
+    {
+      "kind": "session-snapshot",
+      "atMs": 100,
+      "sessions": [{ "id": "session.alpha", "running": true, "pendingInteraction": true }],
+      "jobStatuses": ["running"]
+    },
+    {
+      "kind": "assistant-state",
+      "atMs": 200,
+      "available": true,
+      "status": "ready",
+      "phase": "speaking"
+    },
+    {
+      "kind": "session-snapshot",
+      "atMs": 300,
+      "sessions": [{ "id": "session.alpha", "running": false, "pendingInteraction": false }],
+      "jobStatuses": ["completed"]
+    },
+    {
+      "kind": "session-snapshot",
+      "atMs": 400,
+      "sessions": [{ "id": "session.alpha", "running": false, "pendingInteraction": false }],
+      "jobStatuses": ["failed"]
+    }
+  ]
+}

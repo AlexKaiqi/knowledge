@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "multi-turn-response-repetition",
+  "sources": [
+    {
+      "id": "parlai-controllable-dialogue-controls", "url": "https://raw.githubusercontent.com/facebookresearch/ParlAI/38fce64bc0ad7d0e676316b3b52407541e624680/projects/controllable_dialogue/controllable_seq2seq/controls.py", "role": "reference-lexical-repetition-implementation",
+      "acceptedDocumentDigest": "74555fcf5338c153484ecda5ac74e4d516d9106316af6baaa39346857bf338b3",
+      "observation": { "mode": "static-text-semantic", "assertions": [
+        { "id": "external-repetition", "includes": "def extrep_repeated_ngram_frac" },
+        { "id": "prior-own-turns", "includes": "Proportion of 2-grams in utt that appeared in a previous bot utterance" }
+      ] }
+    },
+    {
+      "id": "see-2019-multi-turn-controls", "url": "https://aclanthology.org/N19-1170/", "role": "multi-turn-repetition-evidence",
+      "acceptedDocumentDigest": "73ef0ecc9b657d6947ec2ff9e85794803a5aafd31143e14fdfbdbd9d5a4cdf19",
+      "observation": { "mode": "static-html-semantic", "assertions": [
+        { "id": "multi-turn-evaluation", "includes": "multi-turn interactive conversations" },
+        { "id": "repetition-control", "includes": "repetition, specificity, response-relatedness and question-asking" }
+      ] }
+    },
+    {
+      "id": "han-2022-semantic-diversity", "url": "https://aclanthology.org/2022.findings-emnlp.66/", "role": "lexical-metric-limit",
+      "acceptedDocumentDigest": "d5b9e4cb526fdfd2a12708182508109984b68d860c327f08d2ca2ed021e5a738",
+      "observation": { "mode": "static-html-semantic", "assertions": [
+        { "id": "lexical-limit", "includes": "lexical aspects of the generated responses" },
+        { "id": "semantic-diversity", "includes": "semantic diversity" }
+      ] }
+    },
+    {
+      "id": "groundialog-2023-repair", "url": "https://aclanthology.org/2023.bea-1.26/", "role": "intentional-repetition-counterevidence",
+      "acceptedDocumentDigest": "376c8bc3f08f1e58cb889a915f220683fd7dd85d9222c13b6dad2a0ef4eea03c",
+      "observation": { "mode": "static-html-semantic", "assertions": [
+        { "id": "repair-grounding", "includes": "Repair and Grounding" },
+        { "id": "common-ground", "includes": "negotiate meaning and find common ground" }
+      ] }
+    },
+    {
+      "id": "vasselli-2025-reference-free-metrics", "url": "https://aclanthology.org/2025.coling-main.331/", "role": "metric-robustness-counterevidence",
+      "acceptedDocumentDigest": "b1460bf033a1d9583fb4f0e04279b753f04e493b355d62b560cc7c7944c359d0",
+      "observation": { "mode": "static-html-semantic", "assertions": [
+        { "id": "repeated-context", "includes": "repeated conversational context" },
+        { "id": "correlation-robustness", "includes": "not always aligned" }
+      ] }
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "coresignal-job-posting-snapshot",
+  "version": "0.1.0",
+  "capabilityRefs": ["/capabilities/research/read-job-posting-snapshot.md"],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "connectors/coresignal-job-posting-snapshot/src/index.mjs"
+  },
+  "configSchema": "repo:/connectors/coresignal-job-posting-snapshot/config.schema.json",
+  "credentialSlots": [
+    {
+      "name": "api-key",
+      "required": true,
+      "purpose": "Resolve an opaque Coresignal API key outside Git after the account, trial or paid Data agreement has been approved."
+    }
+  ],
+  "handlers": [
+    {
+      "capabilityRef": "/capabilities/research/read-job-posting-snapshot.md",
+      "operation": "readJobPostingSnapshot"
+    }
+  ],
+  "conformance": {
+    "status": "candidate",
+    "probeDefinitionRef": "repo:/probes/definitions/coresignal-job-posting-snapshot-live.json"
+  }
+}

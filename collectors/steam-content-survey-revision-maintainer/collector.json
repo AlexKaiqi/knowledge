@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "dsh.collector-definition/v1",
+  "id": "steam-content-survey-revision-maintainer",
+  "version": "1.0.0",
+  "scope": {
+    "knowledgeGlobs": [
+      "knowledge/tools/steam-content-survey-revision.md",
+      "knowledge/concepts/steam/content-survey-review-revision.md",
+      "knowledge/capabilities/steam/prepare-content-survey-review-revision.md",
+      "knowledge/schemas/steam/prepare-content-survey-review-revision-*.schema.json",
+      "knowledge/verifications/steam/content-survey-review-revision/*.json"
+    ],
+    "connectorIds": ["steam-content-survey-revision"],
+    "capabilityRefs": ["/capabilities/steam/prepare-content-survey-review-revision.md"]
+  },
+  "triggers": [{ "kind": "schedule", "schedule": "25 10 * * 3" }, { "kind": "source-change" }, { "kind": "schema-change" }, { "kind": "connector-change" }, { "kind": "failed-execution" }, { "kind": "manual" }],
+  "execution": { "kind": "deterministic", "runtime": "node >=22.19", "entrypoint": "collectors/steam-content-survey-revision-maintainer/src/index.mjs" },
+  "outputs": ["knowledge-proposal", "connector-change-proposal", "verification-report"],
+  "writePolicy": { "mode": "proposal-only", "requiresApprovalFor": ["knowledge", "connector", "live-probe"] },
+  "probePolicy": { "allowedEnvironments": ["local", "production-public"], "identityPoolRefs": [], "maximumEffect": "none" },
+  "budgets": { "maxRunsPerDay": 2, "maxCostPerDay": 0, "currency": "CNY" }
+}

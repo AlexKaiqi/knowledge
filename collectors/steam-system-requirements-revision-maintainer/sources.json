@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "steam-system-requirements-review-revision",
+  "sources": [
+    {
+      "id": "steam-platforms", "url": "https://partner.steamgames.com/doc/store/application/platforms?l=english&language=english", "role": "official-platform-build-package-and-requirements-linkage",
+      "observation": { "mode": "static-html-semantic", "assertions": [
+        { "id": "supported-os", "includes": "Steam provides support for Windows, macOS, and Linux (SteamOS)." },
+        { "id": "beta-test", "includes": "Set that build to a beta branch with a password." },
+        { "id": "public-packages", "includes": "add the necessary depots to any public packages" },
+        { "id": "corresponding-requirements", "includes": "enter the corresponding system requirements" },
+        { "id": "preview-store-page", "includes": "Preview your store page" }
+      ] }
+    },
+    {
+      "id": "steam-review-process", "url": "https://partner.steamgames.com/doc/store/review_process?l=english&language=english", "role": "official-launch-and-review-boundary",
+      "observation": { "mode": "static-html-semantic", "assertions": [
+        { "id": "all-listed-os-launch", "includes": "successfully launch in all supported operating systems listed on the store page" },
+        { "id": "implemented-features", "includes": "All supported features listed on the store page will need to be implemented in the current build" },
+        { "id": "review-action", "includes": "Mark as ready for review" }
+      ] }
+    },
+    {
+      "id": "portal-2-store-page", "url": "https://store.steampowered.com/app/620/Portal_2/?l=english", "role": "first-party-public-system-requirements-field-shape",
+      "observation": { "mode": "static-html-semantic", "assertions": [
+        { "id": "requirements-heading", "includes": "System Requirements" }, { "id": "minimum-tier", "includes": "Minimum:" },
+        { "id": "processor-field", "includes": "Processor:" }, { "id": "memory-field", "includes": "Memory:" },
+        { "id": "graphics-field", "includes": "Graphics:" }, { "id": "storage-field", "includes": "Storage:" }
+      ] }
+    }
+  ]
+}

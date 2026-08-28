@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "steam-store-asset-review-revision-local",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/steam/prepare-store-asset-review-revision.md",
+  "connectorId": "steam-store-asset-revision",
+  "environment": "local",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "observe-current-official-rules", "operation": "verifySteamStoreAssetSources" },
+    { "id": "prepare-valid-asset-set", "operation": "prepareSteamStoreAssetReviewRevision" },
+    { "id": "replay-frozen-assets", "operation": "prepareSteamStoreAssetReviewRevision" },
+    { "id": "exercise-dimension-and-count-blockers", "operation": "exerciseUnsafeAssetFixtures" },
+    { "id": "validate-public-schema", "operation": "validateOutputSchema" }
+  ],
+  "assertions": [
+    "The current four required Steam store capsule dimensions and five-screenshot minimum are observed from official documentation.",
+    "PNG/JPEG headers, relative paths, byte sizes and streamed SHA-256 digests are frozen into a deterministic revision.",
+    "Old capsule sizes, non-16:9 or byte-identical duplicate screenshots, missing required assets, symlinks and unsafe paths block preparation.",
+    "Visual semantics, rights and launch-content claims remain explicit pending human checks.",
+    "The result never claims upload, Steam review submission, platform approval, release or execution authorization."
+  ],
+  "cleanup": ["remove-temporary-generated-assets"],
+  "budget": { "timeoutSeconds": 60, "maxCost": 0, "currency": "CNY" }
+}

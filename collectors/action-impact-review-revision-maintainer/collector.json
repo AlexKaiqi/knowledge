@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "dsh.collector-definition/v1",
+  "id": "action-impact-review-revision-maintainer",
+  "version": "1.0.0",
+  "scope": {
+    "knowledgeGlobs": [
+      "knowledge/tools/action-impact-review-revision.md",
+      "knowledge/concepts/assistant/action-impact-review-revision.md",
+      "knowledge/capabilities/assistant/prepare-action-impact-review-revision.md",
+      "knowledge/schemas/assistant/prepare-action-impact-review-revision-*.schema.json",
+      "knowledge/verifications/assistant/action-impact-review-revision/*.json"
+    ],
+    "connectorIds": ["action-impact-review-revision"],
+    "capabilityRefs": ["/capabilities/assistant/prepare-action-impact-review-revision.md"]
+  },
+  "triggers": [
+    { "kind": "schedule", "schedule": "50 10 * * 3" },
+    { "kind": "source-change" },
+    { "kind": "schema-change" },
+    { "kind": "connector-change" },
+    { "kind": "failed-execution" },
+    { "kind": "manual" }
+  ],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "collectors/action-impact-review-revision-maintainer/src/index.mjs"
+  },
+  "outputs": ["knowledge-proposal", "connector-change-proposal", "verification-report"],
+  "writePolicy": {
+    "mode": "proposal-only",
+    "requiresApprovalFor": ["knowledge", "connector", "live-probe"]
+  },
+  "probePolicy": {
+    "allowedEnvironments": ["local", "production-public"],
+    "identityPoolRefs": [],
+    "maximumEffect": "none"
+  },
+  "budgets": { "maxRunsPerDay": 2, "maxCostPerDay": 0, "currency": "CNY" }
+}

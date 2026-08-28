@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/schemas/assistant/prepare-durable-memory-change-review-revision-output.schema.json",
+  "title": "Durable memory change review revision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "ownerScopeRef", "repositoryRevisionRef", "target", "change", "implementationSemanticsRevision", "status", "reviewRevisionHash", "reviewItems", "preflight", "reviewerDecision", "proposalCreated", "applied", "committed", "receiptIssued", "executionAuthorized", "preparedAt"],
+  "properties": {
+    "schemaVersion": { "const": "dsh.durable-memory-change-review-revision/v1" },
+    "ownerScopeRef": { "$ref": "#/$defs/opaqueRef" },
+    "repositoryRevisionRef": { "$ref": "#/$defs/opaqueRef" },
+    "target": { "$ref": "#/$defs/target" },
+    "change": { "$ref": "#/$defs/change" },
+    "implementationSemanticsRevision": { "const": "dsh-personal-knowledge-base@c8e181adcf3904f47fd33b85ffc1e97126cbbd66" },
+    "status": { "enum": ["ready-for-human-review", "already-satisfied", "blocked"] },
+    "reviewRevisionHash": { "oneOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }] },
+    "reviewItems": {
+      "type": "array",
+      "maxItems": 7,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "status"],
+        "properties": {
+          "id": { "enum": ["exact-target-and-content", "durable-after-current-task", "source-and-provenance", "sensitive-data-and-secrets", "unsupported-inference", "conflict-and-supersession", "forget-scope-and-consequences"] },
+          "status": { "const": "pending" }
+        }
+      }
+    },
+    "preflight": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["blockers"],
+      "properties": {
+        "blockers": {
+          "type": "array",
+          "maxItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["code", "expectedBaseContentDigest", "currentContentDigest"],
+            "properties": {
+              "code": { "const": "target-changed-after-proposal" },
+              "expectedBaseContentDigest": { "oneOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }] },
+              "currentContentDigest": { "oneOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }] }
+            }
+          }
+        }
+      }
+    },
+    "reviewerDecision": { "type": "null" },
+    "proposalCreated": { "const": false },
+    "applied": { "const": false },
+    "committed": { "const": false },
+    "receiptIssued": { "const": false },
+    "executionAuthorized": { "const": false },
+    "preparedAt": { "type": "string", "format": "date-time" }
+  },
+  "allOf": [
+    { "if": { "properties": { "status": { "const": "ready-for-human-review" } }, "required": ["status"] }, "then": { "properties": { "reviewRevisionHash": { "$ref": "#/$defs/digest" }, "reviewItems": { "minItems": 7 }, "preflight": { "properties": { "blockers": { "maxItems": 0 } } } } } },
+    { "if": { "properties": { "status": { "const": "already-satisfied" } }, "required": ["status"] }, "then": { "properties": { "reviewRevisionHash": { "type": "null" }, "reviewItems": { "maxItems": 0 }, "preflight": { "properties": { "blockers": { "maxItems": 0 } } } } } },
+    { "if": { "properties": { "status": { "const": "blocked" } }, "required": ["status"] }, "then": { "properties": { "reviewRevisionHash": { "type": "null" }, "reviewItems": { "maxItems": 0 }, "preflight": { "properties": { "blockers": { "minItems": 1 } } } } } }
+  ],
+  "$defs": {
+    "opaqueRef": { "type": "string", "minLength": 1, "maxLength": 500 },
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "refs": { "type": "array", "minItems": 1, "maxItems": 20, "uniqueItems": true, "items": { "$ref": "#/$defs/opaqueRef" } },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "exists", "contentDigest"],
+      "properties": {
+        "path": { "oneOf": [{ "const": "USER.md" }, { "type": "string", "pattern": "^knowledge/[A-Za-z0-9][A-Za-z0-9._-]{0,127}\\.md$" }] },
+        "exists": { "type": "boolean" },
+        "contentDigest": { "oneOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }] }
+      }
+    },
+    "change": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operation", "baseContentDigest", "content", "reason", "sourceRefs", "evidenceRefs", "desiredContentDigest"],
+      "properties": {
+        "operation": { "enum": ["upsert", "delete"] },
+        "baseContentDigest": { "oneOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }] },
+        "content": { "oneOf": [{ "type": "string", "minLength": 1, "maxLength": 50001 }, { "type": "null" }] },
+        "reason": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "sourceRefs": { "$ref": "#/$defs/refs" },
+        "evidenceRefs": { "$ref": "#/$defs/refs" },
+        "desiredContentDigest": { "oneOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }] }
+      }
+    }
+  }
+}

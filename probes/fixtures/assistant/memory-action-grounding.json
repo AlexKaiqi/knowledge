@@ -1,0 +1,79 @@
+{
+  "grounded": {
+    "action": {
+      "name": "schedule-reminder",
+      "effect": "communication",
+      "scopeRef": "owner:primary",
+      "fields": [
+        { "path": "title", "type": "string", "required": true, "memoryPolicy": "explicit-only" },
+        { "path": "targetChannel", "type": "string", "required": true, "memoryPolicy": "explicit-only", "enumValues": ["current", "mobile"] },
+        { "path": "timezone", "type": "string", "required": true, "memoryPolicy": "allow-user-confirmed" },
+        { "path": "quietMode", "type": "boolean", "required": false, "memoryPolicy": "allow-confirmed-or-verified" }
+      ]
+    },
+    "explicitArguments": { "title": "Review feedback", "targetChannel": "current" },
+    "memoryClaims": [
+      {
+        "id": "timezone-shanghai",
+        "actionName": "schedule-reminder",
+        "scopeRef": "owner:primary",
+        "fieldPath": "timezone",
+        "value": "Asia/Shanghai",
+        "authority": "user-confirmed",
+        "lifecycle": "active",
+        "observedAt": "2026-08-01T00:00:00Z",
+        "provenanceRefs": ["knowledge:user-preferences#timezone"]
+      },
+      {
+        "id": "quiet-tool",
+        "actionName": "schedule-reminder",
+        "scopeRef": "owner:primary",
+        "fieldPath": "quietMode",
+        "value": true,
+        "authority": "tool-verified",
+        "lifecycle": "active",
+        "observedAt": "2026-08-26T00:00:00Z",
+        "validUntil": "2026-09-26T00:00:00Z",
+        "provenanceRefs": ["settings:quiet-mode"]
+      }
+    ],
+    "now": "2026-08-27T00:00:00Z"
+  },
+  "conflicted": {
+    "action": {
+      "name": "schedule-reminder",
+      "effect": "communication",
+      "scopeRef": "owner:primary",
+      "fields": [
+        { "path": "title", "type": "string", "required": true, "memoryPolicy": "explicit-only" },
+        { "path": "timezone", "type": "string", "required": true, "memoryPolicy": "allow-user-confirmed" }
+      ]
+    },
+    "explicitArguments": { "title": "Review feedback" },
+    "memoryClaims": [
+      {
+        "id": "timezone-shanghai",
+        "actionName": "schedule-reminder",
+        "scopeRef": "owner:primary",
+        "fieldPath": "timezone",
+        "value": "Asia/Shanghai",
+        "authority": "user-confirmed",
+        "lifecycle": "active",
+        "observedAt": "2026-08-01T00:00:00Z",
+        "provenanceRefs": ["knowledge:user-preferences#timezone"]
+      },
+      {
+        "id": "timezone-tokyo",
+        "actionName": "schedule-reminder",
+        "scopeRef": "owner:primary",
+        "fieldPath": "timezone",
+        "value": "Asia/Tokyo",
+        "authority": "user-confirmed",
+        "lifecycle": "active",
+        "observedAt": "2026-08-20T00:00:00Z",
+        "provenanceRefs": ["session:recent"]
+      }
+    ],
+    "now": "2026-08-27T00:00:00Z"
+  }
+}

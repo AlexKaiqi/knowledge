@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "evidence-backed-research-agent",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/research/conduct-evidence-backed-research.md"],
+  "execution": {
+    "kind": "agentic",
+    "runtime": "DSH agent runtime",
+    "entrypoint": "connectors/evidence-backed-research-agent/src/index.mjs",
+    "modelRouteRef": "model-route:research.default",
+    "promptRef": "repo:/connectors/evidence-backed-research-agent/prompts/conduct-research.md",
+    "toolRefs": ["capability-gateway:read", "web:read"],
+    "evalRefs": ["repo:/connectors/evidence-backed-research-agent/evals/contract.md"]
+  },
+  "configSchema": "repo:/connectors/evidence-backed-research-agent/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [
+    {
+      "capabilityRef": "/capabilities/research/conduct-evidence-backed-research.md",
+      "operation": "conductEvidenceBackedResearch"
+    }
+  ],
+  "conformance": {
+    "status": "verified",
+    "probeReportRef": "/verifications/research/evidence-backed-research/report.json"
+  }
+}

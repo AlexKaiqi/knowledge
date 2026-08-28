@@ -1,0 +1,93 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "google-places-public-reviews",
+  "sources": [
+    {
+      "id": "text-search-new",
+      "url": "https://developers.google.com/maps/documentation/places/web-service/text-search",
+      "role": "official-resolution-contract",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "post-endpoint", "includes": "https://places.googleapis.com/v1/places:searchText" },
+          { "id": "field-mask-required", "includes": "X-Goog-FieldMask" },
+          { "id": "id-only-sku", "includes": "Text Search Essentials ID Only SKU" },
+          { "id": "place-id-field", "includes": "places.id" },
+          { "id": "page-size", "includes": "pageSize" }
+        ]
+      }
+    },
+    {
+      "id": "place-details-new",
+      "url": "https://developers.google.com/maps/documentation/places/web-service/place-details",
+      "role": "official-review-read-contract",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "details-endpoint", "includes": "https://places.googleapis.com/v1/places/" },
+          { "id": "details-field-mask", "includes": "X-Goog-FieldMask" },
+          { "id": "atmosphere-sku", "includes": "Place Details Enterprise + Atmosphere SKU" },
+          { "id": "reviews-field", "includes": "reviews" }
+        ]
+      }
+    },
+    {
+      "id": "review-rest-schema",
+      "url": "https://developers.google.com/maps/documentation/places/web-service/reference/rest/v1/places",
+      "role": "official-review-schema",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "author-attribution", "includes": "authorAttribution" },
+          { "id": "report-link", "includes": "flagContentUri" },
+          { "id": "source-link", "includes": "googleMapsUri" },
+          { "id": "visit-date", "includes": "visitDate" },
+          { "id": "resource-name", "includes": "places/{placeId}/reviews/{review}" }
+        ]
+      }
+    },
+    {
+      "id": "places-policies-and-attributions",
+      "url": "https://developers.google.com/maps/documentation/places/web-service/policies?hl=en",
+      "role": "official-retention-and-attribution-policy",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "no-cache", "includes": "must not pre-fetch, cache, or store Places API content" },
+          { "id": "credit-author", "includes": "You must always credit the author when displaying photos or reviews" },
+          { "id": "individual-source", "includes": "using the provided googleMapsUri" },
+          { "id": "relevance-order", "includes": "By default, reviews are ordered by relevance" },
+          { "id": "france-visit-date", "includes": "visitDate (the month and year in which the author visited the place)" }
+        ]
+      }
+    },
+    {
+      "id": "places-sku-details",
+      "url": "https://developers.google.com/maps/billing-and-pricing/sku-details?hl=en",
+      "role": "official-field-billing-contract",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "details-atmosphere-name", "includes": "SKU: Places API Place Details Enterprise + Atmosphere" },
+          { "id": "details-atmosphere-id", "includes": "EB23-5ECC-F753" },
+          { "id": "reviews-trigger", "includes": "reviews" },
+          { "id": "field-mask-billing", "includes": "Your request is billed based on the fields provided in the field mask" }
+        ]
+      }
+    },
+    {
+      "id": "places-current-pricing",
+      "url": "https://developers.google.com/maps/billing-and-pricing/pricing",
+      "role": "official-pricing-contract",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "id-only-free", "includes": "Places API Text Search Essentials (IDs Only)" },
+          { "id": "details-atmosphere-name", "includes": "Places API Place Details Enterprise + Atmosphere" },
+          { "id": "details-atmosphere-id", "includes": "EB23-5ECC-F753" },
+          { "id": "first-tier-price", "includes": "$25.00" }
+        ]
+      }
+    }
+  ]
+}

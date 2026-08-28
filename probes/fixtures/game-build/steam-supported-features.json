@@ -1,0 +1,13 @@
+{
+  "gameRef": "game:clockwork-familiar",
+  "sourceRevisionRef": "design:launch-v4",
+  "buildRevisionRef": "build:steam-public-candidate-v7",
+  "featureCatalogRevisionRef": "steam-features:observed-2026-08-27",
+  "features": [
+    { "featureRef": "steam-feature:single-player", "displayName": "Single-player", "implementationState": "implemented-current-build", "implementationEvidenceRefs": ["build-proof:single-player"], "testEvidenceRefs": ["test:single-player-launch"] },
+    { "featureRef": "steam-feature:steam-achievements", "displayName": "Steam Achievements", "implementationState": "implemented-current-build", "implementationEvidenceRefs": ["build-proof:achievements-api"], "testEvidenceRefs": ["test:achievement-unlock"] },
+    { "featureRef": "steam-feature:full-controller-support", "displayName": "Full controller support", "implementationState": "implemented-current-build", "implementationEvidenceRefs": ["build-proof:controller-navigation"], "testEvidenceRefs": ["test:controller-cold-start", "test:controller-full-loop"] },
+    { "featureRef": "steam-feature:steam-cloud", "displayName": "Steam Cloud", "implementationState": "implemented-current-build", "implementationEvidenceRefs": ["build-proof:cloud-config"], "testEvidenceRefs": ["test:cloud-upload-download"] },
+    { "featureRef": "steam-feature:family-sharing", "displayName": "Family Sharing", "implementationState": "implemented-current-build", "implementationEvidenceRefs": ["build-proof:package-sharing-policy"], "testEvidenceRefs": ["test:family-library-access"] }
+  ]
+}

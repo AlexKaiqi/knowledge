@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "public-state-pet-behavior-projector",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/pet/project-public-state-to-behavior.md"],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "connectors/public-state-pet-behavior-projector/src/index.mjs"
+  },
+  "configSchema": "repo:/connectors/public-state-pet-behavior-projector/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [
+    {
+      "capabilityRef": "/capabilities/pet/project-public-state-to-behavior.md",
+      "operation": "projectPublicStateToPetBehavior"
+    }
+  ],
+  "conformance": {
+    "status": "verified",
+    "probeReportRef": "/verifications/pet/public-state-behavior/report.json"
+  }
+}

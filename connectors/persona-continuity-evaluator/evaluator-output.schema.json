@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/connectors/persona-continuity-evaluator/evaluator-output.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["cases"],
+  "properties": {
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 20,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["caseRef", "axes", "systemTruth"],
+        "properties": {
+          "caseRef": { "$ref": "#/$defs/id" },
+          "axes": {
+            "type": "array", "minItems": 4, "maxItems": 4,
+            "items": {
+              "type": "object", "additionalProperties": false,
+              "required": ["axis", "verdict", "ruleRefs", "responseSegmentRefs", "reasonCode"],
+              "properties": {
+                "axis": { "enum": ["role", "boundary", "value", "style"] },
+                "verdict": { "enum": ["held", "deviated", "unknown"] },
+                "ruleRefs": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/id" } },
+                "responseSegmentRefs": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/id" } },
+                "reasonCode": { "$ref": "#/$defs/id" }
+              }
+            }
+          },
+          "systemTruth": {
+            "type": "object", "additionalProperties": false,
+            "required": ["verdict", "truthRefs", "responseSegmentRefs", "reasonCode"],
+            "properties": {
+              "verdict": { "enum": ["held", "deviated", "unknown", "not-applicable"] },
+              "truthRefs": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/id" } },
+              "responseSegmentRefs": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/id" } },
+              "reasonCode": { "$ref": "#/$defs/id" }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": { "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" } }
+}

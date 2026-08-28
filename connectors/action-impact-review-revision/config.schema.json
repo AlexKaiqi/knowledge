@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/connectors/action-impact-review-revision/config.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "minimumValiditySeconds": { "type": "integer", "minimum": 30, "maximum": 3600, "default": 60 },
+    "maximumValiditySeconds": { "type": "integer", "minimum": 60, "maximum": 86400, "default": 3600 }
+  }
+}

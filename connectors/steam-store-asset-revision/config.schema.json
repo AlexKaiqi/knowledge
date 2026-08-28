@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/connectors/steam-store-asset-revision/config.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["workspaceRoot"],
+  "properties": {
+    "workspaceRoot": { "type": "string", "minLength": 1 },
+    "maxAssets": { "type": "integer", "minimum": 9, "maximum": 100, "default": 50 },
+    "maxSingleAssetBytes": { "type": "integer", "minimum": 1, "maximum": 1073741824, "default": 52428800 },
+    "maxTotalBytes": { "type": "integer", "minimum": 1, "maximum": 10737418240, "default": 536870912 }
+  }
+}

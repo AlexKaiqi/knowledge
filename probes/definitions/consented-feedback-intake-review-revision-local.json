@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "consented-feedback-intake-review-revision-local",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/feedback/prepare-consented-intake-review-revision.md",
+  "connectorId": "consented-feedback-intake-revision",
+  "environment": "local",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "verify-public-privacy-boundaries", "operation": "verifyOfficialPrivacySources" },
+    { "id": "prepare-reviewed-intake", "operation": "prepareConsentedFeedbackIntakeRevision" },
+    { "id": "verify-exact-revision-binding", "operation": "exerciseSubmissionPurposeNoticeRetentionDrift" },
+    { "id": "exercise-consent-privacy-retention-blockers", "operation": "exerciseIntakeBlockers" },
+    { "id": "validate-public-schema", "operation": "validateOutputSchema" }
+  ],
+  "assertions": [
+    "One exact scope, product revision, decision, purpose set, form field set, notice, submission and withdrawal mechanism are frozen together.",
+    "Only currently declared consent whose notice matches the scope and predates the submission can become ready for review.",
+    "Missing or unexpected fields, out-of-scope purposes, unresolved other-people data, identifiers, sensitive data and overlong retention are blocked.",
+    "The connector binds caller-provided privacy-review evidence but does not detect identifiers, certify de-identification or make a legal-compliance claim.",
+    "The result always requires human review and never stores data, issues a receipt, applies withdrawal, replies, writes knowledge or authorizes execution."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 45, "maxCost": 0, "currency": "CNY" }
+}

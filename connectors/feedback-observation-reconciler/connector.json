@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "feedback-observation-reconciler",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/feedback/reconcile-feedback-observations.md"],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "connectors/feedback-observation-reconciler/src/index.mjs"
+  },
+  "configSchema": "repo:/connectors/feedback-observation-reconciler/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [
+    {
+      "capabilityRef": "/capabilities/feedback/reconcile-feedback-observations.md",
+      "operation": "reconcileFeedbackObservations"
+    }
+  ],
+  "conformance": {
+    "status": "verified",
+    "probeReportRef": "/verifications/feedback/observation-reconciliation/report.json"
+  }
+}

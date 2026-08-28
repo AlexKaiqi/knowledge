@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "xiaohongshu-android-observation",
+  "version": "0.1.0",
+  "capabilityRefs": ["/capabilities/research/search-public-social-content.md"],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19; Android API 26+ for the Portal route; Appium Android session for the Appium route",
+    "entrypoint": "connectors/xiaohongshu-android-observation/src/index.mjs"
+  },
+  "configSchema": "repo:/connectors/xiaohongshu-android-observation/config.schema.json",
+  "credentialSlots": [
+    {
+      "name": "portal-local-token",
+      "required": false,
+      "purpose": "Authenticate the loopback-only Mobilerun Portal HTTP service when the portal-http route is selected."
+    },
+    {
+      "name": "owned-account-session",
+      "required": true,
+      "purpose": "Reference a manually authenticated, explicitly authorized Xiaohongshu session on a dedicated Android probe device."
+    }
+  ],
+  "handlers": [
+    {
+      "capabilityRef": "/capabilities/research/search-public-social-content.md",
+      "operation": "executeCandidateXiaohongshuAndroidSearch"
+    }
+  ],
+  "conformance": {
+    "status": "candidate",
+    "probeDefinitionRef": "repo:/probes/definitions/xiaohongshu-android-public-search-live.json"
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "openconnector-upstream",
+  "sources": [
+    {
+      "id": "oomol-openconnector-verification",
+      "url": "https://raw.githubusercontent.com/oomol-lab/open-connector/v1.4.0/docs/verification.md",
+      "role": "upstream-verification-contract",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "separate-states", "includes": "Catalog coverage, local execution, and external API verification are separate states." },
+          { "id": "verified-coverage", "includes": "Verified coverage" },
+          { "id": "no-global-claim", "includes": "Do not imply that every catalog action is end-to-end verified" }
+        ]
+      }
+    },
+    {
+      "id": "oomol-openconnector-runtime",
+      "url": "https://raw.githubusercontent.com/oomol-lab/open-connector/v1.4.0/docs/runtime-api.md",
+      "role": "upstream-runtime-contract",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "action-endpoint", "includes": "POST /v1/actions/:actionId" },
+          { "id": "runtime-token", "includes": "Authorization: Bearer <runtime-token-or-jwt>" },
+          { "id": "connection-grant", "includes": "allowedConnections" },
+          { "id": "proxy-separation", "includes": "Action policy does not affect it" }
+        ]
+      }
+    },
+    {
+      "id": "oomol-openconnector-credentials",
+      "url": "https://raw.githubusercontent.com/oomol-lab/open-connector/v1.4.0/docs/credentials.md",
+      "role": "upstream-security-contract",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "aes-gcm", "includes": "AES-256-GCM" },
+          { "id": "plaintext-fallback", "includes": "completed idempotent Action responses are stored as plaintext" },
+          { "id": "replay-retention", "includes": "remain eligible for replay for 24 hours" }
+        ]
+      }
+    },
+    {
+      "id": "oomol-openconnector-tikhub-actions",
+      "url": "https://raw.githubusercontent.com/oomol-lab/open-connector/96fb6afe8c244c7d6f3a8351df06d7b04137f6a6/src/providers/tikhub/actions.ts",
+      "role": "upstream-action-contract",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "xiaohongshu-search", "includes": "name: \"search_xiaohongshu_notes\"" },
+          { "id": "douyin-search", "includes": "name: \"search_douyin_videos\"" },
+          { "id": "raw-data", "includes": "rawData: rawDataSchema" },
+          { "id": "raw-response", "includes": "raw: rawResponseSchema" }
+        ]
+      }
+    },
+    {
+      "id": "oomol-pricing",
+      "url": "https://oomol.com/en/pricing/",
+      "role": "managed-route-pricing",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "free-plan", "includes": "Free" },
+          { "id": "app-calls", "includes": "App calls" },
+          { "id": "monthly-calls", "includes": "20K" },
+          { "id": "overage", "includes": "0.3 credits" }
+        ]
+      }
+    },
+    {
+      "id": "oomol-public-social-research-skill",
+      "url": "https://oomol.com/en/skills/@alwaysmavs/public-social-research/",
+      "role": "managed-route-surface",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "tikhub", "includes": "TikHub" },
+          { "id": "xiaohongshu", "includes": "Xiaohongshu" },
+          { "id": "quick-search", "includes": "Quick Search" },
+          { "id": "deep-research", "includes": "Deep Research" }
+        ]
+      }
+    },
+    {
+      "id": "openconnector-dev-placeholder",
+      "url": "https://raw.githubusercontent.com/openconnector-dev/openconnector/main/README.md",
+      "role": "same-name-project-status",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "preparing-source", "includes": "source code is being prepared for public release" },
+          { "id": "agpl", "includes": "GNU Affero General Public License v3.0" }
+        ]
+      }
+    }
+  ]
+}

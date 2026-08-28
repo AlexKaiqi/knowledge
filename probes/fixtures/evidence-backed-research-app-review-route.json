@@ -1,0 +1,259 @@
+{
+  "agentObservation": {
+    "scenario": "platform-integration",
+    "performedAt": "2026-08-27T03:52:11Z",
+    "openedSourceCount": 6,
+    "counterSearchPerformed": true,
+    "humanReviewRequired": true
+  },
+  "sourceChecks": [
+    {
+      "id": "appfigures-reviews-doc",
+      "kind": "html-semantic",
+      "url": "https://docs.appfigures.com/api/reference/v2/reviews",
+      "assertions": ["public:read", "Public Data API", "Google Play does not support the concept of countries", "has_response"],
+      "digest": "d19c7c41d4c8a789bf9f82fe0c3cc508274e121982c35979887d02127468e740"
+    },
+    {
+      "id": "appfigures-public-data-policy",
+      "kind": "html-semantic",
+      "url": "https://docs.appfigures.com/public-data-access",
+      "assertions": ["selling it directly or using it publicly is not allowed", "pre-paid credits", "requests start at two credits"],
+      "digest": "374a424212847a066535efe122a27074f69ce95e2aa1496ddb372264545284d3"
+    },
+    {
+      "id": "appfigures-credit-and-license",
+      "kind": "html-semantic",
+      "url": "https://help.appfigures.com/en/article/appfigures-api-cli-and-mcp-access-limits-and-public-data-1seiibo/",
+      "assertions": ["Product metadata 2", "Reviews 3", "separate commercial license"],
+      "digest": "2b21eec44188f6b27ac19ba1dcee69fbe656bfa10c2437569983f35eea13ce5e"
+    },
+    {
+      "id": "appfigures-candidate-implementation",
+      "kind": "repository-manifest",
+      "resource": "repo:/connectors/appfigures-public-app-reviews/",
+      "files": [
+        "connectors/appfigures-public-app-reviews/connector.json",
+        "connectors/appfigures-public-app-reviews/config.schema.json",
+        "connectors/appfigures-public-app-reviews/src/index.mjs",
+        "connectors/appfigures-public-app-reviews/test/connector.test.mjs"
+      ],
+      "digest": "87ed6527908dfdb900acbf0246b0aa974f4267c000b4ea2edff71304a8d3499f"
+    },
+    {
+      "id": "appfollow-review-route",
+      "kind": "html-semantic",
+      "url": "https://docs.api.appfollow.io/reference/reviews_api_v2_reviews_get-1",
+      "assertions": ["10 credits per request", "Get reviews for application or collection", "Review text query"],
+      "digest": "788f9bed76481d8f5f476651a17f5992ce0f172a30265958c0cbd681ffaa29c4"
+    },
+    {
+      "id": "apptweak-app-store-api",
+      "kind": "html-semantic",
+      "url": "https://www.apptweak.com/en/app-store-api",
+      "assertions": ["7-day free trial", "100,000 credits", "App reviews search"],
+      "digest": "ae19a59a34c2956e83a2adac8d23e3aab425013157f29675bae9beb71b98510e"
+    }
+  ],
+  "input": {
+    "scenario": "platform-integration",
+    "goal": "用公开竞品 App 评论发现真实需求，同时把授权、身份、成本和数据保留复杂度隐藏在能力之后",
+    "decision": "是否继续以 Appfigures 作为首个小额付费 live probe，还是先改用 AppFollow 或 AppTweak",
+    "questions": [
+      "Appfigures 是否能在一个固定 App、territory 和时间窗口内返回需要的评论证据？",
+      "内部产品研究的许可、credit 成本和字段边界是否足够明确？",
+      "AppFollow 或 AppTweak 是否提供足以推翻首选路线的更低门槛或更好覆盖？"
+    ],
+    "constraints": {
+      "cutoffAt": "2026-08-27T03:52:11Z",
+      "geographies": ["US"],
+      "versions": ["current official documentation", "local candidate 0.1.0"],
+      "exclusions": ["创建供应商账号", "接受条款", "购买 credits", "调用付费 API", "保存评论作者或完整正文"]
+    },
+    "budget": { "maxSources": 8, "maxQueries": 8 }
+  },
+  "candidate": {
+    "scenario": "platform-integration",
+    "question": "公开竞品 App 评论的首个小额付费验证应该继续走 Appfigures，还是先切换 AppFollow/AppTweak？",
+    "decision": "保留 Appfigures 为首个窄 probe，但只在内部研究用途、实际 credit 包价格和供应商身份获批后执行；AppFollow 与 AppTweak 保留为失败后的独立后备路线，不自动采购或切换。",
+    "answer": "继续准备 Appfigures 的固定样本 probe。官方 Reviews route 明确支持 public:read、竞品 Public Data add-on、日期/星级/关键词/国家过滤和 newest-first 分页；现有 candidate 已把一次调用限制为产品解析加一页评论，并删除作者、供应商内部 ID、原文持久化和不可靠的竞品回复状态。官方公开计费语义给出产品元数据 2 credits、评论 3 credits，正好可形成 5-credit 上限；但 credit 包的实际美元成本、标准账号对本次内部研究的许可与账单扣减仍未验证，因此不能准入或执行。AppFollow 的评论请求为 10 credits 且依赖订阅可用性；AppTweak 提供 7 天/100,000 credits 试用和更广的评论/ASO 数据，都是有效替代，但当前证据没有证明它们在这个单一固定问题上比已实现、边界更窄的 Appfigures probe 更优。若 Appfigures 的最低采购、许可或 live 结果不满足门槛，再对同一 fixture 比较 AppTweak trial 或 AppFollow，而不是扩大本次采购。",
+    "confidence": "high",
+    "findings": [
+      {
+        "id": "bounded-review-surface",
+        "claim": "Appfigures 官方评论接口覆盖固定竞品、国家、日期、星级、关键词和 newest-first 分页；Google Play 不提供国家语义，竞品回复状态也不能作为可靠事实。",
+        "status": "supported",
+        "confidence": "high",
+        "evidenceIds": ["appfigures-reviews", "candidate-implementation"],
+        "counterEvidenceIds": ["apptweak-alternative"],
+        "applicability": "Apple US 可声明 territory；Google Play 必须保留 country-unavailable，不能伪统一。",
+        "inference": false
+      },
+      {
+        "id": "internal-use-boundary",
+        "claim": "Appfigures Public Data 可用于自身竞品与市场研究，但直接销售、公开使用、客户处理、重包装或 AI training 可能需要另行商业许可。",
+        "status": "supported",
+        "confidence": "high",
+        "evidenceIds": ["appfigures-policy", "appfigures-cost-license"],
+        "counterEvidenceIds": [],
+        "applicability": "仅支持本次声明的内部产品研究；任何外部数据产品或训练用途均不在授权内。",
+        "inference": false
+      },
+      {
+        "id": "five-credit-envelope",
+        "claim": "一次产品元数据解析和一次评论读取的公开单位成本分别为 2 和 3 credits，因此可把技术请求预算冻结为最多 5 credits。",
+        "status": "supported",
+        "confidence": "high",
+        "evidenceIds": ["appfigures-cost-license", "candidate-implementation"],
+        "counterEvidenceIds": ["appfollow-alternative", "apptweak-alternative"],
+        "applicability": "只约束 API credit 数；实际购买包价格和真实扣减必须在执行前后人工对账。",
+        "inference": true
+      },
+      {
+        "id": "alternatives-remain-valid",
+        "claim": "AppFollow 和 AppTweak 都提供公开评论研究能力；AppTweak 的大额试用尤其可能降低第一次 Schema/coverage 比较成本。",
+        "status": "supported",
+        "confidence": "medium",
+        "evidenceIds": ["appfollow-alternative", "apptweak-alternative"],
+        "counterEvidenceIds": ["candidate-implementation", "appfigures-cost-license"],
+        "applicability": "尚未验证具体套餐是否允许目标 App、territory、导出与内部研究用途，也未实现同边界 Connector。",
+        "inference": false
+      },
+      {
+        "id": "first-probe-choice",
+        "claim": "在当前单一固定问题下，继续验证已实现且可限制为 5 credits 的 Appfigures candidate，比先采购更宽的 ASO/review 产品更能隔离成本与字段风险。",
+        "status": "suggestive",
+        "confidence": "medium",
+        "evidenceIds": ["candidate-implementation", "appfigures-reviews", "appfigures-cost-license"],
+        "counterEvidenceIds": ["appfollow-alternative", "apptweak-alternative"],
+        "applicability": "只适用于首个固定 ChatGPT Apple/US 小样本；如果最低购买成本、许可或结果质量失败，结论立即失效。",
+        "inference": true
+      }
+    ],
+    "evidence": [
+      {
+        "id": "appfigures-reviews",
+        "role": "official-boundary",
+        "sourceType": "official-document",
+        "weight": "primary",
+        "title": "Appfigures Reviews API",
+        "resource": "https://docs.appfigures.com/api/reference/v2/reviews",
+        "claim": "public:read 与 Public Data add-on 覆盖竞品评论；接口支持 q/countries/versions/stars/start/end/sort，Google Play country 与竞品 response state 有明确限制。",
+        "locator": "Reviews: scope, request arguments, paging and response field notes",
+        "observedAt": "2026-08-27T03:52:11Z",
+        "digest": "d19c7c41d4c8a789bf9f82fe0c3cc508274e121982c35979887d02127468e740"
+      },
+      {
+        "id": "appfigures-policy",
+        "role": "official-boundary",
+        "sourceType": "official-document",
+        "weight": "primary",
+        "title": "Appfigures Public Data Access",
+        "resource": "https://docs.appfigures.com/public-data-access",
+        "claim": "Public Data API 支持竞品/市场内部研究，公开或直接销售数据不在标准用途内；请求使用预付 credits。",
+        "locator": "What Can You Do with the API; Billing",
+        "observedAt": "2026-08-27T03:52:11Z",
+        "digest": "374a424212847a066535efe122a27074f69ce95e2aa1496ddb372264545284d3"
+      },
+      {
+        "id": "appfigures-cost-license",
+        "role": "official-boundary",
+        "sourceType": "official-document",
+        "weight": "primary",
+        "title": "Appfigures API, CLI, and MCP access, limits, and public data",
+        "resource": "https://help.appfigures.com/en/article/appfigures-api-cli-and-mcp-access-limits-and-public-data-1seiibo/",
+        "claim": "产品元数据请求 2 credits、评论请求 3 credits；客户处理、转售、重包装和 AI training 等用途可能需要单独商业许可。",
+        "locator": "How credits work; Commercial use, data processing, and AI training",
+        "observedAt": "2026-08-27T03:52:11Z",
+        "digest": "2b21eec44188f6b27ac19ba1dcee69fbe656bfa10c2437569983f35eea13ce5e"
+      },
+      {
+        "id": "candidate-implementation",
+        "role": "implementation-evidence",
+        "sourceType": "repository",
+        "weight": "primary",
+        "title": "Appfigures public app reviews candidate manifest",
+        "resource": "repo:/connectors/appfigures-public-app-reviews/",
+        "claim": "候选实现固定产品解析加一页评论、最多 25 条/90 天、无 retry，删除作者/内部 ID/不可靠回复状态，并在账单对账前保持 partial。",
+        "locator": "connector.json, config.schema.json, src/index.mjs, test/connector.test.mjs",
+        "observedAt": "2026-08-27T03:52:11Z",
+        "digest": "87ed6527908dfdb900acbf0246b0aa974f4267c000b4ea2edff71304a8d3499f"
+      },
+      {
+        "id": "appfollow-alternative",
+        "role": "counter-evidence",
+        "sourceType": "official-document",
+        "weight": "primary",
+        "title": "AppFollow Reviews API v2",
+        "resource": "https://docs.api.appfollow.io/reference/reviews_api_v2_reviews_get-1",
+        "claim": "AppFollow 可按 external app ID、country、date 和正文 query 读取评论，公开方法价格为每请求 10 credits。",
+        "locator": "Reviews endpoint summary, price and query parameters",
+        "observedAt": "2026-08-27T03:52:11Z",
+        "digest": "788f9bed76481d8f5f476651a17f5992ce0f172a30265958c0cbd681ffaa29c4"
+      },
+      {
+        "id": "apptweak-alternative",
+        "role": "counter-evidence",
+        "sourceType": "official-document",
+        "weight": "primary",
+        "title": "AppTweak App Store API",
+        "resource": "https://www.apptweak.com/en/app-store-api",
+        "claim": "AppTweak 提供按 app/country/date/rating/keyword 的评论搜索，并公开 7 天、100,000 API credits 的试用。",
+        "locator": "App Metadata & Reviews; API getting started",
+        "observedAt": "2026-08-27T03:52:11Z",
+        "digest": "ae19a59a34c2956e83a2adac8d23e3aab425013157f29675bae9beb71b98510e"
+      }
+    ],
+    "conflicts": [
+      {
+        "claim": "哪个供应商是最低门槛的第一次评论 probe。",
+        "evidenceIds": ["appfigures-cost-license", "candidate-implementation", "appfollow-alternative", "apptweak-alternative"],
+        "resolution": "Appfigures 的请求级 credit 数和本地实现边界最清楚，但最低购买包价格未知；AppTweak 的免费试用可能更便宜，却尚未验证目标数据、许可和同等最小化。先请求 Appfigures 购买/许可事实，门槛不满足时用同一 fixture 比较 AppTweak trial。"
+      },
+      {
+        "claim": "country/territory 是否能跨 Apple 与 Google Play 统一。",
+        "evidenceIds": ["appfigures-reviews", "apptweak-alternative"],
+        "resolution": "不能依据供应商统一字段抹平 store-native 语义；当前 Appfigures 文档明确 Google Play 无 country 概念，公共能力必须保留 unavailable。"
+      }
+    ],
+    "gaps": [
+      "尚未创建或批准供应商研究身份，也未接受任何条款。",
+      "Appfigures credit 包的最低美元价格和一次真实调用的账单扣减尚未验证。",
+      "三家供应商对固定 ChatGPT Apple/US 30 天样本的实际 coverage、新鲜度、删评和合法空集尚未横向测量。",
+      "当前结果是一个真实 Agent 场景样本，不证明同一 Agent/runtime 可对所有 platform-integration 问题稳定复现。"
+    ],
+    "counterEvidenceSearch": {
+      "performed": true,
+      "queries": [
+        "Appfigures official public app reviews API credits commercial license",
+        "AppFollow official reviews API v2 credits public app",
+        "AppTweak official app reviews search API trial credits",
+        "Appfigures Google Play country review semantics",
+        "alternative public competitor app review API"
+      ],
+      "outcome": "found",
+      "evidenceIds": ["appfollow-alternative", "apptweak-alternative"]
+    },
+    "nextProbes": [
+      {
+        "hypothesis": "标准 Appfigures Public Data 账号允许本次内部产品研究，且 5 credits 的实际成本不超过 1 USD。",
+        "method": "经人工批准后确认账户用途与购买页价格，仅登记 opaque identity/credential refs 和购买前 credit ledger；不调用评论接口。",
+        "success": "用途边界书面可核、最低购买和 5-credit 等价成本满足预算，并能建立隔离的 probe identity。",
+        "failure": "标准许可不覆盖用途、最低采购明显过量、无法建立隔离身份或价格不可对账。",
+        "effect": "identity-relationship"
+      },
+      {
+        "hypothesis": "Appfigures 能在一次 5-credit 上限运行中返回 schema-valid、去身份化且 coverage 清楚的固定 Apple/US 评论样本。",
+        "method": "批准身份和费用后，运行现有 production-public probe：解析固定 store product、读取 30 天 newest-first 最多 25 条、保存仅摘要/长度并对账 credit ledger。",
+        "success": "结果通过产品身份、territory/date/rating/version、字段删除、响应预算和账单对账检查；合法空集也可通过。",
+        "failure": "授权/许可失败、字段/coverage 漂移、实际成本超限、身份或正文泄漏，或账单不可对账。",
+        "effect": "financial"
+      }
+    ],
+    "coverage": {
+      "queryCount": 5,
+      "stoppedBecause": "decision-sufficient",
+      "complete": true
+    }
+  }
+}

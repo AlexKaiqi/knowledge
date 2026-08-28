@@ -1,0 +1,81 @@
+{
+  "fixture": "grounded-reminder-action-review",
+  "schemaVersion": "dsh.action-impact-review-revision/v1",
+  "candidate": {
+    "candidateRef": "repo:/knowledge/verifications/assistant/memory-action-grounding/snapshot.json",
+    "candidateDigest": "2e79de34108c35250c52dc7a058c2046a42d6a8bf79ab0c06c734840270f3aa2",
+    "actionName": "schedule-reminder",
+    "effect": "communication",
+    "scopeRef": "owner:primary",
+    "targetRefs": [
+      "channel:current"
+    ],
+    "arguments": {
+      "quietMode": true,
+      "targetChannel": "current",
+      "timezone": "Asia/Shanghai",
+      "title": "Review feedback"
+    },
+    "readiness": "grounded",
+    "requiredMissing": []
+  },
+  "impact": {
+    "dataClasses": [
+      "personal"
+    ],
+    "audience": "single-recipient",
+    "reversibility": "reversible",
+    "cost": {
+      "kind": "none"
+    },
+    "consequenceRefs": [
+      "contract:schedule-reminder"
+    ]
+  },
+  "evidenceRefs": [
+    "candidate:2e79de34108c35250c52dc7a058c2046a42d6a8bf79ab0c06c734840270f3aa2",
+    "contract:schedule-reminder"
+  ],
+  "requestedAt": "2026-08-27T05:00:00.000Z",
+  "expiresAt": "2026-08-27T05:10:00.000Z",
+  "reviewClass": "high",
+  "riskSignals": [
+    "external-communication",
+    "personal-data"
+  ],
+  "reviewItems": [
+    {
+      "id": "data-use-and-disclosure",
+      "status": "pending"
+    },
+    {
+      "id": "declared-impact-and-consequences",
+      "status": "pending"
+    },
+    {
+      "id": "exact-action-and-arguments",
+      "status": "pending"
+    },
+    {
+      "id": "exact-targets-and-scope",
+      "status": "pending"
+    },
+    {
+      "id": "recipient-and-audience",
+      "status": "pending"
+    },
+    {
+      "id": "validity-window-and-cancel",
+      "status": "pending"
+    }
+  ],
+  "reviewerDecision": null,
+  "authorizationGranted": false,
+  "confirmationTokenIssued": false,
+  "executionAuthorized": false,
+  "status": "ready-for-human-review",
+  "reviewRevisionHash": "sha256:52ad8674b941fc6eadb370882cadfab5bb14568a82541c50610176325dd4f784",
+  "preflight": {
+    "blockers": []
+  }
+}

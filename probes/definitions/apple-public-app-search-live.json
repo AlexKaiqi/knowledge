@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "apple-public-app-search-live",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/research/search-public-app-catalog.md",
+  "connectorId": "apple-public-app-search",
+  "environment": "production-public",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "search-fixed-app-query", "operation": "searchPublicAppCatalog" },
+    { "id": "validate-metadata-boundary", "operation": "normalizeSearchResponse" },
+    { "id": "validate-public-schema", "operation": "validateOutputSchema" }
+  ],
+  "assertions": [
+    "The fixed official Apple Search API returns a bounded US iPhone app page without an account, cookie or credential.",
+    "The result contains the expected public App Store app identity while making no claim about ranking, corpus size or historical completeness.",
+    "Only minimized app identity, developer, genre, version, price, rating summary and canonical store links are retained; descriptions, release notes, artwork and raw payloads are excluded.",
+    "The Connector makes one serialized request, respects the documented approximate 20-call-per-minute limit and never retries a failure.",
+    "The live result matches the public product schema and exposes no hidden Connector route, request endpoint, credential or internal trace."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 60, "maxCost": 0, "currency": "USD" }
+}

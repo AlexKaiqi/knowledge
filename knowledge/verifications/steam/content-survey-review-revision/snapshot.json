@@ -1,0 +1,212 @@
+{
+  "fixture": "owned-game-content-survey-evidence",
+  "schemaVersion": "dsh.steam-content-survey-review-revision/v1",
+  "gameRef": "game:clockwork-familiar",
+  "sourceRevisionRef": "design:content-audit-v1",
+  "buildRevisionRef": "build:steam-public-candidate-v7",
+  "questionnaireRevisionRef": "steam-content-survey:observed-2026-08-27",
+  "policyRevision": "steam-content-survey-2026-08-27",
+  "manualReview": {
+    "required": true,
+    "checks": [
+      {
+        "id": "current-questionnaire-revision",
+        "status": "pending"
+      },
+      {
+        "id": "question-mapping-and-answer-truthfulness",
+        "status": "pending"
+      },
+      {
+        "id": "current-build-and-store-page-match",
+        "status": "pending"
+      },
+      {
+        "id": "mature-content-disclosure-complete",
+        "status": "pending"
+      },
+      {
+        "id": "generative-ai-classification-complete",
+        "status": "pending"
+      },
+      {
+        "id": "ai-rights-and-legality-evidence",
+        "status": "pending"
+      },
+      {
+        "id": "live-ai-guardrails-sufficient",
+        "status": "pending"
+      },
+      {
+        "id": "owned-target-and-submitter-authority",
+        "status": "pending"
+      }
+    ]
+  },
+  "platformValidated": false,
+  "buildValidatedByConnector": false,
+  "submittedToSteamworks": false,
+  "ratingIssued": false,
+  "storefrontVisibilityChanged": false,
+  "markedReadyForReview": false,
+  "released": false,
+  "executionAuthorized": false,
+  "preparedAt": "2026-08-27T10:30:00.000Z",
+  "status": "ready-for-human-review",
+  "revisionHash": "sha256:18f02e94ab3d135e7c9a9ecd4d5c19c36f11893864dd15d267f49b82bef3ca8a",
+  "sections": [
+    {
+      "section": "general-content",
+      "expectedQuestionRefs": [
+        "survey-question:general-gambling",
+        "survey-question:general-violence"
+      ],
+      "answers": [
+        {
+          "questionRef": "survey-question:general-gambling",
+          "response": {
+            "kind": "boolean",
+            "value": false
+          },
+          "evidenceRefs": [
+            "evidence:general-gambling"
+          ],
+          "contentRefs": [
+            "content:general-gambling"
+          ]
+        },
+        {
+          "questionRef": "survey-question:general-violence",
+          "response": {
+            "kind": "single-choice",
+            "value": "choice:fantasy-violence-occasional"
+          },
+          "evidenceRefs": [
+            "evidence:general-violence"
+          ],
+          "contentRefs": [
+            "content:general-violence"
+          ]
+        }
+      ]
+    },
+    {
+      "section": "mature-content",
+      "expectedQuestionRefs": [
+        "survey-question:mature-adult-sexual-content",
+        "survey-question:mature-language"
+      ],
+      "answers": [
+        {
+          "questionRef": "survey-question:mature-adult-sexual-content",
+          "response": {
+            "kind": "boolean",
+            "value": false
+          },
+          "evidenceRefs": [
+            "evidence:mature-adult-sexual-content"
+          ],
+          "contentRefs": [
+            "content:mature-adult-sexual-content"
+          ]
+        },
+        {
+          "questionRef": "survey-question:mature-language",
+          "response": {
+            "kind": "single-choice",
+            "value": "choice:mild"
+          },
+          "evidenceRefs": [
+            "evidence:mature-language"
+          ],
+          "contentRefs": [
+            "content:mature-language"
+          ]
+        }
+      ]
+    },
+    {
+      "section": "generative-ai-content",
+      "expectedQuestionRefs": [
+        "survey-question:ai-live-generated",
+        "survey-question:ai-pre-generated"
+      ],
+      "answers": [
+        {
+          "questionRef": "survey-question:ai-live-generated",
+          "response": {
+            "kind": "boolean",
+            "value": true
+          },
+          "evidenceRefs": [
+            "evidence:ai-live-generated"
+          ],
+          "contentRefs": [
+            "content:ai-live-generated"
+          ]
+        },
+        {
+          "questionRef": "survey-question:ai-pre-generated",
+          "response": {
+            "kind": "boolean",
+            "value": true
+          },
+          "evidenceRefs": [
+            "evidence:ai-pre-generated"
+          ],
+          "contentRefs": [
+            "content:ai-pre-generated"
+          ]
+        }
+      ]
+    }
+  ],
+  "declarations": {
+    "allUploadedAdultContentDisclosed": true,
+    "answersMatchCurrentBuildAndStorePage": true
+  },
+  "aiDisclosure": {
+    "mode": "both",
+    "shippedContentRefs": [
+      "content:ai-assisted-localization"
+    ],
+    "runtimeContentRefs": [
+      "system:dynamic-npc-dialogue"
+    ],
+    "rightsEvidenceRefs": [
+      "rights:ai-content-audit-v1"
+    ],
+    "guardrailEvidenceRefs": [
+      "guardrail:runtime-generation-policy-v3"
+    ]
+  },
+  "preflight": {
+    "checks": [
+      {
+        "id": "three-required-sections",
+        "status": "passed"
+      },
+      {
+        "id": "question-answer-set-closed",
+        "status": "passed"
+      },
+      {
+        "id": "adult-content-disclosure-declared",
+        "status": "passed"
+      },
+      {
+        "id": "build-and-store-consistency-declared",
+        "status": "passed"
+      },
+      {
+        "id": "generative-ai-evidence-shape",
+        "status": "passed"
+      },
+      {
+        "id": "answer-evidence-and-content-bound",
+        "status": "passed"
+      }
+    ],
+    "blockers": []
+  }
+}

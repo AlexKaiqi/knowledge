@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/steam/read-public-game-review-page-output.schema.json",
+  "title": "SteamPublicGameReviewPage",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["source", "query", "coverage", "summary", "reviews", "observedAt", "resultDigest", "conformance"],
+  "properties": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "endpoint", "documentation"],
+      "properties": {
+        "id": { "const": "steam-public-game-reviews" },
+        "endpoint": { "type": "string", "format": "uri", "pattern": "^https://store\\.steampowered\\.com/appreviews/[1-9][0-9]*$" },
+        "documentation": { "const": "https://partner.steamgames.com/doc/store/getreviews" }
+      }
+    },
+    "query": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["appId", "filter", "language", "reviewType", "purchaseType", "cursor", "perPage", "includeOfftopic"],
+      "properties": {
+        "appId": { "type": "integer", "minimum": 1 },
+        "filter": { "enum": ["recent", "updated"] },
+        "language": { "type": "string", "minLength": 2 },
+        "reviewType": { "enum": ["all", "positive", "negative"] },
+        "purchaseType": { "enum": ["all", "steam", "non_steam_purchase"] },
+        "cursor": { "type": "string", "minLength": 1, "maxLength": 1024 },
+        "perPage": { "type": "integer", "minimum": 1, "maximum": 20 },
+        "includeOfftopic": { "type": "boolean" }
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["representation", "returnedCount", "nextCursor", "pageExhausted", "corpusComplete", "offtopicIncluded", "authorIdentityRetained", "reviewTextRetention"],
+      "properties": {
+        "representation": { "const": "cursor-page" },
+        "returnedCount": { "type": "integer", "minimum": 0, "maximum": 20 },
+        "nextCursor": { "type": "string", "minLength": 1, "maxLength": 1024 },
+        "pageExhausted": { "type": "boolean" },
+        "corpusComplete": { "const": false },
+        "offtopicIncluded": { "type": "boolean" },
+        "authorIdentityRetained": { "const": false },
+        "reviewTextRetention": { "enum": ["transient", "redacted"] }
+      }
+    },
+    "summary": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["returnedCount", "reviewScore", "reviewScoreDescription", "totalPositive", "totalNegative", "totalReviews"],
+          "properties": {
+            "returnedCount": { "type": "integer", "minimum": 0, "maximum": 20 },
+            "reviewScore": { "type": "integer", "minimum": 0, "maximum": 10 },
+            "reviewScoreDescription": { "type": "string", "minLength": 1, "maxLength": 128 },
+            "totalPositive": { "type": "integer", "minimum": 0 },
+            "totalNegative": { "type": "integer", "minimum": 0 },
+            "totalReviews": { "type": "integer", "minimum": 0 }
+          }
+        }
+      ]
+    },
+    "reviews": {
+      "type": "array",
+      "maxItems": 20,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["recommendationId", "language", "text", "createdAt", "updatedAt", "recommended", "playtimeAtReviewMinutes", "steamPurchase", "receivedForFree", "writtenDuringEarlyAccess", "primarilySteamDeck"],
+        "properties": {
+          "recommendationId": { "type": "string", "pattern": "^[1-9][0-9]*$" },
+          "language": { "type": "string", "minLength": 1, "maxLength": 64 },
+          "text": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["retained", "length", "sha256", "truncated"],
+            "properties": {
+              "retained": { "type": "boolean" },
+              "value": { "type": "string", "maxLength": 16000 },
+              "length": { "type": "integer", "minimum": 0 },
+              "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+              "truncated": { "type": "boolean" }
+            },
+            "allOf": [
+              { "if": { "properties": { "retained": { "const": true } }, "required": ["retained"] }, "then": { "required": ["value"] }, "else": { "not": { "required": ["value"] } } }
+            ]
+          },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" },
+          "recommended": { "type": "boolean" },
+          "playtimeAtReviewMinutes": { "type": ["integer", "null"], "minimum": 0 },
+          "steamPurchase": { "type": "boolean" },
+          "receivedForFree": { "type": "boolean" },
+          "writtenDuringEarlyAccess": { "type": "boolean" },
+          "primarilySteamDeck": { "type": "boolean" }
+        }
+      }
+    },
+    "observedAt": { "type": "string", "format": "date-time" },
+    "resultDigest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "conformance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "assertions"],
+      "properties": {
+        "status": { "enum": ["passed", "review-required"] },
+        "assertions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "passed"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+              "passed": { "type": "boolean" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/schemas/pet/project-public-state-to-behavior-input.schema.json",
+  "title": "Project public state to pet behavior input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["trace"],
+  "properties": {
+    "trace": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100,
+      "items": {
+        "oneOf": [
+          { "$ref": "#/$defs/sessionSnapshot" },
+          { "$ref": "#/$defs/assistantState" }
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "atMs": { "type": "integer", "minimum": 0 },
+    "sessionSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "atMs", "sessions", "jobStatuses"],
+      "properties": {
+        "kind": { "const": "session-snapshot" },
+        "atMs": { "$ref": "#/$defs/atMs" },
+        "sessions": {
+          "type": "array",
+          "maxItems": 50,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "running", "pendingInteraction"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^[a-zA-Z0-9._:-]{1,128}$" },
+              "running": { "type": "boolean" },
+              "pendingInteraction": { "type": "boolean" }
+            }
+          }
+        },
+        "jobStatuses": {
+          "type": "array",
+          "maxItems": 100,
+          "items": { "enum": ["queued", "running", "completed", "failed"] }
+        }
+      }
+    },
+    "assistantState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "atMs", "available"],
+      "properties": {
+        "kind": { "const": "assistant-state" },
+        "atMs": { "$ref": "#/$defs/atMs" },
+        "available": { "type": "boolean" },
+        "status": { "enum": ["idle", "opening", "ready", "error"] },
+        "phase": { "enum": ["idle", "connecting", "listening", "speaking", "responding", "editing", "drafting", "ready", "submitted"] }
+      },
+      "anyOf": [
+        { "required": ["status"] },
+        { "required": ["phase"] }
+      ]
+    }
+  }
+}

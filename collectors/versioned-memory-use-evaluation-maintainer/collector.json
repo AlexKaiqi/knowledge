@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "dsh.collector-definition/v1",
+  "id": "versioned-memory-use-evaluation-maintainer",
+  "version": "1.0.0",
+  "scope": {
+    "knowledgeGlobs": [
+      "knowledge/tools/versioned-memory-use-evaluator.md",
+      "knowledge/concepts/assistant/versioned-memory-use-evaluation-suite.md",
+      "knowledge/capabilities/assistant/evaluate-versioned-memory-use-suite.md",
+      "knowledge/schemas/assistant/evaluate-versioned-memory-use-suite-*.schema.json",
+      "knowledge/verifications/assistant/versioned-memory-use-evaluation/*.json"
+    ],
+    "connectorIds": ["versioned-memory-use-evaluator"],
+    "capabilityRefs": ["/capabilities/assistant/evaluate-versioned-memory-use-suite.md"]
+  },
+  "triggers": [{ "kind": "schedule", "schedule": "15 9 * * 2" }, { "kind": "source-change" }, { "kind": "schema-change" }, { "kind": "connector-change" }, { "kind": "failed-execution" }, { "kind": "manual" }],
+  "execution": { "kind": "deterministic", "runtime": "node >=22.19", "entrypoint": "collectors/versioned-memory-use-evaluation-maintainer/src/index.mjs" },
+  "outputs": ["knowledge-proposal", "connector-change-proposal", "verification-report"],
+  "writePolicy": { "mode": "proposal-only", "requiresApprovalFor": ["knowledge", "connector", "live-probe"] },
+  "probePolicy": { "allowedEnvironments": ["local", "production-public"], "identityPoolRefs": [], "maximumEffect": "none" },
+  "budgets": { "maxRunsPerDay": 2, "maxCostPerDay": 0, "currency": "CNY" }
+}

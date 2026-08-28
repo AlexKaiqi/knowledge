@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "versioned-memory-use-evaluator",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/assistant/evaluate-versioned-memory-use-suite.md"],
+  "execution": { "kind": "deterministic", "runtime": "node >=22.19", "entrypoint": "connectors/versioned-memory-use-evaluator/src/index.mjs" },
+  "configSchema": "repo:/connectors/versioned-memory-use-evaluator/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [{ "capabilityRef": "/capabilities/assistant/evaluate-versioned-memory-use-suite.md", "operation": "evaluateVersionedMemoryUseSuite" }],
+  "conformance": { "status": "verified", "probeReportRef": "/verifications/assistant/versioned-memory-use-evaluation/report.json" }
+}

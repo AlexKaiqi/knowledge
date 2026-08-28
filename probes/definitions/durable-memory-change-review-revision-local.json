@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "durable-memory-change-review-revision-local",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/assistant/prepare-durable-memory-change-review-revision.md",
+  "connectorId": "durable-memory-change-review-revision",
+  "environment": "local",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "verify-pinned-production-semantics", "operation": "observePersonalKnowledgeBaseSources" },
+    { "id": "exercise-real-proposal-apply-commit-receipt", "operation": "runIsolatedPersonalKnowledgeBaseFlow" },
+    { "id": "prepare-review-revision", "operation": "prepareDurableMemoryChangeReviewRevision" },
+    { "id": "exercise-conflict-and-replay", "operation": "verifyBaseHashConflictAndIdempotence" },
+    { "id": "validate-public-schema", "operation": "validateOutputSchema" }
+  ],
+  "assertions": [
+    "One normalized USER.md or direct knowledge/*.md change is bound to its base, current and desired content digests.",
+    "A production Personal Knowledge Base runs proposal, explicit confirmation, atomic write, Git commit and receipt in an isolated temporary repository.",
+    "Target drift is blocked and an already-satisfied desired state is recognized without creating a second review revision.",
+    "Exact content, path, provenance or base changes invalidate the review revision hash.",
+    "The public result never creates a proposal, writes durable memory, commits Git, issues a receipt or authorizes execution."
+  ],
+  "cleanup": ["removeTemporaryRepository"],
+  "budget": { "timeoutSeconds": 60, "maxCost": 0, "currency": "CNY" }
+}

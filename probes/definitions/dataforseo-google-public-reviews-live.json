@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "dataforseo-google-public-reviews-live",
+  "version": "0.1.0",
+  "capabilityRef": "/capabilities/research/read-public-place-review-snapshot.md",
+  "connectorId": "dataforseo-google-public-reviews",
+  "environment": "production-public",
+  "identity": { "required": true, "poolRef": "identity-pool:dataforseo-google-review-probes" },
+  "effect": "financial",
+  "steps": [
+    { "id": "verify-approved-use-and-billing-controls", "operation": "verifyUseBasisIdentityBalanceAndAutoRechargeOff" },
+    { "id": "submit-one-bounded-task", "operation": "submitPublicPlaceReviewTask" },
+    { "id": "suspend-until-ready", "operation": "suspendWithoutResubmission" },
+    { "id": "read-exact-task-result", "operation": "readSubmittedPublicPlaceReviewSnapshot" },
+    { "id": "verify-sensitive-field-removal", "operation": "verifyReviewerAndOwnerIdentityRemoval" },
+    { "id": "redact-verification-candidate", "operation": "redactForVerification" },
+    { "id": "reconcile-provider-charge", "operation": "reconcileSingleTaskCost" },
+    { "id": "write-staging-report", "operation": "writeCandidateProbeReport" }
+  ],
+  "assertions": [
+    "Before submission, an approved DataForSEO account/Terms record, API credential ref, probe identity, target-content use/data-protection review, available trial credit or balance, duplicate-task protection and disabled auto-recharge are present.",
+    "Exactly one standard-priority task is submitted with one establishment keyword, one location code, one language code, depth 20 and newest-first sorting; no raw operator, tag, pingback, postback, callback or retry is accepted.",
+    "The task executor suspends and resumes by opaque operation reference for no more than 45 minutes; it never resubmits a pending or ambiguous task and GETs only the exact returned task ID.",
+    "The result contains at most 20 reviews, declares complete=false and unconfirmed keyword-based place resolution, and does not infer prevalence from total review count or the bounded sample.",
+    "Reviewer name/profile/image, Local Guide status, reviewer review/photo history, provider review ID, images and owner-response text are removed before public output; verbatim review text remains transient and may contain self-disclosed personal data.",
+    "Git verification contains no query, place, review text/rating/time/link/observation ID, reviewer field, owner response, operation reference or raw result digest.",
+    "Task POST cost and free task GET are reconciled with a hard maximum of USD 0.002; no second task is created for a failed, pending or ambiguous outcome.",
+    "Passing evidence remains candidate-only until human admission; supplier access is never represented as Google authorization and durable output is limited to reviewed non-verbatim deidentified paraphrase plus evidence reference."
+  ],
+  "cleanup": [
+    "Destroy in-memory verbatim review content and direct review links after the bounded human review window.",
+    "Retain only the redacted staging report and billing receipt; do not retain provider task IDs in Git."
+  ],
+  "budget": { "timeoutSeconds": 3600, "maxCost": 0.002, "currency": "USD" }
+}

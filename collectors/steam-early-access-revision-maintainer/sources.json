@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "steam-early-access-review-revision",
+  "sources": [
+    {
+      "id": "steam-early-access",
+      "url": "https://partner.steamgames.com/doc/store/earlyaccess?language=english",
+      "role": "official-early-access-eligibility-qa-price-and-maintenance-boundary",
+      "observation": { "mode": "static-html-semantic", "assertions": [
+        { "id": "playable-build", "includes": "playable alpha or beta state" },
+        { "id": "not-crowdfunding", "includes": "Early Access is not a way to crowdfund development of your product" },
+        { "id": "no-specific-promises", "includes": "Do not make specific promises about future events" },
+        { "id": "steam-price-parity", "includes": "The Early Access price of your game should be no higher than that offered on any other service or website" },
+        { "id": "sixth-question", "includes": "How are you planning on involving the Community in your development process?" },
+        { "id": "planned-date-field", "includes": "date picker to select a planned 1.0 release date" },
+        { "id": "no-specific-date-field", "includes": "There is not a specific field for you to enter your intended full release date" }
+      ] }
+    },
+    {
+      "id": "steam-review-process",
+      "url": "https://partner.steamgames.com/doc/store/review_process?language=english",
+      "role": "official-early-access-review-boundary",
+      "observation": { "mode": "static-html-semantic", "assertions": [
+        { "id": "all-questions", "includes": "answer all the questions in the Early Access section" },
+        { "id": "current-expectation", "includes": "clear expectation of what the current version of your game contains" },
+        { "id": "future-differences", "includes": "what features and content still need to be added" },
+        { "id": "review-handoff", "includes": "Mark as ready for review" }
+      ] }
+    },
+    {
+      "id": "steam-store-page",
+      "url": "https://partner.steamgames.com/doc/store/page?language=english",
+      "role": "official-early-access-store-page-field-boundary",
+      "observation": { "mode": "static-html-semantic", "assertions": [
+        { "id": "early-access-checkbox", "includes": "check the box under the Early Access tab" },
+        { "id": "all-section-questions", "includes": "answer all the questions in that section" },
+        { "id": "store-required-items", "includes": "required items for your store presence" }
+      ] }
+    }
+  ]
+}

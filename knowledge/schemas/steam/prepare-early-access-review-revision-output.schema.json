@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/steam/prepare-early-access-review-revision-output.schema.json",
+  "title": "SteamEarlyAccessReviewRevision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "gameRef", "sourceRevisionRef", "buildRevisionRef", "questionnaireRevisionRef", "policyRevision", "manualReview", "platformValidated", "buildValidatedByConnector", "priceValidated", "savedToSteamworks", "published", "markedReadyForReview", "releasedAsEarlyAccess", "executionAuthorized", "preparedAt", "status", "revisionHash", "answers", "currentBuild", "eligibility", "pricePlan", "thirdPartyDistribution", "preflight"],
+  "properties": {
+    "schemaVersion": { "const": "dsh.steam-early-access-review-revision/v1" },
+    "gameRef": { "type": "string", "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,191}$" },
+    "sourceRevisionRef": { "$ref": "#/$defs/ref" },
+    "buildRevisionRef": { "$ref": "#/$defs/ref" },
+    "questionnaireRevisionRef": { "$ref": "#/$defs/ref" },
+    "policyRevision": { "const": "steam-early-access-2026-08-27" },
+    "status": { "enum": ["ready-for-human-review", "blocked"] },
+    "revisionHash": { "type": ["string", "null"], "pattern": "^sha256:[a-f0-9]{64}$" },
+    "answers": {
+      "type": "array", "maxItems": 6,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["questionRef", "text", "evidenceRefs"],
+        "properties": {
+          "questionRef": { "$ref": "#/$defs/question" },
+          "text": { "type": "string", "minLength": 1, "maxLength": 4000 },
+          "evidenceRefs": { "$ref": "#/$defs/refs" }
+        }
+      }
+    },
+    "currentBuild": {
+      "type": "object", "additionalProperties": false,
+      "required": ["playabilityState", "playableEvidenceRefs", "gameplayTrailerEvidenceRefs", "currentFeatureRefs", "currentLimitationRefs"],
+      "properties": {
+        "playabilityState": { "enum": ["playable-current-build", "not-playable", "unknown"] },
+        "playableEvidenceRefs": { "$ref": "#/$defs/refs" },
+        "gameplayTrailerEvidenceRefs": { "$ref": "#/$defs/refs" },
+        "currentFeatureRefs": { "$ref": "#/$defs/refs" },
+        "currentLimitationRefs": { "$ref": "#/$defs/optionalRefs" }
+      }
+    },
+    "eligibility": {
+      "type": "object", "additionalProperties": false,
+      "required": ["developmentState", "fundingDependency", "futurePlanCommitment", "communityInfluence"],
+      "properties": {
+        "developmentState": { "enum": ["actively-in-development", "finished-or-bugfix-only", "unknown"] },
+        "fundingDependency": { "enum": ["not-dependent-on-early-access-sales", "dependent-on-early-access-sales", "unknown"] },
+        "futurePlanCommitment": { "enum": ["non-binding-and-changeable", "specific-promises", "unknown"] },
+        "communityInfluence": { "enum": ["planned-and-material", "not-planned", "unknown"] }
+      }
+    },
+    "pricePlan": {
+      "type": "object", "additionalProperties": false,
+      "required": ["currentPriceRevisionRef", "futurePriceDirection", "steamPriceParity", "transparencyEvidenceRefs", "otherServiceAvailability", "otherServicePriceEvidenceRefs"],
+      "properties": {
+        "currentPriceRevisionRef": { "$ref": "#/$defs/ref" },
+        "futurePriceDirection": { "enum": ["lower", "same", "higher", "undecided"] },
+        "steamPriceParity": { "enum": ["confirmed-no-higher", "higher-than-other-service", "unknown"] },
+        "transparencyEvidenceRefs": { "$ref": "#/$defs/refs" },
+        "otherServiceAvailability": { "enum": ["none", "planned-or-active"] },
+        "otherServicePriceEvidenceRefs": { "$ref": "#/$defs/optionalRefs" }
+      }
+    },
+    "thirdPartyDistribution": {
+      "type": "object", "additionalProperties": false,
+      "required": ["mode", "disclosureEvidenceRefs"],
+      "properties": {
+        "mode": { "enum": ["none", "steam-key-sites"] },
+        "disclosureEvidenceRefs": { "$ref": "#/$defs/optionalRefs" }
+      }
+    },
+    "manualReview": {
+      "type": "object", "additionalProperties": false, "required": ["required", "checks"],
+      "properties": {
+        "required": { "const": true },
+        "checks": {
+          "type": "array", "minItems": 11, "maxItems": 11,
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["id", "status"],
+            "properties": {
+              "id": { "enum": ["current-questionnaire-and-platform-fields", "answers-detailed-transparent-and-consistent", "current-build-is-playable-and-worth-current-price", "gameplay-trailer-represents-current-build", "current-state-and-limitations-match-build", "future-language-avoids-specific-promises", "funding-plan-does-not-rely-on-sales", "pricing-parity-and-transparency", "third-party-branding-and-disclosure", "community-involvement-is-material", "owned-target-and-submitter-authority"] },
+              "status": { "const": "pending" }
+            }
+          }
+        }
+      }
+    },
+    "preflight": {
+      "type": "object", "additionalProperties": false, "required": ["checks", "blockers"],
+      "properties": {
+        "checks": {
+          "type": "array", "minItems": 7, "maxItems": 7,
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["id", "status"],
+            "properties": {
+              "id": { "enum": ["six-question-answer-set", "current-build-playable-declared", "playability-and-trailer-evidence-bound", "future-plans-non-binding", "development-and-funding-eligible", "community-influence-planned", "pricing-and-third-party-boundaries"] },
+              "status": { "enum": ["passed", "failed"] }
+            }
+          }
+        },
+        "blockers": {
+          "type": "array", "maxItems": 30,
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["code"],
+            "properties": {
+              "code": { "enum": ["missing-question-answer", "duplicate-question-answer", "current-build-not-playable", "current-build-playability-unknown", "development-already-finished", "development-state-unknown", "completion-depends-on-early-access-sales", "funding-dependency-unknown", "specific-future-promises", "future-plan-commitment-unknown", "community-cannot-influence-development", "community-influence-unknown", "steam-price-higher-than-other-service", "steam-price-parity-unknown", "missing-other-service-price-evidence", "unexpected-other-service-price-evidence", "missing-third-party-early-access-disclosure", "unexpected-third-party-disclosure-evidence"] },
+              "questionRef": { "$ref": "#/$defs/question" }
+            }
+          }
+        }
+      }
+    },
+    "platformValidated": { "const": false },
+    "buildValidatedByConnector": { "const": false },
+    "priceValidated": { "const": false },
+    "savedToSteamworks": { "const": false },
+    "published": { "const": false },
+    "markedReadyForReview": { "const": false },
+    "releasedAsEarlyAccess": { "const": false },
+    "executionAuthorized": { "const": false },
+    "preparedAt": { "type": "string", "format": "date-time" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "ready-for-human-review" } } },
+      "then": {
+        "properties": {
+          "revisionHash": { "$ref": "#/$defs/digest" },
+          "answers": { "minItems": 6, "maxItems": 6 },
+          "preflight": { "properties": { "blockers": { "maxItems": 0 } } }
+        }
+      },
+      "else": {
+        "properties": {
+          "revisionHash": { "type": "null" },
+          "answers": { "maxItems": 0 },
+          "preflight": { "properties": { "blockers": { "minItems": 1 } } }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "ref": { "type": "string", "minLength": 1, "maxLength": 500, "pattern": "^[^\\r\\n\\u0000]+$" },
+    "refs": { "type": "array", "minItems": 1, "maxItems": 50, "uniqueItems": true, "items": { "$ref": "#/$defs/ref" } },
+    "optionalRefs": { "type": "array", "maxItems": 50, "uniqueItems": true, "items": { "$ref": "#/$defs/ref" } },
+    "question": { "enum": ["why-early-access", "approximate-duration", "planned-full-version-differences", "current-early-access-state", "pricing-during-and-after", "community-involvement"] },
+    "digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" }
+  }
+}

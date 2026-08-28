@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "feedback-intake-local-retention-expiry-local",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/feedback/expire-consented-intake-record.md",
+  "connectorId": "feedback-intake-local-retention-expiry",
+  "environment": "local",
+  "identity": { "required": false },
+  "effect": "local-write",
+  "steps": [
+    { "id": "verify-retention-and-deletion-sources", "operation": "verifyOfficialRetentionSources" },
+    { "id": "create-isolated-stored-intake", "operation": "persistConsentedFeedbackIntakeRevision" },
+    { "id": "observe-due-candidate-proposal", "operation": "collectRetentionExpiryProposal" },
+    { "id": "verify-early-and-hold-rejection", "operation": "exerciseRetentionGuards" },
+    { "id": "verify-exact-retention-grant", "operation": "verifyRetentionGrant" },
+    { "id": "delete-and-inspect-journal", "operation": "expireConsentedFeedbackIntakeRecord" },
+    { "id": "verify-idempotent-concurrent-and-recovery", "operation": "exerciseRetentionDeletionRecovery" },
+    { "id": "verify-tamper-and-path-rejection", "operation": "exerciseRetentionDeletionRejections" },
+    { "id": "validate-public-schema", "operation": "validateRetentionDeletionReceipt" },
+    { "id": "cleanup-isolated-stores", "operation": "removeTemporaryStores" }
+  ],
+  "assertions": [
+    "A hidden inventory exposes only receipt, digest, retention policy and deadline metadata; the Collector turns due records into proposals and never deletes them.",
+    "Before deleteAfter the Connector does not consult a grant or create control state.",
+    "After deleteAfter, a trusted grant must bind capability, effect, store, receipt, digest, policy and deadline and explicitly report delete disposition with no active hold.",
+    "A durable journal makes exact concurrent deletion and post-unlink interruption recoverable and idempotent.",
+    "The receipt proves retention-expiry logical deletion only, not withdrawal, media sanitization, backup purge, downstream deletion, compliance or scheduling.",
+    "The isolated local-write probe removes all temporary stores after verification."
+  ],
+  "cleanup": ["removeTemporaryStores"],
+  "budget": { "timeoutSeconds": 60, "maxCost": 0, "currency": "CNY" }
+}

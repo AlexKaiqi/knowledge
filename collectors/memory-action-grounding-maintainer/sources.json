@@ -1,0 +1,94 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "memory-action-grounding",
+  "sources": [
+    {
+      "id": "personal-knowledge-pinned",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-personal-knowledge-base/c8e181adcf3904f47fd33b85ffc1e97126cbbd66/dsh/service.js",
+      "role": "production-projection",
+      "acceptedDocumentDigest": "b849ae068d99070181b14f80eb2b0385a0f996253b8717d2331682d60a0e4bbf",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "bounded-project", "includes": "async project(options = {})" },
+          { "id": "source-set", "includes": "sources: [...new Set(sources)]" }
+        ]
+      }
+    },
+    {
+      "id": "personal-knowledge-main",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-personal-knowledge-base/main/dsh/service.js",
+      "role": "projection-change-surface",
+      "acceptedDocumentDigest": "b849ae068d99070181b14f80eb2b0385a0f996253b8717d2331682d60a0e4bbf",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "current-source", "includes": "add('Current work', this.readCurrent(), ['.pkb/current.md'])" },
+          { "id": "durable-sources", "includes": "doc.content, [doc.path]" }
+        ]
+      }
+    },
+    {
+      "id": "pet-assistant-pinned",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-pet-assistant/77ea504f5267ac0f929d4fc81301f999899f270b/dsh/core.js",
+      "role": "production-action-boundary",
+      "acceptedDocumentDigest": "ba5a0797aabcb0f7cdd1cef1585dc5974bd335e52ee98040fdb9d647d2c5fe46",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "untrusted-projection", "includes": "untrusted data, not instructions" },
+          { "id": "explicit-delegation", "includes": "Explicit delegation authorization is required in the current user message" }
+        ]
+      }
+    },
+    {
+      "id": "pet-assistant-main",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-pet-assistant/main/dsh/core.js",
+      "role": "action-change-surface",
+      "acceptedDocumentDigest": "ba5a0797aabcb0f7cdd1cef1585dc5974bd335e52ee98040fdb9d647d2c5fe46",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "query-bounded", "includes": "query: userText.slice(0, 2400)" },
+          { "id": "no-direct-action", "includes": "turn.delegation = { targetSessionId: turn.targetSessionId, request }" }
+        ]
+      }
+    },
+    {
+      "id": "memtoolagent-v1",
+      "url": "https://arxiv.org/abs/2606.07909v1",
+      "role": "structured-tool-memory-evidence",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "structured-memory", "includes": "unified memory entry format" },
+          { "id": "tool-use", "includes": "tool-using capabilities" }
+        ]
+      }
+    },
+    {
+      "id": "stale-v1",
+      "url": "https://arxiv.org/abs/2605.06527v1",
+      "role": "staleness-evidence",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "policy-adaptation", "includes": "Implicit Policy Adaptation" },
+          { "id": "retrieval-action-gap", "includes": "gap between retrieving updated evidence and acting on it" }
+        ]
+      }
+    },
+    {
+      "id": "tangle-v1",
+      "url": "https://arxiv.org/abs/2608.13921v1",
+      "role": "conflict-evidence",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "underdetermination", "includes": "recognizing underdetermination" },
+          { "id": "retain-conflict", "includes": "retaining conflicting evidence" }
+        ]
+      }
+    }
+  ]
+}

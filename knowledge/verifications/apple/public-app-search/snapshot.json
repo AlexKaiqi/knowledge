@@ -1,0 +1,183 @@
+{
+  "schemaVersion": "dsh.probe-snapshot/apple-public-app-search/v1",
+  "fixture": {
+    "purpose": "personal-assistant-competitor-discovery",
+    "expectedAppId": "6448311069"
+  },
+  "source": {
+    "store": "apple-app-store",
+    "accessSurface": "itunes-search-api",
+    "contractStatus": "official-documentation-archive",
+    "documentation": "https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/index.html"
+  },
+  "query": {
+    "query": "ChatGPT",
+    "country": "US",
+    "surface": "iphone",
+    "limit": 5
+  },
+  "coverage": {
+    "representation": "bounded-search-page",
+    "returnedCount": 5,
+    "requestedLimit": 5,
+    "storefrontCountry": "US",
+    "corpusComplete": false,
+    "resultSetMutable": true,
+    "historical": false,
+    "rankingSemantics": "apple-search-api-unspecified",
+    "resultCountSemantics": "returned-page-size-only",
+    "metadataOnly": true
+  },
+  "items": [
+    {
+      "appId": "6448311069",
+      "name": "ChatGPT",
+      "bundleId": "com.openai.chat",
+      "developer": "OpenAI OpCo, LLC",
+      "primaryGenre": "Productivity",
+      "genres": [
+        "Productivity",
+        "Utilities"
+      ],
+      "version": "1.2026.230",
+      "releasedAt": "2023-05-18T07:00:00.000Z",
+      "currentVersionReleasedAt": "2026-08-26T22:31:34.000Z",
+      "price": {
+        "amount": 0,
+        "currency": "USD"
+      },
+      "rating": {
+        "average": 4.83014,
+        "count": 9679535
+      },
+      "storeUrl": "https://apps.apple.com/us/app/id6448311069"
+    },
+    {
+      "appId": "6670324846",
+      "name": "Grok AI",
+      "bundleId": "ai.x.GrokApp",
+      "developer": "X Corp.",
+      "primaryGenre": "Productivity",
+      "genres": [
+        "Productivity",
+        "Utilities"
+      ],
+      "version": "1.4.28",
+      "releasedAt": "2025-01-08T08:00:00.000Z",
+      "currentVersionReleasedAt": "2026-08-21T23:07:46.000Z",
+      "price": {
+        "amount": 0,
+        "currency": "USD"
+      },
+      "rating": {
+        "average": 4.87615,
+        "count": 1353271
+      },
+      "storeUrl": "https://apps.apple.com/us/app/id6670324846"
+    },
+    {
+      "appId": "6477489729",
+      "name": "Google Gemini",
+      "bundleId": "com.google.gemini",
+      "developer": "Google LLC",
+      "primaryGenre": "Productivity",
+      "genres": [
+        "Productivity",
+        "Utilities"
+      ],
+      "version": "1.2026.3370502",
+      "releasedAt": "2024-11-13T08:00:00.000Z",
+      "currentVersionReleasedAt": "2026-08-26T15:24:15.000Z",
+      "price": {
+        "amount": 0,
+        "currency": "USD"
+      },
+      "rating": {
+        "average": 4.71938,
+        "count": 2153922
+      },
+      "storeUrl": "https://apps.apple.com/us/app/id6477489729"
+    },
+    {
+      "appId": "1658377526",
+      "name": "Chatbot AI Assistant - Genie",
+      "bundleId": "co.appnation.geniechat",
+      "developer": "APPNATION YAZILIM HIZMETLERI TICARET ANONIM SIRKETI",
+      "primaryGenre": "Productivity",
+      "genres": [
+        "Productivity",
+        "Utilities"
+      ],
+      "version": "10.5.9",
+      "releasedAt": "2022-12-08T08:00:00.000Z",
+      "currentVersionReleasedAt": "2026-08-25T07:13:45.000Z",
+      "price": {
+        "amount": 0,
+        "currency": "USD"
+      },
+      "rating": {
+        "average": 4.71505,
+        "count": 199581
+      },
+      "storeUrl": "https://apps.apple.com/us/app/id1658377526"
+    },
+    {
+      "appId": "1661308505",
+      "name": "ChatOn AI - Chat Bot Assistant",
+      "bundleId": "com.aiby.chat",
+      "developer": "AIBY Incorporated",
+      "primaryGenre": "Productivity",
+      "genres": [
+        "Productivity",
+        "Utilities"
+      ],
+      "version": "1.93",
+      "releasedAt": "2023-01-13T08:00:00.000Z",
+      "currentVersionReleasedAt": "2026-08-11T12:13:18.000Z",
+      "price": {
+        "amount": 0,
+        "currency": "USD"
+      },
+      "rating": {
+        "average": 4.69987,
+        "count": 283121
+      },
+      "storeUrl": "https://apps.apple.com/us/app/id1661308505"
+    }
+  ],
+  "observedAt": "2026-08-27T05:26:44.300Z",
+  "resultDigest": "eed02306b4e48c550a4a580c4f754917a8df9dda814c26a7e93b748fee9fc9aa",
+  "conformance": {
+    "status": "passed",
+    "assertions": [
+      {
+        "id": "page-bound",
+        "passed": true
+      },
+      {
+        "id": "request-identity",
+        "passed": true
+      },
+      {
+        "id": "unique-app-ids",
+        "passed": true
+      },
+      {
+        "id": "official-store-links",
+        "passed": true
+      },
+      {
+        "id": "ranking-unspecified",
+        "passed": true
+      },
+      {
+        "id": "not-corpus-count",
+        "passed": true
+      },
+      {
+        "id": "metadata-only",
+        "passed": true
+      }
+    ]
+  }
+}

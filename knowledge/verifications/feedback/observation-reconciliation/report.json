@@ -1,0 +1,66 @@
+{
+  "schemaVersion": "dsh.probe-report/v1",
+  "id": "feedback-observation-reconciliation-local-20260827",
+  "capabilityRef": "/capabilities/feedback/reconcile-feedback-observations.md",
+  "connectorId": "feedback-observation-reconciler",
+  "probeDefinitionRef": "repo:/probes/definitions/feedback-observation-reconciliation-local.json",
+  "environment": "local",
+  "level": "local",
+  "outcome": "passed",
+  "startedAt": "2026-08-27T02:35:18.638Z",
+  "finishedAt": "2026-08-27T02:35:18.959Z",
+  "expiresAt": "2026-09-26T02:35:18.959Z",
+  "checks": [
+    {
+      "id": "production-feedback-boundary",
+      "status": "passed"
+    },
+    {
+      "id": "new-edit-reply-lifecycle-classification",
+      "status": "passed"
+    },
+    {
+      "id": "absence-is-not-deletion",
+      "status": "passed"
+    },
+    {
+      "id": "checkpoint-proposal-only",
+      "status": "passed"
+    },
+    {
+      "id": "order-stable-replay",
+      "status": "passed"
+    },
+    {
+      "id": "output-schema",
+      "status": "passed"
+    },
+    {
+      "id": "no-text-or-identity",
+      "status": "passed"
+    }
+  ],
+  "evidence": [
+    {
+      "kind": "artifact",
+      "ref": "https://raw.githubusercontent.com/AlexKaiqi/dsh-social-workbench/0bb63b6f6963992e121d719f9a671637f6ab6c7f/spec/feedback-item.schema.json",
+      "sha256": "747b925d8cacdb7fdd29d65b13dadc0802053da12687afd4cd32a6b7e029141a"
+    },
+    {
+      "kind": "artifact",
+      "ref": "https://raw.githubusercontent.com/AlexKaiqi/dsh-social-workbench/0bb63b6f6963992e121d719f9a671637f6ab6c7f/runtime/src/loop-control.mjs",
+      "sha256": "c49fdf9df8ac9f08a3560334cc8cedfb6930b13e19cbc51a45f73c058efff6f0"
+    },
+    {
+      "kind": "snapshot",
+      "ref": "repo:/knowledge/verifications/feedback/observation-reconciliation/snapshot.json",
+      "sha256": "30476e772c0ca3fea4d40cebd2a8adcd0b9dde59497e168571af8dff464e159c"
+    }
+  ],
+  "sideEffects": [
+    {
+      "effect": "none",
+      "status": "none"
+    }
+  ]
+}

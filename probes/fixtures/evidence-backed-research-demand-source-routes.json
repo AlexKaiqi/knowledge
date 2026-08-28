@@ -1,0 +1,354 @@
+{
+  "agentObservation": {
+    "scenario": "platform-integration",
+    "performedAt": "2026-08-27T16:20:00Z",
+    "openedSourceCount": 9,
+    "counterSearchPerformed": true,
+    "humanReviewRequired": true
+  },
+  "sourceChecks": [
+    {
+      "id": "dataforseo-google-pricing",
+      "kind": "html-semantic",
+      "url": "https://dataforseo.com/pricing/serp/google-organic-serp-api",
+      "assertions": ["10 search engine results", "$0.0006", "$0.6", "$0.002"],
+      "digest": "b2f378be2eae301e16e799406d84a000cbee46b7f1609acc5b749a4bd427b347"
+    },
+    {
+      "id": "xianyu-automation-boundary",
+      "kind": "html-semantic",
+      "url": "https://terms.alicdn.com/legal-agreement/terms/suit_bu1_taobao/suit_bu1_taobao202103061039_91765.html",
+      "assertions": ["机器人、蜘蛛", "未经阿里巴巴集团及/或其关联公司许可"],
+      "digest": "d987fe4e5007c4914331c9c9bd9572ca2fd53bdaf9152adb64b562cf409d422f"
+    },
+    {
+      "id": "58-commercial-use-boundary",
+      "kind": "html-semantic",
+      "url": "https://static.58.com/git/passport-mapp/announcement.html",
+      "assertions": ["不对58同城平台上的任何数据作商业性利用", "未经58同城事先书面同意", "以复制、传播等任何方式使用58同城平台站上展示的资料"],
+      "digest": "ed96f186a4e236ec129f587170f3100a511bb4c5a2b05f1161ed23ef5c90316c"
+    },
+    {
+      "id": "boss-third-party-boundary",
+      "kind": "html-semantic",
+      "url": "https://www.zhipin.com/web/common/protocol/protocol-2019-09-30.html",
+      "assertions": ["未经许可，不得通过其他第三方工具或运营平台获取BOSS直聘服务", "未经BOSS直聘公司的许可", "爬虫程序、拟人程序"],
+      "digest": "590be323cb26b492eaffc923f7ea8efe610ca0861a8c88230c931fa3963be27f"
+    },
+    {
+      "id": "bright-data-58-route",
+      "kind": "html-semantic",
+      "url": "https://brightdata.com/products/web-scraper/58-com",
+      "assertions": ["58.com Scraper - 5K page loads/Month for Free", "Pay as you go", "$ 1.5 /1K page loads", "Set monthly spend limits"],
+      "digest": "4f9d6baf3981a46381ccbef9329fff4c572918d11c99cf791baabc98c9c221e8"
+    },
+    {
+      "id": "bright-data-boss-route",
+      "kind": "html-semantic",
+      "url": "https://brightdata.com/products/web-scraper/boss-zhipin",
+      "assertions": ["BOSS Zhipin Scraper - 5K page loads/Month for Free", "Pay as you go", "$ 1.5 /1K page loads", "Set monthly spend limits"],
+      "digest": "8ac295af69ea66154d128cf1a9f543e99a3a1bc60cea2a1ab2abd2ddcc02cd95"
+    },
+    {
+      "id": "coresignal-jobs-pricing",
+      "kind": "html-semantic",
+      "url": "https://coresignal.com/pricing/",
+      "assertions": ["7 day free trial", "Job posting", "1 credit", "Multi-source endpoints"],
+      "digest": "05458b7ba4ed51cbaff210ee9fbfc40be8a397258171c28bec2b59b9287f44c5"
+    },
+    {
+      "id": "coresignal-data-boundary",
+      "kind": "html-semantic",
+      "url": "https://coresignal.com/data-transparency/",
+      "assertions": ["Publicly available, strictly business-related data", "do not scrape any private data or data from within log-in secured areas"],
+      "digest": "6d095a471c9305151820d68af1d8bea5f9ec1f2383479d1e9da90d27f39731a8"
+    },
+    {
+      "id": "local-demand-route-implementations",
+      "kind": "repository-manifest",
+      "files": [
+        "connectors/demand-signal-access-routes/routes.json",
+        "connectors/dataforseo-google-organic-serp/src/index.mjs",
+        "probes/definitions/dataforseo-google-organic-serp-sandbox.json",
+        "probes/definitions/dataforseo-google-organic-serp-live.json",
+        "connectors/coresignal-job-posting-snapshot/src/index.mjs",
+        "probes/definitions/coresignal-job-posting-snapshot-live.json"
+      ],
+      "digest": "6536afba5ba201b3787e751ad8019df4fc7bd17477e90af901acf6bb5a3f746d"
+    }
+  ],
+  "input": {
+    "scenario": "platform-integration",
+    "goal": "为需求研究选择 Google、闲鱼、58 同城和 BOSS 直聘相关的可维护读取路线，同时把平台、供应商、授权、身份、计费和失败切换隐藏在调研能力之后",
+    "decision": "哪些现有路线可以进入下一次有界 probe，哪些必须暂停，是否需要新增平台专属 Connector",
+    "questions": [
+      "Google 搜索结果研究是否已有成本可控且实现完整的 sandbox/live 候选？",
+      "闲鱼的一页用户可见观察与第三方自动抓取是否必须分开？",
+      "58 和 BOSS 的付费抓取供应商是否足以越过目标平台授权门？",
+      "BOSS 类岗位需求能否先用不声称目标平台覆盖的多源 Jobs API 验证？"
+    ],
+    "constraints": {
+      "cutoffAt": "2026-08-27T16:20:00Z",
+      "geographies": ["CN"],
+      "versions": ["current official terms", "current public provider pricing", "current local route catalog and candidate implementations"],
+      "exclusions": ["创建供应商或平台账号", "接受条款或数据协议", "登录平台", "启用 free trial", "消费 credits", "调用 live API", "使用代理或处理验证码", "保存个人或招聘者身份", "平台写操作"]
+    },
+    "budget": { "maxSources": 12, "maxQueries": 10 }
+  },
+  "candidate": {
+    "scenario": "platform-integration",
+    "question": "Google、闲鱼、58 和 BOSS 的需求信号读取应分别进入 probe、人工 proposal 还是暂停？",
+    "decision": "Google 继续使用现有 DataForSEO 候选，先跑免费 sandbox、再经批准跑单页低额 live；闲鱼只保留用户主导的一页可见观察 proposal，自动 Actor 继续暂停；58 和 BOSS 的直接自动读取均暂停到取得书面权限；BOSS 类岗位需求优先验证现有 Coresignal 多源 Jobs 候选，但必须先确认数据协议、中国覆盖和实际来源，不能对外声称 BOSS 覆盖。当前不新增平台专属 Connector，也没有任何新路线可自动选择。",
+    "answer": "四个平台不能用同一种“付费抓取”抽象处理。Google 已有一个本地实现完整、能固定单页十条、拒绝付费搜索操作符并核对费用的 DataForSEO 候选；供应商当前公开 Standard、Priority、Live 单页价格分别为 0.0006、0.0012、0.002 美元，但账号、条款、凭据、sandbox 和 live 账单仍未获批准。闲鱼官方边界要求机器人/蜘蛛获取内容事先获许可，因此只保留正常产品界面中用户主导、最多一页、落盘前去身份的观察 proposal。58 的现行协议要求商业利用平台数据先获书面同意；BOSS 又明确限制未经许可的第三方工具和爬虫/拟人程序。Bright Data 同时提供 58 与 BOSS 的技术产品及低额价格，只证明供应商能尝试交付，不证明目标平台授权。岗位需求可改用 Coresignal 多源 Jobs API 候选；其价格页显示七天试用、每条 job posting 一 credit，并声明多源端点，其透明度页限定公开、业务相关且不进入登录区的数据，但中国覆盖、具体来源、数据协议和一条真实去身份样本仍为空白。",
+    "confidence": "high",
+    "findings": [
+      {
+        "id": "google-candidate-can-enter-sandbox",
+        "claim": "现有 DataForSEO Google Organic 候选已经具备有界实现和 sandbox/live probe 定义，可以在不宣称 live 可用的前提下先进入免费 sandbox 验证。",
+        "status": "supported",
+        "confidence": "high",
+        "evidenceIds": ["google-provider-contract", "local-route-state"],
+        "counterEvidenceIds": ["local-route-state"],
+        "applicability": "仅适用于单页、最多十条、无付费搜索操作符的候选流程；账号、接受条款、凭据、身份登记和 live 费用都仍需人工批准。",
+        "inference": true
+      },
+      {
+        "id": "xianyu-manual-and-automation-are-distinct",
+        "claim": "闲鱼用户主导的可见页面观察不能被扩张为后台自动采集；自动路线在没有目标平台事先许可时必须继续暂停。",
+        "status": "supported",
+        "confidence": "high",
+        "evidenceIds": ["xianyu-official-restriction", "local-route-state"],
+        "counterEvidenceIds": ["local-route-state"],
+        "applicability": "人工 proposal 仍限制为一页、最多二十条、不翻页、不处理验证码、不导出会话、不保存卖家、位置、图片或联系方式。",
+        "inference": true
+      },
+      {
+        "id": "58-paid-provider-does-not-clear-consent",
+        "claim": "Bright Data 的 58 Scraper 与公开价格证明技术供应存在，但不能替代 58 对商业利用平台数据的事先书面同意。",
+        "status": "supported",
+        "confidence": "high",
+        "evidenceIds": ["58-official-restriction", "58-provider-route"],
+        "counterEvidenceIds": ["58-provider-route"],
+        "applicability": "适用于当前产品需求研究用途；未来自有发布或合作方运营属于另一种 official partner scope，不能反推公开市场读取权。",
+        "inference": true
+      },
+      {
+        "id": "boss-direct-provider-route-remains-suspended",
+        "claim": "BOSS 对第三方工具、爬虫和拟人程序的限制使 Bright Data 直连路线在没有书面权限时不可进入 probe。",
+        "status": "supported",
+        "confidence": "high",
+        "evidenceIds": ["boss-official-restriction", "boss-provider-route"],
+        "counterEvidenceIds": ["boss-provider-route"],
+        "applicability": "供应商的免费额度、代理、解封或 CAPTCHA 能力都不能改变该结论。",
+        "inference": true
+      },
+      {
+        "id": "independent-jobs-route-is-next-candidate",
+        "claim": "Coresignal 多源 Jobs 候选可以承载岗位需求研究的下一次验证，但只能声称多源公开岗位样本，不能声称 BOSS 覆盖。",
+        "status": "supported",
+        "confidence": "medium",
+        "evidenceIds": ["coresignal-provider-contract", "coresignal-provider-boundary", "local-route-state"],
+        "counterEvidenceIds": ["boss-official-restriction", "coresignal-provider-boundary"],
+        "applicability": "需先确认数据协议、中国地域覆盖、source-level coverage、字段最小化和真实 credit 扣减；未验证前不进入 OKF 平台能力。",
+        "inference": true
+      },
+      {
+        "id": "paid-access-is-not-platform-authorization",
+        "claim": "向数据供应商付费只建立供应商关系和技术访问，不自动建立目标平台许可。",
+        "status": "supported",
+        "confidence": "high",
+        "evidenceIds": ["58-official-restriction", "boss-official-restriction", "58-provider-route", "boss-provider-route"],
+        "counterEvidenceIds": ["coresignal-provider-boundary"],
+        "applicability": "每条路线都必须分别记录供应商契约、目标平台边界、数据用途、身份、保留和效果门。",
+        "inference": true
+      }
+    ],
+    "evidence": [
+      {
+        "id": "google-provider-contract",
+        "role": "implementation-evidence",
+        "sourceType": "official-document",
+        "weight": "primary",
+        "title": "DataForSEO Google Organic SERP API pricing",
+        "resource": "https://dataforseo.com/pricing/serp/google-organic-serp-api",
+        "claim": "一个 Google Organic SERP 当前按十条结果计费，Standard、Priority、Live 基础价格分别为每页 0.0006、0.0012、0.002 美元。",
+        "locator": "Base Price and Price Calculation",
+        "observedAt": "2026-08-27T16:20:00Z",
+        "digest": "b2f378be2eae301e16e799406d84a000cbee46b7f1609acc5b749a4bd427b347"
+      },
+      {
+        "id": "xianyu-official-restriction",
+        "role": "official-boundary",
+        "sourceType": "official-document",
+        "weight": "primary",
+        "title": "闲鱼社区法律声明",
+        "resource": "https://terms.alicdn.com/legal-agreement/terms/suit_bu1_taobao/suit_bu1_taobao202103061039_91765.html",
+        "claim": "未经阿里巴巴集团或关联公司许可，不得用机器人、蜘蛛等程序擅自获取或使用闲鱼社区内容。",
+        "locator": "信息限制",
+        "observedAt": "2026-08-27T16:20:00Z",
+        "digest": "d987fe4e5007c4914331c9c9bd9572ca2fd53bdaf9152adb64b562cf409d422f"
+      },
+      {
+        "id": "58-official-restriction",
+        "role": "official-boundary",
+        "sourceType": "official-document",
+        "weight": "primary",
+        "title": "58 同城使用协议",
+        "resource": "https://static.58.com/git/passport-mapp/announcement.html",
+        "claim": "协议要求不商业性利用平台数据；未经 58 事先书面同意，不得复制、传播或使用平台展示资料。",
+        "locator": "平台使用承诺第 4 条第 3 项",
+        "observedAt": "2026-08-27T16:20:00Z",
+        "digest": "ed96f186a4e236ec129f587170f3100a511bb4c5a2b05f1161ed23ef5c90316c"
+      },
+      {
+        "id": "boss-official-restriction",
+        "role": "official-boundary",
+        "sourceType": "official-document",
+        "weight": "primary",
+        "title": "BOSS 直聘用户协议",
+        "resource": "https://www.zhipin.com/web/common/protocol/protocol-2019-09-30.html",
+        "claim": "未经许可不得通过第三方工具获取服务；未经公司许可，不得用蜘蛛、爬虫、拟人程序等手段读取、复制、转存平台信息。",
+        "locator": "四、用户使用规则第 8 项；八、禁止行为第 13 项",
+        "observedAt": "2026-08-27T16:20:00Z",
+        "digest": "590be323cb26b492eaffc923f7ea8efe610ca0861a8c88230c931fa3963be27f"
+      },
+      {
+        "id": "58-provider-route",
+        "role": "implementation-evidence",
+        "sourceType": "official-document",
+        "weight": "secondary",
+        "title": "Bright Data 58.com Scraper",
+        "resource": "https://brightdata.com/products/web-scraper/58-com",
+        "claim": "供应商公开提供 58.com Scraper、每月 5K 免费 page loads 和 1.5 美元/千页 PAYG，并允许设置月度支出上限。",
+        "locator": "Pricing",
+        "observedAt": "2026-08-27T16:20:00Z",
+        "digest": "4f9d6baf3981a46381ccbef9329fff4c572918d11c99cf791baabc98c9c221e8"
+      },
+      {
+        "id": "boss-provider-route",
+        "role": "implementation-evidence",
+        "sourceType": "official-document",
+        "weight": "secondary",
+        "title": "Bright Data BOSS Zhipin Scraper",
+        "resource": "https://brightdata.com/products/web-scraper/boss-zhipin",
+        "claim": "供应商公开提供 BOSS Zhipin Scraper、每月 5K 免费 page loads 和 1.5 美元/千页 PAYG，并允许设置月度支出上限。",
+        "locator": "Pricing",
+        "observedAt": "2026-08-27T16:20:00Z",
+        "digest": "8ac295af69ea66154d128cf1a9f543e99a3a1bc60cea2a1ab2abd2ddcc02cd95"
+      },
+      {
+        "id": "coresignal-provider-contract",
+        "role": "implementation-evidence",
+        "sourceType": "official-document",
+        "weight": "secondary",
+        "title": "Coresignal pricing",
+        "resource": "https://coresignal.com/pricing/",
+        "claim": "供应商当前提供七天试用；job posting 每条一 credit，并列出 multi-source endpoints。",
+        "locator": "Compare the plans; How can you use the credits?",
+        "observedAt": "2026-08-27T16:20:00Z",
+        "digest": "05458b7ba4ed51cbaff210ee9fbfc40be8a397258171c28bec2b59b9287f44c5"
+      },
+      {
+        "id": "coresignal-provider-boundary",
+        "role": "counter-evidence",
+        "sourceType": "official-document",
+        "weight": "secondary",
+        "title": "Coresignal data transparency",
+        "resource": "https://coresignal.com/data-transparency/",
+        "claim": "供应商声明只收集公开、严格业务相关的数据，不抓取私有数据或登录保护区域；该声明仍不能证明特定中国平台覆盖或替代目标平台许可。",
+        "locator": "What data does Coresignal collect?; Does Coresignal have the right to collect the data?",
+        "observedAt": "2026-08-27T16:20:00Z",
+        "digest": "6d095a471c9305151820d68af1d8bea5f9ec1f2383479d1e9da90d27f39731a8"
+      },
+      {
+        "id": "local-route-state",
+        "role": "implementation-evidence",
+        "sourceType": "repository",
+        "weight": "primary",
+        "title": "Current demand route catalog and bounded candidate implementations",
+        "resource": "repo:/connectors/demand-signal-access-routes/routes.json",
+        "claim": "本地目录把 DataForSEO 和 Coresignal 标为不可自动选择的 candidate，把闲鱼可见浏览标为 degraded research proposal，并暂停闲鱼、58、BOSS 未授权自动路线；两个候选都有固定实现和 probe 定义。",
+        "locator": "google-serp-dataforseo; xianyu-visible-browser-sample; 58-bright-data-scraper; boss-bright-data-direct; jobs-coresignal-multi-source",
+        "observedAt": "2026-08-27T16:20:00Z",
+        "digest": "6536afba5ba201b3787e751ad8019df4fc7bd17477e90af901acf6bb5a3f746d"
+      }
+    ],
+    "conflicts": [
+      {
+        "claim": "第三方供应商公开出售 58/BOSS 抓取能力，是否足以证明我们的使用获得许可。",
+        "evidenceIds": ["58-provider-route", "boss-provider-route", "58-official-restriction", "boss-official-restriction"],
+        "resolution": "供应商页面只证明技术产品和价格；目标平台协议分别要求书面同意或限制第三方工具与自动获取。两类契约不能合并，按更窄权限停止 direct probe。"
+      },
+      {
+        "claim": "Coresignal 的合规声明是否足以推出其覆盖 BOSS 或中国岗位。",
+        "evidenceIds": ["coresignal-provider-contract", "coresignal-provider-boundary", "boss-official-restriction"],
+        "resolution": "合规声明描述供应商通用采集原则，价格页只证明多源岗位产品。没有 source-level 或中国样本证据，因此只能验证独立岗位信号，不能声称 BOSS coverage。"
+      },
+      {
+        "claim": "存在候选 Connector 是否等于外部调研能力已经可用。",
+        "evidenceIds": ["google-provider-contract", "coresignal-provider-contract", "local-route-state"],
+        "resolution": "candidate 只证明实现和下一 probe 已准备；只有 sandbox/live 结果、授权关系、费用对账和当前健康满足准入门后，路线才可能被自动选择或形成平台知识。"
+      }
+    ],
+    "gaps": [
+      "尚未创建或批准 DataForSEO 研究身份、接受条款、设置 credential ref、运行 sandbox 或核对一笔 live 费用。",
+      "闲鱼一页可见观察仍缺用户批准、稳定页面复开和落盘前去身份的真实 probe。",
+      "尚未获得 58 对当前商业需求研究用途、字段、频率、保留和再利用的书面同意。",
+      "尚未获得 BOSS 对第三方读取的书面权限，也没有可用官方公开岗位研究 API 证据。",
+      "Coresignal 的 Data agreement、中国地域覆盖、source-level coverage、结果新鲜度和真实 credit 扣减均未验证。",
+      "付费路线间的同 query coverage、重复率、新鲜度、删除语义和故障切换尚无对照样本。"
+    ],
+    "counterEvidenceSearch": {
+      "performed": true,
+      "queries": [
+        "DataForSEO Google Organic SERP current price 10 results sandbox",
+        "闲鱼 官方 法律声明 机器人 蜘蛛 许可",
+        "58 同城 用户协议 商业利用 平台数据 书面同意",
+        "58 官方 开放平台 招聘 房产 API",
+        "BOSS 直聘 用户协议 第三方工具 爬虫 拟人程序",
+        "Bright Data 58.com scraper pricing",
+        "Bright Data BOSS Zhipin scraper pricing",
+        "Coresignal Jobs API trial pricing multi-source",
+        "Coresignal data transparency login secured areas",
+        "Coresignal China BOSS coverage jobs source"
+      ],
+      "outcome": "found",
+      "evidenceIds": ["58-official-restriction", "boss-official-restriction", "coresignal-provider-boundary", "local-route-state"]
+    },
+    "nextProbes": [
+      {
+        "hypothesis": "现有 DataForSEO 候选能在免费 sandbox 中保持单页十条、固定 location/language、拒绝付费操作符、无重试和费用上限契约。",
+        "method": "经人工批准账号、条款、研究身份和 opaque credential ref 后，只运行既有 sandbox probe；不调用 live，不把 sandbox 内容当 Google 当前结果。",
+        "success": "请求与结果通过 Schema，深度不超过十，无付费参数，provider cost echo 与预期一致，输出显式 sandbox=true、complete=false。",
+        "failure": "必须扩大输入、sandbox 不覆盖关键字段、出现额外费用、解析漂移或输出把 sandbox 冒充 live。",
+        "effect": "identity-relationship"
+      },
+      {
+        "hypothesis": "闲鱼正常产品界面的一页用户主导观察可以产生不超过二十条、无卖家身份的需求信号。",
+        "method": "经用户逐次批准，在现有可见浏览器中提交一个固定 query，只读取当前一页；不翻页、不处理验证码、不导出会话，落盘前删除卖家、位置、图片和联系方式。",
+        "success": "页面可复开，快照 Schema-valid，只有 query、粗价格、标题主题、公开属性、观察时间和 complete=false，且无身份字段。",
+        "failure": "需要登录或验证码、必须规避风控、页面不可复开、无法去身份，或平台提示限制。",
+        "effect": "none"
+      },
+      {
+        "hypothesis": "58 可为当前内部需求研究提供书面、字段有界的授权或数据合作范围。",
+        "method": "由人工向 58 提交用途、字段、频率、保留期、商业性质和不联系人承诺；只保存授权结论和 opaque relationship ref，不运行供应商 scraper。",
+        "success": "获得可核验的书面范围，明确允许的数据、频率、保留、商业使用和供应商代理边界，可据此设计最多二十条的 live probe。",
+        "failure": "拒绝、无适用合作路线、范围不覆盖公开研究，或要求采集联系人/使用规避手段。",
+        "effect": "identity-relationship"
+      },
+      {
+        "hypothesis": "Coresignal 能在明确数据协议下返回中国相关、公开、多源且去招聘者身份的最多十条岗位样本。",
+        "method": "经人工批准试用或购买、Data agreement、credential ref 和费用上限后，运行既有 live probe；先要求供应商书面确认中国与 source-level coverage，再用一个固定 query 对账一笔 credit。",
+        "success": "最多十条 active job，地域与观察时间明确，无招聘者身份和隐藏 source route，credit 扣减精确，结果只声明多源岗位样本。",
+        "failure": "中国无覆盖、来源权不清、必须保留个人身份、费用不可对账、数据过旧，或供应商要求把结果表示成 BOSS coverage。",
+        "effect": "financial"
+      }
+    ],
+    "coverage": {
+      "queryCount": 10,
+      "stoppedBecause": "decision-sufficient",
+      "complete": true
+    }
+  }
+}

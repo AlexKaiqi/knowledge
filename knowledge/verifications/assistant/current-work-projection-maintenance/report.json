@@ -1,0 +1,84 @@
+{
+  "schemaVersion": "dsh.probe-report/v1",
+  "id": "current-work-projection-maintenance-local-20260827",
+  "capabilityRef": "/capabilities/assistant/maintain-current-work-projection.md",
+  "connectorId": "current-work-projection-maintainer",
+  "probeDefinitionRef": "repo:/probes/definitions/current-work-projection-maintenance-local.json",
+  "environment": "local",
+  "level": "local",
+  "outcome": "passed",
+  "startedAt": "2026-08-27T06:49:31.160Z",
+  "finishedAt": "2026-08-27T06:49:31.363Z",
+  "expiresAt": "2026-09-26T06:49:31.363Z",
+  "checks": [
+    {
+      "id": "pinned-production-boundaries",
+      "status": "passed"
+    },
+    {
+      "id": "production-e2e-evidence",
+      "status": "passed"
+    },
+    {
+      "id": "real-current-projection-write",
+      "status": "passed"
+    },
+    {
+      "id": "current-session-source-and-cursor",
+      "status": "passed"
+    },
+    {
+      "id": "unconfirmed-proposal-only",
+      "status": "passed"
+    },
+    {
+      "id": "checkpoint-replay",
+      "status": "passed"
+    },
+    {
+      "id": "public-redaction-and-schema",
+      "status": "passed"
+    },
+    {
+      "id": "non-commit-non-authorization-boundary",
+      "status": "passed"
+    },
+    {
+      "id": "temporary-repository-cleanup",
+      "status": "passed"
+    }
+  ],
+  "evidence": [
+    {
+      "kind": "artifact",
+      "ref": "https://raw.githubusercontent.com/AlexKaiqi/dsh-personal-knowledge-base/c8e181adcf3904f47fd33b85ffc1e97126cbbd66/dsh/maintainer.js",
+      "sha256": "dcd89672a70d559f8afb14e296879ca03a027027d98c91d79eed6ae42d454fe1"
+    },
+    {
+      "kind": "artifact",
+      "ref": "https://raw.githubusercontent.com/AlexKaiqi/dsh-personal-knowledge-base/c8e181adcf3904f47fd33b85ffc1e97126cbbd66/dsh/service.js",
+      "sha256": "b849ae068d99070181b14f80eb2b0385a0f996253b8717d2331682d60a0e4bbf"
+    },
+    {
+      "kind": "artifact",
+      "ref": "https://raw.githubusercontent.com/AlexKaiqi/dsh-personal-knowledge-base/c8e181adcf3904f47fd33b85ffc1e97126cbbd66/spec/repository-layout.json",
+      "sha256": "5d2a81bda32184a2114c4ad525ce92c62302d5cf31074cc04ea0801bb2124bde"
+    },
+    {
+      "kind": "artifact",
+      "ref": "https://raw.githubusercontent.com/AlexKaiqi/dsh-personal-knowledge-base/c8e181adcf3904f47fd33b85ffc1e97126cbbd66/eval/evidence/latest.md",
+      "sha256": "79c458f4aacd3b31e8c1f58ab15fbfe65046d34e56bda151692372bf1ed56410"
+    },
+    {
+      "kind": "snapshot",
+      "ref": "repo:/knowledge/verifications/assistant/current-work-projection-maintenance/snapshot.json",
+      "sha256": "1b1dc4861502d56bc6a37edd7a700d6f702ad3fb176ce34768a2e71da534aa34"
+    }
+  ],
+  "sideEffects": [
+    {
+      "effect": "local-write",
+      "status": "cleaned"
+    }
+  ]
+}

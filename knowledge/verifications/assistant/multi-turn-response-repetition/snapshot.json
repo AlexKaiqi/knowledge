@@ -1,0 +1,387 @@
+{
+  "fixture": "multilingual-multi-turn-response-repetition-suite",
+  "schemaVersion": "dsh.multi-turn-response-repetition-observation/v1",
+  "suiteRef": "fixture:assistant-response-repetition-v1",
+  "policy": {
+    "revisionRef": "multi-turn-response-repetition-observation-2026-08-27",
+    "normalizationProfile": "intl-word-segmentation-nfkc-lowercase-emoji-v1",
+    "tokenizerRuntime": "node-intl-icu-78.3",
+    "ngramSizes": [
+      2,
+      3
+    ],
+    "comparisonScope": "prior-assistant-responses-in-supplied-case",
+    "thresholdsApplied": false
+  },
+  "summary": {
+    "caseCount": 2,
+    "responseCount": 9,
+    "exactRepeatPairCount": 3,
+    "contextualizedExactRepeatPairCount": 2,
+    "uncontextualizedExactRepeatPairCount": 1,
+    "declaredRepeatContextPairCount": 2,
+    "bigram": {
+      "comparableResponses": 6,
+      "total": 41,
+      "repeated": 27,
+      "fraction": 0.6585365853658537
+    },
+    "trigram": {
+      "comparableResponses": 6,
+      "total": 35,
+      "repeated": 22,
+      "fraction": 0.6285714285714286
+    }
+  },
+  "cases": [
+    {
+      "caseRef": "chinese-planning",
+      "locale": "zh-CN",
+      "responseCount": 3,
+      "summary": {
+        "exactRepeatPairCount": 1,
+        "contextualizedExactRepeatPairCount": 1,
+        "uncontextualizedExactRepeatPairCount": 0,
+        "declaredRepeatContextPairCount": 1,
+        "bigram": {
+          "comparableResponses": 2,
+          "total": 16,
+          "repeated": 11,
+          "fraction": 0.6875
+        },
+        "trigram": {
+          "comparableResponses": 2,
+          "total": 14,
+          "repeated": 9,
+          "fraction": 0.6428571428571429
+        }
+      },
+      "observations": [
+        {
+          "responseRef": "reply-one",
+          "responseDigest": "sha256:7ff0b054c4d3f47dbf9a5b8167c65dbe388b79bd8d383ead8ea1c25897967198",
+          "tokenCount": 9,
+          "historyResponseRefs": [],
+          "exactPriorResponseRefs": [],
+          "overlapPriorResponseRefs": [],
+          "repeatContexts": [],
+          "bigram": {
+            "status": "no-history",
+            "total": 8,
+            "repeated": 0,
+            "fraction": null
+          },
+          "trigram": {
+            "status": "no-history",
+            "total": 7,
+            "repeated": 0,
+            "fraction": null
+          }
+        },
+        {
+          "responseRef": "reply-two",
+          "responseDigest": "sha256:5d055a6c83f30fcf15e44088b2c0b1d903315bc6b57c8a45873543871d79cb2b",
+          "tokenCount": 9,
+          "historyResponseRefs": [
+            "reply-one"
+          ],
+          "exactPriorResponseRefs": [
+            "reply-one"
+          ],
+          "overlapPriorResponseRefs": [
+            "reply-one"
+          ],
+          "repeatContexts": [
+            {
+              "currentResponseRef": "reply-two",
+              "priorResponseRef": "reply-one",
+              "kind": "persona-catchphrase",
+              "evidenceRefs": [
+                "fixture:persona/declared-catchphrase"
+              ]
+            }
+          ],
+          "bigram": {
+            "status": "observed",
+            "total": 8,
+            "repeated": 8,
+            "fraction": 1
+          },
+          "trigram": {
+            "status": "observed",
+            "total": 7,
+            "repeated": 7,
+            "fraction": 1
+          }
+        },
+        {
+          "responseRef": "reply-three",
+          "responseDigest": "sha256:8baca4959771d993a24998a34c903872bd730bbc36b602104fd88dcaee7a9d20",
+          "tokenCount": 9,
+          "historyResponseRefs": [
+            "reply-one",
+            "reply-two"
+          ],
+          "exactPriorResponseRefs": [],
+          "overlapPriorResponseRefs": [
+            "reply-one",
+            "reply-two"
+          ],
+          "repeatContexts": [],
+          "bigram": {
+            "status": "observed",
+            "total": 8,
+            "repeated": 3,
+            "fraction": 0.375
+          },
+          "trigram": {
+            "status": "observed",
+            "total": 7,
+            "repeated": 2,
+            "fraction": 0.2857142857142857
+          }
+        }
+      ]
+    },
+    {
+      "caseRef": "english-planning",
+      "locale": "en-US",
+      "responseCount": 6,
+      "summary": {
+        "exactRepeatPairCount": 2,
+        "contextualizedExactRepeatPairCount": 1,
+        "uncontextualizedExactRepeatPairCount": 1,
+        "declaredRepeatContextPairCount": 1,
+        "bigram": {
+          "comparableResponses": 4,
+          "total": 25,
+          "repeated": 16,
+          "fraction": 0.64
+        },
+        "trigram": {
+          "comparableResponses": 4,
+          "total": 21,
+          "repeated": 13,
+          "fraction": 0.6190476190476191
+        }
+      },
+      "observations": [
+        {
+          "responseRef": "turn-one",
+          "responseDigest": "sha256:261435408a215b629fc94043464c96d7046e82e52c156dc9ba2f1caf64e7b38e",
+          "tokenCount": 6,
+          "historyResponseRefs": [],
+          "exactPriorResponseRefs": [],
+          "overlapPriorResponseRefs": [],
+          "repeatContexts": [],
+          "bigram": {
+            "status": "no-history",
+            "total": 5,
+            "repeated": 0,
+            "fraction": null
+          },
+          "trigram": {
+            "status": "no-history",
+            "total": 4,
+            "repeated": 0,
+            "fraction": null
+          }
+        },
+        {
+          "responseRef": "turn-two",
+          "responseDigest": "sha256:d1ad0a3345871d23c40fab051f654c7179aba64080fe35838874f7ee53ce2723",
+          "tokenCount": 6,
+          "historyResponseRefs": [
+            "turn-one"
+          ],
+          "exactPriorResponseRefs": [
+            "turn-one"
+          ],
+          "overlapPriorResponseRefs": [
+            "turn-one"
+          ],
+          "repeatContexts": [
+            {
+              "currentResponseRef": "turn-two",
+              "priorResponseRef": "turn-one",
+              "kind": "confirmation-readback",
+              "evidenceRefs": [
+                "fixture:event/user-requested-readback"
+              ]
+            }
+          ],
+          "bigram": {
+            "status": "observed",
+            "total": 5,
+            "repeated": 5,
+            "fraction": 1
+          },
+          "trigram": {
+            "status": "observed",
+            "total": 4,
+            "repeated": 4,
+            "fraction": 1
+          }
+        },
+        {
+          "responseRef": "turn-three",
+          "responseDigest": "sha256:e640eb7213ceaaf6ecd7d7dff0595d981626d267d4c986b04da8dd8c586baa02",
+          "tokenCount": 7,
+          "historyResponseRefs": [
+            "turn-one",
+            "turn-two"
+          ],
+          "exactPriorResponseRefs": [],
+          "overlapPriorResponseRefs": [],
+          "repeatContexts": [],
+          "bigram": {
+            "status": "observed",
+            "total": 6,
+            "repeated": 0,
+            "fraction": 0
+          },
+          "trigram": {
+            "status": "observed",
+            "total": 5,
+            "repeated": 0,
+            "fraction": 0
+          }
+        },
+        {
+          "responseRef": "turn-four",
+          "responseDigest": "sha256:e640eb7213ceaaf6ecd7d7dff0595d981626d267d4c986b04da8dd8c586baa02",
+          "tokenCount": 7,
+          "historyResponseRefs": [
+            "turn-one",
+            "turn-two",
+            "turn-three"
+          ],
+          "exactPriorResponseRefs": [
+            "turn-three"
+          ],
+          "overlapPriorResponseRefs": [
+            "turn-three"
+          ],
+          "repeatContexts": [],
+          "bigram": {
+            "status": "observed",
+            "total": 6,
+            "repeated": 6,
+            "fraction": 1
+          },
+          "trigram": {
+            "status": "observed",
+            "total": 5,
+            "repeated": 5,
+            "fraction": 1
+          }
+        },
+        {
+          "responseRef": "turn-five",
+          "responseDigest": "sha256:7148125929d542903d29fa8ca5f577da6942d36583fa62bef825d9025cccc2e3",
+          "tokenCount": 9,
+          "historyResponseRefs": [
+            "turn-one",
+            "turn-two",
+            "turn-three",
+            "turn-four"
+          ],
+          "exactPriorResponseRefs": [],
+          "overlapPriorResponseRefs": [
+            "turn-three",
+            "turn-four"
+          ],
+          "repeatContexts": [],
+          "bigram": {
+            "status": "observed",
+            "total": 8,
+            "repeated": 5,
+            "fraction": 0.625
+          },
+          "trigram": {
+            "status": "observed",
+            "total": 7,
+            "repeated": 4,
+            "fraction": 0.5714285714285714
+          }
+        },
+        {
+          "responseRef": "turn-six",
+          "responseDigest": "sha256:03b25bed61dad2fc92bb7ca539a0f5abb89e97a767e3ca68789d47009f9fa5c3",
+          "tokenCount": 1,
+          "historyResponseRefs": [
+            "turn-one",
+            "turn-two",
+            "turn-three",
+            "turn-four",
+            "turn-five"
+          ],
+          "exactPriorResponseRefs": [],
+          "overlapPriorResponseRefs": [],
+          "repeatContexts": [],
+          "bigram": {
+            "status": "unavailable",
+            "total": 0,
+            "repeated": 0,
+            "fraction": null
+          },
+          "trigram": {
+            "status": "unavailable",
+            "total": 0,
+            "repeated": 0,
+            "fraction": null
+          }
+        }
+      ]
+    }
+  ],
+  "interpretation": {
+    "declaredContextsAreCallerClaims": true,
+    "semanticRepetitionEvaluated": false,
+    "responseQualityInferred": false,
+    "personaContinuityInferred": false,
+    "companionshipOutcomeInferred": false,
+    "humanReviewRequired": true
+  },
+  "retention": "input-text-ephemeral-output-digests-locators-and-lexical-counts-only",
+  "observedAt": "2026-08-27T10:00:00.000Z",
+  "personaChanged": false,
+  "memoryChanged": false,
+  "platformDataRead": false,
+  "actionExecuted": false,
+  "executionAuthorized": false,
+  "resultDigest": "sha256:e0b93107f23129702ee87b0e43e925fee6a7d23e0aeb616bc24df5a866073937",
+  "conformance": {
+    "status": "passed",
+    "assertions": [
+      {
+        "id": "all-responses-observed",
+        "passed": true
+      },
+      {
+        "id": "raw-repetition-preserved",
+        "passed": true
+      },
+      {
+        "id": "no-threshold-or-quality-score",
+        "passed": true
+      },
+      {
+        "id": "declared-context-not-exemption",
+        "passed": true
+      },
+      {
+        "id": "semantic-and-outcome-boundary",
+        "passed": true
+      },
+      {
+        "id": "input-text-not-retained",
+        "passed": true
+      },
+      {
+        "id": "no-effects-or-authorization",
+        "passed": true
+      }
+    ]
+  }
+}

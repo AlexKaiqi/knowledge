@@ -1,0 +1,96 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "coresignal-job-posting-snapshot",
+  "sources": [
+    {
+      "id": "multi-source-jobs-api",
+      "url": "https://docs.coresignal.com/jobs-api/multi-source-jobs-api.md",
+      "role": "official-api-contract",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "search-endpoint", "includes": "/v2/job_multi_source/search/es_dsl" },
+          { "id": "collect-endpoint", "includes": "/v2/job_multi_source/collect/{job_id}" },
+          { "id": "multi-source", "includes": "Multi-source Jobs" }
+        ]
+      }
+    },
+    {
+      "id": "multi-source-search-schema",
+      "url": "https://docs.coresignal.com/jobs-api/multi-source-jobs-api/elasticsearch-dsl.md",
+      "role": "official-search-contract",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "title-field", "includes": "\"title\"" },
+          { "id": "country-field", "includes": "\"country\"" },
+          { "id": "active-status-field", "includes": "\"status\"" },
+          { "id": "updated-field", "includes": "\"updated_at\"" }
+        ]
+      }
+    },
+    {
+      "id": "multi-source-collect-fields",
+      "url": "https://docs.coresignal.com/jobs-api/multi-source-jobs-api/collect.md",
+      "role": "official-collect-contract",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "field-selection", "includes": "?fields=id&fields=description" },
+          { "id": "api-key-header", "includes": "apikey: {API Key}" }
+        ]
+      }
+    },
+    {
+      "id": "credits-and-pricing",
+      "url": "https://docs.coresignal.com/pricing/pricing.md",
+      "role": "official-pricing-contract",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "search-free", "includes": "/search/es_dsl" },
+          { "id": "jobs-one-credit", "includes": "1 Multi-source Jobs API record" },
+          { "id": "trial-duration", "includes": "7-day free trial" },
+          { "id": "trial-credits", "includes": "2,000" }
+        ]
+      }
+    },
+    {
+      "id": "credits-response-header",
+      "url": "https://docs.coresignal.com/api-introduction/credits.md",
+      "role": "official-billing-contract",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "credits-header", "includes": "x-credits-remaining" },
+          { "id": "success-debit", "includes": "successful (200) request" },
+          { "id": "insufficient-credits", "includes": "402" }
+        ]
+      }
+    },
+    {
+      "id": "data-transparency",
+      "url": "https://coresignal.com/data-transparency/",
+      "role": "official-data-provenance",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "public-data", "includes": "publicly available" },
+          { "id": "business-data", "includes": "business-related" }
+        ]
+      }
+    },
+    {
+      "id": "website-terms-boundary",
+      "url": "https://coresignal.com/terms-and-conditions/",
+      "role": "official-legal-boundary",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "purchased-data-exclusion", "includes": "do not govern the relationship between You and the Company if you have purchased Data" },
+          { "id": "separate-agreement", "includes": "separate legal agreement" }
+        ]
+      }
+    }
+  ]
+}

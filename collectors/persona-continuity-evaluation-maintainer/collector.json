@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "dsh.collector-definition/v1",
+  "id": "persona-continuity-evaluation-maintainer",
+  "version": "1.0.0",
+  "scope": {
+    "knowledgeGlobs": [
+      "knowledge/tools/persona-continuity-evaluator.md",
+      "knowledge/concepts/assistant/persona-continuity-evaluation-suite.md",
+      "knowledge/capabilities/assistant/evaluate-persona-continuity-suite.md",
+      "knowledge/schemas/assistant/evaluate-persona-continuity-suite-*.schema.json",
+      "knowledge/verifications/assistant/persona-continuity-evaluation/*.json"
+    ],
+    "connectorIds": ["persona-continuity-evaluator"],
+    "capabilityRefs": ["/capabilities/assistant/evaluate-persona-continuity-suite.md"]
+  },
+  "triggers": [{ "kind": "schedule", "schedule": "45 9 * * 2" }, { "kind": "source-change" }, { "kind": "schema-change" }, { "kind": "connector-change" }, { "kind": "failed-execution" }, { "kind": "manual" }],
+  "execution": { "kind": "deterministic", "runtime": "node >=22.19", "entrypoint": "collectors/persona-continuity-evaluation-maintainer/src/index.mjs" },
+  "outputs": ["knowledge-proposal", "connector-change-proposal", "verification-report"],
+  "writePolicy": { "mode": "proposal-only", "requiresApprovalFor": ["knowledge", "connector", "live-probe"] },
+  "probePolicy": { "allowedEnvironments": ["local", "production-public"], "identityPoolRefs": [], "maximumEffect": "none" },
+  "budgets": { "maxRunsPerDay": 2, "maxCostPerDay": 0, "currency": "CNY" }
+}

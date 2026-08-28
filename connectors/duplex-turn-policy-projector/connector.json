@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "duplex-turn-policy-projector",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/voice/project-duplex-turn-events-to-actions.md"],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "connectors/duplex-turn-policy-projector/src/index.mjs"
+  },
+  "configSchema": "repo:/connectors/duplex-turn-policy-projector/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [
+    {
+      "capabilityRef": "/capabilities/voice/project-duplex-turn-events-to-actions.md",
+      "operation": "projectDuplexTurnEventsToActions"
+    }
+  ],
+  "conformance": {
+    "status": "verified",
+    "probeReportRef": "/verifications/voice/duplex-turn-policy/report.json"
+  }
+}

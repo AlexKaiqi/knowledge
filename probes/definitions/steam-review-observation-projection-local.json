@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "steam-review-observation-projection-local",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/steam/project-review-page-to-observation-window.md",
+  "connectorId": "steam-public-game-reviews",
+  "environment": "local",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "verify-upstream-live-report", "operation": "verifyUpstreamLiveEvidence" },
+    { "id": "project-redacted-live-page", "operation": "projectReviewPageToFeedbackObservationWindow" },
+    { "id": "replay-reordered-page", "operation": "projectReviewPageToFeedbackObservationWindow" },
+    { "id": "compose-with-feedback-reconciler", "operation": "reconcileFeedbackObservations" },
+    { "id": "validate-public-schema", "operation": "validateOutputSchema" }
+  ],
+  "assertions": [
+    "The local projection is grounded in an unexpired passed live Steam review-page report and its exact redacted snapshot digest.",
+    "The window is always partial; the resume cursor is not represented as a global high-watermark and checkpoint advancement is held.",
+    "Recommendation ID remains the item identity and semantic content changes produce an edited observation when reconciled.",
+    "Page absence is never deletion because the verified Steam route provides no explicit lifecycle tombstones.",
+    "Review text, author identity and execution authorization are absent from the public projection."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 30, "maxCost": 0, "currency": "CNY" }
+}

@@ -1,0 +1,267 @@
+{
+  "input": {
+    "scenario": "technical-solution",
+    "goal": "为个人助理选择一个模型不能伪造、其它本机或跨 Session 客户端不能劫持，并能绑定 exact action review revision 的审批入口",
+    "decision": "当前 DSH Web approval answerer 是否足以作为可信审批 Connector 路线进入 OKF",
+    "questions": [
+      "DSH user-approval seam 本身提供了哪些一次性、审计和 fail-closed 语义？",
+      "当前 Web answerer 是否能证明响应来自目标 Session 的人类 owner？",
+      "审批是否绑定 exact tool arguments、review revision、expiry 与撤销状态？",
+      "需要满足哪些 sandbox 负向测试后才能重新考虑准入？"
+    ],
+    "constraints": {
+      "cutoffAt": "2026-08-27T08:30:00Z",
+      "versions": [
+        "deepseek-harness b150a551b8d465e31e418e1b2eaf5e79bbb7d28e",
+        "local @deepseek-ai/dsh-user-approval 0.1.0-rc.8",
+        "local @deepseek-ai/dsh-host-apiproxy 0.1.0-rc.8",
+        "local @deepseek-ai/dsh-client-connection 0.1.0-rc.8"
+      ],
+      "exclusions": [
+        "把 loopback 或 same-origin 当成用户身份认证",
+        "把 service-issued request id 当成回答者身份",
+        "运行攻击 PoC 或请求真实升权",
+        "在未修复 Web transport 前创建可路由 approval Capability"
+      ]
+    },
+    "budget": { "maxSources": 8, "maxQueries": 8 }
+  },
+  "agentObservation": {
+    "scenario": "technical-solution",
+    "performedAt": "2026-08-27T08:30:00Z",
+    "openedSourceCount": 5,
+    "counterSearchPerformed": true,
+    "humanReviewRequired": true
+  },
+  "sourceChecks": [
+    {
+      "id": "dsh-approval-contract",
+      "kind": "html-semantic",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/deepseek-harness/b150a551b8d465e31e418e1b2eaf5e79bbb7d28e/docs/subsystems/approval.md",
+      "assertions": [
+        "UI channels may provide human answerers",
+        "It deliberately omits tool arguments",
+        "requires the requesting session to be inside an open turn"
+      ],
+      "digest": "3df5e496a8757c5268f1a625afb383cf3d6b62b07dc894dda1efb9daa36554d7"
+    },
+    {
+      "id": "dsh-web-approval-transport",
+      "kind": "html-semantic",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/deepseek-harness/b150a551b8d465e31e418e1b2eaf5e79bbb7d28e/packages/host/apiproxy/src/api-proxy.ts",
+      "assertions": [
+        "for (const queue of muxQueues) queue.push(envelope)",
+        "for (const pending of pendingApprovals.values()) queue.push(requestedFrame(pending))",
+        "const approval = pendingApprovals.get(message.rpcId)",
+        "approval.resolve(parsed.data.outcome)"
+      ],
+      "digest": "3692666852649b869b116a698c898d7ff5f3d5ef81b70a6224cfe71d703c0e0a"
+    },
+    {
+      "id": "dsh-web-self-approval-reproduction",
+      "kind": "html-semantic",
+      "url": "https://github.com/deepseek-ai/deepseek-harness/discussions/250",
+      "assertions": [
+        "SANDBOX_APPROVAL_PROOF",
+        "workspace-write Landlock child",
+        "Host pending approval"
+      ],
+      "digest": "9db019a42add46830e01e42ac9ce20f4026371eb797ffcca597c02e65f992f7f"
+    },
+    {
+      "id": "dsh-web-cross-session-reproduction",
+      "kind": "html-semantic",
+      "url": "https://github.com/deepseek-ai/deepseek-harness/discussions/1220",
+      "assertions": [
+        "CWE-862",
+        "Cross-session approval hijack",
+        "PATCHED VERSIONS",
+        "None at the time of writing."
+      ],
+      "digest": "75c2089f46a8de84f48d8b572885ac3139b403c8656cad6fc5444ae93842a895"
+    },
+    {
+      "id": "dsh-approval-cancellation-counterexample",
+      "kind": "html-semantic",
+      "url": "https://github.com/deepseek-ai/deepseek-harness/discussions/4104",
+      "assertions": [
+        "late grants survive cancellation",
+        "session/cancel",
+        "withdrawal path"
+      ],
+      "digest": "e760754c637dc277ca2aeec923c681c1485ba087a0869781d5b3e0b3b2320220"
+    }
+  ],
+  "candidate": {
+    "scenario": "technical-solution",
+    "question": "当前 DSH Web approval answerer 是否足以作为可信个人助理审批路线？",
+    "decision": "不准入当前 DSH Web answerer，也不创建可路由 approval Connector。保留 `dsh-user-approval` 的 current-turn one-shot、fail-closed 和审计语义作为未来 Connector 内部原语；只有回答通道完成 owner-bound authentication、Session-scoped delivery、one-time nonce、exact review revision 绑定、撤销和跨 Session 负向 probe 后，才能重新评估。跨 turn 持久审批和 CAS authorization consume 仍是另一条独立能力。",
+    "answer": "现有 seam 解决了机制问题，但没有解决可信回答者问题。它为每次请求生成新 ID，在 open turn 内记录 asked/decided，对 rejected、cancelled、unavailable 一律 fail closed，并用 callId 关联已经展示的 tool call；这些语义值得复用。然而 Web route 把 pending approval 广播给全局 mux，后来连接的客户端也能收到；`/api/respond` 只凭 rpcId、sessionId 与 approvalId 匹配即可提交 allowed-once，没有 owner/channel attestation。公开的真实组合复现已经证明受限 Agent 可通过 loopback 自批，另一个本机或 LAN 客户端也可跨 Session 劫持；取消路径还存在 late grant 反例。因此该 route 不能证明人类批准，审计记录也可能只是伪造响应的忠实记录。callId 又只间接关联参数，seam 本身不绑定 reviewRevisionHash、expiry、tool/policy version，也不支持跨 turn durable grant。结论是暂停 Web answerer 路线，而不是否定一次性 approval seam；修复后的可信 answerer 与持久授权消费应分开验证。",
+    "confidence": "high",
+    "findings": [
+      {
+        "id": "one-shot-seam-useful",
+        "claim": "DSH approval seam 提供 current-turn、service-issued request ID、closed outcome、fail-closed 和成对审计，适合作为未来可信 Connector 的内部一次性决策原语。",
+        "status": "supported",
+        "confidence": "high",
+        "evidenceIds": ["approval-contract"],
+        "counterEvidenceIds": ["cancellation-risk"],
+        "applicability": "只说明同进程 seam 的机制，不证明任意 UI/ACP/Web answerer 是可信人类通道。",
+        "inference": false
+      },
+      {
+        "id": "web-answerer-not-owner-bound",
+        "claim": "当前 Web answerer 的 pending delivery 和 response resolution 没有绑定目标 Session owner；拿到全局 mux frame 的客户端可提交唯一 grant outcome。",
+        "status": "supported",
+        "confidence": "high",
+        "evidenceIds": ["web-transport-source", "self-approval-probe", "cross-session-probe"],
+        "counterEvidenceIds": [],
+        "applicability": "适用于 b150a551 和本机语义相同的 0.1.0-rc.8 Web Host/Client route；不自动推断其它 answerer。",
+        "inference": false
+      },
+      {
+        "id": "loopback-not-human-attestation",
+        "claim": "loopback、same-origin、随机 rpcId 和成对审计都不能单独证明回答来自人类；受限模型进程或其它本机客户端仍可成为第一响应者。",
+        "status": "supported",
+        "confidence": "high",
+        "evidenceIds": ["self-approval-probe", "cross-session-probe"],
+        "counterEvidenceIds": ["approval-contract"],
+        "applicability": "个人助理高影响动作不能把当前 Web `allowed-once` 当作 owner consent。",
+        "inference": true
+      },
+      {
+        "id": "exact-revision-binding-missing",
+        "claim": "approval request 只携带 toolName、可选 callId 和 reason；exact arguments 依赖外部关联，review revision、expiry、tool/policy version 与 target mutation 不是 seam 的强制字段。",
+        "status": "supported",
+        "confidence": "high",
+        "evidenceIds": ["approval-contract", "web-transport-source"],
+        "counterEvidenceIds": [],
+        "applicability": "修复回答者认证后仍必须由 Connector 校验 exact review revision，不能只批准工具名或自然语言 reason。",
+        "inference": false
+      },
+      {
+        "id": "durable-authorization-remains-separate",
+        "claim": "current-turn allowed-once 不等于可恢复的授权记录；跨 turn 等待、撤销、过期、CAS consume、崩溃和 unknown receipt 仍需要独立持久能力。",
+        "status": "supported",
+        "confidence": "high",
+        "evidenceIds": ["approval-contract", "cancellation-risk"],
+        "counterEvidenceIds": [],
+        "applicability": "适用于提醒、消息、发布、付款和其它可能跨 turn 或恢复后执行的个人助理动作。",
+        "inference": true
+      }
+    ],
+    "evidence": [
+      {
+        "id": "approval-contract",
+        "role": "implementation-evidence",
+        "sourceType": "official-document",
+        "weight": "primary",
+        "title": "DeepSeek Harness user approval contract",
+        "resource": "https://raw.githubusercontent.com/deepseek-ai/deepseek-harness/b150a551b8d465e31e418e1b2eaf5e79bbb7d28e/docs/subsystems/approval.md",
+        "claim": "官方契约定义 current-turn one-shot outcome、fail-closed、asked/decided 审计和 callId 关联，同时明确请求不复制 tool arguments，UI answerer 由外部通道提供。",
+        "locator": "Identity and outcome; Approval request; Dispatch and audit; Known limitations",
+        "observedAt": "2026-08-27T08:30:00Z",
+        "digest": "3df5e496a8757c5268f1a625afb383cf3d6b62b07dc894dda1efb9daa36554d7"
+      },
+      {
+        "id": "web-transport-source",
+        "role": "implementation-evidence",
+        "sourceType": "repository",
+        "weight": "primary",
+        "title": "DeepSeek Harness Web approval transport at b150a551",
+        "resource": "https://raw.githubusercontent.com/deepseek-ai/deepseek-harness/b150a551b8d465e31e418e1b2eaf5e79bbb7d28e/packages/host/apiproxy/src/api-proxy.ts",
+        "claim": "Host 使用全局 mux queues 广播并重放 pending approvals；respond 以 rpcId 找 pending entry，核对 sessionId/approvalId 后直接 resolve caller-provided outcome。",
+        "locator": "PendingApproval; broadcast; approval/request listener; events.mux replay; respond",
+        "observedAt": "2026-08-27T08:30:00Z",
+        "digest": "3692666852649b869b116a698c898d7ff5f3d5ef81b70a6224cfe71d703c0e0a"
+      },
+      {
+        "id": "self-approval-probe",
+        "role": "benchmark",
+        "sourceType": "experiment",
+        "weight": "independent",
+        "title": "Real Web transport self-approval reproduction",
+        "resource": "https://github.com/deepseek-ai/deepseek-harness/discussions/250",
+        "claim": "公开复现组合了真实 workspace-write child、Connection WebSocket、ApiProxy 和 ApprovalService；child 收到 approval/requested 后提交 allowed-once，Host 返回 accepted 并解析为 grant。",
+        "locator": "Sections 5-9; SANDBOX_APPROVAL_PROOF",
+        "publishedAt": "2026-08-13T00:00:00Z",
+        "observedAt": "2026-08-27T08:30:00Z",
+        "digest": "9db019a42add46830e01e42ac9ce20f4026371eb797ffcca597c02e65f992f7f"
+      },
+      {
+        "id": "cross-session-probe",
+        "role": "counter-evidence",
+        "sourceType": "work-item",
+        "weight": "independent",
+        "title": "Cross-session approval hijack report",
+        "resource": "https://github.com/deepseek-ai/deepseek-harness/discussions/1220",
+        "claim": "报告复现无 owner binding 的全局 pending stream 和 rpcId-only response，可由其它本机或 LAN client 审批或拒绝另一个 Session；报告时没有 patched version。",
+        "locator": "Summary; Vulnerability details; Reproduction; Patched versions",
+        "publishedAt": "2026-08-14T00:00:00Z",
+        "observedAt": "2026-08-27T08:30:00Z",
+        "digest": "75c2089f46a8de84f48d8b572885ac3139b403c8656cad6fc5444ae93842a895"
+      },
+      {
+        "id": "cancellation-risk",
+        "role": "counter-evidence",
+        "sourceType": "work-item",
+        "weight": "independent",
+        "title": "Late approval grant after cancellation hardening report",
+        "resource": "https://github.com/deepseek-ai/deepseek-harness/discussions/4104",
+        "claim": "当 asker 没有携带 abort signal 时，ACP answer 可在 session cancellation 后仍产生 allowed-once，说明撤销状态必须是授权边界的一部分。",
+        "locator": "Problem; Reproduction; Fix direction",
+        "publishedAt": "2026-08-23T00:00:00Z",
+        "observedAt": "2026-08-27T08:30:00Z",
+        "digest": "e760754c637dc277ca2aeec923c681c1485ba087a0869781d5b3e0b3b2320220"
+      }
+    ],
+    "conflicts": [
+      {
+        "claim": "service-issued request ID 和 one-shot outcome 是否足以证明人类批准。",
+        "evidenceIds": ["approval-contract", "self-approval-probe", "cross-session-probe"],
+        "resolution": "request ID 只证明 Host 创建了问题并关联审计，不证明谁回答；在回答通道完成 owner authentication 前，allowed-once 不能进入可信授权事实。"
+      },
+      {
+        "claim": "callId 是否已经完成 exact action revision 绑定。",
+        "evidenceIds": ["approval-contract", "web-transport-source", "cancellation-risk"],
+        "resolution": "callId 可让 UI 关联已展示 tool call，但 seam 不验证 reviewRevisionHash、expiry 或撤销；Connector 必须在 ask 前和 consume 前分别重验冻结 revision 与当前 policy/tool state。"
+      }
+    ],
+    "gaps": [
+      "上游尚未公布并在本机采用修复 Web owner binding 的版本。",
+      "尚无 Session-scoped downlink credential、回答者 attestation 或一次性 nonce 的可验证契约。",
+      "当前 one-shot seam 不支持跨 turn durable pending、expiry、revocation 或 grant store。",
+      "尚未在修复后 transport 上测试跨 Session、受限 child、自身 loopback、stale response、并发第一响应者和 reconnect replay。",
+      "exact review revision、tool/policy version 和 target state 的 pre-ask/pre-consume 双重校验仍未实现。"
+    ],
+    "counterEvidenceSearch": {
+      "performed": true,
+      "queries": [
+        "deepseek harness approval requested allowed-once tests",
+        "deepseek harness Web approval self approve sandbox",
+        "deepseek harness cross-session approval hijack",
+        "deepseek harness approval cancellation late grant",
+        "deepseek harness pendingApprovals owner binding fix"
+      ],
+      "outcome": "found",
+      "evidenceIds": ["self-approval-probe", "cross-session-probe", "cancellation-risk"]
+    },
+    "nextProbes": [
+      {
+        "hypothesis": "修复后的 Web answerer 能把每个 pending approval 只交给已认证的 exact Session owner，并拒绝模型 child、其它 Session、本机旁路和 stale/replayed response。",
+        "method": "等上游公布候选修复和版本后，在隔离 sandbox 运行真实 Host/Client：分别从 owner UI、受限 child、第二 Session、独立 loopback client 和重连后的 stale frame 提交 response；校验 Session-scoped delivery、channel attestation、nonce 单次消费、撤销和 audit answering-channel 字段。",
+        "success": "只有 owner channel 对当前 pending nonce 的一次响应被接受；所有旁路和重放 fail closed，审计可区分 human UI 与 machine policy。",
+        "failure": "任一非 owner actor 可收到/回答 pending，响应只靠可观察 ID，撤销后仍 grant，或审计不能说明回答通道。",
+        "effect": "local-write"
+      },
+      {
+        "hypothesis": "可信 answerer 修复后，Connector 能把 approval 精确绑定 action impact review revision，并在 mutation、expiry 或 policy/tool drift 时拒绝。",
+        "method": "使用 effect-free sandbox action，把 reviewRevisionHash、action/arguments/targets、expiry 和 tool/policy version 冻结到 Host-owned pending state；在 approve 前后分别注入字段 mutation、过期、撤销、版本变化和并发 consume。",
+        "success": "只有 byte-identical current revision 获得一次性 consume；任何 drift 或第二次 consume 都 fail closed，且没有真实工具副作用。",
+        "failure": "仅凭 toolName/reason/callId 即可 grant，revision mutation 不失效，或 allowed-once 能跨 turn/重复使用。",
+        "effect": "local-write"
+      }
+    ],
+    "coverage": { "queryCount": 5, "stoppedBecause": "decision-sufficient", "complete": true }
+  }
+}

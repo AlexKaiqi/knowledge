@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "multi-turn-response-repetition-local",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/assistant/observe-multi-turn-response-repetition.md",
+  "connectorId": "multi-turn-response-repetition-observer",
+  "environment": "local",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "verify-source-semantics", "operation": "verifyPinnedRepetitionSources" },
+    { "id": "observe-multilingual-fixture", "operation": "observeMultiTurnResponseRepetition", "inputRef": "repo:/probes/fixtures/assistant/multi-turn-response-repetition.json" },
+    { "id": "verify-context-boundary", "operation": "verifyDeclaredContextDoesNotEraseRawCounts" },
+    { "id": "verify-no-score", "operation": "verifyNoThresholdSemanticOrQualityInference" },
+    { "id": "validate-public-schemas", "operation": "validateInputAndOutputSchemas" },
+    { "id": "verify-no-effects", "operation": "verifyNoPersonaMemoryPlatformActionOrAuthorizationEffect" }
+  ],
+  "assertions": [
+    "The frozen suite covers English and Chinese exact repeats, partial n-gram overlap, contextualized and uncontextualized repeats, and short unavailable n-grams.",
+    "Every observation compares only with prior assistant responses in the same supplied case.",
+    "Caller-declared confirmation, repair, safety or persona contexts retain provenance but never erase raw repetition counts.",
+    "No threshold, semantic repetition verdict, response quality score, persona continuity or companionship outcome is inferred.",
+    "Input text is ephemeral; public output retains digests, declared locators and lexical counts only.",
+    "Observation cannot change persona, memory, platform state, execute an action or grant authorization."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 45, "maxCost": 0, "currency": "CNY" }
+}

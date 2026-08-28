@@ -1,0 +1,283 @@
+{
+  "schemaVersion": "dsh.probe-snapshot/research-evidence-backed/v1",
+  "fixture": "game-app-distribution-impact",
+  "scenario": "distribution-impact",
+  "question": "发布后影响力应先被抽象成统一总分、平台专属读取器，还是一个保留原生定义和归因边界的 effect-free observation evaluator？",
+  "decision": "在没有自有 Steam Partner app、App Store Connect app 或 Play Console app 可读身份时，下一步先建设什么影响力能力",
+  "answer": "三个官方分析面都提供有价值但不可互换的漏斗事实。Steam UTM 只对带 UTM 的商店访问提供 Total/Trusted/Tracked Visits，并把 wishlist、purchase、activation 限定在可追踪访问和 72 小时窗口；转化四天后才最终化，且浏览器/cookie 和社交 App 内浏览器会造成缺失。Apple campaign token 可以关联展示、页面访问、下载、使用、销售与订阅，但低于五的指标被抑制，多个链接采用末次点击归因；Analytics Reports 首份数据还需约 24–48 小时、单日两天后才完整。Google Play 自 2026 年 7 月把 store listing 主报告改为 intent clicks/CTR，acquisition 仍在其它报告/旧导出，并显式存在 Not attributed 和 surface exclusion。因此跨平台总分或简单发布前后对比会混合不同事件、窗口、最终化和归因模型。可独立验证的公共能力应只评估调用者提供的去身份化、source-native observation：同定义同窗口才算 delta；未最终化、被阈值抑制、未归因或 surface 缺失必须保留 unknown；没有平台 attribution 时最多声称 temporal association。",
+  "confidence": "high",
+  "findings": [
+    {
+      "id": "native-metrics-not-equivalent",
+      "claim": "Steam visits/conversions、Apple campaign funnel 和 Google Play clicks/acquisitions 不是可直接求和或排名的同一指标。",
+      "status": "supported",
+      "confidence": "high",
+      "evidenceIds": [
+        "steam-native-funnel",
+        "apple-native-funnel",
+        "play-semantic-change"
+      ],
+      "counterEvidenceIds": [],
+      "applicability": "适用于跨游戏商店和 App 商店的发布影响观察；平台内同一定义、同一 surface 和同一窗口仍可比较。",
+      "inference": true
+    },
+    {
+      "id": "finalization-is-part-of-fact",
+      "claim": "观察值是否最终化必须是结果的一部分；Steam 转化和 Apple Analytics 报告都存在小时到数日的成熟期。",
+      "status": "supported",
+      "confidence": "high",
+      "evidenceIds": [
+        "steam-finalization-gap",
+        "apple-report-latency"
+      ],
+      "counterEvidenceIds": [],
+      "applicability": "任何 baseline/current delta 都必须在相同成熟度下比较，未成熟窗口只能 pending。",
+      "inference": true
+    },
+    {
+      "id": "missing-is-not-zero",
+      "claim": "阈值抑制、cookie/登录缺失、Not attributed 和未覆盖 surface 都不能被归一成零。",
+      "status": "supported",
+      "confidence": "high",
+      "evidenceIds": [
+        "steam-tracking-gap",
+        "apple-threshold-and-last-click",
+        "play-semantic-change"
+      ],
+      "counterEvidenceIds": [],
+      "applicability": "适用于读取、导出归一和后续影响评估；公开可见指标同样不能证明完整漏斗。",
+      "inference": true
+    },
+    {
+      "id": "causality-needs-platform-attribution",
+      "claim": "没有平台归因窗口或受控实验时，发布前后变化最多是时间关联，不能声称由某条内容或版本造成。",
+      "status": "supported",
+      "confidence": "high",
+      "evidenceIds": [
+        "steam-native-funnel",
+        "apple-threshold-and-last-click"
+      ],
+      "counterEvidenceIds": [
+        "steam-tracking-gap",
+        "play-semantic-change"
+      ],
+      "applicability": "适用于内容、游戏版本、商店素材和营销活动的影响复盘。",
+      "inference": true
+    },
+    {
+      "id": "evaluator-before-owned-reader",
+      "claim": "在缺少开发者身份和自有 target 时，先验证 source-native observation evaluator 比伪造平台读取闭环更独立；平台读取器以后按原生 Schema 组合。",
+      "status": "supported",
+      "confidence": "high",
+      "evidenceIds": [
+        "steam-native-funnel",
+        "apple-native-funnel",
+        "play-semantic-change"
+      ],
+      "counterEvidenceIds": [
+        "steam-tracking-gap",
+        "apple-report-latency"
+      ],
+      "applicability": "首版只接收冻结导出/fixture 的摘要和计数，不读取账号、不发布、不保留用户级数据。",
+      "inference": true
+    }
+  ],
+  "evidence": [
+    {
+      "id": "steam-native-funnel",
+      "role": "platform-signal",
+      "sourceType": "official-document",
+      "weight": "primary",
+      "title": "Steamworks UTM Analytics",
+      "resource": "https://partner.steamgames.com/doc/marketing/utm_analytics",
+      "claim": "Steam 将 UTM 流量区分 Total、Trusted 和 Tracked Visits，并只对同一 App ID 的 wishlist、purchase、activation 定义转化。",
+      "locator": "Tracked Visits; Conversions; Conversion timeframe",
+      "observedAt": "2026-08-27T08:00:00Z",
+      "digest": "22beb14bfbaea99f11e22eabcb123355eab1bbac84c56ba00fb1bf31197fc973"
+    },
+    {
+      "id": "steam-finalization-gap",
+      "role": "problem-evidence",
+      "sourceType": "official-document",
+      "weight": "primary",
+      "title": "Steamworks UTM reporting finalization",
+      "resource": "https://partner.steamgames.com/doc/marketing/utm_analytics",
+      "claim": "访问数按小时更新，但转化在访问后四天才最终化。",
+      "locator": "Testing a link",
+      "observedAt": "2026-08-27T08:00:00Z",
+      "digest": "22beb14bfbaea99f11e22eabcb123355eab1bbac84c56ba00fb1bf31197fc973"
+    },
+    {
+      "id": "steam-tracking-gap",
+      "role": "counter-evidence",
+      "sourceType": "official-document",
+      "weight": "primary",
+      "title": "Steamworks UTM known tracking gaps",
+      "resource": "https://partner.steamgames.com/doc/marketing/utm_analytics",
+      "claim": "部分浏览器/cookie 配置不会被追踪，社交 App 内浏览器尤其可能无法把后续桌面搜索或购买关联到原始链接。",
+      "locator": "Privacy; Known Challenges — Tracked Visits",
+      "observedAt": "2026-08-27T08:00:00Z",
+      "digest": "22beb14bfbaea99f11e22eabcb123355eab1bbac84c56ba00fb1bf31197fc973"
+    },
+    {
+      "id": "apple-native-funnel",
+      "role": "platform-signal",
+      "sourceType": "official-document",
+      "weight": "primary",
+      "title": "App Store Connect campaign links",
+      "resource": "https://developer.apple.com/help/app-store-connect-analytics/acquisition/campaign-links",
+      "claim": "Apple campaign token 可关联 impressions、product page views、downloads、usage、sales 和 subscriptions。",
+      "locator": "Campaign links; Measure campaign performance",
+      "observedAt": "2026-08-27T08:00:00Z",
+      "digest": "48704e8a1b9cb726beed30c503990d214c2c5a9f88406a322c7bb6e1e0a65802"
+    },
+    {
+      "id": "apple-threshold-and-last-click",
+      "role": "counter-evidence",
+      "sourceType": "official-document",
+      "weight": "primary",
+      "title": "App Store campaign privacy threshold and credit model",
+      "resource": "https://developer.apple.com/help/app-store-connect-analytics/acquisition/campaign-links",
+      "claim": "指标需达到五的最低阈值才显示；用户点击多个 campaign link 时，后续 sales 只归给最近一次链接。",
+      "locator": "Campaign links; Measure campaign performance",
+      "observedAt": "2026-08-27T08:00:00Z",
+      "digest": "48704e8a1b9cb726beed30c503990d214c2c5a9f88406a322c7bb6e1e0a65802"
+    },
+    {
+      "id": "apple-report-latency",
+      "role": "problem-evidence",
+      "sourceType": "official-document",
+      "weight": "primary",
+      "title": "App Store Connect Analytics Reports API",
+      "resource": "https://developer.apple.com/help/app-store-connect-analytics/overview/analytics-reports-api",
+      "claim": "ONGOING report 的首份结果约 24–48 小时后出现，给定日期的数据在报告日两天后才视为完整。",
+      "locator": "Download Analytics Reports; Data completeness",
+      "observedAt": "2026-08-27T08:00:00Z",
+      "digest": "405267bb9ea6588074f22fb35d0a69c2af3d5893d36abd14a31517681a200601"
+    },
+    {
+      "id": "play-semantic-change",
+      "role": "counter-evidence",
+      "sourceType": "official-document",
+      "weight": "primary",
+      "title": "Google Play store listing performance",
+      "resource": "https://support.google.com/googleplay/android-developer/answer/9859173?hl=en",
+      "claim": "Google Play 自 2026 年 7 月把 store listing 主报告聚焦 unique clicks/CTR；acquisitions 仍在其它页面和 legacy export，同时保留 Not attributed 与未覆盖 surface。",
+      "locator": "How we measure your performance; Different ways to view your app's acquisition; Store listing clicks only",
+      "observedAt": "2026-08-27T08:00:00Z",
+      "digest": "63dfb64dfd4f03ddd7e859b6f1a6aaa8bac2b56008a224b55f0e48c6bfd3f784"
+    }
+  ],
+  "conflicts": [
+    {
+      "claim": "三个平台都显示 conversion 或 acquisition，因此是否可以映射成统一转化率。",
+      "evidenceIds": [
+        "steam-native-funnel",
+        "apple-native-funnel",
+        "play-semantic-change"
+      ],
+      "resolution": "只保留平台原生 metric definition 和 denominator；除非定义、surface、窗口、cohort 与最终化全部兼容，否则不生成跨平台 rate。"
+    },
+    {
+      "claim": "发布后指标上升是否证明发布或某条营销内容产生影响。",
+      "evidenceIds": [
+        "steam-native-funnel",
+        "apple-threshold-and-last-click",
+        "steam-tracking-gap"
+      ],
+      "resolution": "平台明确归因且窗口最终化时可报告 platform-attributed；只有时间对齐时报告 temporal-association；缺失或冲突时 unknown。"
+    }
+  ],
+  "gaps": [
+    "没有自有 Steam、App Store Connect 或 Google Play target，因此本轮未读取真实开发者报告或验证导出字段。",
+    "Steam UTM 页面描述 CSV 下载，但本轮没有可公开固定的官方 CSV schema 样本。",
+    "Apple 和 Google 的指标、阈值与报告面会继续变化，平台专属读取器必须独立维护 semantic version。",
+    "本轮没有证明任何营销活动、商店素材或版本发布对真实用户行为产生因果影响。"
+  ],
+  "counterEvidenceSearch": {
+    "performed": true,
+    "queries": [
+      "Steam UTM analytics untracked traffic conversion finalization official",
+      "App Store Connect campaign threshold last click attribution official",
+      "App Store Connect analytics report data completeness official",
+      "Google Play July 2026 store listing clicks acquisitions official",
+      "Google Play Not attributed surface exclusions official",
+      "cross platform app store conversion metric equivalence counter evidence"
+    ],
+    "outcome": "found",
+    "evidenceIds": [
+      "steam-tracking-gap",
+      "apple-threshold-and-last-click",
+      "apple-report-latency",
+      "play-semantic-change"
+    ]
+  },
+  "nextProbes": [
+    {
+      "hypothesis": "一个不含账号 route 的 effect-free evaluator 能稳定保留平台原生定义、窗口成熟度、抑制和归因边界，并只对真正可比的 observation 计算 delta。",
+      "method": "构造 Steam UTM、Apple campaign 和 Google Play clicks 三组去身份化 fixture；输入 publication revision/receipt ref、metric definition revision、baseline/current window、native count/null state、finalizedAt、attribution model 和 coverage flags；验证同定义计算、定义漂移拒绝、未最终化 pending、suppressed/unavailable 不变零、platform-attributed/temporal-association/unknown 三态。",
+      "success": "同一输入稳定重放；不产生跨平台总分；所有 delta 可回链到同平台同定义同 scope 观察；不完整和未归因保持未知；无平台/知识写入。",
+      "failure": "把 null 变零、混合 clicks/downloads/visits、忽略 finalization、仅凭时间相邻声称因果，或输入输出泄露账号、用户身份和内部 route。",
+      "effect": "none"
+    },
+    {
+      "hypothesis": "平台专属读取器需要真实 owned developer target，不能由公开文档或 synthetic export 冒充。",
+      "method": "取得目标游戏/App、只读开发者权限和批准后，分别做 Steam UTM CSV、App Store Analytics Reports API、Google Play export 的最小 read probe；每条路线独立 Schema、费用/权限和 freshness。",
+      "success": "固定 target/window 返回 source-native observation 与完整性证据，Connector 删除用户级信息并能组合 evaluator。",
+      "failure": "缺少权限、没有稳定导出、字段语义无法固定，或只能通过未授权 UI 自动化获取。",
+      "effect": "none"
+    }
+  ],
+  "coverage": {
+    "queryCount": 6,
+    "stoppedBecause": "decision-sufficient",
+    "complete": true,
+    "requiredRoles": [
+      "platform-signal",
+      "problem-evidence",
+      "counter-evidence"
+    ],
+    "coveredRoles": [
+      "counter-evidence",
+      "platform-signal",
+      "problem-evidence"
+    ],
+    "sourceCount": 7,
+    "cutoffAt": "2026-08-27T08:00:00Z"
+  },
+  "observedAt": "2026-08-27T11:07:28.917Z",
+  "resultDigest": "b5eeaf25115b5af2594ce510c7c93ee190cf8872c1cfa1fde09269199a696aac",
+  "conformance": {
+    "status": "passed",
+    "assertions": [
+      {
+        "id": "scenario-matched",
+        "passed": true
+      },
+      {
+        "id": "evidence-identities-unique",
+        "passed": true
+      },
+      {
+        "id": "findings-traceable",
+        "passed": true
+      },
+      {
+        "id": "required-roles-covered",
+        "passed": true
+      },
+      {
+        "id": "counter-evidence-searched",
+        "passed": true
+      },
+      {
+        "id": "inference-explicit",
+        "passed": true
+      },
+      {
+        "id": "next-probe-present",
+        "passed": true
+      }
+    ]
+  }
+}

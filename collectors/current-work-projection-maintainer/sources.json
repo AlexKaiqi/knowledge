@@ -1,0 +1,92 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "current-work-projection-maintenance",
+  "sources": [
+    {
+      "id": "personal-knowledge-maintainer-pinned",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-personal-knowledge-base/c8e181adcf3904f47fd33b85ffc1e97126cbbd66/dsh/maintainer.js",
+      "role": "accepted-maintenance-semantics",
+      "acceptedDocumentDigest": "dcd89672a70d559f8afb14e296879ca03a027027d98c91d79eed6ae42d454fe1",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "explicit-curate", "includes": "async curate(sessionId, options = {})" },
+          { "id": "serial-queue", "includes": "this.enqueue(() => this.maintain" },
+          { "id": "proposal-boundary", "includes": "knowledge_candidates are optional proposals, never confirmed facts." }
+        ]
+      }
+    },
+    {
+      "id": "personal-knowledge-maintainer-main",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-personal-knowledge-base/main/dsh/maintainer.js",
+      "role": "maintenance-change-surface",
+      "acceptedDocumentDigest": "dcd89672a70d559f8afb14e296879ca03a027027d98c91d79eed6ae42d454fe1",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "unconsumed-events", "includes": "kind: 'seq', from: previous + 1" },
+          { "id": "current-write", "includes": "this.knowledge.writeCurrent(currentMarkdown)" },
+          { "id": "cursor-write", "includes": "this.knowledge.writeCursor(sessionId, options.lastSeq)" },
+          { "id": "proposal-limit", "includes": ".slice(0, 4)" }
+        ]
+      }
+    },
+    {
+      "id": "personal-knowledge-service-pinned",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-personal-knowledge-base/c8e181adcf3904f47fd33b85ffc1e97126cbbd66/dsh/service.js",
+      "role": "accepted-local-write-semantics",
+      "acceptedDocumentDigest": "b849ae068d99070181b14f80eb2b0385a0f996253b8717d2331682d60a0e4bbf",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "atomic-current", "includes": "atomicWrite(this.currentPath, value)" },
+          { "id": "current-limit", "includes": "current work projection exceeds" },
+          { "id": "cursor-monotonic", "includes": "if (previous && Number(previous.seq) > seq) return previous" }
+        ]
+      }
+    },
+    {
+      "id": "personal-knowledge-service-main",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-personal-knowledge-base/main/dsh/service.js",
+      "role": "local-write-change-surface",
+      "acceptedDocumentDigest": "b849ae068d99070181b14f80eb2b0385a0f996253b8717d2331682d60a0e4bbf",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "current-heading", "includes": "current work projection must contain a # Current Work heading" },
+          { "id": "proposal-create", "includes": "propose(change)" }
+        ]
+      }
+    },
+    {
+      "id": "personal-knowledge-layout-main",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-personal-knowledge-base/main/spec/repository-layout.json",
+      "role": "repository-layout-change-surface",
+      "acceptedDocumentDigest": "5d2a81bda32184a2114c4ad525ce92c62302d5cf31074cc04ea0801bb2124bde",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "current-runtime", "includes": ".pkb/current.md" },
+          { "id": "cursor-runtime", "includes": ".pkb/cursor.json" },
+          { "id": "proposal-runtime", "includes": ".pkb/proposals" },
+          { "id": "background-no-confirm", "includes": "backgroundAgentMayConfirm" }
+        ]
+      }
+    },
+    {
+      "id": "personal-knowledge-e2e-main",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-personal-knowledge-base/main/eval/evidence/latest.md",
+      "role": "production-evidence-change-surface",
+      "acceptedDocumentDigest": "79c458f4aacd3b31e8c1f58ab15fbfe65046d34e56bda151692372bf1ed56410",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "overall-pass", "includes": "Result: **PASS**" },
+          { "id": "current-maintenance", "includes": "Session 事件驱动 current 投影" },
+          { "id": "unconfirmed-boundary", "includes": "未确认候选不得提交" },
+          { "id": "state-convergence", "includes": "当前状态收敛" }
+        ]
+      }
+    }
+  ]
+}

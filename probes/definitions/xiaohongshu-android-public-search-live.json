@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "xiaohongshu-android-public-search-live",
+  "version": "0.1.0",
+  "capabilityRef": "/capabilities/research/search-public-social-content.md",
+  "connectorId": "xiaohongshu-android-observation",
+  "environment": "production-private",
+  "identity": {
+    "required": true,
+    "poolRef": "identity-pool:xiaohongshu-owned-probes"
+  },
+  "effect": "none",
+  "steps": [
+    {
+      "id": "approve-dedicated-device-and-capability",
+      "operation": "confirmOwnedProbeIdentityExtension"
+    },
+    {
+      "id": "verify-device-isolation",
+      "operation": "verifyDedicatedAndroidProbeDevice"
+    },
+    {
+      "id": "verify-loopback-runtime",
+      "operation": "verifyAndroidObservationRuntimeSecurity"
+    },
+    {
+      "id": "manually-authenticate-visible-app",
+      "operation": "confirmVisibleOwnedSession"
+    },
+    {
+      "id": "search-one-visible-result-surface",
+      "operation": "executeCandidateXiaohongshuAndroidSearch",
+      "inputRef": "repo:/probes/fixtures/xiaohongshu-android-public-search-probe.json"
+    },
+    {
+      "id": "compare-visible-screen-and-tree",
+      "operation": "manuallyCompareStructuredCoverage"
+    },
+    {
+      "id": "discard-transient-tree",
+      "operation": "discardTransientMobileObservation"
+    }
+  ],
+  "assertions": [
+    "The probe runs on a dedicated emulator or owned probe device, not a daily-use phone, and the user explicitly approves extending the opaque identity to this candidate capability before execution.",
+    "Login is completed manually in the visible Xiaohongshu app; credentials, SMS codes, cookies and account identifiers never enter the Connector, Git or logs.",
+    "The Portal/Appium service is reachable only through an exact loopback origin and no reverse-cloud, APK-install, file, clipboard, notification or streaming feature is enabled by this Connector.",
+    "The foreground package equals com.xingin.xhs before every action and any package drift fails closed.",
+    "The query 拼豆 is entered once, no pagination or retry is performed, and there are no likes, follows, comments, messages, publication or account changes.",
+    "At least ten visually distinct result cards are represented by structured nodes and their primary visible text can be matched to the visible app screen without screenshot or vision inference.",
+    "The candidate output retains no coordinates, resource IDs, selectors, raw XML/JSON, runtime route, session ID, token or account identity.",
+    "A passed probe verifies only one current Android app version, route and initial visible search surface; comments, trend estimation and corpus completeness remain unverified."
+  ],
+  "cleanup": [
+    "Stop the Xiaohongshu app after manual comparison and discard the transient UI tree and any temporary diagnostic screenshot outside Git."
+  ],
+  "budget": {
+    "timeoutSeconds": 300,
+    "maxCost": 0,
+    "currency": "USD"
+  }
+}

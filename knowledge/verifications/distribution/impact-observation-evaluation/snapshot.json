@@ -1,0 +1,125 @@
+{
+  "fixture": "steam-apple-google-play-native-impact-observations",
+  "schemaVersion": "dsh.distribution-impact-observation-evaluation/v1",
+  "evaluationRef": "impact-eval:owned-game-launch-v1",
+  "targetRef": "game:owned-demo",
+  "publicationRevisionRef": "publication-revision:owned-demo-v1",
+  "publicationReceiptBound": true,
+  "evaluatedAt": "2026-08-27T00:00:00.000Z",
+  "comparisons": [
+    {
+      "comparisonRef": "apple:downloads-suppressed",
+      "platform": "apple-app-store",
+      "sourceRef": "source:apple-campaign",
+      "nativeMetricRef": "metric:downloads",
+      "status": "unknown",
+      "baselineState": "observed",
+      "currentState": "suppressed",
+      "delta": null,
+      "attributionConclusion": "unknown",
+      "reasons": [
+        "non-observed-state:observed:suppressed"
+      ],
+      "evidenceRefs": []
+    },
+    {
+      "comparisonRef": "apple:views-not-finalized",
+      "platform": "apple-app-store",
+      "sourceRef": "source:apple-analytics",
+      "nativeMetricRef": "metric:page-views",
+      "status": "pending",
+      "baselineState": "observed",
+      "currentState": "not-finalized",
+      "delta": null,
+      "attributionConclusion": "unknown",
+      "reasons": [
+        "window-not-finalized"
+      ],
+      "evidenceRefs": []
+    },
+    {
+      "comparisonRef": "play:clicks-unattributed",
+      "platform": "google-play",
+      "sourceRef": "source:play-store-performance",
+      "nativeMetricRef": "metric:unique-clicks",
+      "status": "comparable",
+      "baselineState": "observed",
+      "currentState": "observed",
+      "delta": {
+        "absolute": 15,
+        "direction": "increase"
+      },
+      "attributionConclusion": "unknown",
+      "reasons": [
+        "attribution-unavailable"
+      ],
+      "evidenceRefs": []
+    },
+    {
+      "comparisonRef": "play:definition-drift",
+      "platform": "google-play",
+      "sourceRef": "source:play-store-performance",
+      "nativeMetricRef": "metric:listing-action",
+      "status": "definition-drift",
+      "baselineState": "observed",
+      "currentState": "observed",
+      "delta": null,
+      "attributionConclusion": "unknown",
+      "reasons": [
+        "native-definition-changed"
+      ],
+      "evidenceRefs": []
+    },
+    {
+      "comparisonRef": "steam:total-visits-temporal",
+      "platform": "steam",
+      "sourceRef": "source:steam-utm",
+      "nativeMetricRef": "metric:total-visits",
+      "status": "comparable",
+      "baselineState": "observed",
+      "currentState": "observed",
+      "delta": {
+        "absolute": 50,
+        "direction": "increase"
+      },
+      "attributionConclusion": "temporal-association",
+      "reasons": [
+        "causality-not-established"
+      ],
+      "evidenceRefs": []
+    },
+    {
+      "comparisonRef": "steam:tracked-visits-attributed",
+      "platform": "steam",
+      "sourceRef": "source:steam-utm",
+      "nativeMetricRef": "metric:tracked-visits",
+      "status": "comparable",
+      "baselineState": "observed",
+      "currentState": "observed",
+      "delta": {
+        "absolute": 30,
+        "direction": "increase"
+      },
+      "attributionConclusion": "platform-attributed",
+      "reasons": [],
+      "evidenceRefs": [
+        "evidence:steam-utm-campaign"
+      ]
+    }
+  ],
+  "summary": {
+    "total": 6,
+    "comparable": 3,
+    "pending": 1,
+    "unknown": 2,
+    "platformAttributed": 1,
+    "temporalAssociations": 1
+  },
+  "noCrossPlatformScore": true,
+  "causalClaimGenerated": false,
+  "platformDataRead": false,
+  "knowledgeWritten": false,
+  "actionExecuted": false,
+  "executionAuthorized": false,
+  "resultDigest": "sha256:34cbb621c7916cd9f70310289bc39282830cfb393a05b4ec63870b2564aa247c"
+}

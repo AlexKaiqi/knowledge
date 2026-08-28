@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "apple-public-app-search",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/research/search-public-app-catalog.md"],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "connectors/apple-public-app-search/src/index.mjs"
+  },
+  "configSchema": "repo:/connectors/apple-public-app-search/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [
+    { "capabilityRef": "/capabilities/research/search-public-app-catalog.md", "operation": "searchPublicAppCatalog" }
+  ],
+  "conformance": {
+    "status": "verified",
+    "probeReportRef": "/verifications/apple/public-app-search/report.json"
+  }
+}

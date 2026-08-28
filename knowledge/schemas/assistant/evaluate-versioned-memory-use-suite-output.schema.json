@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/assistant/evaluate-versioned-memory-use-suite-output.schema.json",
+  "title": "VersionedMemoryUseEvaluationSuite",
+  "type": "object", "additionalProperties": false,
+  "required": ["schemaVersion", "suiteRef", "fixtureRevisionRef", "policyRevision", "status", "summary", "cases", "retention", "memoryChanged", "knowledgeWritten", "actionExecuted", "executionAuthorized", "resultDigest"],
+  "properties": {
+    "schemaVersion": { "const": "dsh.versioned-memory-use-evaluation-suite/v1" },
+    "suiteRef": { "$ref": "#/$defs/id" }, "fixtureRevisionRef": { "$ref": "#/$defs/id" },
+    "policyRevision": { "const": "versioned-memory-use-eval-2026-08-27" }, "status": { "enum": ["passed", "failed"] },
+    "summary": {
+      "type": "object", "additionalProperties": false, "required": ["caseCount", "passedCases", "failedCases", "stagePassCounts"],
+      "properties": {
+        "caseCount": { "type": "integer", "minimum": 1, "maximum": 50 }, "passedCases": { "type": "integer", "minimum": 0, "maximum": 50 }, "failedCases": { "type": "integer", "minimum": 0, "maximum": 50 },
+        "stagePassCounts": { "type": "array", "minItems": 5, "maxItems": 5, "items": { "type": "object", "additionalProperties": false, "required": ["stage", "passed"], "properties": {
+          "stage": { "$ref": "#/$defs/stageId" }, "passed": { "type": "integer", "minimum": 0, "maximum": 50 }
+        } } }
+      }
+    },
+    "cases": { "type": "array", "minItems": 1, "maxItems": 50, "items": { "$ref": "#/$defs/caseResult" } },
+    "retention": { "const": "opaque-digests-and-evaluation-only" },
+    "memoryChanged": { "const": false }, "knowledgeWritten": { "const": false }, "actionExecuted": { "const": false }, "executionAuthorized": { "const": false },
+    "resultDigest": { "$ref": "#/$defs/digest" }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,191}$" }, "digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "memoryIds": { "type": "array", "maxItems": 100, "uniqueItems": true, "items": { "$ref": "#/$defs/id" } },
+    "stageId": { "enum": ["ingestion-coverage", "retrieval-precision-and-coverage", "version-and-scope-resolution", "abstention-or-action-decision", "evidence-grounded-utilization"] },
+    "fieldResult": {
+      "type": "object", "additionalProperties": false, "required": ["fieldRef", "valueDigest", "evidenceRefs"],
+      "properties": { "fieldRef": { "$ref": "#/$defs/id" }, "valueDigest": { "$ref": "#/$defs/digest" }, "evidenceRefs": { "type": "array", "minItems": 1, "maxItems": 10, "uniqueItems": true, "items": { "$ref": "#/$defs/id" } } }
+    },
+    "trace": {
+      "type": "object", "additionalProperties": false, "required": ["decision", "ingestedMemoryRefs", "retrievedMemoryRefs", "selectedMemoryRefs", "fields"],
+      "properties": {
+        "decision": { "enum": ["answer", "ask", "abstain", "action-candidate"] },
+        "ingestedMemoryRefs": { "$ref": "#/$defs/memoryIds" }, "retrievedMemoryRefs": { "$ref": "#/$defs/memoryIds" }, "selectedMemoryRefs": { "$ref": "#/$defs/memoryIds" },
+        "fields": { "type": "array", "maxItems": 20, "items": { "$ref": "#/$defs/fieldResult" } }
+      }
+    },
+    "issue": {
+      "type": "object", "additionalProperties": false, "required": ["code", "refs"],
+      "properties": {
+        "code": { "enum": ["ingestion-required-record-missing", "ingestion-cross-scope-record-present", "retrieval-required-record-missing", "retrieval-unexpected-record-present", "selected-version-set-mismatch", "decision-mismatch", "field-value-or-evidence-mismatch"] },
+        "refs": { "$ref": "#/$defs/memoryIds" }
+      }
+    },
+    "stage": {
+      "type": "object", "additionalProperties": false, "required": ["id", "status", "issues"],
+      "properties": { "id": { "$ref": "#/$defs/stageId" }, "status": { "enum": ["passed", "failed"] }, "issues": { "type": "array", "maxItems": 10, "items": { "$ref": "#/$defs/issue" } } }
+    },
+    "caseResult": {
+      "type": "object", "additionalProperties": false,
+      "required": ["caseRef", "queryKind", "evaluatedAt", "targetScopeRef", "expected", "observed", "stages", "status", "resultDigest"],
+      "properties": {
+        "caseRef": { "$ref": "#/$defs/id" }, "queryKind": { "enum": ["recall", "action-parameters"] }, "evaluatedAt": { "type": "string", "format": "date-time" }, "targetScopeRef": { "$ref": "#/$defs/id" },
+        "expected": { "$ref": "#/$defs/trace" }, "observed": { "$ref": "#/$defs/trace" },
+        "stages": { "type": "array", "minItems": 5, "maxItems": 5, "items": { "$ref": "#/$defs/stage" } },
+        "status": { "enum": ["passed", "failed"] }, "resultDigest": { "$ref": "#/$defs/digest" }
+      }
+    }
+  }
+}

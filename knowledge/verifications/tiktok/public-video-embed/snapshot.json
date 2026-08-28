@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "dsh.tiktok-public-video-embed-snapshot/v1",
+  "fixture": { "expected": { "videoId": "6718335390845095173", "canonicalUrl": "https://www.tiktok.com/@scout2015/video/6718335390845095173", "title": "Scramble up ur name & I’ll try to guess it😍❤️ #foryoupage #petsoftiktok #aesthetic" } },
+  "source": { "id": "tiktok-public-video-embed", "apiOrigin": "https://www.tiktok.com", "endpointTemplate": "https://www.tiktok.com/oembed?url={videoUrl}", "accessClass": "official-public-no-account" },
+  "request": { "videoUrl": "https://www.tiktok.com/@scout2015/video/6718335390845095173" },
+  "videoEmbed": { "videoId": "6718335390845095173", "canonicalUrl": "https://www.tiktok.com/@scout2015/video/6718335390845095173", "title": "Scramble up ur name & I’ll try to guess it😍❤️ #foryoupage #petsoftiktok #aesthetic", "thumbnailWidth": 576, "thumbnailHeight": 1024 },
+  "observedAt": "2026-08-27T12:59:43.597Z",
+  "resultDigest": "be8b4ec954089cceb5c768a332c5e74589c34ed75df105970cd7abdc396434bb",
+  "conformance": { "status": "passed", "assertions": [{ "id": "exact-video-identity", "passed": true }, { "id": "bounded-public-fields", "passed": true }, { "id": "unsafe-upstream-fields-excluded", "passed": true }] }
+}

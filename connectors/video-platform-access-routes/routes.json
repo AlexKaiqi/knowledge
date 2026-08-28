@@ -1,0 +1,117 @@
+{
+  "schemaVersion": "dsh.access-route-catalog/v1",
+  "id": "video-platform-access-routes",
+  "subjectRef": "/tools/evidence-backed-research.md",
+  "capabilityRefs": [
+    "/capabilities/tiktok/read-public-video-embed.md",
+    "/capabilities/tiktok/search-public-videos.md",
+    "/capabilities/tiktok/list-owned-public-videos.md",
+    "/capabilities/tiktok/publish-owned-content.md",
+    "/capabilities/youtube/search-public-videos.md"
+  ],
+  "routes": [
+    {
+      "id": "tiktok-official-public-oembed",
+      "lifecycle": "verified",
+      "contractLevel": "full",
+      "accessMethod": "official-api",
+      "automaticSelectionEligible": true,
+      "priority": 5,
+      "connectorId": "tiktok-public-video-embed",
+      "implementationRef": "repo:/connectors/tiktok-public-video-embed/src/index.mjs",
+      "probeReportRef": "/verifications/tiktok/public-video-embed/report.json",
+      "capabilityCoverage": [{ "capabilityRef": "/capabilities/tiktok/read-public-video-embed.md", "phases": ["observe"], "gaps": [] }],
+      "failureDomains": ["tiktok-public-oembed", "public-video-availability"],
+      "sourceRefs": ["https://developers.tiktok.com/docs/en/embed-videos"],
+      "maintenance": { "owner": "tiktok-public-video-embed-maintainer", "reviewOn": ["source-change", "probe-failure", "contract-gap-change", "manual"] },
+      "notes": "Verified, no-account, effect-free official route for one already-known canonical public video URL. It is evidence resolution, not discovery or influence measurement."
+    },
+    {
+      "id": "youtube-official-data-api-search",
+      "lifecycle": "candidate",
+      "contractLevel": "full",
+      "accessMethod": "official-api",
+      "automaticSelectionEligible": false,
+      "priority": 10,
+      "connectorId": "youtube-public-video-search",
+      "implementationRef": "repo:/connectors/youtube-public-video-search/src/index.mjs",
+      "probeDefinitionRef": "repo:/probes/definitions/youtube-public-video-search-live.json",
+      "capabilityCoverage": [{ "capabilityRef": "/capabilities/youtube/search-public-videos.md", "phases": ["authorize", "observe", "cleanup"], "gaps": ["An owned Google Cloud project, enabled YouTube Data API, restricted API key, current quota observation and live metadata-only probe are missing."] }],
+      "failureDomains": ["google-cloud-project", "youtube-data-api", "youtube-search-bucket", "api-key", "youtube-policy"],
+      "sourceRefs": ["https://developers.google.com/youtube/v3/docs/search/list", "https://developers.google.com/youtube/v3/getting-started", "https://developers.google.com/youtube/terms/developer-policies"],
+      "maintenance": { "owner": "youtube-public-video-search-maintainer", "reviewOn": ["source-change", "probe-failure", "contract-gap-change", "manual"] },
+      "notes": "Implemented direct official candidate: one video-only keyword page, maximum ten items, no pagination or approximate total, no channel identity, and a 30-day refresh/delete boundary. This is simpler and lower privilege than OpenConnector's OAuth-only YouTube provider."
+    },
+    {
+      "id": "youtube-openconnector-oauth",
+      "lifecycle": "researching",
+      "contractLevel": "component",
+      "accessMethod": "official-sdk",
+      "automaticSelectionEligible": false,
+      "priority": 50,
+      "capabilityCoverage": [{ "capabilityRef": "/capabilities/youtube/search-public-videos.md", "phases": ["authorize", "observe"], "gaps": ["OpenConnector v1.4.0 requires OAuth2 even for search and exposes a much larger action surface than this read-only use case; no least-privilege conformance or live probe exists."] }],
+      "failureDomains": ["openconnector-runtime", "google-oauth", "youtube-data-api", "broad-provider-surface"],
+      "sourceRefs": ["https://github.com/oomol-lab/open-connector/blob/v1.4.0/src/providers/youtube/actions.ts", "https://github.com/oomol-lab/open-connector/blob/v1.4.0/src/providers/youtube/definition.ts"],
+      "upstream": { "repository": "https://github.com/oomol-lab/open-connector.git", "branch": "main", "observedRevision": "0fa2c728dfbf957735da2843ec2b8a4f3425b105" },
+      "maintenance": { "owner": "openconnector-upstream-maintainer", "reviewOn": ["upstream-change", "source-change", "contract-gap-change", "manual"] },
+      "notes": "Kept only as an alternate failure domain for future owned-account operations. It is intentionally not selected for public search while a narrower API-key route exists."
+    },
+    {
+      "id": "tiktok-official-research-api-commercial",
+      "lifecycle": "suspended",
+      "contractLevel": "full",
+      "accessMethod": "official-api",
+      "automaticSelectionEligible": false,
+      "priority": 90,
+      "capabilityCoverage": [{ "capabilityRef": "/capabilities/tiktok/search-public-videos.md", "phases": ["authorize"], "gaps": ["TikTok explicitly excludes creators, advertisers and commercial users; the current product research use is not an eligible non-commercial academic/public-interest research project."] }],
+      "failureDomains": ["tiktok-research-eligibility", "research-application", "research-api"],
+      "sourceRefs": ["https://developers.tiktok.com/products/research-api/", "https://developers.tiktok.com/doc/research-api-faq/"],
+      "maintenance": { "owner": "tiktok-route-maintainer", "reviewOn": ["source-change", "contract-gap-change", "manual"] },
+      "notes": "Negative route record. Do not present Research API availability as commercial product-demand access and do not submit an ineligible application."
+    },
+    {
+      "id": "tiktok-official-display-api-owned",
+      "lifecycle": "researching",
+      "contractLevel": "full",
+      "accessMethod": "official-api",
+      "automaticSelectionEligible": false,
+      "priority": 20,
+      "capabilityCoverage": [{ "capabilityRef": "/capabilities/tiktok/list-owned-public-videos.md", "phases": ["authorize", "observe"], "gaps": ["A registered app, product approval, user authorization, least-privilege scopes, owned creator identity and a live delta/revocation probe are missing."] }],
+      "failureDomains": ["tiktok-developer-app", "display-api-approval", "user-oauth", "owned-creator-data"],
+      "sourceRefs": ["https://developers.tiktok.com/docs/en/display-api-overview", "https://developers.tiktok.com/docs/en/display-api-get-started"],
+      "maintenance": { "owner": "tiktok-route-maintainer", "reviewOn": ["source-change", "probe-failure", "contract-gap-change", "manual"] },
+      "notes": "Useful for maintaining and measuring an authorized creator's own public videos, not for arbitrary competitor keyword discovery."
+    },
+    {
+      "id": "tiktok-official-content-posting",
+      "lifecycle": "researching",
+      "contractLevel": "full",
+      "accessMethod": "official-api",
+      "automaticSelectionEligible": false,
+      "priority": 20,
+      "capabilityCoverage": [{ "capabilityRef": "/capabilities/tiktok/publish-owned-content.md", "phases": ["authorize", "prepare", "submit", "reconcile", "observe"], "gaps": ["Registered app, video.publish approval, creator user authorization, unaudited-client private-only behavior, publish receipt reconciliation and an approved sandbox/live write probe are missing."] }],
+      "failureDomains": ["tiktok-developer-app", "content-posting-approval", "video-publish-scope", "user-oauth", "publication-receipt"],
+      "sourceRefs": ["https://developers.tiktok.com/docs/en/content-posting-api-get-started", "https://developers.tiktok.com/docs/en/content-posting-api-reference-direct-post"],
+      "maintenance": { "owner": "tiktok-route-maintainer", "reviewOn": ["source-change", "probe-failure", "contract-gap-change", "manual"] },
+      "notes": "Write route stays separate from research. Unaudited clients are private-only; no upload, publish, review submission, app registration or OAuth is performed automatically."
+    },
+    {
+      "id": "tiktok-oomol-managed-public-research",
+      "lifecycle": "researching",
+      "contractLevel": "component",
+      "accessMethod": "official-sdk",
+      "automaticSelectionEligible": false,
+      "priority": 40,
+      "capabilityCoverage": [{ "capabilityRef": "/capabilities/tiktok/search-public-videos.md", "phases": ["authorize", "observe", "cleanup"], "gaps": ["The managed Skill's exact TikTok machine contract, target-platform permission, deidentifying schema, cost receipt, account binding and bounded live comparison are unverified."] }],
+      "failureDomains": ["oomol-account", "oomol-managed-skill", "tikhub-managed-proxy", "tiktok-content-rights", "provider-parser", "oomol-credit-ledger"],
+      "sourceRefs": ["https://oomol.com/en/skills/@alwaysmavs/public-social-research/", "https://oomol.com/en/pricing/", "https://oomol.com/en/terms/"],
+      "maintenance": { "owner": "openconnector-upstream-maintainer", "reviewOn": ["source-change", "probe-failure", "contract-gap-change", "manual"] },
+      "notes": "Commercial fallback proposal only. It may cover public TikTok research that official commercial APIs do not, but technical access and a free-plan allowance are not platform authorization or a verified free capability."
+    }
+  ],
+  "selectionPolicy": {
+    "automaticRouteRequirements": { "lifecycles": ["verified"], "contractLevels": ["full"], "requireHealthy": true },
+    "platformWrite": { "stickyRoute": true, "preEffectFallback": "verified-compatible-only", "ambiguousOutcomeFallback": "forbidden", "postEffectRouteChange": "reconcile-first" },
+    "readOnly": { "fallback": "verified-compatible-only" }
+  }
+}

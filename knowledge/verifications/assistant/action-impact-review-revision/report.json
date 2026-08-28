@@ -1,0 +1,86 @@
+{
+  "schemaVersion": "dsh.probe-report/v1",
+  "id": "action-impact-review-revision-local-20260827",
+  "capabilityRef": "/capabilities/assistant/prepare-action-impact-review-revision.md",
+  "connectorId": "action-impact-review-revision",
+  "probeDefinitionRef": "repo:/probes/definitions/action-impact-review-revision-local.json",
+  "environment": "local",
+  "level": "local",
+  "outcome": "passed",
+  "startedAt": "2026-08-27T03:44:27.633Z",
+  "finishedAt": "2026-08-27T03:44:29.508Z",
+  "expiresAt": "2026-09-26T03:44:29.508Z",
+  "checks": [
+    {
+      "id": "pinned-production-boundaries",
+      "status": "passed"
+    },
+    {
+      "id": "grounded-candidate-chain",
+      "status": "passed"
+    },
+    {
+      "id": "exact-revision-binding",
+      "status": "passed"
+    },
+    {
+      "id": "impact-escalation",
+      "status": "passed"
+    },
+    {
+      "id": "incomplete-candidate-blocker",
+      "status": "passed"
+    },
+    {
+      "id": "output-schema",
+      "status": "passed"
+    },
+    {
+      "id": "non-authorization-boundary",
+      "status": "passed"
+    }
+  ],
+  "evidence": [
+    {
+      "kind": "artifact",
+      "ref": "https://raw.githubusercontent.com/AlexKaiqi/dsh-social-workbench/0bb63b6f6963992e121d719f9a671637f6ab6c7f/runtime/src/domain.mjs",
+      "sha256": "20f1d35eef1c0be4121762ef2bf14443bf766db1dd9c0f962c38543d698eb47a"
+    },
+    {
+      "kind": "artifact",
+      "ref": "https://raw.githubusercontent.com/AlexKaiqi/dsh-pet-assistant/77ea504f5267ac0f929d4fc81301f999899f270b/dsh/core.js",
+      "sha256": "ba5a0797aabcb0f7cdd1cef1585dc5974bd335e52ee98040fdb9d647d2c5fe46"
+    },
+    {
+      "kind": "artifact",
+      "ref": "https://raw.githubusercontent.com/AlexKaiqi/dsh-personal-knowledge-base/c8e181adcf3904f47fd33b85ffc1e97126cbbd66/spec/repository-layout.json",
+      "sha256": "5d2a81bda32184a2114c4ad525ce92c62302d5cf31074cc04ea0801bb2124bde"
+    },
+    {
+      "kind": "artifact",
+      "ref": "https://www.rfc-editor.org/rfc/rfc8707.html",
+      "sha256": "d085d9b8e5665995a3c9702ffb1458ac93c51855624f1109e2c81e467f3e82dd"
+    },
+    {
+      "kind": "artifact",
+      "ref": "https://www.rfc-editor.org/rfc/rfc9396.html",
+      "sha256": "a71380d14733dd4d5056ecec42598b5b2661b197a4079468ce09c71d1adf2e33"
+    },
+    {
+      "kind": "artifact",
+      "ref": "repo:/knowledge/verifications/assistant/memory-action-grounding/snapshot.json",
+      "sha256": "29d85ae86bf2f737782d41a0bf48960b9951799ce91110c358c17d59b6c6c898"
+    },
+    {
+      "kind": "snapshot",
+      "ref": "repo:/knowledge/verifications/assistant/action-impact-review-revision/snapshot.json",
+      "sha256": "66fda3a62012aed345e587c329b1e8e26a710fee60984af4f1648a6b306f7345"
+    }
+  ],
+  "sideEffects": [
+    {
+      "effect": "none",
+      "status": "none"
+    }
+  ]
+}

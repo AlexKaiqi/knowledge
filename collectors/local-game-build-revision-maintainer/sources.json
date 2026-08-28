@@ -1,0 +1,96 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "local-game-build-revision",
+  "sources": [
+    {
+      "id": "social-workbench-domain-pinned",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-social-workbench/0bb63b6f6963992e121d719f9a671637f6ab6c7f/runtime/src/domain.mjs",
+      "role": "production-revision-primitive",
+      "acceptedDocumentDigest": "20f1d35eef1c0be4121762ef2bf14443bf766db1dd9c0f962c38543d698eb47a",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "stable-stringify", "includes": "export function stableStringify(value)" },
+          { "id": "revision-hash", "includes": "const revisionHash = sha256(stableStringify(payload))" }
+        ]
+      }
+    },
+    {
+      "id": "social-workbench-domain-main",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-social-workbench/main/runtime/src/domain.mjs",
+      "role": "revision-change-surface",
+      "acceptedDocumentDigest": "20f1d35eef1c0be4121762ef2bf14443bf766db1dd9c0f962c38543d698eb47a",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "revision-payload", "includes": "schemaVersion: 'social-workbench.revision/v1'" },
+          { "id": "prepared-time-outside-hash", "includes": "return { ...payload, revisionHash, preparedAt: now.toISOString() }" }
+        ]
+      }
+    },
+    {
+      "id": "social-workbench-media-pinned",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-social-workbench/0bb63b6f6963992e121d719f9a671637f6ab6c7f/runtime/src/media.mjs",
+      "role": "production-media-primitive",
+      "acceptedDocumentDigest": "a703573af97d0741b32b2d9186d24c47c7894a5efce5e044c0fb0dcf220780a2",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "stream-hash", "includes": "const stream = createReadStream(target)" },
+          { "id": "canonical-path", "includes": "const canonicalPath = await realpath(unresolved)" }
+        ]
+      }
+    },
+    {
+      "id": "social-workbench-media-main",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-social-workbench/main/runtime/src/media.mjs",
+      "role": "media-change-surface",
+      "acceptedDocumentDigest": "a703573af97d0741b32b2d9186d24c47c7894a5efce5e044c0fb0dcf220780a2",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "sha256", "includes": "contentHash: await hashFile(canonicalPath)" },
+          { "id": "regular-file", "includes": "if (!metadata.isFile()) throw new Error" }
+        ]
+      }
+    },
+    {
+      "id": "steam-steampipe-uploading",
+      "url": "https://partner.steamgames.com/doc/sdk/uploading?l=english&language=english",
+      "role": "official-platform-semantics",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "preview-manifest", "includes": "only outputs logs and a file manifest" },
+          { "id": "preview-no-upload", "includes": "nothing is uploaded" }
+        ]
+      }
+    },
+    {
+      "id": "itch-butler-pinned",
+      "url": "https://raw.githubusercontent.com/itchio/butler/460ca909eae917694a1f76544db770064a7acda6/README.md",
+      "role": "official-tool-semantics",
+      "acceptedDocumentDigest": "43591284b39ff66a7549c562001c4256b639815026e397e175fed83c7d050a0c",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "creator-push", "includes": "Content creators on [itch.io](https://itch.io) to push builds quickly & reliably" },
+          { "id": "official-docs", "includes": "**butler docs:** <https://itch.io/docs/butler>" }
+        ]
+      }
+    },
+    {
+      "id": "itch-butler-master",
+      "url": "https://raw.githubusercontent.com/itchio/butler/master/README.md",
+      "role": "tool-change-surface",
+      "acceptedDocumentDigest": "43591284b39ff66a7549c562001c4256b639815026e397e175fed83c7d050a0c",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "creator-push", "includes": "push builds quickly & reliably" },
+          { "id": "bleeding-docs", "includes": "https://itchio.github.io/butler/" }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "feedback-theme-synthesis-local",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/feedback/synthesize-feedback-theme-evidence.md",
+  "connectorId": "feedback-theme-synthesis-agent",
+  "environment": "local",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "verify-production-learning-boundaries", "operation": "verifyPinnedProductionSources" },
+    { "id": "run-scripted-agent-fixture", "operation": "synthesizeFeedbackThemeEvidence", "inputRef": "repo:/probes/fixtures/feedback/theme-synthesis.json#input" },
+    { "id": "validate-evidence-conformance", "operation": "validateThemeEvidence" },
+    { "id": "validate-public-schema", "operation": "validateOutputSchema" }
+  ],
+  "assertions": [
+    "Every theme cites only provided evidence refs and retains counterevidence, conflicts and gaps.",
+    "Frequency is independently derived and explicitly scoped to the bounded sample.",
+    "Unassigned evidence is preserved instead of forced into a theme.",
+    "The result requires human review and never authorizes replies, issues, roadmap changes or publication.",
+    "This local contract probe does not claim real-Agent L3 synthesis quality."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 30, "maxCost": 0, "currency": "CNY" }
+}

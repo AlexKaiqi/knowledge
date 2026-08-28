@@ -1,6 +1,6 @@
 # OKF 知识能力门面、隐藏执行与持续维护内核
 
-状态：架构决策；独立知识仓库、本地准入门和第一个 candidate Connector 已实现，不代表任何外部平台能力已准入
+状态：架构决策；独立知识仓库、准入门、已验证 Connector/Collector 与首个本地 Agentic Tool 已实现；具体可用范围以 canonical Capability 和 VerificationReport 为准
 
 核验日期：2026-08-26
 
@@ -248,6 +248,28 @@ Capability 文档不公开或不要求调用者选择：
 - Connector workflow 的 checkpoint；
 - 内部 mapping implementation。
 
+### 3.4 调研等认知能力也是 Capability
+
+Capability 不等于平台 API endpoint。只要一个能力有稳定的外部目标、输入、输出、失败边界、副作用声明和可重复验证，它就可以是查询、动作，也可以是由 Agent 执行的计算或编排能力。
+
+例如“执行证据化调研”的公共契约是：
+
+```text
+场景 + 目标 + 待做决策 + 研究问题 + 预算
+  → 有来源、反证、冲突、覆盖边界和 next probe 的 Research Dossier
+```
+
+GitHub、arXiv、应用评论、搜索服务、浏览器和模型 route 都只是隐藏执行路线。调用者不选择这些路线，也不需要理解具体 prompt、查询轮换或 provider。研究方法与来源可以被替换，只要公开语义和验证契约仍成立。
+
+“需求、市场/竞品、技术方案、学术前沿、平台接入、传播/影响力”首先是同一调研能力的场景策略，不因来源不同而复制成六个 Capability。只有下列边界之一真正分叉时才拆分：
+
+- 外部输入或结果 Concept 不再兼容；
+- 证据门和停止条件不能在一个场景契约中准确表达；
+- 权限、保留、副作用或人工确认边界不同；
+- 需要独立路由、版本与 eval 才能诚实声明可用性。
+
+这允许仓库收集平台能力，也收集跨平台的认知与工作流能力，同时避免把每种报告模板或每个数据源都冒充成新能力。
+
 ## 4. Schema 不统一产品，只统一边界
 
 每个产品可以拥有完全不同的输入、原生响应和领域对象 Schema。这不是缺陷，而是事实。
@@ -411,6 +433,24 @@ content.search.videos/v1
 
 知识只公开已证实存在的访问方式类别以及边界；具体路由、优先级和 fallback 是运行时配置。
 
+### 6.1 能力所有权与外部执行基座
+
+第三方 Connector framework 只解决“如何执行”，不决定“什么值得成为知识”。以 OpenConnector 为例，本仓库采用下面的所有权规则：
+
+```text
+direct-owned route
+  = 无边际供应商费用 + 合法用途清楚 + 能独立维护 + 已 live/sandbox 验证
+
+external execution route
+  = 价值明确，但授权/OAuth/付费/协议或故障域需要供应商隔离
+```
+
+Direct-owned 能力由本仓库维护最小 Connector，不为了统一技术栈再套一层第三方 runtime。External route 则放在 Capability Gateway 后面，必须先经过本仓库的 capability-specific adapter，再调用第三方 Provider/Action/Connection；第三方目录、action ID、connection、价格与 trace 都不进入 OKF。
+
+可以借鉴 Provider / Action / Executor / Connection 的职责分离、action 与 connection 的交集授权、托管/自托管共享 action contract，以及 catalog/local/live 三种验证状态分层。不能借用“目录规模即能力规模”、通用 raw proxy、provider 级全局准入或 raw response 直通。每个 action 都是一个独立 conformance 单元；只有实际 result Schema、权限、费用、数据最小化和 live probe 全部成立，Gateway 才能把它变成可选 route。
+
+开源许可证只回答运行时代码能否使用，不授予上游 API、平台内容、用户数据、商标或自动化权限。免费套餐也只是一种价格状态，不自动改变 route 的供应商属性、授权要求或维护责任。具体 OpenConnector 审计见 [OpenConnector：借执行架构，不借目录真相](research/openconnector-upstream.md)。
+
 ## 7. Collector：隐藏的持续维护者
 
 Collector 不在 capability invocation 的数据路径中。它是持续维护 OKF knowledge 与 Connector 实现的内部控制循环，通常由 Agent 参与，也可以组合确定性 watcher、validator、probe 和测试器。
@@ -497,24 +537,25 @@ CapabilityStatusRecommendation
 
 ### 7.3 目标驱动的知识研究
 
-“发现哪些问题值得解决”不能由平台目录驱动。Agentic Collector 可以接受内部 `GoalResearchProfile`，维护目标相关的 Workflow、Difficulty 和 Opportunity 候选：
+“发现哪些问题值得解决”不能由平台目录驱动。外部通过 Research Capability 提交目标、决策和研究问题；隐藏的 agentic Connector 接受编译后的 `GoalResearchProfile`，执行有界读取与综合，产出 Research Dossier：
 
 ```text
-GoalResearchProfile
+Research Capability invocation
+  → GoalResearchProfile
   goal / target users / contexts / success / boundaries
   → workflow decomposition
   → source-specific research questions
   → bounded Connector reads
   → EvidenceItems
   → cross-source synthesis
-  → KnowledgeProposal
+  → Research Dossier
 ```
 
 不同来源承担不同证据角色：GitHub issue/repository 证明实现摩擦、workaround 和工程可行性；arXiv/OpenReview 证明被明确描述和评测的能力缺口；应用评论与社区证明用户语境、频率和后果；官方文档证明访问与执行边界。单一来源不能独立证明一个产品机会。
 
-Collector 中的 Agent 负责把 source-native evidence 聚合为候选 Difficulty/Opportunity，但必须保留来源、原始主张、推断和反证。它不能从 star、citation、热榜或模型摘要直接生成 canonical 知识。目标研究结果仍是 proposal，只有对应的工作流、能力或产品实验通过验证后才进入 OKF。
+Research Connector 中的 Agent 负责把 source-native evidence 聚合为 dossier，但必须保留来源、原始主张、推断和反证。它不能从 star、citation、热榜或模型摘要直接生成 canonical 知识。若要把结论提升为 Difficulty、Opportunity 或新 Capability，必须另行生成 KnowledgeProposal，并通过对应工作流或产品实验验证。
 
-`GoalResearchProfile` 是内部研究控制面，不泄露 query 轮换、checkpoint、模型 prompt 或 source route。外部若需要理解已证实的问题，只看到 OKF 中经准入的 Goal、Workflow、Difficulty、Evidence 和 Capability 关系。
+Research Collector 不执行用户的调研任务。它维护场景方法、来源 provenance、Schema、Connector conformance、eval 覆盖和 verification freshness，只产生方法更新、Connector 变更或知识准入 proposal。`GoalResearchProfile` 是内部执行控制面，不泄露 query 轮换、checkpoint、模型 prompt 或 source route。
 
 ### 7.4 原“采集编排”放回 Connector
 

@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "action-impact-review-revision-local",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/assistant/prepare-action-impact-review-revision.md",
+  "connectorId": "action-impact-review-revision",
+  "environment": "local",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "verify-pinned-production-boundaries", "operation": "verifyPinnedActionReviewSources" },
+    { "id": "chain-grounded-action-candidate", "operation": "prepareActionImpactReviewRevision" },
+    { "id": "verify-revision-binding", "operation": "exerciseActionTargetArgumentAndExpiryDrift" },
+    { "id": "exercise-impact-and-incomplete-blockers", "operation": "exerciseReviewBlockers" },
+    { "id": "validate-public-schema", "operation": "validateOutputSchema" }
+  ],
+  "assertions": [
+    "A verified grounded Action Candidate digest, exact scalar arguments, scope and target references are frozen into one review revision.",
+    "Action, argument, target, impact or validity changes produce a different revision hash.",
+    "Incomplete candidates and missing communication, consequence or financial declarations are blocked.",
+    "External, financial, credential, public, unknown and irreversible impact is conservatively escalated.",
+    "The result never accepts a reviewer decision, grants authorization, issues a confirmation token or executes an action."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 30, "maxCost": 0, "currency": "CNY" }
+}

@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "dataforseo-google-organic-serp-sandbox",
+  "version": "0.1.0",
+  "capabilityRef": "/capabilities/research/read-web-result-page.md",
+  "connectorId": "dataforseo-google-organic-serp",
+  "environment": "sandbox",
+  "identity": { "required": true, "poolRef": "identity-pool:dataforseo-provider-probes" },
+  "effect": "none",
+  "steps": [
+    { "id": "read-fixed-query-pack", "operation": "readGoogleOrganicResultPage", "inputRef": "repo:/probes/fixtures/dataforseo-google-organic-serp-probe-pack.json" },
+    { "id": "validate-dummy-shape", "operation": "normalizeSerpResponse" },
+    { "id": "write-staging-report", "operation": "writeCandidateProbeReport" }
+  ],
+  "assertions": [
+    "An explicitly approved provider sandbox identity authenticates with the provider-issued API login and API password resolved outside Git.",
+    "The fixed sandbox host accepts the same bounded live-advanced request shape and returns structurally valid dummy results without a charge.",
+    "No invocation can choose an endpoint, raw search parameters, more than ten results, paid AI/pixel features or advanced operators.",
+    "The normalized result omits the provider route, credentials, raw response, result-count estimate and internal task identifier.",
+    "A sandbox pass proves only schema compatibility and cannot promote the Connector or create canonical knowledge."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 60, "maxCost": 0, "currency": "USD" }
+}

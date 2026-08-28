@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/schemas/assistant/prepare-durable-memory-change-review-revision-input.schema.json",
+  "title": "Prepare durable memory change review revision input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["ownerScopeRef", "repositoryRevisionRef", "target", "change"],
+  "properties": {
+    "ownerScopeRef": { "$ref": "#/$defs/opaqueRef" },
+    "repositoryRevisionRef": { "$ref": "#/$defs/opaqueRef" },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "exists", "contentDigest"],
+      "properties": {
+        "path": { "oneOf": [{ "const": "USER.md" }, { "type": "string", "pattern": "^knowledge/[A-Za-z0-9][A-Za-z0-9._-]{0,127}\\.md$" }] },
+        "exists": { "type": "boolean" },
+        "contentDigest": { "oneOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }] }
+      },
+      "allOf": [
+        { "if": { "properties": { "exists": { "const": true } }, "required": ["exists"] }, "then": { "properties": { "contentDigest": { "$ref": "#/$defs/digest" } } } },
+        { "if": { "properties": { "exists": { "const": false } }, "required": ["exists"] }, "then": { "properties": { "contentDigest": { "type": "null" } } } }
+      ]
+    },
+    "change": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operation", "baseContentDigest", "content", "reason", "sourceRefs", "evidenceRefs"],
+      "properties": {
+        "operation": { "enum": ["upsert", "delete"] },
+        "baseContentDigest": { "oneOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }] },
+        "content": { "oneOf": [{ "type": "string", "minLength": 1, "maxLength": 50000 }, { "type": "null" }] },
+        "reason": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "sourceRefs": { "$ref": "#/$defs/refs" },
+        "evidenceRefs": { "$ref": "#/$defs/refs" }
+      },
+      "allOf": [
+        { "if": { "properties": { "operation": { "const": "upsert" } }, "required": ["operation"] }, "then": { "properties": { "content": { "type": "string", "minLength": 1, "maxLength": 50000 } } } },
+        { "if": { "properties": { "operation": { "const": "delete" } }, "required": ["operation"] }, "then": { "properties": { "content": { "type": "null" } } } }
+      ]
+    }
+  },
+  "$defs": {
+    "opaqueRef": { "type": "string", "minLength": 1, "maxLength": 500 },
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "refs": { "type": "array", "minItems": 1, "maxItems": 20, "uniqueItems": true, "items": { "$ref": "#/$defs/opaqueRef" } }
+  }
+}

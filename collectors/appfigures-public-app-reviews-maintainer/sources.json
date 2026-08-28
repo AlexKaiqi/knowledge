@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "appfigures-public-app-reviews",
+  "sources": [
+    {
+      "id": "api-authentication",
+      "url": "https://docs.appfigures.com/api/reference/v2/authentication",
+      "role": "official-auth-contract",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "personal-access-token", "includes": "Personal Access Tokens" },
+          { "id": "internal-use-recommendation", "includes": "internal ETLs, dashboards, and scripts" },
+          { "id": "public-client-oauth", "includes": "MUST use OAuth 2.0" }
+        ]
+      }
+    },
+    {
+      "id": "store-product-resolution",
+      "url": "https://docs.appfigures.com/api/reference/v2/products-2",
+      "role": "official-product-contract",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "store-id-route", "includes": "GET /products/{store}/{id_in_store}" },
+          { "id": "apple-id-example", "includes": "GET /products/apple/335060889" },
+          { "id": "google-package-example", "includes": "GET /products/google_play/com.rdio.android.ui" },
+          { "id": "async-resolution", "includes": "receive a 202 response" }
+        ]
+      }
+    },
+    {
+      "id": "public-reviews-contract",
+      "url": "https://docs.appfigures.com/api/reference/v2/reviews",
+      "role": "official-review-contract",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "public-read-scope", "includes": "public:read" },
+          { "id": "reviews-route", "includes": "GET /reviews ?{filters}" },
+          { "id": "newest-sort", "includes": "-date will return newest reviews first" },
+          { "id": "google-country-limit", "includes": "Google Play does not support the concept of countries" },
+          { "id": "competitor-response-limit", "includes": "will always results in a false value" }
+        ]
+      }
+    },
+    {
+      "id": "public-data-access-and-license",
+      "url": "https://help.appfigures.com/en/article/appfigures-api-cli-and-mcp-access-limits-and-public-data-1seiibo/",
+      "role": "official-access-license-pricing",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "daily-request-limit", "includes": "1,000 API requests per day" },
+          { "id": "product-credit-cost", "includes": "Product metadata" },
+          { "id": "review-credit-cost", "includes": "Reviews" },
+          { "id": "commercial-contact", "includes": "contact us first" },
+          { "id": "commercial-license", "includes": "separate commercial license" }
+        ]
+      }
+    }
+  ]
+}

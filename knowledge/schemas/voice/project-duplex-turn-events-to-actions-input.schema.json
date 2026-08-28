@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/schemas/voice/project-duplex-turn-events-to-actions-input.schema.json",
+  "title": "Project duplex turn events to actions input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["trace"],
+  "properties": {
+    "trace": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 200,
+      "items": {
+        "oneOf": [
+          { "$ref": "#/$defs/assistantOutput" },
+          { "$ref": "#/$defs/speechCandidate" },
+          { "$ref": "#/$defs/speechConfirmation" },
+          { "$ref": "#/$defs/userTurn" }
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "atMs": { "type": "integer", "minimum": 0 },
+    "candidateId": { "type": "string", "pattern": "^[a-zA-Z0-9._:-]{1,128}$" },
+    "assistantOutput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "atMs", "state"],
+      "properties": {
+        "kind": { "const": "assistant-output" },
+        "atMs": { "$ref": "#/$defs/atMs" },
+        "state": { "enum": ["started", "ended"] }
+      }
+    },
+    "speechCandidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "atMs", "candidateId", "state"],
+      "properties": {
+        "kind": { "const": "speech-candidate" },
+        "atMs": { "$ref": "#/$defs/atMs" },
+        "candidateId": { "$ref": "#/$defs/candidateId" },
+        "state": { "enum": ["started", "released"] }
+      }
+    },
+    "speechConfirmation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "atMs", "candidateId", "intent"],
+      "properties": {
+        "kind": { "const": "speech-confirmation" },
+        "atMs": { "$ref": "#/$defs/atMs" },
+        "candidateId": { "$ref": "#/$defs/candidateId" },
+        "intent": { "enum": ["take-turn", "backchannel"] }
+      }
+    },
+    "userTurn": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "atMs", "state"],
+      "properties": {
+        "kind": { "const": "user-turn" },
+        "atMs": { "$ref": "#/$defs/atMs" },
+        "state": { "const": "ended" }
+      }
+    }
+  }
+}

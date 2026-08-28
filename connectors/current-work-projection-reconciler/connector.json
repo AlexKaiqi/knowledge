@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "current-work-projection-reconciler",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/assistant/reconcile-current-work-projection.md"],
+  "execution": {
+    "kind": "hybrid",
+    "runtime": "DSH agent runtime + node >=22.19",
+    "entrypoint": "connectors/current-work-projection-reconciler/src/index.mjs",
+    "modelRouteRef": "runtime:agent-default-text",
+    "promptRef": "https://github.com/AlexKaiqi/dsh-personal-knowledge-base/blob/c8e181adcf3904f47fd33b85ffc1e97126cbbd66/dsh/maintainer.js",
+    "evalRefs": [
+      "repo:/probes/definitions/current-work-projection-reconciliation-local.json",
+      "https://github.com/AlexKaiqi/dsh-personal-knowledge-base/blob/c8e181adcf3904f47fd33b85ffc1e97126cbbd66/eval/evidence/latest.md"
+    ]
+  },
+  "configSchema": "repo:/connectors/current-work-projection-reconciler/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [{ "capabilityRef": "/capabilities/assistant/reconcile-current-work-projection.md", "operation": "reconcileCurrentWorkProjection" }],
+  "conformance": { "status": "verified", "probeReportRef": "/verifications/assistant/current-work-projection-reconciliation/report.json" }
+}

@@ -1,0 +1,40 @@
+{
+  "scope": {
+    "scopeRevisionRef": "feedback-scope:pet-onboarding-v3",
+    "productRef": "product:pet-assistant",
+    "productRevisionRef": "product-revision:0.2.0",
+    "decisionRef": "decision:improve-first-day-activation",
+    "purposeRefs": ["purpose:product-improvement"],
+    "expectedFieldRefs": ["difficulty", "workaround"],
+    "noticeRevisionRef": "privacy-notice:feedback-v2"
+  },
+  "submission": {
+    "submissionRef": "submission:01J7PETFEEDBACK",
+    "channel": "product-form",
+    "submittedAt": "2026-08-27T08:00:00Z",
+    "purposeRefs": ["purpose:product-improvement"],
+    "answers": [
+      { "fieldRef": "difficulty", "kind": "problem", "statement": "The pet loses the current task after I switch sessions." },
+      { "fieldRef": "workaround", "kind": "workaround", "statement": "I reopen the conversation before asking the pet to continue." }
+    ]
+  },
+  "consent": {
+    "status": "given",
+    "noticeRevisionRef": "privacy-notice:feedback-v2",
+    "evidenceRef": "consent-receipt:01J7PETFEEDBACK",
+    "capturedAt": "2026-08-27T07:59:58Z",
+    "validUntil": "2027-08-27T08:00:00Z",
+    "withdrawalMechanismRef": "feedback-withdrawal:self-service-v1",
+    "otherPeopleData": "absent"
+  },
+  "privacyReview": {
+    "status": "passed",
+    "directIdentifiers": "removed",
+    "sensitiveData": "absent",
+    "reidentificationProhibited": true,
+    "evidenceRefs": ["privacy-review:01J7PETFEEDBACK"]
+  },
+  "retention": { "policyRef": "retention:product-feedback-180d", "deleteAfter": "2027-02-23T08:00:00Z" },
+  "preparedAt": "2026-08-27T08:01:00Z",
+  "evidenceRefs": ["form-revision:pet-onboarding-v3", "consent-receipt:01J7PETFEEDBACK"]
+}

@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "steam-initial-base-price-revision",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/steam/prepare-initial-base-price-review-revision.md"],
+  "execution": { "kind": "deterministic", "runtime": "node >=22.19", "entrypoint": "connectors/steam-initial-base-price-revision/src/index.mjs" },
+  "configSchema": "repo:/connectors/steam-initial-base-price-revision/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [{ "capabilityRef": "/capabilities/steam/prepare-initial-base-price-review-revision.md", "operation": "prepareSteamInitialBasePriceReviewRevision" }],
+  "conformance": { "status": "verified", "probeReportRef": "/verifications/steam/initial-base-price-review-revision/report.json" }
+}

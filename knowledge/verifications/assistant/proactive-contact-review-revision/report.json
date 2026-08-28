@@ -1,0 +1,90 @@
+{
+  "schemaVersion": "dsh.probe-report/v1",
+  "id": "proactive-contact-review-revision-local-20260827",
+  "capabilityRef": "/capabilities/assistant/prepare-proactive-contact-review-revision.md",
+  "connectorId": "proactive-contact-review-revision",
+  "probeDefinitionRef": "repo:/probes/definitions/proactive-contact-review-revision-local.json",
+  "environment": "local",
+  "level": "local",
+  "outcome": "passed",
+  "startedAt": "2026-08-27T04:28:00.488Z",
+  "finishedAt": "2026-08-27T04:28:03.456Z",
+  "expiresAt": "2026-09-26T04:28:03.456Z",
+  "checks": [
+    {
+      "id": "pinned-proactive-policy-semantics",
+      "status": "passed"
+    },
+    {
+      "id": "official-user-notification-control",
+      "status": "passed"
+    },
+    {
+      "id": "opt-in-pause-activity-frequency-unanswered-gates",
+      "status": "passed"
+    },
+    {
+      "id": "source-visible-and-dedupe-gates",
+      "status": "passed"
+    },
+    {
+      "id": "iana-wraparound-quiet-window",
+      "status": "passed"
+    },
+    {
+      "id": "copy-surface-timing-policy-state-binding",
+      "status": "passed"
+    },
+    {
+      "id": "output-schema",
+      "status": "passed"
+    },
+    {
+      "id": "non-delivery-non-authorization-boundary",
+      "status": "passed"
+    }
+  ],
+  "evidence": [
+    {
+      "kind": "artifact",
+      "ref": "https://raw.githubusercontent.com/Vexillon-ai/MIRA/91e128431c93d6efab5bcb450aa50b42df8f8a01/src/companion/policy.rs",
+      "sha256": "26f860e0c0f259eecf34e4c2c8bdb6aaec4f08792a2aab04be7ebfb1c42e48d9"
+    },
+    {
+      "kind": "artifact",
+      "ref": "https://raw.githubusercontent.com/Vexillon-ai/MIRA/91e128431c93d6efab5bcb450aa50b42df8f8a01/src/companion/settings.rs",
+      "sha256": "8a57768421b6ab5d8b4aeed0c49b4b4ee8a141fc32e6fa1d7cb349f34070daf7"
+    },
+    {
+      "kind": "artifact",
+      "ref": "https://raw.githubusercontent.com/vellum-ai/vellum-assistant/bd79e0797681bfb2cf76f50d6f0bc2ad84e995e8/assistant/src/notifications/deterministic-checks.ts",
+      "sha256": "9587739632d83cbe846023342937519cb92712cc5c2d1ba7e6585b447dd70aee"
+    },
+    {
+      "kind": "artifact",
+      "ref": "https://raw.githubusercontent.com/vellum-ai/vellum-assistant/bd79e0797681bfb2cf76f50d6f0bc2ad84e995e8/assistant/src/notifications/README.md",
+      "sha256": "28b47a1e5fde59925b3c4316b79c32328781c32eff679bd8c99c707d5443973b"
+    },
+    {
+      "kind": "artifact",
+      "ref": "https://developer.android.com/develop/ui/compose/notifications?hl=en",
+      "sha256": "5f1dd768ee9f1a1a48687eee0e5e6d1aa959d3b38f7310c9251f9cd5e1aad875"
+    },
+    {
+      "kind": "artifact",
+      "ref": "https://developer.android.com/develop/ui/compose/notifications/notification-permission?hl=en",
+      "sha256": "54f0f6356c06a67b51fef2bcc2e6b1d4aacc2d834e910dc9158bfbe9541e1a5d"
+    },
+    {
+      "kind": "snapshot",
+      "ref": "repo:/knowledge/verifications/assistant/proactive-contact-review-revision/snapshot.json",
+      "sha256": "e8a9d93f7a47f900ac3a1f0eda81be4533ddfe25fd29d8ac3173de3a3f8de4ee"
+    }
+  ],
+  "sideEffects": [
+    {
+      "effect": "none",
+      "status": "none"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "appfigures-public-app-reviews",
+  "version": "0.1.0",
+  "capabilityRefs": ["/capabilities/research/read-public-app-review-snapshot.md"],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "connectors/appfigures-public-app-reviews/src/index.mjs"
+  },
+  "configSchema": "repo:/connectors/appfigures-public-app-reviews/config.schema.json",
+  "credentialSlots": [
+    {
+      "name": "personal-access-token",
+      "required": true,
+      "purpose": "Resolve an Appfigures Personal Access Token with public:read access outside Git for the approved internal research account."
+    }
+  ],
+  "handlers": [
+    {
+      "capabilityRef": "/capabilities/research/read-public-app-review-snapshot.md",
+      "operation": "readPublicAppReviewSnapshot"
+    }
+  ],
+  "conformance": {
+    "status": "candidate",
+    "probeDefinitionRef": "repo:/probes/definitions/appfigures-public-app-reviews-live.json"
+  }
+}

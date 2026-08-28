@@ -1,0 +1,134 @@
+{
+  "fixture": "ordered-owned-game-steam-tags",
+  "schemaVersion": "dsh.steam-store-tag-review-revision/v1",
+  "gameRef": "game:clockwork-familiar",
+  "sourceRevisionRef": "design:launch-v1",
+  "catalogRevisionRef": "steam-tags:observed-2026-08-27",
+  "audienceEvidenceRefs": [
+    "research:comparable-tag-pages-v1"
+  ],
+  "policyRevision": "steam-store-tags-2026-08-27",
+  "manualReview": {
+    "required": true,
+    "checks": [
+      {
+        "id": "current-platform-tag-availability",
+        "status": "pending"
+      },
+      {
+        "id": "top-five-clear-picture",
+        "status": "pending"
+      },
+      {
+        "id": "tag-relevance-and-specificity",
+        "status": "pending"
+      },
+      {
+        "id": "ordering-and-discovery-intent",
+        "status": "pending"
+      },
+      {
+        "id": "launch-build-consistency",
+        "status": "pending"
+      },
+      {
+        "id": "audience-evidence-quality",
+        "status": "pending"
+      },
+      {
+        "id": "owned-target-authority",
+        "status": "pending"
+      }
+    ]
+  },
+  "platformValidated": false,
+  "savedToSteamworks": false,
+  "published": false,
+  "markedReadyForReview": false,
+  "released": false,
+  "executionAuthorized": false,
+  "preparedAt": "2026-08-27T06:20:00.000Z",
+  "status": "ready-for-human-review",
+  "revisionHash": "sha256:82d55e9cd06e69a4705546b8d65c145b8b485cbc5b6b4ec0729be03c76f888aa",
+  "tags": [
+    {
+      "tagRef": "steam-tag:puzzle",
+      "displayName": "Puzzle",
+      "launchEvidenceRefs": [
+        "design:puzzle-loop-v1"
+      ],
+      "rank": 1,
+      "topFive": true
+    },
+    {
+      "tagRef": "steam-tag:atmospheric",
+      "displayName": "Atmospheric",
+      "launchEvidenceRefs": [
+        "art:atmosphere-v1"
+      ],
+      "rank": 2,
+      "topFive": true
+    },
+    {
+      "tagRef": "steam-tag:exploration",
+      "displayName": "Exploration",
+      "launchEvidenceRefs": [
+        "design:exploration-loop-v1"
+      ],
+      "rank": 3,
+      "topFive": true
+    },
+    {
+      "tagRef": "steam-tag:singleplayer",
+      "displayName": "Singleplayer",
+      "launchEvidenceRefs": [
+        "build:singleplayer-v1"
+      ],
+      "rank": 4,
+      "topFive": true
+    },
+    {
+      "tagRef": "steam-tag:story-rich",
+      "displayName": "Story Rich",
+      "launchEvidenceRefs": [
+        "narrative:launch-v1"
+      ],
+      "rank": 5,
+      "topFive": true
+    },
+    {
+      "tagRef": "steam-tag:indie",
+      "displayName": "Indie",
+      "launchEvidenceRefs": [
+        "rights:independent-production-v1"
+      ],
+      "rank": 6,
+      "topFive": false
+    }
+  ],
+  "preflight": {
+    "checks": [
+      {
+        "id": "official-tag-count",
+        "status": "passed"
+      },
+      {
+        "id": "unique-tag-refs",
+        "status": "passed"
+      },
+      {
+        "id": "unique-tag-names",
+        "status": "passed"
+      },
+      {
+        "id": "launch-evidence-bound",
+        "status": "passed"
+      },
+      {
+        "id": "ordered-top-five-present",
+        "status": "passed"
+      }
+    ],
+    "blockers": []
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "dsh.collector-definition/v1",
+  "id": "distribution-impact-observation-evaluation-maintainer",
+  "version": "1.0.0",
+  "scope": {
+    "knowledgeGlobs": [
+      "knowledge/tools/distribution-impact-observation-evaluator.md",
+      "knowledge/concepts/distribution/impact-observation-evaluation.md",
+      "knowledge/capabilities/distribution/evaluate-impact-observation-set.md",
+      "knowledge/schemas/distribution/evaluate-impact-observation-set-*.schema.json",
+      "knowledge/verifications/distribution/impact-observation-evaluation/*.json"
+    ],
+    "connectorIds": ["distribution-impact-observation-evaluator"],
+    "capabilityRefs": ["/capabilities/distribution/evaluate-impact-observation-set.md"]
+  },
+  "triggers": [
+    { "kind": "schedule", "schedule": "25 9 * * 2" },
+    { "kind": "source-change" },
+    { "kind": "schema-change" },
+    { "kind": "connector-change" },
+    { "kind": "failed-execution" },
+    { "kind": "manual" }
+  ],
+  "execution": { "kind": "deterministic", "runtime": "node >=22.19", "entrypoint": "collectors/distribution-impact-observation-evaluation-maintainer/src/index.mjs" },
+  "outputs": ["knowledge-proposal", "connector-change-proposal", "verification-report"],
+  "writePolicy": { "mode": "proposal-only", "requiresApprovalFor": ["knowledge", "connector", "live-probe"] },
+  "probePolicy": { "allowedEnvironments": ["local", "production-public"], "identityPoolRefs": [], "maximumEffect": "none" },
+  "budgets": { "maxRunsPerDay": 2, "maxCostPerDay": 0, "currency": "CNY" }
+}

@@ -1,0 +1,254 @@
+{
+  "schemaVersion": "dsh.probe-snapshot/research-evidence-backed/v1",
+  "fixture": "assistant-impact-aware-approval",
+  "scenario": "technical-solution",
+  "question": "个人助理下一能力切片应优先做可信 approval，还是先扩展自然语言 claim extraction？",
+  "decision": "个人助理下一能力切片应优先实现 impact-aware approval，还是继续扩展自然语言 claim extraction",
+  "answer": "现有 memory grounding 已把可信记忆映射到明确 Action Candidate，impact review 又把 action、arguments、scope、targets、data/audience/cost/reversibility 和 expiry 绑定进不可变 revision，并明确不产生 authorization。此时继续增强自然语言抽取只会扩大候选输入面，仍不能让任何动作安全执行。OpenAI Agents SDK 与 LangGraph 都把高影响工具调用建模为执行前暂停、外部决策、恢复同一状态；这支持 approval 是当前最小且高杠杆的缺口。但两者也暴露恢复风险：长时 pending state 需要版本绑定，LangGraph resume 会从 node 开头重跑，副作用必须幂等。因此不能做一个接受 caller supplied approved=true 的纯函数，也不能让 approval 直接声称执行成功。下一能力应由可信 UI/Host 捕获 reviewer interaction，绑定 exact review revision、call/target、decision、expiry 和单次 consume key；执行 Gateway 以 CAS 消费后才调用工具，并把 timeout/unknown 与成功 receipt 分开。没有真实 UI/Host sandbox probe 前，这只能是 candidate，不能进入 OKF 可用能力。",
+  "confidence": "high",
+  "findings": [
+    {
+      "id": "review-revision-ready",
+      "claim": "现有本地链已经稳定冻结候选 action 和影响审阅，但刻意不生成 decision、token 或 execution authorization，因此 approval 是显式缺口而非重复抽象。",
+      "status": "supported",
+      "confidence": "high",
+      "evidenceIds": [
+        "existing-action-chain",
+        "existing-action-benchmark"
+      ],
+      "counterEvidenceIds": [],
+      "applicability": "适用于当前扁平 scalar action contract；自然语言 claim 抽取和嵌套参数仍是独立上游能力。",
+      "inference": false
+    },
+    {
+      "id": "pause-before-effect-pattern",
+      "claim": "两个独立 Agent runtime 都把 HITL 建模为工具副作用前暂停、暴露待审项目、保存状态并在外部 approve/reject 后恢复。",
+      "status": "supported",
+      "confidence": "high",
+      "evidenceIds": [
+        "openai-hitl",
+        "langgraph-interrupts"
+      ],
+      "counterEvidenceIds": [
+        "resume-replay-risk"
+      ],
+      "applicability": "证明暂停/恢复模式成熟，不证明任一 runtime 的内部 RunState 应成为本项目公共 Schema。",
+      "inference": false
+    },
+    {
+      "id": "exact-binding-required",
+      "claim": "approval 必须绑定单个 exact review revision、调用和目标，而不是只绑定工具名或会话中的宽泛同意。",
+      "status": "supported",
+      "confidence": "high",
+      "evidenceIds": [
+        "existing-action-benchmark",
+        "openai-hitl"
+      ],
+      "counterEvidenceIds": [
+        "resume-replay-risk"
+      ],
+      "applicability": "sticky always-approve 只能作为 runtime 内显式策略，不能替代本项目逐 revision 高影响授权。",
+      "inference": true
+    },
+    {
+      "id": "approval-before-claim-extraction",
+      "claim": "在已有结构化 Action Candidate 的窄路径上，先补 approval 比先扩大 claim extraction 更直接地形成可执行闭环。",
+      "status": "suggestive",
+      "confidence": "medium",
+      "evidenceIds": [
+        "existing-action-chain",
+        "existing-action-benchmark",
+        "openai-hitl"
+      ],
+      "counterEvidenceIds": [
+        "resume-replay-risk"
+      ],
+      "applicability": "只决定下一工程切片；当真实用户主要以自由文本发起动作时，claim extraction 仍需单独 eval。",
+      "inference": true
+    },
+    {
+      "id": "approval-not-execution",
+      "claim": "获得 approval 不能证明副作用 exactly-once 或执行成功；resume 重放、版本变化和 ambiguous checkpoint 必须由幂等消费与 receipt 对账处理。",
+      "status": "supported",
+      "confidence": "high",
+      "evidenceIds": [
+        "openai-hitl",
+        "langgraph-interrupts",
+        "resume-replay-risk"
+      ],
+      "counterEvidenceIds": [],
+      "applicability": "任何邮件、发布、付款、文件写入或平台动作都必须把 authorization consume 与 tool receipt 分开。",
+      "inference": false
+    }
+  ],
+  "evidence": [
+    {
+      "id": "existing-action-chain",
+      "role": "implementation-evidence",
+      "sourceType": "repository",
+      "weight": "primary",
+      "title": "Verified memory grounding and action impact review implementations",
+      "resource": "repo:/connectors/",
+      "claim": "本地实现先生成 executionAuthorized=false 的 Action Candidate，再生成绑定 exact arguments/scope/targets/impact/expiry 的 immutable review revision；两层都不接受或产生授权。",
+      "locator": "memory-action-grounding and action-impact-review-revision connector definitions and implementations",
+      "observedAt": "2026-08-27T05:00:00Z",
+      "digest": "b77cb4e0088f3b90ba3327a09e21cf271338064905ccfbbc1f5198c0bbfe02de"
+    },
+    {
+      "id": "existing-action-benchmark",
+      "role": "benchmark",
+      "sourceType": "experiment",
+      "weight": "primary",
+      "title": "Local action-chain contract and mutation benchmarks",
+      "resource": "repo:/knowledge/verifications/assistant/",
+      "claim": "本地测试和 snapshots 已覆盖 exact scope、可信/过期/冲突 memory、explicit-only 字段、action/argument/target/validity mutation、保守 impact 分级与 incomplete blockers。",
+      "locator": "connector tests plus admitted memory-action and action-impact snapshots",
+      "observedAt": "2026-08-27T05:00:00Z",
+      "digest": "62200e242a9c747ac2bcfa00969b00b3e3b815c30f32c26b003c1a18d1397175"
+    },
+    {
+      "id": "openai-hitl",
+      "role": "implementation-evidence",
+      "sourceType": "official-document",
+      "weight": "primary",
+      "title": "OpenAI Agents SDK human-in-the-loop guide",
+      "resource": "https://openai.github.io/openai-agents-js/guides/human-in-the-loop/",
+      "claim": "需要审批的工具调用在执行前暂停并产生 interruptions；外部在同一 RunState 上 approve/reject 后恢复。序列化 checkpoint 对 ownership 不确定时 fail closed，长时任务还需要版本化 agent 定义。",
+      "locator": "Approval flow; Dealing with longer approval times; Versioning pending tasks",
+      "observedAt": "2026-08-27T05:00:00Z",
+      "digest": "dbd6121e7fe972d059f6aeafde3db367709240f0a0a5b8a738d9b820f4b84311"
+    },
+    {
+      "id": "langgraph-interrupts",
+      "role": "counter-evidence",
+      "sourceType": "official-document",
+      "weight": "primary",
+      "title": "LangGraph interrupts and resume rules",
+      "resource": "https://docs.langchain.com/oss/python/langgraph/interrupts",
+      "claim": "interrupt 以 thread/checkpoint 暂停并恢复，但恢复时 node 从开头重新运行；interrupt 前的任何副作用必须幂等，调用顺序和复杂 resume payload 也受约束。",
+      "locator": "Resuming interrupts; Rules of interrupts; Side effects called before interrupt must be idempotent",
+      "observedAt": "2026-08-27T05:00:00Z",
+      "digest": "2e91d5b1f8cd58d6731027cdf4f4c6c698b8e958759fcfe39bccc50800ca3674"
+    },
+    {
+      "id": "resume-replay-risk",
+      "role": "counter-evidence",
+      "sourceType": "official-document",
+      "weight": "independent",
+      "title": "Cross-runtime resume and replay limitations",
+      "resource": "https://docs.langchain.com/oss/python/langgraph/interrupts",
+      "claim": "通用 pause/resume 不自动提供 exactly-once：节点可重跑，长时状态会遇到版本漂移；因此 approval 之后仍需单次消费、幂等 key 和执行 receipt。",
+      "locator": "same-thread resume and node restart rule, interpreted together with OpenAI serialized-state fail-closed guidance",
+      "observedAt": "2026-08-27T05:00:00Z",
+      "digest": "2e91d5b1f8cd58d6731027cdf4f4c6c698b8e958759fcfe39bccc50800ca3674"
+    }
+  ],
+  "conflicts": [
+    {
+      "claim": "approval 状态是否可以直接使用 runtime 自带 RunState/thread state 作为公共事实源。",
+      "evidenceIds": [
+        "openai-hitl",
+        "langgraph-interrupts",
+        "existing-action-chain"
+      ],
+      "resolution": "runtime state 适合作为 Connector 内部 pause/resume 机制，但公共对象只保存 runtime-neutral 的 review revision、trusted interaction、decision、expiry 和 consume state；否则 SDK/version/thread 细节会泄漏并锁死能力。"
+    },
+    {
+      "claim": "一个 approval 步骤是否足以完成可执行闭环。",
+      "evidenceIds": [
+        "existing-action-benchmark",
+        "openai-hitl",
+        "resume-replay-risk"
+      ],
+      "resolution": "不足。approval 只证明某次可信交互对 exact revision 的决策；authorization 的一次性 consume、真实执行、unknown outcome 和 receipt reconciliation 必须保持独立。"
+    }
+  ],
+  "gaps": [
+    "尚未定义可信 Client/Host interaction attestation，纯本地 JSON fixture 不能证明真实用户决策。",
+    "尚未验证 approval 等待期间 action target、policy、credential 或 tool version 变化时的失效规则。",
+    "尚未实现 authorization CAS consume 和 timeout/unknown 后的 receipt reconciliation。",
+    "自然语言 claim extraction、嵌套参数和多 action batch 仍未覆盖；本结论只针对已有 scalar action 窄路径。"
+  ],
+  "counterEvidenceSearch": {
+    "performed": true,
+    "queries": [
+      "OpenAI Agents SDK human in the loop approval RunState resume fail closed",
+      "LangGraph interrupt resume node restart idempotent side effects",
+      "agent approval exactly once execution replay risk",
+      "claim extraction versus human approval next capability personal assistant"
+    ],
+    "outcome": "found",
+    "evidenceIds": [
+      "langgraph-interrupts",
+      "resume-replay-risk"
+    ]
+  },
+  "nextProbes": [
+    {
+      "hypothesis": "可信 UI/Host 可以对一个 exact action impact review revision 捕获 approve/reject，而模型无法从普通 tool input 伪造 reviewer interaction。",
+      "method": "在隔离 sandbox 中由 Client 展示 frozen action/targets/impact/expiry，Host 生成一次性 interaction ID 并签入 decision；测试 revision mutation、过期、重复提交、错误 owner/channel 和直接 JSON 注入均 fail closed。",
+      "success": "只有真实交互能产生绑定 owner/channel/revision/decision/expiry 的 approval record；任一 action 或 target byte 变化都失效。",
+      "failure": "模型或普通调用者可自行提交 approved，interaction 可跨 owner/revision 重用，或拒绝/过期仍产生授权。",
+      "effect": "local-write"
+    },
+    {
+      "hypothesis": "execution Gateway 能以 CAS 一次性消费 approval，并在成功、明确失败、timeout/unknown 和进程恢复时不盲重发。",
+      "method": "对无外部副作用的 sandbox tool 注入并发、崩溃和超时 fault；以 review revision + interaction ID 派生 idempotency key，分别记录 consume 与 execution receipt。",
+      "success": "并发只消费一次；成功有 receipt；明确失败不可复用；unknown 进入 reconcile-required，重启后不自动重发。",
+      "failure": "重复副作用、approval 可二次消费、unknown 被当失败重试，或 receipt 与 exact revision 不一致。",
+      "effect": "local-write"
+    }
+  ],
+  "coverage": {
+    "queryCount": 4,
+    "stoppedBecause": "decision-sufficient",
+    "complete": true,
+    "requiredRoles": [
+      "implementation-evidence",
+      "benchmark",
+      "counter-evidence"
+    ],
+    "coveredRoles": [
+      "benchmark",
+      "counter-evidence",
+      "implementation-evidence"
+    ],
+    "sourceCount": 5,
+    "cutoffAt": "2026-08-27T05:00:00Z"
+  },
+  "observedAt": "2026-08-27T11:07:28.917Z",
+  "resultDigest": "6dc83d1643a3ee4623fccc8b3cf66b4a23e406d37f8548d9d91c0096e0aef80e",
+  "conformance": {
+    "status": "passed",
+    "assertions": [
+      {
+        "id": "scenario-matched",
+        "passed": true
+      },
+      {
+        "id": "evidence-identities-unique",
+        "passed": true
+      },
+      {
+        "id": "findings-traceable",
+        "passed": true
+      },
+      {
+        "id": "required-roles-covered",
+        "passed": true
+      },
+      {
+        "id": "counter-evidence-searched",
+        "passed": true
+      },
+      {
+        "id": "inference-explicit",
+        "passed": true
+      },
+      {
+        "id": "next-probe-present",
+        "passed": true
+      }
+    ]
+  }
+}

@@ -39,19 +39,54 @@ async function markdownInstances(directory, prefix = '') {
 }
 
 test('canonical knowledge contains only probe-admitted subject and capability files', async () => {
-  assert.deepEqual(await markdownInstances('knowledge/platforms/'), ['douyin.md', 'github.md', 'hugging-face-hub.md', 'xiaohongshu.md'])
+  assert.deepEqual(await markdownInstances('knowledge/platforms/'), ['apple-app-store.md', 'douyin.md', 'github.md', 'hugging-face-hub.md', 'steam.md', 'tiktok.md', 'xiaohongshu.md'])
   assert.deepEqual(await markdownInstances('knowledge/services/'), [])
-  assert.deepEqual(await markdownInstances('knowledge/sources/'), ['douyin-open-platform.md', 'xiaohongshu-account-api.md', 'xiaohongshu-community-rules.md'])
-  assert.deepEqual(await markdownInstances('knowledge/tools/'), [])
+  assert.deepEqual(await markdownInstances('knowledge/sources/'), ['arxiv.md', 'douyin-open-platform.md', 'xiaohongshu-account-api.md', 'xiaohongshu-community-rules.md'])
+  assert.deepEqual(await markdownInstances('knowledge/tools/'), ['action-impact-review-revision.md', 'bounded-work-context-projection.md', 'consented-feedback-intake-revision.md', 'current-work-projection-maintainer.md', 'current-work-projection-reconciler.md', 'distribution-impact-observation-evaluator.md', 'duplex-turn-policy-projector.md', 'durable-memory-change-review-revision.md', 'evidence-backed-research.md', 'feedback-intake-local-retention-expiry.md', 'feedback-intake-local-store.md', 'feedback-intake-local-withdrawal.md', 'feedback-observation-reconciler.md', 'feedback-theme-synthesis.md', 'local-game-build-revision.md', 'memory-action-grounding.md', 'multi-turn-response-repetition-observer.md', 'persona-continuity-evaluator.md', 'proactive-contact-review-revision.md', 'public-state-pet-behavior-projector.md', 'steam-content-survey-revision.md', 'steam-early-access-revision.md', 'steam-initial-base-price-revision.md', 'steam-initial-release-date-revision.md', 'steam-review-observation-projector.md', 'steam-store-asset-revision.md', 'steam-store-description-revision.md', 'steam-store-tag-revision.md', 'steam-supported-feature-revision.md', 'steam-system-requirements-revision.md', 'versioned-memory-use-evaluator.md'])
   assert.deepEqual(await markdownInstances('knowledge/capabilities/'), [
+    'arxiv/search-public-eprint-metadata.md',
+    'assistant/evaluate-persona-continuity-suite.md',
+    'assistant/evaluate-versioned-memory-use-suite.md',
+    'assistant/ground-memory-into-action-candidate.md',
+    'assistant/maintain-current-work-projection.md',
+    'assistant/observe-multi-turn-response-repetition.md',
+    'assistant/prepare-action-impact-review-revision.md',
+    'assistant/prepare-durable-memory-change-review-revision.md',
+    'assistant/prepare-proactive-contact-review-revision.md',
+    'assistant/read-bounded-work-context.md',
+    'assistant/reconcile-current-work-projection.md',
+    'distribution/evaluate-impact-observation-set.md',
     'douyin/read-open-platform-surface.md',
     'douyin/read-public-video-embed.md',
+    'feedback/expire-consented-intake-record.md',
+    'feedback/persist-consented-intake-revision.md',
+    'feedback/prepare-consented-intake-review-revision.md',
+    'feedback/reconcile-feedback-observations.md',
+    'feedback/synthesize-feedback-theme-evidence.md',
+    'feedback/withdraw-consented-intake-record.md',
+    'game/prepare-local-build-revision.md',
     'github/list-public-repository-tags.md',
     'github/list-public-repository-work-item-changes.md',
     'github/read-public-repository-file.md',
     'github/read-public-repository-release-by-tag.md',
     'github/search-public-repositories.md',
     'hugging-face/read-public-model-revision-manifest.md',
+    'pet/project-public-state-to-behavior.md',
+    'research/conduct-evidence-backed-research.md',
+    'research/search-public-app-catalog.md',
+    'steam/prepare-content-survey-review-revision.md',
+    'steam/prepare-early-access-review-revision.md',
+    'steam/prepare-initial-base-price-review-revision.md',
+    'steam/prepare-initial-release-date-review-revision.md',
+    'steam/prepare-store-asset-review-revision.md',
+    'steam/prepare-store-description-review-revision.md',
+    'steam/prepare-store-tag-review-revision.md',
+    'steam/prepare-supported-feature-review-revision.md',
+    'steam/prepare-system-requirements-review-revision.md',
+    'steam/project-review-page-to-observation-window.md',
+    'steam/read-public-game-review-page.md',
+    'tiktok/read-public-video-embed.md',
+    'voice/project-duplex-turn-events-to-actions.md',
     'xiaohongshu/list-owned-notes.md',
     'xiaohongshu/read-account-api-surface.md',
     'xiaohongshu/read-community-rule-surface.md',

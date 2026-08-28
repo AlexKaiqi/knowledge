@@ -1,0 +1,210 @@
+{
+  "schemaVersion": "dsh.probe-snapshot/arxiv-public-metadata-search/v1",
+  "fixture": {
+    "purpose": "personal-assistant-frontier-research"
+  },
+  "source": {
+    "id": "arxiv-public-metadata-api",
+    "documentation": "https://info.arxiv.org/help/api/user-manual.html",
+    "terms": "https://info.arxiv.org/help/api/tou.html"
+  },
+  "query": {
+    "query": "personal assistant",
+    "field": "all",
+    "category": "cs.AI",
+    "sortBy": "submittedDate",
+    "sortOrder": "descending",
+    "start": 0,
+    "limit": 5
+  },
+  "coverage": {
+    "representation": "offset-page",
+    "totalResults": 153,
+    "startIndex": 0,
+    "itemsPerPage": 5,
+    "returnedCount": 5,
+    "corpusComplete": false,
+    "resultSetMutable": true,
+    "checkpointSemantics": "offset-is-not-stable-delta",
+    "metadataOnly": true,
+    "contentFilesRetained": false
+  },
+  "entries": [
+    {
+      "arxivId": "2608.22266v2",
+      "title": "Clarify User Expertise: Towards Proactive Conversational Agents Tailoring Responses to User Proficiency",
+      "summary": "In the context of information seeking, conversational agents are undergoing an evolution from reactive tools to proactive, personalized assistants. A critical aspect of this evolution is the ability to tailor strategic interactions to a user's unique needs and expectations. Unlike existing studies that focus on proactively clarifying query ambiguities, we center on clarifying the user's expertise in order to tailor responses for better user comprehension. We find that existing agents struggle to determine user expertise from queries alone, a limitation that prevents them from dynamically adapting their responses. To address this gap, we introduce PASSING to empower the agent to proactively clarify a user's expertise through targeted inquiries. This is achieved by our What-to-ask and How-to-ask strategies, induced by LLM self-play. Our extensive experiments also show our superiority. We believe that PASSING represents a crucial step towards creating more human-centric conversational agents.",
+      "authors": [
+        "Zhihong Cao",
+        "Chen Huang"
+      ],
+      "publishedAt": "2026-08-23T07:54:31.000Z",
+      "updatedAt": "2026-08-26T06:46:20.000Z",
+      "primaryCategory": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL"
+      ],
+      "abstractUrl": "https://arxiv.org/abs/2608.22266v2",
+      "pdfUrl": "https://arxiv.org/pdf/2608.22266v2",
+      "comment": "Findings of EMNLP 2026",
+      "journalReference": null,
+      "doi": null
+    },
+    {
+      "arxivId": "2608.13606v2",
+      "title": "MobileMem: Learning from a Year of Mobile Experiences",
+      "summary": "The next generation of AI agents is increasingly moving beyond systems that answer isolated questions toward persistent personal assistants that can understand, remember, and continuously learn from users' experiences. Such assistants require long-term memory to accumulate and leverage user-specific experiences over time, yet existing benchmarks remain inadequate for realistic mobile settings, where experiences are heterogeneous, multimodal, evolving, and deeply personal. We introduce MobileMem, a benchmark and framework for studying on-device long-term memory, grounded in a year-scale collection of mobile experiences. MobileMem employs a knowledge-grounded synthesis pipeline to construct coherent and temporally consistent long-horizon trajectories from user-app sessions. It provides complementary text and multimodal settings covering multi-hop and temporal reasoning, knowledge updating, and implicit preference inference. Specifically, MobileMem enables agents to remember the past, understand the present, and adapt to the future. By modeling experiences rather than isolated facts, MobileMem moves memory beyond information retrieval toward experiential intelligence for continuous personal learning.",
+      "authors": [
+        "Xinle Deng",
+        "Yida Xue",
+        "Xiangyuan Ru",
+        "Yijun Chen",
+        "Buqiang Xu",
+        "Mingjun Mao",
+        "Xinjie Liu",
+        "Haoming Xu",
+        "Shuofei Qiao",
+        "Mengru Wang",
+        "Chen Jiang",
+        "Yuchen Eleanor Jiang",
+        "Lizhong Wang",
+        "Jason Wang",
+        "Li Zeng",
+        "Haofen Wang",
+        "Guilin Qi",
+        "Huajun Chen",
+        "Ningyu Zhang"
+      ],
+      "publishedAt": "2026-08-11T14:09:51.000Z",
+      "updatedAt": "2026-08-17T11:49:20.000Z",
+      "primaryCategory": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL",
+        "cs.LG",
+        "cs.MA",
+        "cs.MM"
+      ],
+      "abstractUrl": "https://arxiv.org/abs/2608.13606v2",
+      "pdfUrl": "https://arxiv.org/pdf/2608.13606v2",
+      "comment": "Technical Report; Project Page: http://mobilemem.openkg.cn/",
+      "journalReference": null,
+      "doi": null
+    },
+    {
+      "arxivId": "2608.10915v2",
+      "title": "ComBodied Agents: a New Paradigm of Human-Centric Agentic AI",
+      "summary": "After an older adult misses a medication dose, a software agent can send another reminder and an embodied agent can bring the medication. Yet neither explains whether the person forgot, is confused, has side effects, or deliberately refused, nor what support is appropriate. This reveals a structural gap in Agentic AI: Digital Agents primarily transform software states, while Embodied Agents transform physical states; neither makes a person's evolving state and agency the primary object of modeling, intervention, and evaluation. We introduce Combodied Agents, a human-centered paradigm that perceives, models, predicts, and supports individual human-state trajectories over time, using software tools, sensors, wearables, robots, and human services as action channels rather than end goals. We unify fragmented capabilities across personal assistants, health agents, AI companions, and adaptive human--AI systems into a closed loop: event-based multimodal perception reconstructs meaningful personal events; longitudinal, correctable memory provides temporal context; Personal World Models estimate future personal states and outcomes under alternative decisions and interventions; and an admissible intervention policy selects proportionate support under consent, uncertainty, safety, reversibility, and user control. Feedback from the person and environment updates the loop. Rather than requiring an exhaustive Human Digital Twin, the framework uses purpose-bounded, uncertainty-aware, user-correctable representations. We organize the design space by human-state targets, relational contexts, and agent roles, and propose scenario-centered evaluation, agency-preservation metrics, benchmark requirements, edge-native personal models, and governance directions. Combodied Agents shift Agentic AI from external task completion toward sustained human benefit.",
+      "authors": [
+        "Qianggang Ding",
+        "Xingyao Wang",
+        "Rui Feng",
+        "Zhibin Wang",
+        "Feixiang Yao",
+        "Kelong Mao",
+        "Hao Sun",
+        "Zhiyao Luo",
+        "Jiankai Tang",
+        "Lei Li",
+        "Jiadong Guo",
+        "Minheng Ni",
+        "Weicong Lin",
+        "Chenxi Yang",
+        "Hongxiang Gao",
+        "Zhenghua Chen",
+        "Yang Bai",
+        "Min Wu",
+        "Jun Cheng",
+        "Huazhu Fu",
+        "Dacheng Tao",
+        "Bang Liu"
+      ],
+      "publishedAt": "2026-08-11T13:35:58.000Z",
+      "updatedAt": "2026-08-12T09:22:00.000Z",
+      "primaryCategory": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "abstractUrl": "https://arxiv.org/abs/2608.10915v2",
+      "pdfUrl": "https://arxiv.org/pdf/2608.10915v2",
+      "comment": "38 pages, 6 figures, 10 tables",
+      "journalReference": null,
+      "doi": null
+    },
+    {
+      "arxivId": "2608.10875v2",
+      "title": "VibeLifeBench: Can Your Life Agent Be Proactive and Persistent in a Living World?",
+      "summary": "Large language model (LLM) agents are increasingly deployed as personal assistants. Existing evaluations, however, mostly use short, self-contained requests in static environments. Everyday life assistance is different. A task runs for weeks rather than minutes. The world keeps changing while the agent is not being prompted. Many constraints are never stated outright. An agent that merely answers the request in front of it will fail at such a task. What is needed instead is an agent that stays proactive and consistent. It decides on its own when to act, when to ask, and when to stay silent. It notices changes that nobody announced. It keeps one plan coherent from the first day to the last. No current benchmark measures this. We introduce VibeLifeBench, a benchmark of 200 long-horizon tasks across ten everyday-life domains. Each task is a scripted multi-week timeline in a simulated world of 22 mock services. The world advances on its own clock, and many of its changes are silent, so only an agent that re-inspects the world discovers them. Every task is graded by fine-grained, weighted checks that read only what the agent actually left behind, covering the end state, the timeliness of its actions, and whether it upheld the implicit constraints. We evaluate seven frontier models. All of them score low, which shows how far current agents are from assisting with real life. We will open-source all tasks, environments, and the evaluation framework.",
+      "authors": [
+        "Xiaohongshu Dots Studio",
+        "Evolvent AI"
+      ],
+      "publishedAt": "2026-08-11T12:52:38.000Z",
+      "updatedAt": "2026-08-16T17:38:38.000Z",
+      "primaryCategory": "cs.CL",
+      "categories": [
+        "cs.AI",
+        "cs.CL"
+      ],
+      "abstractUrl": "https://arxiv.org/abs/2608.10875v2",
+      "pdfUrl": "https://arxiv.org/pdf/2608.10875v2",
+      "comment": null,
+      "journalReference": null,
+      "doi": null
+    },
+    {
+      "arxivId": "2608.08037v1",
+      "title": "SkillSmith: Enhancing Locally Deployed Agents via Automatic Skill Construction and Evolution",
+      "summary": "LLM-based agent frameworks now act as personal assistants for multi-step tasks. Existing agent frameworks such as OpenClaw commonly follow the Cloud Agent depolyment mode using closed-source cloud LLMs as backbone model, which may expose private user information and incur repeated LLM-calling costs. Local Agents address these deployment concerns by depolying frontier open-source SLMs on user-controlled devices, but their task effectiveness still lags far behind Cloud Agents. Through diagnostic analysis, we reveal that the limited effectiveness of Local Agents with frontier SLM backbones mainly comes from missing environment knowledge caused by limited backbone model scale including environment rules and operation procedures. To supply such knowledge non-parametrically, context-efficiently, and without expert authoring, we present SkillSmith, a Cloud--Local Agent collaboration framework that uses Skill as a context-efficient knowledge carrier, automatic constructs Skill from Cloud Agent task exploration and evolves Skill using Local Agent execution feedback to enhance a frozen Local Agent. Experiments on daily agent task datasets AppWorld and WorkBench show that the automatically generated Skill enables the Local Agent with Qwen3.6-27B(SLM) to achieve task effectiveness comparable to Cloud Agents with frontier LLMs, outperform the strongest non-parametric baselines, reduce average actions per task from 36.1 to 9.9 on AppWorld-Normal, and generalize to other SLM backbone models without rerunning Skill construction.",
+      "authors": [
+        "Xinle Jiang",
+        "Remy Xie",
+        "Ming Tang"
+      ],
+      "publishedAt": "2026-08-08T09:48:21.000Z",
+      "updatedAt": "2026-08-08T09:48:21.000Z",
+      "primaryCategory": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "abstractUrl": "https://arxiv.org/abs/2608.08037v1",
+      "pdfUrl": "https://arxiv.org/pdf/2608.08037v1",
+      "comment": "10 pages,8 figures",
+      "journalReference": null,
+      "doi": null
+    }
+  ],
+  "observedAt": "2026-08-27T03:15:37.000Z",
+  "collectedAt": "2026-08-27T03:15:37.758Z",
+  "resultDigest": "d7c6be031509d6ebba988678e719f46cc1ac29726049b7968b418b97dc4dcfa0",
+  "conformance": {
+    "status": "passed",
+    "assertions": [
+      {
+        "id": "page-bound",
+        "passed": true
+      },
+      {
+        "id": "request-identity",
+        "passed": true
+      },
+      {
+        "id": "sort-order",
+        "passed": true
+      },
+      {
+        "id": "unique-identifiers",
+        "passed": true
+      },
+      {
+        "id": "metadata-only",
+        "passed": true
+      },
+      {
+        "id": "offset-not-delta",
+        "passed": true
+      }
+    ]
+  }
+}

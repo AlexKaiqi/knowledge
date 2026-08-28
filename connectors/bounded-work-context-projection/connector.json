@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "bounded-work-context-projection",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/assistant/read-bounded-work-context.md"],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "connectors/bounded-work-context-projection/src/index.mjs"
+  },
+  "configSchema": "repo:/connectors/bounded-work-context-projection/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [
+    {
+      "capabilityRef": "/capabilities/assistant/read-bounded-work-context.md",
+      "operation": "readBoundedWorkContext"
+    }
+  ],
+  "conformance": {
+    "status": "verified",
+    "probeReportRef": "/verifications/assistant/bounded-work-context/report.json"
+  }
+}

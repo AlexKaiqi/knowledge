@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "dsh.collector-definition/v1",
+  "id": "arxiv-public-metadata-search-maintainer",
+  "version": "1.0.0",
+  "scope": {
+    "knowledgeGlobs": [
+      "knowledge/sources/arxiv.md",
+      "knowledge/concepts/arxiv/public-eprint-metadata-page.md",
+      "knowledge/capabilities/arxiv/search-public-eprint-metadata.md",
+      "knowledge/schemas/arxiv/*.schema.json",
+      "knowledge/verifications/arxiv/public-metadata-search/*.json"
+    ],
+    "connectorIds": ["arxiv-public-metadata-search"],
+    "capabilityRefs": ["/capabilities/arxiv/search-public-eprint-metadata.md"]
+  },
+  "triggers": [
+    { "kind": "schedule", "schedule": "20 8 * * *" },
+    { "kind": "source-change" },
+    { "kind": "schema-change" },
+    { "kind": "connector-change" },
+    { "kind": "failed-execution" },
+    { "kind": "manual" }
+  ],
+  "execution": { "kind": "deterministic", "runtime": "node >=22.19", "entrypoint": "collectors/arxiv-public-metadata-search-maintainer/src/index.mjs" },
+  "outputs": ["knowledge-proposal", "connector-change-proposal", "verification-report"],
+  "writePolicy": { "mode": "proposal-only", "requiresApprovalFor": ["knowledge", "connector", "live-probe"] },
+  "probePolicy": { "allowedEnvironments": ["production-public"], "identityPoolRefs": [], "maximumEffect": "none" },
+  "budgets": { "maxRunsPerDay": 2, "maxCostPerDay": 0, "currency": "USD" }
+}

@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "steam-system-requirements-revision",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/steam/prepare-system-requirements-review-revision.md"],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "connectors/steam-system-requirements-revision/src/index.mjs"
+  },
+  "configSchema": "repo:/connectors/steam-system-requirements-revision/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [
+    {
+      "capabilityRef": "/capabilities/steam/prepare-system-requirements-review-revision.md",
+      "operation": "prepareSteamSystemRequirementsReviewRevision"
+    }
+  ],
+  "conformance": {
+    "status": "verified",
+    "probeReportRef": "/verifications/steam/system-requirements-review-revision/report.json"
+  }
+}

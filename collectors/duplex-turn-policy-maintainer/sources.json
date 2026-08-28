@@ -1,0 +1,59 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "duplex-turn-policy",
+  "sources": [
+    {
+      "id": "production-pinned-client",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-realtime-voice/1cfddba6ad39d4b8ef075b66870ab533068a7d78/client/client.js",
+      "role": "production-implementation",
+      "acceptedDocumentDigest": "f5055565a4df7d95a6fc5b5afc8414e57f071f7fe846e659a2159175dba8af25",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "speech-start", "includes": "event.type === 'input_audio_buffer.speech_started'" },
+          { "id": "playback-cancel", "includes": "handle.cancelPlayback()" },
+          { "id": "provider-cancel", "includes": "type: 'response.cancel'" }
+        ]
+      }
+    },
+    {
+      "id": "production-main-client",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-realtime-voice/main/client/client.js",
+      "role": "upstream-change-surface",
+      "acceptedDocumentDigest": "f5055565a4df7d95a6fc5b5afc8414e57f071f7fe846e659a2159175dba8af25",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "normalized-listening", "includes": "return { type: 'phase', phase: 'listening' }" },
+          { "id": "conversation-interrupt", "includes": "VoiceConversation.prototype.interrupt" },
+          { "id": "provider-cancel", "includes": "type: 'response.cancel'" }
+        ]
+      }
+    },
+    {
+      "id": "barge-in-problem",
+      "url": "https://github.com/huggingface/speech-to-speech/issues/433",
+      "role": "problem-evidence",
+      "observation": {
+        "mode": "html-semantic",
+        "assertions": [
+          { "id": "confirmation-delay", "includes": "default min_speech_ms=384" },
+          { "id": "false-candidate", "includes": "short noise bursts would become real conversation turns" },
+          { "id": "reversible-release", "includes": "A false candidate restores normal output without losing buffered audio." }
+        ]
+      }
+    },
+    {
+      "id": "full-duplex-benchmark",
+      "url": "https://arxiv.org/abs/2607.20460",
+      "role": "benchmark",
+      "observation": {
+        "mode": "html-semantic",
+        "assertions": [
+          { "id": "adherence-result", "includes": "best model achieves only 64.4% adherence" },
+          { "id": "hard-behaviors", "includes": "backchanneling and interruption remaining particularly challenging" }
+        ]
+      }
+    }
+  ]
+}

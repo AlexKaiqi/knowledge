@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "tiktok-public-video-embed-live",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/tiktok/read-public-video-embed.md",
+  "connectorId": "tiktok-public-video-embed",
+  "environment": "production-public",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "read-documented-public-video-oembed", "operation": "readPublicVideoEmbed" },
+    { "id": "verify-video-identity-and-minimized-output", "operation": "normalizePublicVideoEmbedResponse" }
+  ],
+  "assertions": [
+    "TikTok's documented GET /oembed endpoint returns the documented public example without an account, credential, cookie, scope, or user authorization.",
+    "The response preserves the exact requested VideoID, canonical URL, title, and bounded thumbnail dimensions.",
+    "The Connector uses one fixed www.tiktok.com endpoint, no redirect, no retry, and a 128 KiB response limit.",
+    "The normalized output excludes author identity, upstream HTML, thumbnail URL, metrics, comments, media bytes, tokens, cookies, and raw payloads."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 30, "maxCost": 0, "currency": "USD" }
+}

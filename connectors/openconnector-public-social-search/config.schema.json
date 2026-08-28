@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/openconnector-public-social-search-config.schema.json",
+  "title": "OpenConnectorPublicSocialSearchConnectorConfig",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "runtimeOrigin": {
+      "enum": ["http://127.0.0.1:3000", "http://localhost:3000"],
+      "default": "http://127.0.0.1:3000",
+      "description": "Candidate route is deliberately limited to a loopback self-hosted OpenConnector runtime."
+    },
+    "connectionAlias": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$",
+      "maxLength": 64,
+      "default": "dsh-public-research"
+    },
+    "timeoutMs": { "type": "integer", "minimum": 1000, "maximum": 30000, "default": 15000 },
+    "maxResponseBytes": { "type": "integer", "minimum": 65536, "maximum": 2097152, "default": 1048576 }
+  }
+}

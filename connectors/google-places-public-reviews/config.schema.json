@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/google-places-public-reviews-config.schema.json",
+  "title": "GooglePlacesPublicReviewsConnectorConfig",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "timeoutMs": { "type": "integer", "minimum": 1000, "maximum": 120000, "default": 30000 },
+    "maxResponseBytes": { "type": "integer", "minimum": 65536, "maximum": 1048576, "default": 524288 },
+    "maximumBillableRequests": { "const": 1, "default": 1 },
+    "maximumCostUsd": { "const": 0.03, "default": 0.03 }
+  }
+}

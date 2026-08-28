@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "dsh.probe-report/v1",
+  "id": "steam-public-game-reviews-live-20260827",
+  "capabilityRef": "/capabilities/steam/read-public-game-review-page.md",
+  "connectorId": "steam-public-game-reviews",
+  "probeDefinitionRef": "repo:/probes/definitions/steam-public-game-reviews-live.json",
+  "environment": "production-public",
+  "level": "live",
+  "outcome": "passed",
+  "startedAt": "2026-08-27T01:02:20.201Z",
+  "finishedAt": "2026-08-27T01:02:20.796Z",
+  "expiresAt": "2026-09-03T01:02:20.796Z",
+  "checks": [
+    {
+      "id": "official-endpoint-live",
+      "status": "passed"
+    },
+    {
+      "id": "bounded-page",
+      "status": "passed"
+    },
+    {
+      "id": "updated-order",
+      "status": "passed"
+    },
+    {
+      "id": "query-summary",
+      "status": "passed"
+    },
+    {
+      "id": "cursor-present",
+      "status": "passed"
+    },
+    {
+      "id": "author-identity-removed",
+      "status": "passed"
+    },
+    {
+      "id": "durable-text-redacted",
+      "status": "passed"
+    },
+    {
+      "id": "coverage-explicit",
+      "status": "passed"
+    }
+  ],
+  "evidence": [
+    {
+      "kind": "snapshot",
+      "ref": "repo:/knowledge/verifications/steam/public-game-reviews/snapshot.json",
+      "sha256": "88e51b2d1e0d144130ae4f58a1bb89d5cfa44e754ed10a3de8923dcfde62b0d9"
+    }
+  ],
+  "sideEffects": [
+    {
+      "effect": "none",
+      "status": "none"
+    }
+  ]
+}

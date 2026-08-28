@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/schemas/feedback/synthesize-feedback-theme-evidence-input.schema.json",
+  "title": "Synthesize feedback theme evidence input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["question", "decision", "targetRef", "sample", "evidence"],
+  "properties": {
+    "question": { "type": "string", "minLength": 1, "maxLength": 1000 },
+    "decision": { "type": "string", "minLength": 1, "maxLength": 1000 },
+    "targetRef": { "$ref": "#/$defs/ref" },
+    "sample": {
+      "type": "object", "additionalProperties": false,
+      "required": ["observedFrom", "observedTo", "completeness", "sourceRefs"],
+      "properties": {
+        "observedFrom": { "type": "string", "format": "date-time" },
+        "observedTo": { "type": "string", "format": "date-time" },
+        "completeness": { "enum": ["partial", "complete"] },
+        "sourceRefs": { "type": "array", "minItems": 1, "maxItems": 20, "uniqueItems": true, "items": { "$ref": "#/$defs/ref" } }
+      }
+    },
+    "evidence": {
+      "type": "array", "minItems": 2, "maxItems": 100,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["evidenceRef", "kind", "statement", "contentDigest", "observedAt"],
+        "properties": {
+          "evidenceRef": { "$ref": "#/$defs/ref" },
+          "kind": { "enum": ["problem", "request", "workaround", "praise", "context", "counterexample"] },
+          "statement": { "type": "string", "minLength": 1, "maxLength": 1200 },
+          "contentDigest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+          "observedAt": { "type": "string", "format": "date-time" },
+          "targetRevisionRef": { "$ref": "#/$defs/ref" }
+        }
+      }
+    },
+    "maxThemes": { "type": "integer", "minimum": 1, "maximum": 12, "default": 8 }
+  },
+  "$defs": { "ref": { "type": "string", "minLength": 1, "maxLength": 500 } }
+}

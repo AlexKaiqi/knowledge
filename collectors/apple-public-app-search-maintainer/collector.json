@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "dsh.collector-definition/v1",
+  "id": "apple-public-app-search-maintainer",
+  "version": "1.0.0",
+  "scope": {
+    "knowledgeGlobs": [
+      "knowledge/platforms/apple-app-store.md",
+      "knowledge/concepts/research/public-app-catalog-search-page.md",
+      "knowledge/capabilities/research/search-public-app-catalog.md",
+      "knowledge/schemas/research/search-public-app-catalog-*.schema.json",
+      "knowledge/verifications/apple/public-app-search/*.json"
+    ],
+    "connectorIds": ["apple-public-app-search"],
+    "capabilityRefs": ["/capabilities/research/search-public-app-catalog.md"]
+  },
+  "triggers": [
+    { "kind": "schedule", "schedule": "35 8 * * *" },
+    { "kind": "source-change" },
+    { "kind": "schema-change" },
+    { "kind": "connector-change" },
+    { "kind": "failed-execution" },
+    { "kind": "manual" }
+  ],
+  "execution": { "kind": "deterministic", "runtime": "node >=22.19", "entrypoint": "collectors/apple-public-app-search-maintainer/src/index.mjs" },
+  "outputs": ["knowledge-proposal", "connector-change-proposal", "verification-report"],
+  "writePolicy": { "mode": "proposal-only", "requiresApprovalFor": ["knowledge", "connector", "live-probe"] },
+  "probePolicy": { "allowedEnvironments": ["production-public"], "identityPoolRefs": [], "maximumEffect": "none" },
+  "budgets": { "maxRunsPerDay": 2, "maxCostPerDay": 0, "currency": "USD" }
+}

@@ -1,6 +1,6 @@
 # 前沿研究发现与研究成果发布候选调研
 
-状态：candidate research；不是 canonical knowledge  
+状态：arXiv 有界公开元数据搜索已准入；跨源增量、评审和发布仍是 candidate research
 核验日期：2026-08-27
 
 ## 1. 真正需要的不是“论文搜索器”
@@ -29,7 +29,7 @@
 
 | 平台 | 最适合承担的职责 | 不应承担的职责 | 候选结论 |
 | --- | --- | --- | --- |
-| arXiv | 计算机、数学、物理等领域的新论文/新版本增量；预印本的一手记录；自有投稿状态 | 影响力/质量真相；无人值守代作者投稿 | **首选一手增量源** |
+| arXiv | 计算机、数学、物理等领域的论文/版本元数据；预印本的一手记录；自有投稿状态 | 影响力/质量真相；无人值守代作者投稿 | **有界 phrase/category 元数据搜索已 live 准入；稳定增量与投稿仍候选** |
 | OpenAlex | 跨来源 work、topic、author、source、institution 和 citation 图谱；去重与趋势 | 替代原文、同行评审或发布平台原生状态 | **首选跨源研究图谱** |
 | OpenReview | AI/ML 会议公开 submission、review、rebuttal、decision；venue-specific workflow | 跨会议统一投稿按钮 | **首选公开评审与会议状态源** |
 | Semantic Scholar | 相关论文推荐、references/citations 和补充语义召回 | 唯一论文标识真相；把推荐排序当技术重要性事实 | **可选第二发现 route** |
@@ -61,6 +61,8 @@
 
 学术作者身份是引用与归属的必要事实，不能像社交评论者一样一律删除；但不得构建与研究任务无关的个人画像、邮箱/联系方式或跨平台行为图谱。全文只在许可与实际任务需要时读取，不因可下载就永久复制。
 
+当前已准入的 `arxiv.search-public-eprint-metadata` 是这个方向的读取原语，不是完整 delta：纯 phrase、可选 category、最多 20 条，固定官方 Metadata API，并在进程内执行单连接/三秒最小间隔。输出保存 CC0 描述性元数据，不下载 PDF/source；offset 明确为 mutable page，不能当 checkpoint。下一步若要升级为 `ResearchWorkDelta`，必须通过跨日 overlap probe 证明新论文与新版本不会因午夜索引和结果重排漏失。
+
 ### `research.prepare-owned-submission`
 
 这是预检和 handoff，不是最终发布：
@@ -87,6 +89,8 @@ arXiv 和 OpenReview 的最终提交应长期保留 visible/manual handoff：真
 ## 4. 最小 probe 提案
 
 ### Probe A：arXiv 前沿研究增量
+
+前置 page primitive 已在 2026-08-27 live 通过：`personal assistant` + `cs.AI` 按 submitted date 倒序返回 5/153 条，官方链接、Atom 解析、metadata-only 和 offset-not-delta 均通过。以下步骤仍是增量升级条件：
 
 1. 选择一个与当前技术方向直接相关的固定 research profile，例如一个 category 加 2–5 个关键词。
 2. 使用官方 API，按 `submittedDate` 或 `lastUpdatedDate` 排序；单次最多 20 条，不做全库翻页。

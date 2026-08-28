@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "duplex-turn-policy-local",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/voice/project-duplex-turn-events-to-actions.md",
+  "connectorId": "duplex-turn-policy-projector",
+  "environment": "local",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "verify-production-provenance", "operation": "verifyPinnedProductionSource" },
+    { "id": "verify-problem-evidence", "operation": "verifyPublicResearchSources" },
+    { "id": "project-duplex-trace", "operation": "projectDuplexTurnEventsToActions", "inputRef": "repo:/probes/fixtures/voice/duplex-turn-trace.json" },
+    { "id": "validate-public-schema", "operation": "validateInputAndOutputSchema" },
+    { "id": "reject-private-surface", "operation": "verifyPrivateSurfaceRejected" }
+  ],
+  "assertions": [
+    "The pinned production client is readable, digest-bound, and currently cancels output directly on a provider speech-start event.",
+    "The public problem report describes confirmation delay, false candidate risk, and reversible restoration.",
+    "The public benchmark states that backchanneling and interruption remain challenging.",
+    "A released false candidate and a confirmed backchannel restore output without cancellation.",
+    "Only a confirmed take-turn produces cancel-output and open-user-turn.",
+    "Raw audio, transcript, prompt and Provider wire fields cannot enter the public input.",
+    "The same trace returns the same result digest and validates against the public Schema."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 45, "maxCost": 0, "currency": "CNY" }
+}

@@ -1,0 +1,88 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "bounded-work-context",
+  "sources": [
+    {
+      "id": "personal-knowledge-service-pinned",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-personal-knowledge-base/c8e181adcf3904f47fd33b85ffc1e97126cbbd66/dsh/service.js",
+      "role": "accepted-production-projection",
+      "acceptedDocumentDigest": "b849ae068d99070181b14f80eb2b0385a0f996253b8717d2331682d60a0e4bbf",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "bounded-project", "includes": "async project(options = {})" },
+          { "id": "current-session-exclusion", "includes": "String(row.header?.id || '') !== currentSessionId" },
+          { "id": "logical-sources", "includes": "sources: [...new Set(sources)]" }
+        ]
+      }
+    },
+    {
+      "id": "personal-knowledge-service-main",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-personal-knowledge-base/main/dsh/service.js",
+      "role": "production-projection-change-surface",
+      "acceptedDocumentDigest": "b849ae068d99070181b14f80eb2b0385a0f996253b8717d2331682d60a0e4bbf",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "current-source", "includes": "add('Current work', this.readCurrent(), ['.pkb/current.md'])" },
+          { "id": "session-toggle", "includes": "options.includeSessions !== false" },
+          { "id": "durable-source", "includes": "doc.content, [doc.path]" }
+        ]
+      }
+    },
+    {
+      "id": "personal-knowledge-layout-pinned",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-personal-knowledge-base/c8e181adcf3904f47fd33b85ffc1e97126cbbd66/spec/repository-layout.json",
+      "role": "accepted-repository-layout",
+      "acceptedDocumentDigest": "5d2a81bda32184a2114c4ad525ce92c62302d5cf31074cc04ea0801bb2124bde",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "sessions-external", "includes": "external-dsh-sessions" },
+          { "id": "current-rebuildable", "includes": ".pkb/current.md" },
+          { "id": "query-time-view", "includes": "query-time-projection" }
+        ]
+      }
+    },
+    {
+      "id": "personal-knowledge-layout-main",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-personal-knowledge-base/main/spec/repository-layout.json",
+      "role": "repository-layout-change-surface",
+      "acceptedDocumentDigest": "5d2a81bda32184a2114c4ad525ce92c62302d5cf31074cc04ea0801bb2124bde",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "durable-confirmed", "includes": "knowledge/*.md" },
+          { "id": "projection-temporary", "includes": "query-time-projection" }
+        ]
+      }
+    },
+    {
+      "id": "personal-knowledge-e2e-pinned",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-personal-knowledge-base/c8e181adcf3904f47fd33b85ffc1e97126cbbd66/eval/evidence/latest.md",
+      "role": "accepted-production-evidence",
+      "acceptedDocumentDigest": "79c458f4aacd3b31e8c1f58ab15fbfe65046d34e56bda151692372bf1ed56410",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "pass", "includes": "Result: **PASS**" },
+          { "id": "session-projection", "includes": "Session 事件驱动 current 投影" },
+          { "id": "model-context", "includes": "动态投影进入模型上下文" }
+        ]
+      }
+    },
+    {
+      "id": "personal-knowledge-e2e-main",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-personal-knowledge-base/main/eval/evidence/latest.md",
+      "role": "production-evidence-change-surface",
+      "acceptedDocumentDigest": "79c458f4aacd3b31e8c1f58ab15fbfe65046d34e56bda151692372bf1ed56410",
+      "observation": {
+        "mode": "static-text-semantic",
+        "assertions": [
+          { "id": "state-convergence", "includes": "当前状态收敛" },
+          { "id": "bounded-knowledge", "includes": "not credentials or full Session transcripts" }
+        ]
+      }
+    }
+  ]
+}

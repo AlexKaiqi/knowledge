@@ -1,0 +1,149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/schemas/feedback/prepare-consented-intake-review-revision-output.schema.json",
+  "title": "Consented feedback intake review revision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "status", "intakeRevisionHash", "scope", "submission", "consent", "privacyReview", "retention", "preparedAt", "evidenceRefs", "reviewItems", "preflight", "humanReviewRequired", "reviewerDecision", "stored", "receiptIssued", "withdrawalApplied", "replySent", "knowledgeWritten", "executionAuthorized"],
+  "properties": {
+    "schemaVersion": { "const": "dsh.consented-feedback-intake-review-revision/v1" },
+    "status": { "enum": ["ready-for-human-review", "blocked"] },
+    "intakeRevisionHash": { "oneOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }] },
+    "scope": { "$ref": "#/$defs/scope" },
+    "submission": { "$ref": "#/$defs/submission" },
+    "consent": { "$ref": "#/$defs/consent" },
+    "privacyReview": { "$ref": "#/$defs/privacyReview" },
+    "retention": { "$ref": "#/$defs/retention" },
+    "preparedAt": { "type": "string", "format": "date-time" },
+    "evidenceRefs": { "type": "array", "minItems": 1, "maxItems": 20, "uniqueItems": true, "items": { "$ref": "#/$defs/opaqueRef" } },
+    "reviewItems": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "status"],
+        "properties": {
+          "id": { "enum": ["exact-submission-and-fields", "purpose-and-notice", "consent-validity-and-third-party-data", "deidentification-and-sensitive-data", "retention-and-withdrawal"] },
+          "status": { "const": "pending" }
+        }
+      }
+    },
+    "preflight": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["blockers"],
+      "properties": {
+        "blockers": {
+          "type": "array",
+          "maxItems": 13,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["code", "refs"],
+            "properties": {
+              "code": { "enum": ["consent-not-current", "consent-notice-mismatch", "consent-captured-after-submission", "consent-expired", "other-people-data-unresolved", "purpose-outside-scope", "expected-answer-missing", "unexpected-answer", "privacy-review-incomplete", "direct-identifiers-unresolved", "sensitive-data-unresolved", "reidentification-not-prohibited", "retention-expired", "retention-exceeds-policy"] },
+              "refs": { "type": "array", "maxItems": 50, "uniqueItems": true, "items": { "$ref": "#/$defs/opaqueRef" } }
+            }
+          }
+        }
+      }
+    },
+    "humanReviewRequired": { "const": true },
+    "reviewerDecision": { "type": "null" },
+    "stored": { "const": false },
+    "receiptIssued": { "const": false },
+    "withdrawalApplied": { "const": false },
+    "replySent": { "const": false },
+    "knowledgeWritten": { "const": false },
+    "executionAuthorized": { "const": false }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "ready-for-human-review" } }, "required": ["status"] },
+      "then": { "properties": { "intakeRevisionHash": { "$ref": "#/$defs/digest" }, "preflight": { "properties": { "blockers": { "maxItems": 0 } } } } }
+    },
+    {
+      "if": { "properties": { "status": { "const": "blocked" } }, "required": ["status"] },
+      "then": { "properties": { "intakeRevisionHash": { "type": "null" }, "preflight": { "properties": { "blockers": { "minItems": 1 } } } } }
+    }
+  ],
+  "$defs": {
+    "opaqueRef": { "type": "string", "minLength": 1, "maxLength": 500 },
+    "fieldRef": { "type": "string", "pattern": "^[a-z][a-z0-9._-]{0,127}$" },
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scopeRevisionRef", "productRef", "productRevisionRef", "decisionRef", "purposeRefs", "expectedFieldRefs", "noticeRevisionRef"],
+      "properties": {
+        "scopeRevisionRef": { "$ref": "#/$defs/opaqueRef" },
+        "productRef": { "$ref": "#/$defs/opaqueRef" },
+        "productRevisionRef": { "$ref": "#/$defs/opaqueRef" },
+        "decisionRef": { "$ref": "#/$defs/opaqueRef" },
+        "purposeRefs": { "type": "array", "minItems": 1, "maxItems": 10, "uniqueItems": true, "items": { "$ref": "#/$defs/opaqueRef" } },
+        "expectedFieldRefs": { "type": "array", "minItems": 1, "maxItems": 50, "uniqueItems": true, "items": { "$ref": "#/$defs/fieldRef" } },
+        "noticeRevisionRef": { "$ref": "#/$defs/opaqueRef" }
+      }
+    },
+    "answer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fieldRef", "kind", "statement", "contentDigest"],
+      "properties": {
+        "fieldRef": { "$ref": "#/$defs/fieldRef" },
+        "kind": { "enum": ["problem", "request", "workaround", "praise", "context", "counterexample"] },
+        "statement": { "type": "string", "minLength": 1, "maxLength": 1200 },
+        "contentDigest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "submission": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["submissionRef", "channel", "submittedAt", "purposeRefs", "answers"],
+      "properties": {
+        "submissionRef": { "$ref": "#/$defs/opaqueRef" },
+        "channel": { "enum": ["product-form", "support-form", "interview", "user-study"] },
+        "submittedAt": { "type": "string", "format": "date-time" },
+        "purposeRefs": { "type": "array", "minItems": 1, "maxItems": 10, "uniqueItems": true, "items": { "$ref": "#/$defs/opaqueRef" } },
+        "answers": { "type": "array", "minItems": 1, "maxItems": 50, "items": { "$ref": "#/$defs/answer" } }
+      }
+    },
+    "consent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "noticeRevisionRef", "evidenceRef", "capturedAt", "validUntil", "withdrawalMechanismRef", "otherPeopleData"],
+      "properties": {
+        "status": { "enum": ["given", "withdrawn", "expired", "unknown"] },
+        "noticeRevisionRef": { "$ref": "#/$defs/opaqueRef" },
+        "evidenceRef": { "$ref": "#/$defs/opaqueRef" },
+        "capturedAt": { "type": "string", "format": "date-time" },
+        "validUntil": { "type": "string", "format": "date-time" },
+        "withdrawalMechanismRef": { "$ref": "#/$defs/opaqueRef" },
+        "otherPeopleData": { "enum": ["absent", "present", "unknown"] }
+      }
+    },
+    "privacyReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "directIdentifiers", "sensitiveData", "reidentificationProhibited", "evidenceRefs"],
+      "properties": {
+        "status": { "enum": ["passed", "requires-review", "not-performed"] },
+        "directIdentifiers": { "enum": ["absent", "removed", "present", "unknown"] },
+        "sensitiveData": { "enum": ["absent", "removed", "present", "unknown"] },
+        "reidentificationProhibited": { "type": "boolean" },
+        "evidenceRefs": { "type": "array", "minItems": 1, "maxItems": 20, "uniqueItems": true, "items": { "$ref": "#/$defs/opaqueRef" } }
+      }
+    },
+    "retention": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["policyRef", "deleteAfter"],
+      "properties": {
+        "policyRef": { "$ref": "#/$defs/opaqueRef" },
+        "deleteAfter": { "type": "string", "format": "date-time" }
+      }
+    }
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/schemas/assistant/evaluate-persona-continuity-suite-output.schema.json",
+  "title": "EvaluatePersonaContinuitySuiteOutput",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "suiteRef", "persona", "policyRevision", "evaluators", "evaluatorIndependenceClaimed", "summary", "cases", "noCompositeScore", "retention", "observedAt", "humanReviewRequired", "personaChanged", "memoryChanged", "platformDataRead", "actionExecuted", "executionAuthorized", "resultDigest", "conformance"],
+  "properties": {
+    "schemaVersion": { "const": "dsh.persona-continuity-evaluation-suite/v1" },
+    "suiteRef": { "$ref": "#/$defs/opaqueRef" },
+    "persona": {
+      "type": "object", "additionalProperties": false, "required": ["revisionRef", "digest", "ruleRefsByAxis"],
+      "properties": {
+        "revisionRef": { "$ref": "#/$defs/opaqueRef" }, "digest": { "$ref": "#/$defs/digest" },
+        "ruleRefsByAxis": {
+          "type": "object", "additionalProperties": false, "required": ["role", "boundary", "value", "style"],
+          "properties": {
+            "role": { "$ref": "#/$defs/idListNonempty" }, "boundary": { "$ref": "#/$defs/idListNonempty" },
+            "value": { "$ref": "#/$defs/idListNonempty" }, "style": { "$ref": "#/$defs/idListNonempty" }
+          }
+        }
+      }
+    },
+    "policyRevision": { "$ref": "#/$defs/opaqueRef" },
+    "evaluators": { "type": "array", "minItems": 2, "maxItems": 4, "items": { "$ref": "#/$defs/evaluator" } },
+    "evaluatorIndependenceClaimed": { "const": false },
+    "summary": {
+      "type": "object", "additionalProperties": false, "required": ["cases", "axisCounts", "systemTruth", "evaluatorCount"],
+      "properties": {
+        "cases": { "$ref": "#/$defs/countsWithTotal" },
+        "axisCounts": { "type": "array", "minItems": 4, "maxItems": 4, "items": { "$ref": "#/$defs/axisCounts" } },
+        "systemTruth": { "$ref": "#/$defs/counts" },
+        "evaluatorCount": { "type": "integer", "minimum": 2, "maximum": 4 }
+      }
+    },
+    "cases": { "type": "array", "minItems": 1, "maxItems": 20, "items": { "$ref": "#/$defs/resultCase" } },
+    "noCompositeScore": { "const": true },
+    "retention": { "const": "input-text-ephemeral-output-digests-and-locators-only" },
+    "observedAt": { "type": "string", "format": "date-time" },
+    "humanReviewRequired": { "const": true },
+    "personaChanged": { "const": false }, "memoryChanged": { "const": false }, "platformDataRead": { "const": false },
+    "actionExecuted": { "const": false }, "executionAuthorized": { "const": false },
+    "resultDigest": { "$ref": "#/$defs/digest" },
+    "conformance": {
+      "type": "object", "additionalProperties": false, "required": ["status", "assertions"],
+      "properties": {
+        "status": { "enum": ["passed", "review-required"] },
+        "assertions": { "type": "array", "minItems": 1, "items": { "type": "object", "additionalProperties": false, "required": ["id", "passed"], "properties": { "id": { "$ref": "#/$defs/id" }, "passed": { "type": "boolean" } } } }
+      }
+    }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "opaqueRef": { "type": "string", "minLength": 1, "maxLength": 500, "pattern": "^[^\\r\\n\\u0000]+$" },
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "idList": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/id" } },
+    "idListNonempty": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/id" } },
+    "status": { "enum": ["held", "deviated", "disagreement", "unknown", "not-applicable"] },
+    "counts": {
+      "type": "object", "additionalProperties": false, "required": ["held", "deviated", "disagreement", "unknown", "not-applicable"],
+      "properties": { "held": { "type": "integer", "minimum": 0 }, "deviated": { "type": "integer", "minimum": 0 }, "disagreement": { "type": "integer", "minimum": 0 }, "unknown": { "type": "integer", "minimum": 0 }, "not-applicable": { "type": "integer", "minimum": 0 } }
+    },
+    "countsWithTotal": {
+      "type": "object", "additionalProperties": false, "required": ["total", "held", "deviated", "disagreement", "unknown", "not-applicable"],
+      "properties": { "total": { "type": "integer", "minimum": 1 }, "held": { "type": "integer", "minimum": 0 }, "deviated": { "type": "integer", "minimum": 0 }, "disagreement": { "type": "integer", "minimum": 0 }, "unknown": { "type": "integer", "minimum": 0 }, "not-applicable": { "type": "integer", "minimum": 0 } }
+    },
+    "axisCounts": {
+      "type": "object", "additionalProperties": false, "required": ["axis", "held", "deviated", "disagreement", "unknown", "not-applicable"],
+      "properties": { "axis": { "enum": ["role", "boundary", "value", "style"] }, "held": { "type": "integer", "minimum": 0 }, "deviated": { "type": "integer", "minimum": 0 }, "disagreement": { "type": "integer", "minimum": 0 }, "unknown": { "type": "integer", "minimum": 0 }, "not-applicable": { "type": "integer", "minimum": 0 } }
+    },
+    "evaluator": {
+      "type": "object", "additionalProperties": false, "required": ["evaluatorRef", "revisionRef", "familyRef"],
+      "properties": { "evaluatorRef": { "$ref": "#/$defs/opaqueRef" }, "revisionRef": { "$ref": "#/$defs/opaqueRef" }, "familyRef": { "$ref": "#/$defs/opaqueRef" } }
+    },
+    "axisObservation": {
+      "type": "object", "additionalProperties": false, "required": ["evaluatorRef", "evaluatorRevisionRef", "evaluatorFamilyRef", "axis", "verdict", "ruleRefs", "responseSegmentRefs", "reasonCode"],
+      "properties": {
+        "evaluatorRef": { "$ref": "#/$defs/opaqueRef" }, "evaluatorRevisionRef": { "$ref": "#/$defs/opaqueRef" }, "evaluatorFamilyRef": { "$ref": "#/$defs/opaqueRef" },
+        "axis": { "enum": ["role", "boundary", "value", "style"] }, "verdict": { "enum": ["held", "deviated", "unknown"] },
+        "ruleRefs": { "$ref": "#/$defs/idListNonempty" }, "responseSegmentRefs": { "$ref": "#/$defs/idList" }, "reasonCode": { "$ref": "#/$defs/id" }
+      }
+    },
+    "axisResult": {
+      "type": "object", "additionalProperties": false, "required": ["axis", "status", "observations"],
+      "properties": { "axis": { "enum": ["role", "boundary", "value", "style"] }, "status": { "$ref": "#/$defs/status" }, "observations": { "type": "array", "minItems": 2, "maxItems": 4, "items": { "$ref": "#/$defs/axisObservation" } } }
+    },
+    "truthObservation": {
+      "type": "object", "additionalProperties": false, "required": ["evaluatorRef", "evaluatorRevisionRef", "evaluatorFamilyRef", "verdict", "truthRefs", "responseSegmentRefs", "reasonCode"],
+      "properties": {
+        "evaluatorRef": { "$ref": "#/$defs/opaqueRef" }, "evaluatorRevisionRef": { "$ref": "#/$defs/opaqueRef" }, "evaluatorFamilyRef": { "$ref": "#/$defs/opaqueRef" },
+        "verdict": { "enum": ["held", "deviated", "unknown", "not-applicable"] }, "truthRefs": { "$ref": "#/$defs/idList" },
+        "responseSegmentRefs": { "$ref": "#/$defs/idList" }, "reasonCode": { "$ref": "#/$defs/id" }
+      }
+    },
+    "truthResult": {
+      "type": "object", "additionalProperties": false, "required": ["status", "observations"],
+      "properties": { "status": { "$ref": "#/$defs/status" }, "observations": { "type": "array", "minItems": 2, "maxItems": 4, "items": { "$ref": "#/$defs/truthObservation" } } }
+    },
+    "resultCase": {
+      "type": "object", "additionalProperties": false, "required": ["caseRef", "scenario", "contextDigest", "responseDigest", "systemTruthDigest", "status", "axes", "systemTruth", "humanReviewRequired"],
+      "properties": {
+        "caseRef": { "$ref": "#/$defs/id" }, "scenario": { "enum": ["clean", "legitimate-update", "adversarial-override", "agreement-seeking", "emotional-vulnerability", "system-state-conflict", "insufficient-context"] },
+        "contextDigest": { "$ref": "#/$defs/digest" }, "responseDigest": { "$ref": "#/$defs/digest" }, "systemTruthDigest": { "$ref": "#/$defs/digest" },
+        "status": { "$ref": "#/$defs/status" }, "axes": { "type": "array", "minItems": 4, "maxItems": 4, "items": { "$ref": "#/$defs/axisResult" } },
+        "systemTruth": { "$ref": "#/$defs/truthResult" }, "humanReviewRequired": { "const": true }
+      }
+    }
+  }
+}

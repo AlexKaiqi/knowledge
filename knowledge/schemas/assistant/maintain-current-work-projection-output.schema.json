@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/assistant/maintain-current-work-projection-output.schema.json",
+  "title": "Current work projection maintenance result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "currentSessionRef", "workspaceRef", "status", "currentProjectionRef", "currentProjectionDigest", "currentProjectionChars", "currentSessionSourceIncluded", "checkpointAdvanced", "proposalRefs", "coverage", "currentProjectionModified", "sessionHistoryModified", "durableKnowledgeModified", "gitCommitted", "executionAuthorized", "resultDigest"],
+  "properties": {
+    "schemaVersion": { "const": "dsh.current-work-projection-maintenance/v1" },
+    "currentSessionRef": { "type": "string", "pattern": "^session:[A-Za-z0-9._-]{1,128}$" },
+    "workspaceRef": { "type": "string", "pattern": "^workspace:[A-Za-z0-9._-]{1,128}$" },
+    "status": { "enum": ["updated", "no-new-session-text", "no-text-model", "cooldown"] },
+    "currentProjectionRef": { "const": ".pkb/current.md" },
+    "currentProjectionDigest": { "oneOf": [{ "$ref": "#/$defs/digest" }, { "type": "null" }] },
+    "currentProjectionChars": { "oneOf": [{ "type": "integer", "minimum": 1, "maximum": 5000 }, { "type": "null" }] },
+    "currentSessionSourceIncluded": { "type": "boolean" },
+    "checkpointAdvanced": { "type": "boolean" },
+    "proposalRefs": {
+      "type": "array",
+      "maxItems": 4,
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^knowledge-proposal:[A-Za-z0-9._-]{1,128}$" }
+    },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sessionInput", "rawSessionTextReturned", "currentProjectionComplete", "proposalsUnconfirmed", "proposalLimit", "modelOutputHumanReviewed"],
+      "properties": {
+        "sessionInput": { "const": "unconsumed-current-session-events" },
+        "rawSessionTextReturned": { "const": false },
+        "currentProjectionComplete": { "const": false },
+        "proposalsUnconfirmed": { "const": true },
+        "proposalLimit": { "const": 4 },
+        "modelOutputHumanReviewed": { "const": false }
+      }
+    },
+    "currentProjectionModified": { "type": "boolean" },
+    "sessionHistoryModified": { "const": false },
+    "durableKnowledgeModified": { "const": false },
+    "gitCommitted": { "const": false },
+    "executionAuthorized": { "const": false },
+    "resultDigest": { "$ref": "#/$defs/digest" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "updated" } }, "required": ["status"] },
+      "then": {
+        "properties": {
+          "currentProjectionDigest": { "$ref": "#/$defs/digest" },
+          "currentProjectionChars": { "type": "integer", "minimum": 1, "maximum": 5000 },
+          "currentSessionSourceIncluded": { "const": true },
+          "currentProjectionModified": { "const": true }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "status": { "enum": ["no-new-session-text", "no-text-model", "cooldown"] } }, "required": ["status"] },
+      "then": {
+        "properties": {
+          "currentProjectionDigest": { "type": "null" },
+          "currentProjectionChars": { "type": "null" },
+          "currentSessionSourceIncluded": { "const": false },
+          "checkpointAdvanced": { "const": false },
+          "proposalRefs": { "maxItems": 0 },
+          "currentProjectionModified": { "const": false }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+  }
+}

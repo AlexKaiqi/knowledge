@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "openconnector-public-social-search-live",
+  "version": "0.1.0",
+  "capabilityRef": "/capabilities/research/search-public-social-content.md",
+  "connectorId": "openconnector-public-social-search",
+  "environment": "production-public",
+  "identity": { "required": true, "poolRef": "identity-pool:openconnector-tikhub-provider-probes" },
+  "effect": "financial",
+  "steps": [
+    { "id": "review-provider-and-platform-terms", "operation": "confirmApprovedResearchUse" },
+    { "id": "verify-encrypted-loopback-runtime", "operation": "verifyOpenConnectorRuntimeSecurity" },
+    { "id": "inspect-action-contract-and-price", "operation": "inspectTikHubActionAndPrice" },
+    { "id": "search-one-initial-page", "operation": "executeCandidatePublicSocialSearch", "inputRef": "repo:/probes/fixtures/openconnector-public-social-search-probe.json" },
+    { "id": "derive-deidentified-projection", "operation": "proposePublicSocialSearchProjection" },
+    { "id": "reconcile-provider-cost", "operation": "reconcileTikHubUsage" },
+    { "id": "discard-upstream-payload", "operation": "discardEphemeralProviderPayload" },
+    { "id": "write-staging-report", "operation": "writeCandidateProbeReport" }
+  ],
+  "assertions": [
+    "The runtime is OpenConnector v1.4.0 at commit 96fb6afe8c244c7d6f3a8351df06d7b04137f6a6, bound to loopback, protected by an admin token, and configured with credential encryption before any TikHub connection is created.",
+    "The runtime token permits only the selected TikHub search action and the exact research connection; provider proxy access remains denied.",
+    "Exactly one initial-page read is executed with no retry, pagination, comments, profile lookup, media download or platform write.",
+    "The live response shape supports a bounded provider-neutral projection that removes author and account identity, rawData, raw payload duplication, provider connection facts and credentials.",
+    "Upstream public content remains ephemeral, never enters Git or logs, and the durable candidate report retains only structural evidence and digests.",
+    "TikHub usage is measured before and after the run and total approved provider spend does not exceed USD 1.",
+    "A passed probe verifies only this action, platform and revision; it does not admit the rest of the OpenConnector provider catalog."
+  ],
+  "cleanup": ["Discard the transient provider response and remove any temporary diagnostic export after structural evidence is recorded."],
+  "budget": { "timeoutSeconds": 180, "maxCost": 1, "currency": "USD" }
+}

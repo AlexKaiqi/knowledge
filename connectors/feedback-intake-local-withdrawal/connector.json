@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "feedback-intake-local-withdrawal",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/feedback/withdraw-consented-intake-record.md"],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "connectors/feedback-intake-local-withdrawal/src/index.mjs"
+  },
+  "configSchema": "repo:/connectors/feedback-intake-local-withdrawal/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [
+    {
+      "capabilityRef": "/capabilities/feedback/withdraw-consented-intake-record.md",
+      "operation": "withdrawConsentedFeedbackIntakeRecord"
+    }
+  ],
+  "conformance": {
+    "status": "verified",
+    "probeReportRef": "/verifications/feedback/intake-local-withdrawal/report.json"
+  }
+}

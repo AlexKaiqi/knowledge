@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/distribution/evaluate-impact-observation-set-input.schema.json",
+  "title": "EvaluateDistributionImpactObservationSetInput",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["evaluationRef", "targetRef", "publication", "evaluatedAt", "comparisons"],
+  "properties": {
+    "evaluationRef": { "$ref": "#/$defs/ref" },
+    "targetRef": { "$ref": "#/$defs/ref" },
+    "publication": {
+      "type": "object", "additionalProperties": false,
+      "required": ["revisionRef", "occurredAt"],
+      "properties": { "revisionRef": { "$ref": "#/$defs/ref" }, "receiptRef": { "$ref": "#/$defs/ref" }, "occurredAt": { "type": "string", "format": "date-time" } }
+    },
+    "evaluatedAt": { "type": "string", "format": "date-time" },
+    "comparisons": {
+      "type": "array", "minItems": 1, "maxItems": 50,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["comparisonRef", "baseline", "current", "attribution"],
+        "properties": {
+          "comparisonRef": { "$ref": "#/$defs/ref" },
+          "baseline": { "$ref": "#/$defs/observation" },
+          "current": { "$ref": "#/$defs/observation" },
+          "attribution": {
+            "type": "object", "additionalProperties": false,
+            "required": ["method", "evidenceRefs"],
+            "properties": {
+              "method": { "enum": ["platform-attributed", "temporal-only", "none"] },
+              "evidenceRefs": { "type": "array", "maxItems": 10, "uniqueItems": true, "items": { "$ref": "#/$defs/ref" } }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "ref": { "type": "string", "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:/-]{0,255}$" },
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "observation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["sourceRef", "platform", "surfaceRef", "metricRef", "definitionRef", "definitionDigest", "scopeDigest", "unit", "windowStart", "windowEnd", "state", "completeness"],
+      "properties": {
+        "sourceRef": { "$ref": "#/$defs/ref" },
+        "platform": { "enum": ["steam", "apple-app-store", "google-play"] },
+        "surfaceRef": { "$ref": "#/$defs/ref" },
+        "metricRef": { "$ref": "#/$defs/ref" },
+        "definitionRef": { "$ref": "#/$defs/ref" },
+        "definitionDigest": { "$ref": "#/$defs/digest" },
+        "scopeDigest": { "$ref": "#/$defs/digest" },
+        "unit": { "const": "count" },
+        "windowStart": { "type": "string", "format": "date-time" },
+        "windowEnd": { "type": "string", "format": "date-time" },
+        "state": { "enum": ["observed", "suppressed", "unavailable", "not-finalized"] },
+        "value": { "type": "integer", "minimum": 0 },
+        "completeness": { "enum": ["complete", "partial", "unknown"] },
+        "finalizedAt": { "type": "string", "format": "date-time" }
+      }
+    }
+  }
+}

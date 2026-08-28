@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "dsh.collector-definition/v1",
+  "id": "steam-store-tag-revision-maintainer",
+  "version": "1.0.0",
+  "scope": {
+    "knowledgeGlobs": [
+      "knowledge/tools/steam-store-tag-revision.md",
+      "knowledge/concepts/steam/store-tag-review-revision.md",
+      "knowledge/capabilities/steam/prepare-store-tag-review-revision.md",
+      "knowledge/schemas/steam/prepare-store-tag-review-revision-*.schema.json",
+      "knowledge/verifications/steam/store-tag-review-revision/*.json"
+    ],
+    "connectorIds": ["steam-store-tag-revision"],
+    "capabilityRefs": ["/capabilities/steam/prepare-store-tag-review-revision.md"]
+  },
+  "triggers": [
+    { "kind": "schedule", "schedule": "10 10 * * 4" },
+    { "kind": "source-change" },
+    { "kind": "schema-change" },
+    { "kind": "connector-change" },
+    { "kind": "failed-execution" },
+    { "kind": "manual" }
+  ],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "collectors/steam-store-tag-revision-maintainer/src/index.mjs"
+  },
+  "outputs": ["knowledge-proposal", "connector-change-proposal", "verification-report"],
+  "writePolicy": {
+    "mode": "proposal-only",
+    "requiresApprovalFor": ["knowledge", "connector", "live-probe"]
+  },
+  "probePolicy": {
+    "allowedEnvironments": ["local", "production-public"],
+    "identityPoolRefs": [],
+    "maximumEffect": "none"
+  },
+  "budgets": { "maxRunsPerDay": 2, "maxCostPerDay": 0, "currency": "CNY" }
+}

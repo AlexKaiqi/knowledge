@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "distribution-impact-observation-evaluation-local",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/distribution/evaluate-impact-observation-set.md",
+  "connectorId": "distribution-impact-observation-evaluator",
+  "environment": "local",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "verify-official-native-metric-semantics", "operation": "verifyOfficialSources" },
+    { "id": "evaluate-frozen-observations", "operation": "evaluateDistributionImpactObservations", "inputRef": "repo:/probes/fixtures/distribution/impact-observation-evaluation.json" },
+    { "id": "replay-ordering-and-mutations", "operation": "evaluateDistributionImpactObservations", "inputRef": "repo:/probes/fixtures/distribution/impact-observation-evaluation.json" },
+    { "id": "validate-public-schemas", "operation": "validateSchemas" }
+  ],
+  "assertions": [
+    "Only same-platform, same-source observations enter a comparison; no cross-platform score is produced.",
+    "A delta requires the same native metric definition, surface, scope, unit, duration and complete finalized windows.",
+    "Suppressed and unavailable values remain unknown; not-finalized values remain pending and are never coerced to zero.",
+    "Platform-attributed requires an exact PublicationReceipt and evidence; temporal association explicitly denies causality; missing attribution remains unknown.",
+    "The capability reads no platform account, writes no knowledge, executes no action and grants no authority."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 90, "maxCost": 0, "currency": "CNY" }
+}

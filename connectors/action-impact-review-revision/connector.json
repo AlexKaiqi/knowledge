@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "action-impact-review-revision",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/assistant/prepare-action-impact-review-revision.md"],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "connectors/action-impact-review-revision/src/index.mjs"
+  },
+  "configSchema": "repo:/connectors/action-impact-review-revision/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [
+    {
+      "capabilityRef": "/capabilities/assistant/prepare-action-impact-review-revision.md",
+      "operation": "prepareActionImpactReviewRevision"
+    }
+  ],
+  "conformance": {
+    "status": "verified",
+    "probeReportRef": "/verifications/assistant/action-impact-review-revision/report.json"
+  }
+}

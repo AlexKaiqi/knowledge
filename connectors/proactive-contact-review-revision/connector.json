@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "proactive-contact-review-revision",
+  "version": "0.1.0",
+  "capabilityRefs": ["/capabilities/assistant/prepare-proactive-contact-review-revision.md"],
+  "execution": { "kind": "deterministic", "runtime": "node >=22.19", "entrypoint": "connectors/proactive-contact-review-revision/src/index.mjs" },
+  "configSchema": "repo:/connectors/proactive-contact-review-revision/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [{ "capabilityRef": "/capabilities/assistant/prepare-proactive-contact-review-revision.md", "operation": "prepareProactiveContactReviewRevision" }],
+  "conformance": { "status": "verified", "probeReportRef": "/verifications/assistant/proactive-contact-review-revision/report.json" }
+}

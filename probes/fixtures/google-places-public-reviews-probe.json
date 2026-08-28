@@ -1,0 +1,13 @@
+{
+  "target": {
+    "query": "Googleplex Mountain View",
+    "locationBias": { "latitude": 37.422, "longitude": -122.084, "radiusMeters": 5000 },
+    "languageCode": "en",
+    "regionCode": "US"
+  },
+  "limit": 5,
+  "usageMode": "ephemeral-attributed-research",
+  "maximumBillableRequests": 1,
+  "maximumCostUsd": 0.03,
+  "retention": "verification-redaction-only"
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/schemas/arxiv/search-public-eprint-metadata-input.schema.json",
+  "title": "Search public arXiv e-print metadata input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["query"],
+  "properties": {
+    "query": { "type": "string", "minLength": 2, "maxLength": 200, "pattern": "^[^\\r\\n\\u0000:()\\\\]+$" },
+    "field": { "enum": ["all", "title", "abstract"], "default": "all" },
+    "category": { "type": ["string", "null"], "pattern": "^[a-z][a-z0-9-]*(?:\\.[A-Za-z0-9-]+)?$", "default": null },
+    "sortBy": { "enum": ["relevance", "lastUpdatedDate", "submittedDate"], "default": "submittedDate" },
+    "sortOrder": { "enum": ["ascending", "descending"], "default": "descending" },
+    "start": { "type": "integer", "minimum": 0, "maximum": 1000, "default": 0 },
+    "limit": { "type": "integer", "minimum": 1, "maximum": 20, "default": 10 }
+  }
+}

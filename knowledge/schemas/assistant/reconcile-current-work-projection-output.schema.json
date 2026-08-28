@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/assistant/reconcile-current-work-projection-output.schema.json",
+  "title": "CurrentWorkProjectionReconciliation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "currentSessionRef", "workspaceRef", "status", "reason", "currentProjectionRef", "currentProjectionDigest", "currentProjectionChars", "reconciledSessionRefs", "checkpointAdvancedSessionRefs", "skippedSessionRefs", "proposalRefs", "coverage", "currentProjectionModified", "checkpointsModified", "sessionHistoryModified", "durableKnowledgeModified", "gitCommitted", "executionAuthorized", "resultDigest"],
+  "properties": {
+    "schemaVersion": { "const": "dsh.current-work-projection-reconciliation/v1" },
+    "currentSessionRef": { "$ref": "#/$defs/sessionRef" },
+    "workspaceRef": { "type": "string", "pattern": "^workspace:[A-Za-z0-9._-]{1,128}$" },
+    "status": { "enum": ["reconciled", "no-observed-session-increments", "partial", "unavailable"] },
+    "reason": { "type": ["string", "null"], "enum": [null, "no-session-query", "no-text-model", "reconciliation-failed"] },
+    "currentProjectionRef": { "const": ".pkb/current.md" },
+    "currentProjectionDigest": { "type": ["string", "null"], "pattern": "^sha256:[a-f0-9]{64}$" },
+    "currentProjectionChars": { "type": ["integer", "null"], "minimum": 1, "maximum": 5000 },
+    "reconciledSessionRefs": { "$ref": "#/$defs/sessionRefs" },
+    "checkpointAdvancedSessionRefs": { "$ref": "#/$defs/sessionRefs" },
+    "skippedSessionRefs": { "$ref": "#/$defs/sessionRefs" },
+    "proposalRefs": { "type": "array", "maxItems": 48, "uniqueItems": true, "items": { "type": "string", "pattern": "^knowledge-proposal:[A-Za-z0-9._-]{1,128}$" } },
+    "coverage": {
+      "type": "object", "additionalProperties": false,
+      "required": ["sessionInput", "recentSessionLimit", "currentSessionExcluded", "sessionEnumerationComplete", "sourceFailuresFullyObservable", "rawSessionTextReturned", "fullProjectionRebuild", "cursorReset", "proposalsUnconfirmed", "proposalLimitPerReconciledSession", "modelOutputHumanReviewed"],
+      "properties": {
+        "sessionInput": { "const": "unconsumed-persisted-session-events" },
+        "recentSessionLimit": { "const": 12 },
+        "currentSessionExcluded": { "const": true },
+        "sessionEnumerationComplete": { "const": false },
+        "sourceFailuresFullyObservable": { "const": false },
+        "rawSessionTextReturned": { "const": false },
+        "fullProjectionRebuild": { "const": false },
+        "cursorReset": { "const": false },
+        "proposalsUnconfirmed": { "const": true },
+        "proposalLimitPerReconciledSession": { "const": 4 },
+        "modelOutputHumanReviewed": { "const": false }
+      }
+    },
+    "currentProjectionModified": { "type": "boolean" },
+    "checkpointsModified": { "type": "boolean" },
+    "sessionHistoryModified": { "const": false },
+    "durableKnowledgeModified": { "const": false },
+    "gitCommitted": { "const": false },
+    "executionAuthorized": { "const": false },
+    "resultDigest": { "$ref": "#/$defs/digest" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "reconciled" } } },
+      "then": { "properties": { "reason": { "type": "null" }, "currentProjectionDigest": { "$ref": "#/$defs/digest" }, "currentProjectionChars": { "type": "integer" }, "reconciledSessionRefs": { "minItems": 1 }, "skippedSessionRefs": { "maxItems": 0 }, "currentProjectionModified": { "const": true } } }
+    },
+    {
+      "if": { "properties": { "status": { "const": "no-observed-session-increments" } } },
+      "then": { "properties": { "reason": { "type": "null" }, "currentProjectionDigest": { "type": "null" }, "currentProjectionChars": { "type": "null" }, "reconciledSessionRefs": { "maxItems": 0 }, "checkpointAdvancedSessionRefs": { "maxItems": 0 }, "skippedSessionRefs": { "maxItems": 0 }, "proposalRefs": { "maxItems": 0 }, "currentProjectionModified": { "const": false }, "checkpointsModified": { "const": false } } }
+    },
+    {
+      "if": { "properties": { "status": { "const": "partial" } } },
+      "then": { "properties": { "reason": { "enum": ["no-text-model", "reconciliation-failed"] }, "currentProjectionDigest": { "$ref": "#/$defs/digest" }, "currentProjectionChars": { "type": "integer" }, "reconciledSessionRefs": { "minItems": 1 }, "skippedSessionRefs": { "minItems": 1 }, "currentProjectionModified": { "const": true } } }
+    },
+    {
+      "if": { "properties": { "status": { "const": "unavailable" } } },
+      "then": { "properties": { "reason": { "enum": ["no-session-query", "no-text-model", "reconciliation-failed"] }, "currentProjectionDigest": { "type": "null" }, "currentProjectionChars": { "type": "null" }, "reconciledSessionRefs": { "maxItems": 0 }, "proposalRefs": { "maxItems": 0 }, "currentProjectionModified": { "const": false } } }
+    }
+  ],
+  "$defs": {
+    "sessionRef": { "type": "string", "pattern": "^session:[A-Za-z0-9._-]{1,128}$" },
+    "sessionRefs": { "type": "array", "maxItems": 12, "uniqueItems": true, "items": { "$ref": "#/$defs/sessionRef" } },
+    "digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" }
+  }
+}

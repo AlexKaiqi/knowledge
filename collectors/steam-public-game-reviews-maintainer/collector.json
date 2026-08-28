@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "dsh.collector-definition/v1",
+  "id": "steam-public-game-reviews-maintainer",
+  "version": "1.0.0",
+  "scope": {
+    "knowledgeGlobs": [
+      "knowledge/platforms/steam.md",
+      "knowledge/tools/steam-review-observation-projector.md",
+      "knowledge/concepts/steam/public-game-review-page.md",
+      "knowledge/concepts/steam/review-observation-window.md",
+      "knowledge/capabilities/steam/read-public-game-review-page.md",
+      "knowledge/capabilities/steam/project-review-page-to-observation-window.md",
+      "knowledge/schemas/steam/read-public-game-review-page-*.schema.json",
+      "knowledge/schemas/steam/project-review-page-to-observation-window-output.schema.json",
+      "knowledge/verifications/steam/public-game-reviews/*.json",
+      "knowledge/verifications/steam/review-observation-projection/*.json"
+    ],
+    "connectorIds": ["steam-public-game-reviews"],
+    "capabilityRefs": [
+      "/capabilities/steam/read-public-game-review-page.md",
+      "/capabilities/steam/project-review-page-to-observation-window.md"
+    ]
+  },
+  "triggers": [
+    { "kind": "schedule", "schedule": "15 9 * * *" },
+    { "kind": "source-change" },
+    { "kind": "schema-change" },
+    { "kind": "connector-change" },
+    { "kind": "failed-execution" },
+    { "kind": "manual" }
+  ],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "collectors/steam-public-game-reviews-maintainer/src/index.mjs"
+  },
+  "outputs": ["knowledge-proposal", "connector-change-proposal", "verification-report"],
+  "writePolicy": {
+    "mode": "proposal-only",
+    "requiresApprovalFor": ["knowledge", "connector", "live-probe"]
+  },
+  "probePolicy": {
+    "allowedEnvironments": ["local", "production-public"],
+    "identityPoolRefs": [],
+    "maximumEffect": "none"
+  },
+  "budgets": { "maxRunsPerDay": 4, "maxCostPerDay": 0, "currency": "CNY" }
+}

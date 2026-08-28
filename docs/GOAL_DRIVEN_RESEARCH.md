@@ -1,6 +1,6 @@
 # 目标驱动的研究闭环
 
-状态：架构决策；当前只有首个目标研究与初始证据，不代表新 Capability 已准入  
+状态：架构决策；证据化调研 Capability 已以 local/experimental 准入，具体 Difficulty/Opportunity 仍需独立 probe 才能准入
 核验日期：2026-08-27
 
 ## 1. 决策
@@ -88,15 +88,17 @@ query 不是全局关键词表。每个 research question 编译为 source-speci
 
 ```text
 GoalResearchProfile
-  → agentic Collector chooses bounded questions
-  → verified/candidate Connectors read sources
-  → Collector normalizes and cross-checks evidence
-  → KnowledgeProposal: Workflow / Difficulty / Opportunity
+  → public Research Capability
+  → hidden agentic Connector chooses bounded questions
+  → verified source capabilities read evidence
+  → Connector normalizes and cross-checks evidence
+  → Research Dossier
+  → optional KnowledgeProposal: Workflow / Difficulty / Opportunity
   → approval + implementation/probe
   → OKF exposes only verified knowledge/capability
 ```
 
-Connector 继续拥有 source wire、分页、限流、checkpoint 和原生 Schema。Collector 继续维护知识和 Connector，并负责 agentic synthesis；它不把普通抓取改名成研究。OKF 外部调用者不需要知道使用了 GitHub 还是 arXiv，只看经过验证的目标、难点、证据和能力。
+Research Connector 拥有问题编译、来源选择、agentic synthesis 与公共 dossier 归一化；具体来源 Connector 继续拥有 source wire、分页、限流、checkpoint 和原生 Schema。Collector 只维护研究方法、知识、来源与 Connector，不执行面向调用者的调研，也不把普通抓取改名成维护。OKF 外部调用者不需要知道使用了 GitHub 还是 arXiv，只看 Research Dossier 或经过验证的目标、难点、证据和能力。
 
 ## 6. 当前执行规则
 
@@ -105,3 +107,36 @@ Connector 继续拥有 source wire、分页、限流、checkpoint 和原生 Sche
 - 新来源必须先说明它补哪种证据缺口；与现有来源重复且不改变决策的，不接入。
 - 初始 evidence 可以进调研文档；canonical Difficulty/Opportunity 仍需产品实验或相应 probe。
 - Collector 只生成 proposal，不自动安装项目、不采用代码、不创建账号、不接受协议、不执行平台写操作。
+
+## 7. 已准入的调研能力
+
+[执行证据化调研](../knowledge/capabilities/research/conduct-evidence-backed-research.md) 将本章方法变成一个公共能力：调用者只声明场景、目标、决策与问题，内部来源选择、查询轮换、Agent prompt 和 Connector route 保持隐藏，结果统一为 [Research Dossier](../knowledge/concepts/research/evidence-backed-research-dossier.md)。
+
+同一能力内保留六种场景证据策略：需求、市场/竞品、技术方案、学术前沿、平台接入、传播/影响力。当前 local probe 验证了输入输出、上游方法 provenance、反证/引用约束和场景策略，并保存 9 次真实 Agent 调研：3 次 `platform-integration` 覆盖 App 评论、闲鱼以及 Google/闲鱼/58/BOSS 需求来源路线；2 次 `technical-solution` 覆盖个人助理 approval 架构和 transport security；`demand`、`academic-frontier`、`distribution-impact`、`market-competitive` 各 1 次，分别覆盖个人助理/宠物独立困难、长期记忆评测前沿、游戏/App 传播指标边界和个人助理/宠物品类与 persona continuity。六类场景均有真实运行，但这些样本仍不证明跨 runtime 重复性，因此结果必须人审，不能自动产生 canonical Difficulty、Opportunity 或平台 Capability。
+
+场景不是六个独立工具，也不是六套报告模板。只有输入/结果 Concept、证据门、权限/副作用或 eval 生命周期真正不同，才从该能力拆出独立 Capability；新增 GitHub、arXiv、搜索或评论路线本身不会增加公共能力数。
+
+## 8. 调研方法也是能力发现对象
+
+本仓库收集的是能力，不是软件包清单。外部 `SKILL.md`、论文方法、研究模板或 Agent 项目首先是**能力候选的实现证据**；它们描述的目标、步骤、证据门和失败条件可以被吸收，但仓库存在、可以安装或自称“deep research”都不等于形成了一个可用能力。
+
+吸收闭环固定为：
+
+```text
+发现外部方法
+→ 固定来源 revision、许可证与内容 digest
+→ 提取可独立检验的方法原子
+→ 映射到现有 research scenario 的证据策略
+→ 更新隐藏 Connector prompt / policy / eval proposal
+→ 运行真实场景并验证公共 Dossier
+→ 提升现有 Capability 的场景覆盖，或为真正分叉的契约另行申请准入
+```
+
+判断单位始终是“调用者最终获得什么能力”：
+
+- 只改变搜索步骤、来源选择、提问顺序或综合技巧：吸收到隐藏 Connector，不新增公共 Capability；
+- 为现有场景补充新的证据门或反例：更新场景 profile 和独立 eval，不复制工具；
+- 产生新的稳定输入、结果 Concept、权限、副作用或失败生命周期：形成新的 Capability 候选，待 probe 后准入；
+- 只有提示词、报告模板、项目热度或安装说明：保留为方法证据或拒绝，不进入公共知识。
+
+Collector 持续观察已吸收方法的 revision、许可证、语义和验证时效，只生成 proposal。公共 OKF 只声明已经验证的研究能力与场景覆盖，不暴露 skill 仓库、prompt、模型 route 或来源 Connector。这样“调研”本身参与能力收集，同时不会把每个调研项目、数据源和模板错误计成一个能力。

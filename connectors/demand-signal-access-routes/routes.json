@@ -1,0 +1,253 @@
+{
+  "schemaVersion": "dsh.access-route-catalog/v1",
+  "id": "demand-signal-access-routes",
+  "subjectRef": "/tools/evidence-backed-research.md",
+  "capabilityRefs": [
+    "/capabilities/research/read-web-result-page.md",
+    "/capabilities/research/read-search-interest-series.md",
+    "/capabilities/feedback/read-owned-search-query-delta.md",
+    "/capabilities/research/read-public-place-review-snapshot.md",
+    "/capabilities/feedback/read-owned-business-review-delta.md",
+    "/capabilities/research/search-public-app-catalog.md",
+    "/capabilities/research/read-public-app-review-snapshot.md",
+    "/capabilities/feedback/read-owned-app-review-delta.md",
+    "/capabilities/research/read-classified-listing-snapshot.md",
+    "/capabilities/research/read-job-posting-snapshot.md",
+    "/capabilities/research/search-public-social-content.md"
+  ],
+  "routes": [
+    {
+      "id": "google-serp-dataforseo",
+      "lifecycle": "candidate", "contractLevel": "full", "accessMethod": "official-api", "automaticSelectionEligible": false, "priority": 10,
+      "connectorId": "dataforseo-google-organic-serp", "implementationRef": "repo:/connectors/dataforseo-google-organic-serp/src/index.mjs", "probeDefinitionRef": "repo:/probes/definitions/dataforseo-google-organic-serp-live.json",
+      "capabilityCoverage": [{ "capabilityRef": "/capabilities/research/read-web-result-page.md", "phases": ["authorize", "observe"], "gaps": ["Provider account, terms, opaque credential, identity registration, sandbox and a capped live billing reconciliation remain unapproved."] }],
+      "failureDomains": ["dataforseo-account", "dataforseo-api", "google-serp", "provider-parser", "billing-ledger"],
+      "sourceRefs": ["https://dataforseo.com/pricing/serp/google-organic-serp-api", "https://docs.dataforseo.com/v3/appendix/sandbox/"],
+      "maintenance": { "owner": "dataforseo-google-organic-serp-maintainer", "reviewOn": ["source-change", "probe-failure", "contract-gap-change", "manual"] },
+      "notes": "Implemented first choice. One 10-result live page has a current base price of $0.002; paid operators are rejected and the probe hard limit remains $0.01. Purchase-time price and minimum deposit must be rechecked."
+    },
+    {
+      "id": "google-serp-serpapi", "lifecycle": "researching", "contractLevel": "full", "accessMethod": "official-api", "automaticSelectionEligible": false, "priority": 20,
+      "capabilityCoverage": [{ "capabilityRef": "/capabilities/research/read-web-result-page.md", "phases": ["authorize", "observe"], "gaps": ["No Connector, normalized schema comparison, account binding or live cost reconciliation exists."] }],
+      "failureDomains": ["serpapi-account", "serpapi-api", "google-serp", "provider-parser"],
+      "sourceRefs": ["https://serpapi.com/pricing", "https://serpapi.com/account-api"],
+      "maintenance": { "owner": "demand-signal-route-maintainer", "reviewOn": ["source-change", "contract-gap-change", "manual"] },
+      "notes": "Second failure domain for small samples: current free plan is 250 searches/month; paid starts at $25/month for 1,000. The documentation still shows a demo key, but the fixed documented demo request returned HTTP 401 on 2026-08-27; an owned account/API key is required before a probe."
+    },
+    {
+      "id": "google-serp-bright-data", "lifecycle": "researching", "contractLevel": "full", "accessMethod": "official-api", "automaticSelectionEligible": false, "priority": 30,
+      "capabilityCoverage": [{ "capabilityRef": "/capabilities/research/read-web-result-page.md", "phases": ["authorize", "observe"], "gaps": ["No Connector, provider contract review or normalized live comparison exists."] }],
+      "failureDomains": ["bright-data-account", "bright-data-serp-api", "google-serp", "provider-parser"],
+      "sourceRefs": ["https://brightdata.com/pricing/serp", "https://docs.brightdata.com/scraping-automation/serp-api/pricing-and-billing"],
+      "maintenance": { "owner": "demand-signal-route-maintainer", "reviewOn": ["source-change", "contract-gap-change", "manual"] },
+      "notes": "Operationally independent provider with 5K free monthly requests and PAYG $1.5/1K successful requests at the current audit; provider-managed retry/unlocking must not weaken response and cost bounds."
+    },
+    {
+      "id": "google-custom-search-json-existing-customer", "lifecycle": "suspended", "contractLevel": "full", "accessMethod": "official-api", "automaticSelectionEligible": false, "priority": 90,
+      "capabilityCoverage": [{ "capabilityRef": "/capabilities/research/read-web-result-page.md", "phases": ["authorize", "observe"], "gaps": ["Google closed the API to new customers; this project has no existing customer engine/key, and remaining customers must migrate by 2027-01-01."] }],
+      "failureDomains": ["google-cloud-existing-customer", "programmable-search-engine", "api-key", "service-retirement"],
+      "sourceRefs": ["https://developers.google.com/custom-search/v1/overview"],
+      "maintenance": { "owner": "demand-signal-route-maintainer", "reviewOn": ["source-change", "contract-gap-change", "manual"] },
+      "notes": "Official historical route only. Keep visible for migration audits, but do not create a new Connector or procurement plan for an API closed to new customers and scheduled to end for existing customers on 2027-01-01."
+    },
+    {
+      "id": "google-trends-alpha", "lifecycle": "researching", "contractLevel": "full", "accessMethod": "official-api", "automaticSelectionEligible": false, "priority": 10,
+      "capabilityCoverage": [{ "capabilityRef": "/capabilities/research/read-search-interest-series.md", "phases": ["authorize", "observe"], "gaps": ["The official API remains limited alpha and this project has no approved access identity."] }],
+      "failureDomains": ["google-trends-alpha-access", "google-trends-api", "sampling-semantics"],
+      "sourceRefs": ["https://developers.google.com/search/apis/trends"],
+      "maintenance": { "owner": "demand-signal-route-maintainer", "reviewOn": ["source-change", "contract-gap-change", "manual"] },
+      "notes": "Interest is normalized relative attention, never absolute search volume. No unofficial scraping fallback is eligible."
+    },
+    {
+      "id": "google-search-console-owned", "lifecycle": "researching", "contractLevel": "full", "accessMethod": "official-api", "automaticSelectionEligible": false, "priority": 10,
+      "capabilityCoverage": [{ "capabilityRef": "/capabilities/feedback/read-owned-search-query-delta.md", "phases": ["authorize", "observe"], "gaps": ["Requires an owned verified property and read-only OAuth; top-row truncation and checkpoint behavior are unprobed."] }],
+      "failureDomains": ["google-search-console", "verified-property", "oauth-session", "top-row-truncation"],
+      "sourceRefs": ["https://developers.google.com/webmaster-tools/v1/searchanalytics/query"],
+      "maintenance": { "owner": "demand-signal-route-maintainer", "reviewOn": ["source-change", "probe-failure", "contract-gap-change", "manual"] },
+      "notes": "Highest-value owned route once a real property exists; output must preserve that the API returns top rows rather than a complete query corpus."
+    },
+    {
+      "id": "google-places-five-review", "lifecycle": "candidate", "contractLevel": "degraded", "accessMethod": "official-api", "automaticSelectionEligible": false, "priority": 10,
+      "connectorId": "google-places-public-reviews", "implementationRef": "repo:/connectors/google-places-public-reviews/src/index.mjs", "probeDefinitionRef": "repo:/probes/definitions/google-places-public-reviews-live.json",
+      "capabilityCoverage": [{ "capabilityRef": "/capabilities/research/read-public-place-review-snapshot.md", "phases": ["authorize", "observe", "cleanup"], "gaps": ["Google Cloud project/billing, restricted key, identity, terms/privacy/attribution surface and a capped live probe remain unapproved; caller place identity is not confirmed, only a relevance-selected maximum-five sample is available, and Places content cannot be durably retained."] }],
+      "failureDomains": ["google-cloud-project", "places-api", "place-resolution", "billing-quota", "relevance-sample", "author-attribution-display", "places-content-retention"],
+      "sourceRefs": ["https://developers.google.com/maps/documentation/places/web-service/text-search", "https://developers.google.com/maps/documentation/places/web-service/place-details", "https://developers.google.com/maps/documentation/places/web-service/reference/rest/v1/places", "https://developers.google.com/maps/documentation/places/web-service/policies?hl=en", "https://developers.google.com/maps/billing-and-pricing/sku-details?hl=en", "https://developers.google.com/maps/billing-and-pricing/pricing"],
+      "maintenance": { "owner": "google-places-public-reviews-maintainer", "reviewOn": ["source-change", "probe-failure", "contract-gap-change", "manual"] },
+      "notes": "Implemented official low-depth baseline. One ID-only search resolves the first relevance result and one Place Details Enterprise + Atmosphere call returns at most five relevance-selected reviews. Raw review and author content is ephemeral and fully attributed; Git verification retains only structural flags. This is not a historical review API or delta source."
+    },
+    {
+      "id": "google-public-reviews-dataforseo", "lifecycle": "candidate", "contractLevel": "degraded", "accessMethod": "official-api", "automaticSelectionEligible": false, "priority": 20,
+      "connectorId": "dataforseo-google-public-reviews", "implementationRef": "repo:/connectors/dataforseo-google-public-reviews/src/index.mjs", "probeDefinitionRef": "repo:/probes/definitions/dataforseo-google-public-reviews-live.json",
+      "capabilityCoverage": [{ "capabilityRef": "/capabilities/research/read-public-place-review-snapshot.md", "phases": ["authorize", "observe", "cleanup"], "gaps": ["DataForSEO account/Terms, API credential, identity, target Google content-use/data-protection review, suspend/resume executor, free sandbox and one capped live task remain unapproved; the provider keyword resolution is not caller-confirmed and supplier access does not establish Google authorization."] }],
+      "failureDomains": ["dataforseo-account", "dataforseo-business-data-api", "google-review-serp", "provider-keyword-resolution", "async-task-queue", "duplicate-task-billing", "target-content-rights", "transient-personal-data"],
+      "sourceRefs": ["https://docs.dataforseo.com/v3/business_data-google-reviews-task_post/", "https://docs.dataforseo.com/v3/business_data-google-reviews-task_get/", "https://dataforseo.com/pricing/business-data/google-reviews-api", "https://dataforseo.com/terms-of-service", "https://www.google.com/intl/en-US/help/terms_maps/"],
+      "maintenance": { "owner": "dataforseo-google-public-reviews-maintainer", "reviewOn": ["source-change", "probe-failure", "contract-gap-change", "manual"] },
+      "notes": "Implemented paid deeper-sample failure domain. One standard task fixes depth 20 and newest-first ordering; the executor suspends rather than internally polling or resubmitting. Reviewer identity/history, images, provider IDs and owner-response text are removed. Verbatim review text is transient, Git verification is content-free, current task cost is capped at USD 0.002, and target-platform authorization remains explicitly unverified."
+    },
+    {
+      "id": "google-business-profile-owned-reviews", "lifecycle": "researching", "contractLevel": "full", "accessMethod": "official-api", "automaticSelectionEligible": false, "priority": 10,
+      "capabilityCoverage": [{ "capabilityRef": "/capabilities/feedback/read-owned-business-review-delta.md", "phases": ["authorize", "observe"], "gaps": ["Requires API access approval, verified owned location, read-only OAuth and a live empty/edit/reply checkpoint probe."] }],
+      "failureDomains": ["google-business-profile", "verified-location", "oauth-session", "review-pagination"],
+      "sourceRefs": ["https://developers.google.com/my-business/reference/rest/v4/accounts.locations.reviews/list"],
+      "maintenance": { "owner": "demand-signal-route-maintainer", "reviewOn": ["source-change", "probe-failure", "contract-gap-change", "manual"] },
+      "notes": "Owned reviews only; cannot be reused for arbitrary competitor locations."
+    },
+    {
+      "id": "apple-itunes-public-app-search", "lifecycle": "verified", "contractLevel": "full", "accessMethod": "official-api", "automaticSelectionEligible": true, "priority": 10,
+      "connectorId": "apple-public-app-search", "implementationRef": "repo:/connectors/apple-public-app-search/src/index.mjs", "probeReportRef": "/verifications/apple/public-app-search/report.json",
+      "capabilityCoverage": [{ "capabilityRef": "/capabilities/research/search-public-app-catalog.md", "phases": ["observe"], "gaps": [] }],
+      "failureDomains": ["apple-itunes-search-api", "apple-storefront", "apple-search-projection"],
+      "sourceRefs": ["https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/index.html", "https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/Searching.html", "https://developer.apple.com/app-store/review/guidelines/"],
+      "maintenance": { "owner": "apple-public-app-search-maintainer", "reviewOn": ["source-change", "probe-failure", "contract-gap-change", "manual"] },
+      "notes": "Verified first route for bounded Apple app discovery. It returns metadata only, uses archived-but-documented Search API semantics, preserves unspecified result order and never claims rank, total corpus, history or demand."
+    },
+    {
+      "id": "public-app-search-appfigures", "lifecycle": "researching", "contractLevel": "full", "accessMethod": "official-api", "automaticSelectionEligible": false, "priority": 20,
+      "capabilityCoverage": [{ "capabilityRef": "/capabilities/research/search-public-app-catalog.md", "phases": ["authorize", "observe"], "gaps": ["A provider-neutral search projection, account/PAT, Public Data add-on, credit reconciliation, commercial-use judgment and live Apple/Google comparison are unverified."] }],
+      "failureDomains": ["appfigures-account", "appfigures-public-data", "provider-search-ranking", "store-coverage", "credit-ledger"],
+      "sourceRefs": ["https://docs.appfigures.com/api/reference/v2/products-2", "https://help.appfigures.com/en/article/appfigures-api-cli-and-mcp-access-limits-and-public-data-1seiibo/"],
+      "maintenance": { "owner": "demand-signal-route-maintainer", "reviewOn": ["source-change", "probe-failure", "contract-gap-change", "manual"] },
+      "notes": "Commercial Apple/Google backup. Product search requires public:read and the Public Data add-on. Provider product IDs, artwork and provider route details must remain hidden, and search order must not be projected as store-native rank without evidence."
+    },
+    {
+      "id": "public-app-search-42matters", "lifecycle": "researching", "contractLevel": "full", "accessMethod": "official-api", "automaticSelectionEligible": false, "priority": 30,
+      "capabilityCoverage": [{ "capabilityRef": "/capabilities/research/search-public-app-catalog.md", "phases": ["authorize", "observe"], "gaps": ["Account/token, Tiny-or-higher plan, hit reconciliation, commercial-use review, Google parity and a provider-neutral live result are unverified."] }],
+      "failureDomains": ["42matters-account", "42matters-api", "provider-search-ranking", "store-coverage", "hit-ledger"],
+      "sourceRefs": ["https://42matters.com/docs/app-market-data/ios/apps/search", "https://42matters.com/docs/app-market-data/ios/apps/advanced-query-api"],
+      "maintenance": { "owner": "demand-signal-route-maintainer", "reviewOn": ["source-change", "probe-failure", "contract-gap-change", "manual"] },
+      "notes": "Commercial structured-search backup. The current iOS search contract costs 3 hits/request, requires Tiny or above and states that its ranking is provider-generated rather than App Store order; that distinction must remain public if this route is ever normalized."
+    },
+    {
+      "id": "public-app-reviews-appfigures", "lifecycle": "candidate", "contractLevel": "full", "accessMethod": "official-api", "automaticSelectionEligible": false, "priority": 10,
+      "connectorId": "appfigures-public-app-reviews", "implementationRef": "repo:/connectors/appfigures-public-app-reviews/src/index.mjs", "probeDefinitionRef": "repo:/probes/definitions/appfigures-public-app-reviews-live.json",
+      "capabilityCoverage": [{ "capabilityRef": "/capabilities/research/read-public-app-review-snapshot.md", "phases": ["authorize", "observe"], "gaps": ["Internal-use license judgment, PAT, Public Data credits, provider identity and two-stage credit reconciliation remain unapproved."] }],
+      "failureDomains": ["appfigures-account", "appfigures-public-data", "store-coverage", "credit-ledger"],
+      "sourceRefs": ["https://docs.appfigures.com/api/reference/v2/reviews", "https://help.appfigures.com/en/article/appfigures-api-cli-and-mcp-access-limits-and-public-data-1seiibo/"],
+      "maintenance": { "owner": "appfigures-public-app-reviews-maintainer", "reviewOn": ["source-change", "probe-failure", "contract-gap-change", "manual"] },
+      "notes": "Implemented first route. One product resolution plus review page uses 2+3 current Public Data credits; credits have no response debit receipt, so ledger reconciliation is mandatory."
+    },
+    {
+      "id": "apple-app-store-connect-owned-reviews", "lifecycle": "researching", "contractLevel": "full", "accessMethod": "official-api", "automaticSelectionEligible": false, "priority": 10,
+      "capabilityCoverage": [{ "capabilityRef": "/capabilities/feedback/read-owned-app-review-delta.md", "phases": ["authorize", "observe"], "gaps": ["An owned App Store Connect app, least-privilege API key/JWT credential, deidentification contract, pagination checkpoint and live empty/edit/response probe are missing."] }],
+      "failureDomains": ["app-store-connect-team", "owned-app", "app-store-connect-jwt", "customer-review-pagination"],
+      "sourceRefs": ["https://developer.apple.com/documentation/appstoreconnectapi/customer-reviews", "https://developer.apple.com/help/app-store-connect/monitor-ratings-and-reviews/view-ratings-and-reviews/"],
+      "maintenance": { "owner": "demand-signal-route-maintainer", "reviewOn": ["source-change", "probe-failure", "contract-gap-change", "manual"] },
+      "notes": "Official owned-app feedback route. It can filter customer reviews by territory/rating/date and inspect response state, but it cannot be reused for arbitrary competitors; responses are a separate confirmed platform-write capability."
+    },
+    {
+      "id": "google-play-developer-owned-reviews", "lifecycle": "researching", "contractLevel": "full", "accessMethod": "official-api", "automaticSelectionEligible": false, "priority": 10,
+      "capabilityCoverage": [{ "capabilityRef": "/capabilities/feedback/read-owned-app-review-delta.md", "phases": ["authorize", "observe"], "gaps": ["An owned Play Console app, androidpublisher OAuth, author/device minimization, recent-review checkpoint, monthly CSV backfill and live edit/reply probe are missing."] }],
+      "failureDomains": ["play-console-account", "owned-package", "androidpublisher-oauth", "recent-review-window", "monthly-review-export"],
+      "sourceRefs": ["https://developers.google.com/android-publisher/api-ref/rest/v3/reviews/list", "https://developers.google.com/android-publisher/reply-to-reviews", "https://support.google.com/googleplay/android-developer/answer/6135870"],
+      "maintenance": { "owner": "demand-signal-route-maintainer", "reviewOn": ["source-change", "probe-failure", "contract-gap-change", "manual"] },
+      "notes": "Official owned-app feedback route. The API requires androidpublisher authorization and only exposes reviews created or modified within the last week; full history requires the owned monthly Play Console CSV export. Reply remains a separate confirmed write."
+    },
+    {
+      "id": "apple-customerreviews-rss-undocumented", "lifecycle": "suspended", "contractLevel": "degraded", "accessMethod": "official-api", "automaticSelectionEligible": false, "priority": 90,
+      "capabilityCoverage": [{ "capabilityRef": "/capabilities/research/read-public-app-review-snapshot.md", "phases": ["authorize"], "gaps": ["The endpoint currently responds, but no current Apple source was found that identifies this customer-review feed as an approved RSS feed or documents its schema, use rights, limits and lifecycle."] }],
+      "failureDomains": ["undocumented-apple-feed", "approval-ambiguity", "schema-drift", "storefront-coverage"],
+      "sourceRefs": ["https://itunes.apple.com/us/rss/customerreviews/id=6448311069/sortBy=mostRecent/json", "https://developer.apple.com/app-store/review/guidelines/"],
+      "maintenance": { "owner": "demand-signal-route-maintainer", "reviewOn": ["source-change", "contract-gap-change", "manual"] },
+      "notes": "Suspended despite technical HTTP availability. Guideline 4.5.1 permits approved Apple RSS feeds but forbids site scraping; without current feed-specific approval/documentation, this route cannot support a Connector or canonical capability."
+    },
+    {
+      "id": "google-play-direct-public-search-reviews", "lifecycle": "suspended", "contractLevel": "component", "accessMethod": "official-api", "automaticSelectionEligible": false, "priority": 90,
+      "capabilityCoverage": [
+        { "capabilityRef": "/capabilities/research/search-public-app-catalog.md", "phases": ["authorize"], "gaps": ["No official general public Google Play app-search API was found for arbitrary competitor discovery."] },
+        { "capabilityRef": "/capabilities/research/read-public-app-review-snapshot.md", "phases": ["authorize"], "gaps": ["The Android Publisher Reviews API is scoped to a specified owned package under androidpublisher authorization, not arbitrary competitor reviews."] }
+      ],
+      "failureDomains": ["no-official-public-api", "play-web-scraping", "account-risk-control", "schema-drift"],
+      "sourceRefs": ["https://developers.google.com/android-publisher/api-ref/rest/v3/reviews/list", "https://play.google.com/store/apps"],
+      "maintenance": { "owner": "demand-signal-route-maintainer", "reviewOn": ["source-change", "contract-gap-change", "manual"] },
+      "notes": "Negative route record. Do not turn Play Store HTML, internal web endpoints or a community scraper into an automatic fallback; use a reviewed commercial provider for public competitors or the official owned API for your own app."
+    },
+    {
+      "id": "xianyu-visible-browser-sample", "lifecycle": "researching", "contractLevel": "degraded", "accessMethod": "browser-assisted", "automaticSelectionEligible": false, "priority": 10,
+      "capabilityCoverage": [{ "capabilityRef": "/capabilities/research/read-classified-listing-snapshot.md", "phases": ["authorize", "observe", "cleanup"], "gaps": ["No written platform authorization, stable result contract, isolated identity binding or live deidentification probe exists."] }],
+      "failureDomains": ["xianyu-public-web", "browser-session", "page-layout", "account-risk-control", "platform-authorization"],
+      "sourceRefs": ["https://www.goofish.com/", "https://terms.alicdn.com/legal-agreement/terms/suit_bu1_other/suit_bu1_other201708081618_51146.html"],
+      "maintenance": { "owner": "demand-signal-route-maintainer", "reviewOn": ["source-change", "probe-failure", "contract-gap-change", "manual"] },
+      "notes": "Preferred research proposal only: user-directed normal product search, at most one visible page/20 listings, no contact, seller profile, precise GPS, CAPTCHA handling, session export or automatic fallback. The user agreement supports search/browse, but this does not grant automated extraction rights."
+    },
+    {
+      "id": "xianyu-community-no-session-actor", "lifecycle": "suspended", "contractLevel": "full", "accessMethod": "official-api", "automaticSelectionEligible": false, "priority": 90,
+      "capabilityCoverage": [{ "capabilityRef": "/capabilities/research/read-classified-listing-snapshot.md", "phases": ["authorize", "observe"], "gaps": ["The paid community Actor claims no Xianyu login and has a bounded API, but it uses residential proxy rotation and has no target-platform written permission for automated content retrieval."] }],
+      "failureDomains": ["community-actor", "apify-account", "residential-proxy", "platform-authorization", "provider-parser", "billing-ledger"],
+      "sourceRefs": ["https://apify.com/gantianca/xianyu-goofish-search", "https://terms.alicdn.com/legal-agreement/terms/suit_bu1_taobao/suit_bu1_taobao202103061039_91765.html"],
+      "maintenance": { "owner": "demand-signal-route-maintainer", "reviewOn": ["source-change", "contract-gap-change", "manual"] },
+      "notes": "Suspended after evidence-backed research. Current advertised pricing is $0.01/search plus $1/1K results, but payment and no-login access do not replace Xianyu's prior-permission requirement for robot/spider retrieval. Do not create an account, spend credits, invoke the Actor or use its proxy path without written target-platform authorization."
+    },
+    {
+      "id": "xianyu-community-session-actors", "lifecycle": "suspended", "contractLevel": "full", "accessMethod": "official-api", "automaticSelectionEligible": false, "priority": 100,
+      "capabilityCoverage": [{ "capabilityRef": "/capabilities/research/read-classified-listing-snapshot.md", "phases": ["authorize", "observe"], "gaps": ["Community Actors are not platform authorization; common routes require uploaded browser storage state, proxy rotation or return seller/location identity."] }],
+      "failureDomains": ["community-actor", "session-export", "credential-disclosure", "platform-risk-control", "license-and-terms"],
+      "sourceRefs": ["https://apify.com/store?search=xianyu"],
+      "maintenance": { "owner": "demand-signal-route-maintainer", "reviewOn": ["source-change", "contract-gap-change", "manual"] },
+      "notes": "Suspended by policy. Do not upload a Xianyu/Taobao session or use CAPTCHA/proxy evasion merely because a paid Actor exists."
+    },
+    {
+      "id": "58-official-partner", "lifecycle": "researching", "contractLevel": "component", "accessMethod": "official-api", "automaticSelectionEligible": false, "priority": 20,
+      "capabilityCoverage": [{ "capabilityRef": "/capabilities/research/read-classified-listing-snapshot.md", "phases": ["authorize"], "gaps": ["The official partner surface supports owned business workflows; it does not prove arbitrary public listing search/export rights."] }],
+      "failureDomains": ["58-partner-approval", "partner-scope", "owned-business-object"],
+      "sourceRefs": ["https://open.58.com/"],
+      "maintenance": { "owner": "demand-signal-route-maintainer", "reviewOn": ["source-change", "contract-gap-change", "manual"] },
+      "notes": "Useful only for a future owned publishing/lead workflow. Public research still requires separate written permission."
+    },
+    {
+      "id": "58-bright-data-scraper", "lifecycle": "suspended", "contractLevel": "full", "accessMethod": "official-api", "automaticSelectionEligible": false, "priority": 30,
+      "capabilityCoverage": [{ "capabilityRef": "/capabilities/research/read-classified-listing-snapshot.md", "phases": ["authorize", "observe"], "gaps": ["Provider technical availability does not satisfy 58 written-consent requirements for commercial platform data use."] }],
+      "failureDomains": ["58-public-web", "bright-data-account", "provider-scraper", "platform-authorization"],
+      "sourceRefs": ["https://brightdata.com/products/web-scraper/58-com", "https://help.58.com/home/announcement.html"],
+      "maintenance": { "owner": "demand-signal-route-maintainer", "reviewOn": ["source-change", "contract-gap-change", "manual"] },
+      "notes": "Current technical pricing is PAYG $1.5/1K page loads, but no probe may run until the intended commercial research use receives written authorization and data minimization approval."
+    },
+    {
+      "id": "boss-bright-data-direct", "lifecycle": "suspended", "contractLevel": "full", "accessMethod": "official-api", "automaticSelectionEligible": false, "priority": 50,
+      "capabilityCoverage": [{ "capabilityRef": "/capabilities/research/read-job-posting-snapshot.md", "phases": ["authorize", "observe"], "gaps": ["BOSS terms restrict third-party tools and automated retrieval; supplier availability and general compliance claims are not target-platform written permission."] }],
+      "failureDomains": ["boss-public-web", "bright-data-account", "provider-scraper", "captcha-unblocking", "platform-authorization"],
+      "sourceRefs": ["https://brightdata.com/products/web-scraper/boss-zhipin", "https://www.zhipin.com/web/common/protocol/protocol-2019-09-30.html"],
+      "maintenance": { "owner": "demand-signal-route-maintainer", "reviewOn": ["source-change", "contract-gap-change", "manual"] },
+      "notes": "Suspended. The provider advertises proxy/CAPTCHA handling and 5K free monthly credits; neither is a reason to bypass the direct authorization gate."
+    },
+    {
+      "id": "jobs-coresignal-multi-source", "lifecycle": "candidate", "contractLevel": "full", "accessMethod": "official-api", "automaticSelectionEligible": false, "priority": 10,
+      "connectorId": "coresignal-job-posting-snapshot", "implementationRef": "repo:/connectors/coresignal-job-posting-snapshot/src/index.mjs", "probeDefinitionRef": "repo:/probes/definitions/coresignal-job-posting-snapshot-live.json",
+      "capabilityCoverage": [{ "capabilityRef": "/capabilities/research/read-job-posting-snapshot.md", "phases": ["authorize", "observe"], "gaps": ["The trial or purchased Data agreement, China coverage, source-level target-platform coverage and a live deidentified sample are unverified."] }],
+      "failureDomains": ["coresignal-account", "data-agreement", "multi-source-jobs-api", "source-coverage", "china-coverage", "billing-ledger"],
+      "sourceRefs": ["https://docs.coresignal.com/jobs-api/multi-source-jobs-api.md", "https://docs.coresignal.com/pricing/pricing.md", "https://coresignal.com/data-transparency/", "https://coresignal.com/terms-and-conditions/"],
+      "maintenance": { "owner": "coresignal-job-posting-snapshot-maintainer", "reviewOn": ["source-change", "probe-failure", "contract-gap-change", "manual"] },
+      "notes": "Implemented as a non-routable candidate. The Connector compiles one active-only query, collects at most ten records, removes recruiter/source-route fields and requires exact credit reconciliation. Account creation, trial activation, Data agreement acceptance and live probe all require approval."
+    },
+    {
+      "id": "jobs-bright-data-aggregate", "lifecycle": "researching", "contractLevel": "full", "accessMethod": "official-api", "automaticSelectionEligible": false, "priority": 20,
+      "capabilityCoverage": [{ "capabilityRef": "/capabilities/research/read-job-posting-snapshot.md", "phases": ["authorize", "observe"], "gaps": ["Commercial contract, per-record price, source-level rights, China coverage and a bounded deidentified sample are unverified."] }],
+      "failureDomains": ["bright-data-account", "jobs-dataset", "source-coverage", "china-coverage", "billing-ledger"],
+      "sourceRefs": ["https://brightdata.com/products/data-feeds/jobs-data-api", "https://brightdata.com/products/datasets/jobs"],
+      "maintenance": { "owner": "demand-signal-route-maintainer", "reviewOn": ["source-change", "probe-failure", "contract-gap-change", "manual"] },
+      "notes": "Preferred BOSS-independent paid research route. First procurement question is whether China-relevant postings and source rights are contractually covered; price is contact-sales/per-record and must be captured in the purchase evidence."
+    },
+    {
+      "id": "public-social-openconnector-tikhub", "lifecycle": "candidate", "contractLevel": "component", "accessMethod": "official-api", "automaticSelectionEligible": false, "priority": 20,
+      "connectorId": "openconnector-public-social-search", "implementationRef": "repo:/connectors/openconnector-public-social-search/src/index.mjs", "probeDefinitionRef": "repo:/probes/definitions/openconnector-public-social-search-live.json",
+      "capabilityCoverage": [{ "capabilityRef": "/capabilities/research/search-public-social-content.md", "phases": ["authorize", "observe", "cleanup"], "gaps": ["Provider/platform terms, content-use determination, encrypted self-hosted runtime, TikHub account/key/scopes, connection-scoped runtime token, current action price, real response shape and a deidentified public projection remain unapproved or unverified."] }],
+      "failureDomains": ["openconnector-runtime", "openconnector-connection", "tikhub-account", "tikhub-api", "platform-content-rights", "provider-parser", "billing-ledger", "transient-public-identity"],
+      "sourceRefs": ["https://github.com/oomol-lab/open-connector/blob/v1.4.0/docs/verification.md", "https://github.com/oomol-lab/open-connector/blob/v1.4.0/docs/runtime-api.md", "https://github.com/oomol-lab/open-connector/blob/v1.4.0/src/providers/tikhub/actions.ts", "https://github.com/oomol-lab/open-connector/blob/v1.4.0/docs/credentials.md"],
+      "upstream": { "repository": "https://github.com/oomol-lab/open-connector.git", "branch": "main", "observedRevision": "0fa2c728dfbf957735da2843ec2b8a4f3425b105" },
+      "maintenance": { "owner": "openconnector-upstream-maintainer", "reviewOn": ["upstream-change", "source-change", "probe-failure", "contract-gap-change", "manual"] },
+      "notes": "Implemented hidden candidate over the audited OpenConnector v1.4.0 Action contract. It permits only one initial-page Xiaohongshu or Douyin keyword search through a loopback runtime, does not retry or paginate, and labels the provider payload unsafe for OKF until a live deidentifying projection is proven. Apache-2.0 covers the runtime code only, not TikHub or target-platform rights."
+    },
+    {
+      "id": "public-social-oomol-managed-research", "lifecycle": "researching", "contractLevel": "component", "accessMethod": "official-sdk", "automaticSelectionEligible": false, "priority": 30,
+      "capabilityCoverage": [{ "capabilityRef": "/capabilities/research/search-public-social-content.md", "phases": ["authorize", "observe", "cleanup"], "gaps": ["The managed Public Social Research Skill is documented and priced, but its machine-facing capability contract, account binding, per-action receipts, deidentifying output Schema, target-platform authorization and live bounded comparison are not verified in this repository."] }],
+      "failureDomains": ["oomol-account", "oomol-managed-skill", "tikhub-managed-proxy", "platform-content-rights", "provider-parser", "oomol-credit-ledger"],
+      "sourceRefs": ["https://oomol.com/en/skills/@alwaysmavs/public-social-research/", "https://oomol.com/en/pricing/", "https://oomol.com/en/docs/choose-a-path/", "https://oomol.com/en/terms/"],
+      "maintenance": { "owner": "openconnector-upstream-maintainer", "reviewOn": ["source-change", "probe-failure", "contract-gap-change", "manual"] },
+      "notes": "Commercial failure domain only. OOMOL currently documents a managed TikHub-backed social research Skill and a free-plan app-call allowance, but paid content requests and credit semantics remain provider facts, not free capability or platform authorization. Do not create an account, accept terms or spend credits automatically."
+    }
+  ],
+  "selectionPolicy": {
+    "automaticRouteRequirements": { "lifecycles": ["verified"], "contractLevels": ["full"], "requireHealthy": true },
+    "platformWrite": { "stickyRoute": true, "preEffectFallback": "verified-compatible-only", "ambiguousOutcomeFallback": "forbidden", "postEffectRouteChange": "reconcile-first" },
+    "readOnly": { "fallback": "verified-compatible-only" }
+  }
+}

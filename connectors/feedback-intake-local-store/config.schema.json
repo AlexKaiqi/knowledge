@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/connectors/feedback-intake-local-store/config.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["storeRef", "root"],
+  "properties": {
+    "storeRef": { "type": "string", "pattern": "^[a-z][a-z0-9._:-]{0,127}$" },
+    "root": { "type": "string", "minLength": 1, "maxLength": 4096 },
+    "maximumRecordBytes": { "type": "integer", "minimum": 4096, "maximum": 1048576, "default": 131072 }
+  }
+}

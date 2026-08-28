@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "arxiv-public-metadata-search",
+  "sources": [
+    {
+      "id": "api-user-manual", "url": "https://info.arxiv.org/help/api/user-manual.html", "role": "official-api-contract",
+      "observation": { "mode": "static-html-semantic", "assertions": [{ "id": "query-interface", "includes": "search_query" }, { "id": "offset-pagination", "includes": "start and max_results paging" }, { "id": "atom-response", "includes": "Atom 1.0" }] }
+    },
+    {
+      "id": "api-terms", "url": "https://info.arxiv.org/help/api/tou.html", "role": "official-use-policy",
+      "observation": { "mode": "static-html-semantic", "assertions": [{ "id": "metadata-permission", "includes": "descriptive metadata" }, { "id": "three-second-limit", "includes": "one request every three seconds" }, { "id": "single-connection", "includes": "limit requests to a single" }] }
+    }
+  ]
+}

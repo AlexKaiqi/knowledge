@@ -1,0 +1,80 @@
+{
+  "schemaVersion": "dsh.probe-report/v1",
+  "id": "feedback-intake-local-storage-local-20260827",
+  "capabilityRef": "/capabilities/feedback/persist-consented-intake-revision.md",
+  "connectorId": "feedback-intake-local-store",
+  "probeDefinitionRef": "repo:/probes/definitions/feedback-intake-local-storage-local.json",
+  "environment": "local",
+  "level": "local",
+  "outcome": "passed",
+  "startedAt": "2026-08-27T09:43:25.897Z",
+  "finishedAt": "2026-08-27T09:43:27.285Z",
+  "expiresAt": "2026-09-26T09:43:27.285Z",
+  "checks": [
+    {
+      "id": "official-storage-and-privacy-sources",
+      "status": "passed"
+    },
+    {
+      "id": "verified-intake-revision-chain",
+      "status": "passed"
+    },
+    {
+      "id": "exact-trusted-review-grant",
+      "status": "passed"
+    },
+    {
+      "id": "private-atomic-envelope",
+      "status": "passed"
+    },
+    {
+      "id": "idempotent-and-concurrent-replay",
+      "status": "passed"
+    },
+    {
+      "id": "conflict-path-and-tamper-rejection",
+      "status": "passed"
+    },
+    {
+      "id": "public-input-and-receipt-schema",
+      "status": "passed"
+    },
+    {
+      "id": "isolated-store-cleanup",
+      "status": "passed"
+    }
+  ],
+  "evidence": [
+    {
+      "kind": "artifact",
+      "ref": "https://nodejs.org/api/fs.html",
+      "sha256": "ae75ac67a867e94c5f5a31545ed98e22eb1f42b2b50d211a6646dfa2847bfd0b"
+    },
+    {
+      "kind": "artifact",
+      "ref": "https://www.w3.org/TR/privacy-principles/",
+      "sha256": "5fb936c3336a38e34198c0d62a974a41377d11e517213add531f56e53c761ce5"
+    },
+    {
+      "kind": "snapshot",
+      "ref": "repo:/knowledge/verifications/feedback/consented-intake-review-revision/snapshot.json",
+      "sha256": "6f7551638fdf39e8336fd5c5beaa25875c430f7076f364619b682767d6912174"
+    },
+    {
+      "kind": "test-output",
+      "ref": "probe:isolated-feedback-intake-envelope",
+      "sha256": "4f53569c22d4c2a0013bd688feae14d905447988d747f51e2c9992a76757244a"
+    },
+    {
+      "kind": "snapshot",
+      "ref": "repo:/knowledge/verifications/feedback/intake-local-storage/snapshot.json",
+      "sha256": "26b4cd8ad73a5ec72c9f597449d250a257c61353fb47c8ebaaf5e29f5f70756d"
+    }
+  ],
+  "sideEffects": [
+    {
+      "effect": "local-write",
+      "status": "cleaned"
+    }
+  ]
+}

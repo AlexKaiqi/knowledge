@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "steam-initial-release-date-review-revision-local",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/steam/prepare-initial-release-date-review-revision.md",
+  "connectorId": "steam-initial-release-date-revision",
+  "environment": "local",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "verify-official-release-date-rules", "operation": "verifyOfficialSteamInitialReleaseDateSemantics" },
+    { "id": "prepare-release-date-revision", "operation": "prepareSteamInitialReleaseDateReviewRevision", "inputRef": "repo:/probes/fixtures/steam/initial-release-date-owned-game.json" },
+    { "id": "verify-display-projection", "operation": "verifyOfficialDisplayRangeAndListPlacementProjection" },
+    { "id": "verify-mutation-binding", "operation": "verifyReleaseDateMutationBinding" },
+    { "id": "verify-timing-and-readiness-blockers", "operation": "verifyReleaseDatePreflightBlockers" },
+    { "id": "validate-public-schema", "operation": "validateInputAndOutputSchema" },
+    { "id": "verify-no-platform-effect", "operation": "verifyNoSteamworksEffect" }
+  ],
+  "assertions": [
+    "The revision binds one exact intended backend date even when the player-facing display is less precise.",
+    "Exact date, month-year, quarter, year and Coming Soon map to the official upcoming-list placement semantics without generating localized copy.",
+    "A new product must have Coming Soon published for at least fourteen days before the target release date.",
+    "Changing the exact intended date inside the observed two-week lock window is blocked.",
+    "Released, stale, future, unreviewed and short-window states are blocked rather than treated as platform truth.",
+    "Store/build readiness and supplied evidence remain caller assertions pending human review; the Connector does not authenticate Steamworks.",
+    "The result cannot claim a Steamworks save, Coming Soon change, Release App click, release, wishlist notification or execution authorization."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 45, "maxCost": 0, "currency": "CNY" }
+}

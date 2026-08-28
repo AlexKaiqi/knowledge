@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "youtube-public-video-search",
+  "version": "0.1.0",
+  "capabilityRefs": ["/capabilities/youtube/search-public-videos.md"],
+  "execution": { "kind": "deterministic", "runtime": "node >=22.19", "entrypoint": "connectors/youtube-public-video-search/src/index.mjs" },
+  "configSchema": "repo:/connectors/youtube-public-video-search/config.schema.json",
+  "accessRouteCatalog": "repo:/connectors/video-platform-access-routes/routes.json",
+  "credentialSlots": [{ "name": "youtube-api-key", "required": true, "purpose": "Resolve a restricted YouTube Data API key outside Git; the key is never returned, logged, or persisted in OKF." }],
+  "handlers": [{ "capabilityRef": "/capabilities/youtube/search-public-videos.md", "operation": "searchPublicVideos" }],
+  "conformance": { "status": "candidate", "probeDefinitionRef": "repo:/probes/definitions/youtube-public-video-search-live.json" }
+}

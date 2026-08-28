@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "feedback-intake-local-storage-local",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/feedback/persist-consented-intake-revision.md",
+  "connectorId": "feedback-intake-local-store",
+  "environment": "local",
+  "identity": { "required": false },
+  "effect": "local-write",
+  "steps": [
+    { "id": "verify-storage-and-privacy-sources", "operation": "verifyOfficialStorageSources" },
+    { "id": "resolve-verified-intake-revision", "operation": "resolveIntakeRevision" },
+    { "id": "verify-exact-review-grant", "operation": "verifyReviewGrant" },
+    { "id": "persist-and-read-envelope", "operation": "persistConsentedFeedbackIntakeRevision" },
+    { "id": "verify-idempotent-and-concurrent-replay", "operation": "exerciseReplayAndConcurrency" },
+    { "id": "verify-conflict-and-tamper-rejection", "operation": "exerciseStorageConflicts" },
+    { "id": "validate-public-schema", "operation": "validateStorageReceipt" },
+    { "id": "cleanup-isolated-store", "operation": "removeTemporaryStore" }
+  ],
+  "assertions": [
+    "Public input selects only an opaque configured store and cannot submit a filesystem path or approval boolean.",
+    "The hidden runtime resolves the exact canonical ready intake revision and verifies an exact local-write review grant.",
+    "One private atomic envelope binds the full revision, review grant receipt, idempotency key, storage time, deletion deadline and withdrawal mechanism.",
+    "Exact and concurrent replay returns one receipt and one record; another revision or idempotency key for the same submission fails closed.",
+    "The receipt proves local storage only and does not claim withdrawal, reply, platform write, knowledge write or further execution authority.",
+    "The isolated local-write probe removes its temporary store after verification."
+  ],
+  "cleanup": ["removeTemporaryStore"],
+  "budget": { "timeoutSeconds": 45, "maxCost": 0, "currency": "CNY" }
+}

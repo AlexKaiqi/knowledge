@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "dsh.probe-fixture/appfigures-public-app-reviews/v1",
+  "target": {
+    "store": "apple",
+    "appId": "6448311069",
+    "country": "US",
+    "title": "ChatGPT",
+    "purpose": "stable public personal-assistant competitor review fixture"
+  },
+  "windowDays": 30,
+  "limit": 25,
+  "maximumCredits": 5,
+  "maximumCostUsd": 1
+}

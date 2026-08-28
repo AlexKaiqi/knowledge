@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "current-work-projection-maintenance-local",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/assistant/maintain-current-work-projection.md",
+  "connectorId": "current-work-projection-maintainer",
+  "environment": "local",
+  "identity": { "required": false },
+  "effect": "local-write",
+  "steps": [
+    { "id": "verify-pinned-production-maintainer", "operation": "observePersonalKnowledgeMaintainerSources" },
+    { "id": "exercise-real-current-write-and-cursor", "operation": "runIsolatedProductionCurate", "inputRef": "repo:/probes/fixtures/assistant/current-work-projection-maintenance.json" },
+    { "id": "verify-unconfirmed-proposal-boundary", "operation": "inspectTemporaryPersonalKnowledgeRepository" },
+    { "id": "verify-checkpoint-replay", "operation": "rerunWithoutNewSessionEvents" },
+    { "id": "normalize-public-result", "operation": "maintainCurrentWorkProjection" },
+    { "id": "validate-public-schema", "operation": "validateOutputSchema" }
+  ],
+  "assertions": [
+    "The fixed production KnowledgeMaintainer consumes only unconsumed current-Session message events through an owner-bound runtime adapter.",
+    "A production Personal Knowledge Base atomically updates .pkb/current.md, cites the current Session and advances its cursor in an isolated repository.",
+    "At most four durable candidates remain unconfirmed proposal files; no knowledge/*.md file or Git commit is created.",
+    "A repeated pass without new Session events returns no-new-session-text and does not invoke the model again.",
+    "The public result contains only mutation facts and opaque proposal references, never transcript, cwd, model route, cursor sequence or generated Markdown.",
+    "The operation cannot confirm or apply a proposal, modify Session history, commit Git or authorize execution."
+  ],
+  "cleanup": ["removeTemporaryRepository"],
+  "budget": { "timeoutSeconds": 60, "maxCost": 0, "currency": "CNY" }
+}

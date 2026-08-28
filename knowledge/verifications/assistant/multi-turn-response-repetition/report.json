@@ -1,0 +1,90 @@
+{
+  "schemaVersion": "dsh.probe-report/v1",
+  "id": "multi-turn-response-repetition-local-20260827",
+  "capabilityRef": "/capabilities/assistant/observe-multi-turn-response-repetition.md",
+  "connectorId": "multi-turn-response-repetition-observer",
+  "probeDefinitionRef": "repo:/probes/definitions/multi-turn-response-repetition-local.json",
+  "environment": "local",
+  "level": "local",
+  "outcome": "passed",
+  "startedAt": "2026-08-27T12:04:38.532Z",
+  "finishedAt": "2026-08-27T12:04:48.718Z",
+  "expiresAt": "2026-09-10T12:04:48.718Z",
+  "checks": [
+    {
+      "id": "pinned-source-semantics",
+      "status": "passed"
+    },
+    {
+      "id": "multilingual-exact-and-ngram-observation",
+      "status": "passed"
+    },
+    {
+      "id": "context-provenance-without-count-erasure",
+      "status": "passed"
+    },
+    {
+      "id": "short-response-unavailable-state",
+      "status": "passed"
+    },
+    {
+      "id": "no-threshold-or-quality-score",
+      "status": "passed"
+    },
+    {
+      "id": "input-output-schema",
+      "status": "passed"
+    },
+    {
+      "id": "digest-locator-and-count-only-retention",
+      "status": "passed"
+    },
+    {
+      "id": "no-persona-memory-platform-action-or-authorization-effect",
+      "status": "passed"
+    },
+    {
+      "id": "semantic-repetition-and-longitudinal-outcomes",
+      "status": "skipped",
+      "detail": "Lexical overlap does not prove semantic repetition, response quality, persona continuity or longitudinal companion outcomes."
+    }
+  ],
+  "evidence": [
+    {
+      "kind": "artifact",
+      "ref": "https://raw.githubusercontent.com/facebookresearch/ParlAI/38fce64bc0ad7d0e676316b3b52407541e624680/projects/controllable_dialogue/controllable_seq2seq/controls.py",
+      "sha256": "74555fcf5338c153484ecda5ac74e4d516d9106316af6baaa39346857bf338b3"
+    },
+    {
+      "kind": "artifact",
+      "ref": "https://aclanthology.org/N19-1170/",
+      "sha256": "73ef0ecc9b657d6947ec2ff9e85794803a5aafd31143e14fdfbdbd9d5a4cdf19"
+    },
+    {
+      "kind": "artifact",
+      "ref": "https://aclanthology.org/2022.findings-emnlp.66/",
+      "sha256": "d5b9e4cb526fdfd2a12708182508109984b68d860c327f08d2ca2ed021e5a738"
+    },
+    {
+      "kind": "artifact",
+      "ref": "https://aclanthology.org/2023.bea-1.26/",
+      "sha256": "376c8bc3f08f1e58cb889a915f220683fd7dd85d9222c13b6dad2a0ef4eea03c"
+    },
+    {
+      "kind": "artifact",
+      "ref": "https://aclanthology.org/2025.coling-main.331/",
+      "sha256": "b1460bf033a1d9583fb4f0e04279b753f04e493b355d62b560cc7c7944c359d0"
+    },
+    {
+      "kind": "snapshot",
+      "ref": "repo:/knowledge/verifications/assistant/multi-turn-response-repetition/snapshot.json",
+      "sha256": "8e02e72d8934f278b0b7660ccfe8c7882fb1155f02ac08e9b0864d0d69b0958f"
+    }
+  ],
+  "sideEffects": [
+    {
+      "effect": "none",
+      "status": "none"
+    }
+  ]
+}

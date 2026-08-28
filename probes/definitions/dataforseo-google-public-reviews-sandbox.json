@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "dataforseo-google-public-reviews-sandbox",
+  "version": "0.1.0",
+  "capabilityRef": "/capabilities/research/read-public-place-review-snapshot.md",
+  "connectorId": "dataforseo-google-public-reviews",
+  "environment": "sandbox",
+  "identity": { "required": true, "poolRef": "identity-pool:dataforseo-google-review-probes" },
+  "effect": "none",
+  "steps": [
+    { "id": "resolve-approved-api-credential", "operation": "resolveDataForSeoApiCredential" },
+    { "id": "read-fixed-dummy-result", "operation": "readPublicPlaceReviewSnapshot" },
+    { "id": "verify-sensitive-field-removal", "operation": "verifyReviewerAndOwnerIdentityRemoval" },
+    { "id": "redact-verification-candidate", "operation": "redactForVerification" },
+    { "id": "write-staging-report", "operation": "writeCandidateProbeReport" }
+  ],
+  "assertions": [
+    "Exactly one GET is sent to the documented fixed sandbox task ID; no production task is submitted and no callback, retry or payment occurs.",
+    "The dummy result exercises review text, reviewer profile, review history, Local Guide, owner response, image and native identity fields; public output removes all reviewer identity/history, image and owner-response text.",
+    "Output declares synthetic-provider-shape-only, complete=false, targetPlatformAuthorizationVerified=false and durableVerbatimAllowed=false.",
+    "Git verification contains no query, place, review text/rating/time/link/observation ID, reviewer field, owner response, operation reference or raw result digest.",
+    "Passing sandbox evidence proves only response-shape and redaction compatibility; it cannot verify live task submission, freshness, query resolution, Google use rights or billing."
+  ],
+  "cleanup": ["Destroy the in-memory dummy response and any transient review text after redaction."],
+  "budget": { "timeoutSeconds": 60, "maxCost": 0, "currency": "USD" }
+}

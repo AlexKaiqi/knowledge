@@ -1,0 +1,136 @@
+{
+  "fixture": "owned-game-current-build-supported-features",
+  "schemaVersion": "dsh.steam-supported-feature-review-revision/v1",
+  "gameRef": "game:clockwork-familiar",
+  "sourceRevisionRef": "design:launch-v4",
+  "buildRevisionRef": "build:steam-public-candidate-v7",
+  "featureCatalogRevisionRef": "steam-features:observed-2026-08-27",
+  "policyRevision": "steam-supported-features-2026-08-27",
+  "manualReview": {
+    "required": true,
+    "checks": [
+      {
+        "id": "current-platform-feature-availability",
+        "status": "pending"
+      },
+      {
+        "id": "feature-selection-matches-current-catalog",
+        "status": "pending"
+      },
+      {
+        "id": "implementation-evidence-quality",
+        "status": "pending"
+      },
+      {
+        "id": "test-evidence-represents-current-public-build",
+        "status": "pending"
+      },
+      {
+        "id": "feature-is-usable-as-storefront-claims",
+        "status": "pending"
+      },
+      {
+        "id": "owned-target-authority",
+        "status": "pending"
+      }
+    ]
+  },
+  "platformValidated": false,
+  "buildValidatedByConnector": false,
+  "savedToSteamworks": false,
+  "previewedOnSteam": false,
+  "published": false,
+  "markedReadyForReview": false,
+  "released": false,
+  "executionAuthorized": false,
+  "preparedAt": "2026-08-27T09:15:00.000Z",
+  "status": "ready-for-human-review",
+  "revisionHash": "sha256:d381450940a02688ab4bfa867c12675fbe5a949a892948f0a1d27d3625a7cb06",
+  "features": [
+    {
+      "featureRef": "steam-feature:family-sharing",
+      "displayName": "Family Sharing",
+      "implementationState": "implemented-current-build",
+      "implementationEvidenceRefs": [
+        "build-proof:package-sharing-policy"
+      ],
+      "testEvidenceRefs": [
+        "test:family-library-access"
+      ]
+    },
+    {
+      "featureRef": "steam-feature:full-controller-support",
+      "displayName": "Full controller support",
+      "implementationState": "implemented-current-build",
+      "implementationEvidenceRefs": [
+        "build-proof:controller-navigation"
+      ],
+      "testEvidenceRefs": [
+        "test:controller-cold-start",
+        "test:controller-full-loop"
+      ]
+    },
+    {
+      "featureRef": "steam-feature:single-player",
+      "displayName": "Single-player",
+      "implementationState": "implemented-current-build",
+      "implementationEvidenceRefs": [
+        "build-proof:single-player"
+      ],
+      "testEvidenceRefs": [
+        "test:single-player-launch"
+      ]
+    },
+    {
+      "featureRef": "steam-feature:steam-achievements",
+      "displayName": "Steam Achievements",
+      "implementationState": "implemented-current-build",
+      "implementationEvidenceRefs": [
+        "build-proof:achievements-api"
+      ],
+      "testEvidenceRefs": [
+        "test:achievement-unlock"
+      ]
+    },
+    {
+      "featureRef": "steam-feature:steam-cloud",
+      "displayName": "Steam Cloud",
+      "implementationState": "implemented-current-build",
+      "implementationEvidenceRefs": [
+        "build-proof:cloud-config"
+      ],
+      "testEvidenceRefs": [
+        "test:cloud-upload-download"
+      ]
+    }
+  ],
+  "preflight": {
+    "checks": [
+      {
+        "id": "feature-set-present",
+        "status": "passed"
+      },
+      {
+        "id": "unique-feature-refs",
+        "status": "passed"
+      },
+      {
+        "id": "unique-feature-names",
+        "status": "passed"
+      },
+      {
+        "id": "current-build-implementation-declared",
+        "status": "passed"
+      },
+      {
+        "id": "implementation-evidence-bound",
+        "status": "passed"
+      },
+      {
+        "id": "test-evidence-bound",
+        "status": "passed"
+      }
+    ],
+    "blockers": []
+  }
+}

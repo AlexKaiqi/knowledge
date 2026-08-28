@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "feedback-theme-synthesis",
+  "sources": [
+    {
+      "id": "learning-loop-pinned",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-social-workbench/0bb63b6f6963992e121d719f9a671637f6ab6c7f/runtime/src/loop-control.mjs",
+      "role": "production-learning-loop",
+      "acceptedDocumentDigest": "c49fdf9df8ac9f08a3560334cc8cedfb6930b13e19cbc51a45f73c058efff6f0",
+      "observation": { "mode": "static-text-semantic", "assertions": [{ "id": "feedback-lineage", "includes": "feedbackIds" }, { "id": "next-brief", "includes": "feedbackReviewIds: [review.reviewId]" }] }
+    },
+    {
+      "id": "learning-loop-main",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-social-workbench/main/runtime/src/loop-control.mjs",
+      "role": "learning-loop-change-surface",
+      "acceptedDocumentDigest": "c49fdf9df8ac9f08a3560334cc8cedfb6930b13e19cbc51a45f73c058efff6f0",
+      "observation": { "mode": "static-text-semantic", "assertions": [{ "id": "create-review", "includes": "async createReview(input" }, { "id": "review-evidence", "includes": "review requires metric or feedback evidence" }] }
+    },
+    {
+      "id": "hypothesis-review-pinned",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-social-workbench/0bb63b6f6963992e121d719f9a671637f6ab6c7f/spec/hypothesis-review.schema.json",
+      "role": "production-review-contract",
+      "acceptedDocumentDigest": "074d959b2c92101c5d56c8727c2b57ce73d4768ec0e157686416278e7ee1e9b0",
+      "observation": { "mode": "static-text-semantic", "assertions": [{ "id": "verdicts", "includes": "\"inconclusive\"" }, { "id": "feedback-ids", "includes": "\"feedbackIds\"" }] }
+    },
+    {
+      "id": "hypothesis-review-main",
+      "url": "https://raw.githubusercontent.com/AlexKaiqi/dsh-social-workbench/main/spec/hypothesis-review.schema.json",
+      "role": "review-contract-change-surface",
+      "acceptedDocumentDigest": "074d959b2c92101c5d56c8727c2b57ce73d4768ec0e157686416278e7ee1e9b0",
+      "observation": { "mode": "static-text-semantic", "assertions": [{ "id": "next-brief", "includes": "\"nextBrief\"" }, { "id": "observations", "includes": "\"observations\"" }] }
+    }
+  ]
+}

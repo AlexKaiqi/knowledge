@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "dsh.probe-report/v1",
+  "id": "steam-review-observation-projection-local-20260827",
+  "capabilityRef": "/capabilities/steam/project-review-page-to-observation-window.md",
+  "connectorId": "steam-public-game-reviews",
+  "probeDefinitionRef": "repo:/probes/definitions/steam-review-observation-projection-local.json",
+  "environment": "local",
+  "level": "local",
+  "outcome": "passed",
+  "startedAt": "2026-08-27T02:58:28.186Z",
+  "finishedAt": "2026-08-27T02:58:28.216Z",
+  "expiresAt": "2026-09-03T01:02:20.796Z",
+  "checks": [
+    {
+      "id": "upstream-live-evidence-current",
+      "status": "passed"
+    },
+    {
+      "id": "partial-window-only",
+      "status": "passed"
+    },
+    {
+      "id": "resume-cursor-not-high-watermark",
+      "status": "passed"
+    },
+    {
+      "id": "semantic-edit-detected",
+      "status": "passed"
+    },
+    {
+      "id": "absence-is-not-deletion",
+      "status": "passed"
+    },
+    {
+      "id": "order-stable-replay",
+      "status": "passed"
+    },
+    {
+      "id": "no-text-identity-or-execution",
+      "status": "passed"
+    },
+    {
+      "id": "output-schema",
+      "status": "passed"
+    }
+  ],
+  "evidence": [
+    {
+      "kind": "artifact",
+      "ref": "repo:/knowledge/verifications/steam/public-game-reviews/report.json",
+      "sha256": "e1a3ec02702564801e41b0df334d1142600f45787dd802e4394c1e535c66bc7d"
+    },
+    {
+      "kind": "snapshot",
+      "ref": "repo:/knowledge/verifications/steam/public-game-reviews/snapshot.json",
+      "sha256": "88e51b2d1e0d144130ae4f58a1bb89d5cfa44e754ed10a3de8923dcfde62b0d9"
+    },
+    {
+      "kind": "snapshot",
+      "ref": "repo:/knowledge/verifications/steam/review-observation-projection/snapshot.json",
+      "sha256": "37b9ed7e0a76c9a8262b891f5a26728023620c02663a7b39061622640ed836cb"
+    }
+  ],
+  "sideEffects": [
+    {
+      "effect": "none",
+      "status": "none"
+    }
+  ]
+}

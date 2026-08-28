@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "coresignal-job-posting-snapshot-live",
+  "version": "0.1.0",
+  "capabilityRef": "/capabilities/research/read-job-posting-snapshot.md",
+  "connectorId": "coresignal-job-posting-snapshot",
+  "environment": "production-public",
+  "identity": { "required": true, "poolRef": "identity-pool:coresignal-provider-probes" },
+  "effect": "financial",
+  "steps": [
+    { "id": "record-credit-balance", "operation": "recordProviderCreditBalance", "inputRef": "repo:/probes/fixtures/coresignal-job-posting-snapshot-probe.json" },
+    { "id": "read-bounded-job-snapshot", "operation": "readJobPostingSnapshot" },
+    { "id": "reconcile-credit-ledger", "operation": "reconcileProviderCredits" },
+    { "id": "redact-job-descriptions", "operation": "redactJobDescriptionsForVerification" },
+    { "id": "write-staging-report", "operation": "writeCandidateProbeReport" }
+  ],
+  "assertions": [
+    "One fixed server-compiled query reads at most ten active, non-expired China job clusters from a 27-day window; the caller cannot supply Elasticsearch DSL, arbitrary fields, source domains or pagination tokens.",
+    "The search request is free under the observed pricing contract and each successful collect consumes one credit; x-credits-remaining reconciles exactly with returned records and total debit is at most ten credits and USD 0.25 equivalent.",
+    "A legitimate empty result passes only with explicit incomplete coverage; it does not prove absence of demand or China source coverage.",
+    "The normalized result removes recruiter identity, profile/contact data, source IDs and URLs, exact coordinates and provider-specific route names while retaining business-level demand evidence.",
+    "The provider's source mix, target-platform coverage and China coverage remain unverified unless the live sample and procurement evidence support them.",
+    "The Git verification candidate stores description length and SHA-256 only; promotion still requires public Schema review, data agreement review and human admission."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 180, "maxCost": 0.25, "currency": "USD" }
+}

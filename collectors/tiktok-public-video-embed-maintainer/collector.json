@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "dsh.collector-definition/v1",
+  "id": "tiktok-public-video-embed-maintainer",
+  "version": "1.0.0",
+  "scope": {
+    "knowledgeGlobs": [
+      "knowledge/platforms/tiktok.md",
+      "knowledge/concepts/tiktok/public-video-embed-descriptor.md",
+      "knowledge/capabilities/tiktok/read-public-video-embed.md",
+      "knowledge/schemas/tiktok/read-public-video-embed-*.schema.json",
+      "knowledge/verifications/tiktok/public-video-embed/*.json"
+    ],
+    "connectorIds": ["tiktok-public-video-embed"],
+    "capabilityRefs": ["/capabilities/tiktok/read-public-video-embed.md"]
+  },
+  "triggers": [
+    { "kind": "schedule", "schedule": "20 6 * * *" },
+    { "kind": "source-change" }, { "kind": "schema-change" }, { "kind": "connector-change" }, { "kind": "failed-execution" }, { "kind": "manual" }
+  ],
+  "execution": { "kind": "deterministic", "runtime": "node >=22.19", "entrypoint": "collectors/tiktok-public-video-embed-maintainer/src/index.mjs" },
+  "outputs": ["knowledge-proposal", "connector-change-proposal", "verification-report"],
+  "writePolicy": { "mode": "proposal-only", "requiresApprovalFor": ["knowledge", "connector", "live-probe"] },
+  "probePolicy": { "allowedEnvironments": ["production-public"], "identityPoolRefs": [], "maximumEffect": "none" },
+  "budgets": { "maxRunsPerDay": 4, "maxCostPerDay": 0, "currency": "USD" }
+}

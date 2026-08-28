@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/distribution/evaluate-impact-observation-set-output.schema.json",
+  "title": "DistributionImpactObservationEvaluation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "evaluationRef", "targetRef", "publicationRevisionRef", "publicationReceiptBound", "evaluatedAt", "comparisons", "summary", "noCrossPlatformScore", "causalClaimGenerated", "platformDataRead", "knowledgeWritten", "actionExecuted", "executionAuthorized", "resultDigest"],
+  "properties": {
+    "schemaVersion": { "const": "dsh.distribution-impact-observation-evaluation/v1" },
+    "evaluationRef": { "$ref": "#/$defs/ref" },
+    "targetRef": { "$ref": "#/$defs/ref" },
+    "publicationRevisionRef": { "$ref": "#/$defs/ref" },
+    "publicationReceiptBound": { "type": "boolean" },
+    "evaluatedAt": { "type": "string", "format": "date-time" },
+    "comparisons": {
+      "type": "array", "minItems": 1, "maxItems": 50,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["comparisonRef", "platform", "sourceRef", "nativeMetricRef", "status", "baselineState", "currentState", "delta", "attributionConclusion", "reasons", "evidenceRefs"],
+        "properties": {
+          "comparisonRef": { "$ref": "#/$defs/ref" },
+          "platform": { "enum": ["steam", "apple-app-store", "google-play"] },
+          "sourceRef": { "$ref": "#/$defs/ref" },
+          "nativeMetricRef": { "$ref": "#/$defs/ref" },
+          "status": { "enum": ["comparable", "pending", "unknown", "definition-drift"] },
+          "baselineState": { "enum": ["observed", "suppressed", "unavailable", "not-finalized"] },
+          "currentState": { "enum": ["observed", "suppressed", "unavailable", "not-finalized"] },
+          "delta": {
+            "oneOf": [
+              { "type": "null" },
+              { "type": "object", "additionalProperties": false, "required": ["absolute", "direction"], "properties": { "absolute": { "type": "integer" }, "direction": { "enum": ["increase", "decrease", "unchanged"] } } }
+            ]
+          },
+          "attributionConclusion": { "enum": ["platform-attributed", "temporal-association", "unknown"] },
+          "reasons": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1, "maxLength": 200 } },
+          "evidenceRefs": { "type": "array", "maxItems": 10, "uniqueItems": true, "items": { "$ref": "#/$defs/ref" } }
+        }
+      }
+    },
+    "summary": {
+      "type": "object", "additionalProperties": false,
+      "required": ["total", "comparable", "pending", "unknown", "platformAttributed", "temporalAssociations"],
+      "properties": {
+        "total": { "type": "integer", "minimum": 1 }, "comparable": { "type": "integer", "minimum": 0 }, "pending": { "type": "integer", "minimum": 0 }, "unknown": { "type": "integer", "minimum": 0 }, "platformAttributed": { "type": "integer", "minimum": 0 }, "temporalAssociations": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "noCrossPlatformScore": { "const": true },
+    "causalClaimGenerated": { "const": false },
+    "platformDataRead": { "const": false },
+    "knowledgeWritten": { "const": false },
+    "actionExecuted": { "const": false },
+    "executionAuthorized": { "const": false },
+    "resultDigest": { "$ref": "#/$defs/digest" }
+  },
+  "$defs": {
+    "ref": { "type": "string", "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:/-]{0,255}$" },
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+  }
+}

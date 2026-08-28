@@ -1,0 +1,58 @@
+{
+  "fixture": "isolated-production-startup-reconciliation",
+  "productionRevision": "c8e181adcf3904f47fd33b85ffc1e97126cbbd66",
+  "productionReceipt": {
+    "currentProjectionSha256": "722f30b3bd1121701cbb0226cbf5d00e68d5deb521fdffb06f0beecdb8a789aa",
+    "reconciledSessions": 2,
+    "cursorAdvances": 2,
+    "proposalsCreated": 1,
+    "proposalsApplied": false,
+    "durableKnowledgeWritten": false,
+    "gitHeadChanged": false,
+    "modelCalls": 2,
+    "replayStatus": "no-observed-session-increments",
+    "replayModelCalls": 0,
+    "interruptedEarlierSessionCommitted": true,
+    "resumedSessionRef": "session:session-beta"
+  },
+  "schemaVersion": "dsh.current-work-projection-reconciliation/v1",
+  "currentSessionRef": "session:current-live",
+  "workspaceRef": "workspace:primary",
+  "status": "reconciled",
+  "reason": null,
+  "currentProjectionRef": ".pkb/current.md",
+  "currentProjectionDigest": "sha256:722f30b3bd1121701cbb0226cbf5d00e68d5deb521fdffb06f0beecdb8a789aa",
+  "currentProjectionChars": 221,
+  "reconciledSessionRefs": [
+    "session:session-alpha",
+    "session:session-beta"
+  ],
+  "checkpointAdvancedSessionRefs": [
+    "session:session-alpha",
+    "session:session-beta"
+  ],
+  "skippedSessionRefs": [],
+  "proposalRefs": [
+    "knowledge-proposal:495c1591-3631-4e93-b08d-f31fe53e86f7"
+  ],
+  "coverage": {
+    "sessionInput": "unconsumed-persisted-session-events",
+    "recentSessionLimit": 12,
+    "currentSessionExcluded": true,
+    "sessionEnumerationComplete": false,
+    "sourceFailuresFullyObservable": false,
+    "rawSessionTextReturned": false,
+    "fullProjectionRebuild": false,
+    "cursorReset": false,
+    "proposalsUnconfirmed": true,
+    "proposalLimitPerReconciledSession": 4,
+    "modelOutputHumanReviewed": false
+  },
+  "currentProjectionModified": true,
+  "checkpointsModified": true,
+  "sessionHistoryModified": false,
+  "durableKnowledgeModified": false,
+  "gitCommitted": false,
+  "executionAuthorized": false,
+  "resultDigest": "sha256:dc922188ee2d92e3c17d5bd94f86469a42146511181c05ce6ac1661201fb3e86"
+}

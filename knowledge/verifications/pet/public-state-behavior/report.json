@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "dsh.probe-report/v1",
+  "id": "public-state-pet-behavior-local-20260827",
+  "capabilityRef": "/capabilities/pet/project-public-state-to-behavior.md",
+  "connectorId": "public-state-pet-behavior-projector",
+  "probeDefinitionRef": "repo:/probes/definitions/public-state-pet-behavior-local.json",
+  "environment": "local",
+  "level": "local",
+  "outcome": "passed",
+  "startedAt": "2026-08-27T02:01:43.165Z",
+  "finishedAt": "2026-08-27T02:01:44.116Z",
+  "expiresAt": "2026-09-26T02:01:44.116Z",
+  "checks": [
+    {
+      "id": "production-source-readable",
+      "status": "passed"
+    },
+    {
+      "id": "production-source-digest",
+      "status": "passed"
+    },
+    {
+      "id": "production-edge-mapping",
+      "status": "passed"
+    },
+    {
+      "id": "deterministic-replay",
+      "status": "passed"
+    },
+    {
+      "id": "output-schema",
+      "status": "passed"
+    },
+    {
+      "id": "private-surface-rejected",
+      "status": "passed"
+    },
+    {
+      "id": "hidden-execution-boundary",
+      "status": "passed"
+    }
+  ],
+  "evidence": [
+    {
+      "kind": "artifact",
+      "ref": "https://raw.githubusercontent.com/AlexKaiqi/dsh-codex-pet/ddacb3e40385db280930e93d350d3706a8656518/packages/dsh-codex-pet/lib/client.js",
+      "sha256": "362d6112e3a2c14edd7077218ebad5a972751edd36de3e09c0a020d5ba5303d3"
+    },
+    {
+      "kind": "snapshot",
+      "ref": "repo:/knowledge/verifications/pet/public-state-behavior/snapshot.json",
+      "sha256": "4230b790b63be2dd7f8bf7180a54162099aa8a8f351ae3cb0d55b1c84143cef7"
+    }
+  ],
+  "sideEffects": [
+    {
+      "effect": "none",
+      "status": "none"
+    }
+  ]
+}

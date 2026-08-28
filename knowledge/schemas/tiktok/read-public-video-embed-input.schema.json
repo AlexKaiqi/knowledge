@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/tiktok/read-public-video-embed-input.schema.json",
+  "title": "ReadTikTokPublicVideoEmbedInput",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["videoUrl"],
+  "properties": {
+    "videoUrl": {
+      "type": "string",
+      "format": "uri",
+      "maxLength": 256,
+      "pattern": "^https://www\\.tiktok\\.com/@[A-Za-z0-9._-]{2,24}/video/[1-9][0-9]{0,19}$"
+    }
+  }
+}

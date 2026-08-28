@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "openconnector-public-social-search",
+  "version": "0.1.0",
+  "capabilityRefs": ["/capabilities/research/search-public-social-content.md"],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "connectors/openconnector-public-social-search/src/index.mjs"
+  },
+  "configSchema": "repo:/connectors/openconnector-public-social-search/config.schema.json",
+  "accessRouteCatalog": "repo:/connectors/demand-signal-access-routes/routes.json",
+  "credentialSlots": [
+    {
+      "name": "openconnector-runtime-token",
+      "required": true,
+      "purpose": "Resolve a least-privilege OpenConnector runtime token outside Git; the TikHub API key remains inside the selected OpenConnector connection."
+    }
+  ],
+  "handlers": [
+    {
+      "capabilityRef": "/capabilities/research/search-public-social-content.md",
+      "operation": "executeCandidatePublicSocialSearch"
+    }
+  ],
+  "conformance": {
+    "status": "candidate",
+    "probeDefinitionRef": "repo:/probes/definitions/openconnector-public-social-search-live.json"
+  }
+}

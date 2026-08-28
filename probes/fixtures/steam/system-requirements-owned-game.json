@@ -1,0 +1,60 @@
+{
+  "gameRef": "game:clockwork-familiar",
+  "sourceRevisionRef": "revision:system-requirements-v1",
+  "buildRevisionRef": "revision:owned-build-v1",
+  "platforms": [
+    {
+      "platform": "windows",
+      "buildArtifactRef": "artifact:windows-x64-v1",
+      "depotRefs": ["steam-depot:windows-x64"],
+      "publicPackageRefs": ["steam-package:base-game"],
+      "launchTestRefs": ["test:windows-10-low-spec", "test:windows-11-target"],
+      "minimum": [
+        { "field": "os", "value": "Windows 10 64-bit", "evidenceRefs": ["evidence:windows-min-os"] },
+        { "field": "processor", "value": "Intel Core i3-8100 or equivalent", "evidenceRefs": ["evidence:windows-min-cpu"] },
+        { "field": "memory", "value": "8 GB RAM", "evidenceRefs": ["evidence:windows-min-memory"] },
+        { "field": "graphics", "value": "DirectX 11 compatible GPU with 2 GB VRAM", "evidenceRefs": ["evidence:windows-min-gpu"] },
+        { "field": "directx", "value": "Version 11", "evidenceRefs": ["evidence:windows-min-directx"] },
+        { "field": "storage", "value": "4 GB available space", "evidenceRefs": ["evidence:windows-min-storage"] }
+      ],
+      "recommended": [
+        { "field": "os", "value": "Windows 11 64-bit", "evidenceRefs": ["evidence:windows-rec-os"] },
+        { "field": "processor", "value": "Intel Core i5-10400 or equivalent", "evidenceRefs": ["evidence:windows-rec-cpu"] },
+        { "field": "memory", "value": "16 GB RAM", "evidenceRefs": ["evidence:windows-rec-memory"] },
+        { "field": "graphics", "value": "DirectX 12 compatible GPU with 4 GB VRAM", "evidenceRefs": ["evidence:windows-rec-gpu"] },
+        { "field": "directx", "value": "Version 12", "evidenceRefs": ["evidence:windows-rec-directx"] },
+        { "field": "storage", "value": "4 GB available space", "evidenceRefs": ["evidence:windows-rec-storage"] }
+      ]
+    },
+    {
+      "platform": "macos",
+      "buildArtifactRef": "artifact:macos-universal-v1",
+      "depotRefs": ["steam-depot:macos-universal"],
+      "publicPackageRefs": ["steam-package:base-game"],
+      "launchTestRefs": ["test:macos-intel-min", "test:macos-apple-silicon-target"],
+      "minimum": [
+        { "field": "os", "value": "macOS 12", "evidenceRefs": ["evidence:macos-min-os"] },
+        { "field": "processor", "value": "Intel Core i5 or Apple M1", "evidenceRefs": ["evidence:macos-min-cpu"] },
+        { "field": "memory", "value": "8 GB RAM", "evidenceRefs": ["evidence:macos-min-memory"] },
+        { "field": "graphics", "value": "Metal-compatible integrated graphics", "evidenceRefs": ["evidence:macos-min-gpu"] },
+        { "field": "storage", "value": "4 GB available space", "evidenceRefs": ["evidence:macos-min-storage"] }
+      ],
+      "recommended": []
+    },
+    {
+      "platform": "linux-steamos",
+      "buildArtifactRef": "artifact:linux-x64-v1",
+      "depotRefs": ["steam-depot:linux-x64"],
+      "publicPackageRefs": ["steam-package:base-game"],
+      "launchTestRefs": ["test:ubuntu-22-04-min", "test:steamos-target"],
+      "minimum": [
+        { "field": "os", "value": "Ubuntu 22.04 LTS or SteamOS", "evidenceRefs": ["evidence:linux-min-os"] },
+        { "field": "processor", "value": "x86-64 dual-core 3.0 GHz", "evidenceRefs": ["evidence:linux-min-cpu"] },
+        { "field": "memory", "value": "8 GB RAM", "evidenceRefs": ["evidence:linux-min-memory"] },
+        { "field": "graphics", "value": "Vulkan 1.2 compatible GPU with 2 GB VRAM", "evidenceRefs": ["evidence:linux-min-gpu"] },
+        { "field": "storage", "value": "4 GB available space", "evidenceRefs": ["evidence:linux-min-storage"] }
+      ],
+      "recommended": []
+    }
+  ]
+}

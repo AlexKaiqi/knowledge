@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/schemas/feedback/expire-consented-intake-record-input.schema.json",
+  "title": "Expire consented feedback intake record input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["storeRef", "storageReceiptRef", "recordDigest", "retentionPolicyRef", "deleteAfter", "retentionGrantRef", "idempotencyKey"],
+  "properties": {
+    "storeRef": { "type": "string", "pattern": "^[a-z][a-z0-9._:-]{0,127}$" },
+    "storageReceiptRef": { "$ref": "#/$defs/opaqueRef" },
+    "recordDigest": { "$ref": "#/$defs/digest" },
+    "retentionPolicyRef": { "$ref": "#/$defs/opaqueRef" },
+    "deleteAfter": { "type": "string", "format": "date-time" },
+    "retentionGrantRef": { "$ref": "#/$defs/opaqueRef" },
+    "idempotencyKey": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$" }
+  },
+  "$defs": {
+    "opaqueRef": { "type": "string", "minLength": 1, "maxLength": 500 },
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "dsh.probe-report/v1",
+  "id": "local-game-build-revision-local-20260827",
+  "capabilityRef": "/capabilities/game/prepare-local-build-revision.md",
+  "connectorId": "local-game-build-revision",
+  "probeDefinitionRef": "repo:/probes/definitions/local-game-build-revision-local.json",
+  "environment": "local",
+  "level": "local",
+  "outcome": "passed",
+  "startedAt": "2026-08-27T02:27:01.720Z",
+  "finishedAt": "2026-08-27T02:27:02.831Z",
+  "expiresAt": "2026-09-26T02:27:02.831Z",
+  "checks": [
+    {
+      "id": "production-revision-primitive",
+      "status": "passed"
+    },
+    {
+      "id": "production-media-primitive",
+      "status": "passed"
+    },
+    {
+      "id": "streamed-file-digests",
+      "status": "passed"
+    },
+    {
+      "id": "deterministic-replay",
+      "status": "passed"
+    },
+    {
+      "id": "byte-change-detection",
+      "status": "passed"
+    },
+    {
+      "id": "unsafe-file-blockers",
+      "status": "passed"
+    },
+    {
+      "id": "output-schema",
+      "status": "passed"
+    },
+    {
+      "id": "non-upload-boundary",
+      "status": "passed"
+    }
+  ],
+  "evidence": [
+    {
+      "kind": "artifact",
+      "ref": "https://raw.githubusercontent.com/AlexKaiqi/dsh-social-workbench/0bb63b6f6963992e121d719f9a671637f6ab6c7f/runtime/src/domain.mjs",
+      "sha256": "20f1d35eef1c0be4121762ef2bf14443bf766db1dd9c0f962c38543d698eb47a"
+    },
+    {
+      "kind": "artifact",
+      "ref": "https://raw.githubusercontent.com/AlexKaiqi/dsh-social-workbench/0bb63b6f6963992e121d719f9a671637f6ab6c7f/runtime/src/media.mjs",
+      "sha256": "a703573af97d0741b32b2d9186d24c47c7894a5efce5e044c0fb0dcf220780a2"
+    },
+    {
+      "kind": "snapshot",
+      "ref": "repo:/knowledge/verifications/game/local-build-revision/snapshot.json",
+      "sha256": "332ca7caa88b7bae699fba58b4276cea637b13a6fa2721f52b0151403494cebc"
+    }
+  ],
+  "sideEffects": [
+    {
+      "effect": "none",
+      "status": "none"
+    }
+  ]
+}

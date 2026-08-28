@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/assistant/read-bounded-work-context-input.schema.json",
+  "title": "ReadBoundedWorkContextInput",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["query", "currentSessionRef", "workspaceRef", "maxChars", "includePriorSessions"],
+  "properties": {
+    "query": { "type": "string", "maxLength": 500 },
+    "currentSessionRef": { "type": "string", "pattern": "^session:[A-Za-z0-9._-]{1,128}$" },
+    "workspaceRef": { "type": "string", "pattern": "^workspace:[A-Za-z0-9._-]{1,128}$" },
+    "maxChars": { "type": "integer", "minimum": 1200, "maximum": 12000 },
+    "includePriorSessions": { "type": "boolean" }
+  }
+}

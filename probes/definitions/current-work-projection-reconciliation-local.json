@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "current-work-projection-reconciliation-local",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/assistant/reconcile-current-work-projection.md",
+  "connectorId": "current-work-projection-reconciler",
+  "environment": "local",
+  "identity": { "required": false },
+  "effect": "local-write",
+  "steps": [
+    { "id": "verify-pinned-production-reconcile-seam", "operation": "verifyPinnedPersonalKnowledgeReconciliationSemantics" },
+    { "id": "create-isolated-production-repository", "operation": "createIsolatedPersonalKnowledgeRepository" },
+    { "id": "reconcile-persisted-session-increments", "operation": "reconcileCurrentWorkProjection", "inputRef": "repo:/probes/fixtures/assistant/current-work-projection-reconciliation.json" },
+    { "id": "verify-current-and-cursors", "operation": "verifyCurrentProjectionAndPerSessionCursors" },
+    { "id": "verify-exact-replay", "operation": "verifyNoObservedSessionIncrementReplay" },
+    { "id": "verify-interrupted-resume", "operation": "verifyPartialSessionFailureResume" },
+    { "id": "verify-boundaries", "operation": "verifyNoCurrentSessionNoDurableApplyNoFullRebuild" },
+    { "id": "validate-public-schema", "operation": "validateInputAndOutputSchema" },
+    { "id": "cleanup-isolated-repositories", "operation": "removeTemporaryRepositories" }
+  ],
+  "assertions": [
+    "The pinned production maintainer serially reconciles recent persisted Sessions from each stored cursor and excludes the current Session.",
+    "Two persisted Sessions with unconsumed semantic events update the real current.md and their individual cursors in an isolated production Personal Knowledge Base.",
+    "An exact replay makes no model call and reports no observed Session increments.",
+    "If a later Session fails after an earlier Session commits, a subsequent run skips the committed cursor and resumes the remaining Session.",
+    "Session history and confirmed durable Markdown remain unchanged; generated durable candidates stay unconfirmed proposals.",
+    "The public result contains opaque Session references but no raw text, cwd, cursor values, model route or private repository path.",
+    "Coverage explicitly states recentSessionLimit=12, incomplete enumeration, source failures not fully observable, fullProjectionRebuild=false and cursorReset=false."
+  ],
+  "cleanup": ["remove-isolated-personal-knowledge-repositories"],
+  "budget": { "timeoutSeconds": 60, "maxCost": 0, "currency": "CNY" }
+}

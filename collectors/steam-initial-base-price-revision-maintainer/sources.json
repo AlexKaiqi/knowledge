@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "steam-initial-base-price-review-revision",
+  "sources": [
+    {
+      "id": "steam-pricing",
+      "url": "https://partner.steamgames.com/doc/store/pricing?l=english&language=english",
+      "role": "official-initial-price-review-permission-and-regional-boundary",
+      "observation": { "mode": "static-html-semantic", "assertions": [
+        { "id": "partner-responsibility", "includes": "Partners on Steam are responsible for setting and managing pricing for their products" },
+        { "id": "valve-review", "includes": "Initial pricing as well as proposed pricing adjustments will be reviewed by Valve" },
+        { "id": "pricing-permission", "includes": "Manage pricing and discounts" },
+        { "id": "market-count", "includes": "37 different currencies and 4" },
+        { "id": "minimum-base", "includes": "minimum base price that can be entered" },
+        { "id": "missing-price-unavailable", "includes": "Any currency that is missing a price will make your game unavailable" },
+        { "id": "publish-modes", "includes": "have Valve publish them immediately after review" }
+      ] }
+    },
+    {
+      "id": "steam-supported-currencies",
+      "url": "https://partner.steamgames.com/doc/store/pricing/currencies?l=english&language=english",
+      "role": "official-live-currency-region-group-and-increment-boundary",
+      "observation": { "mode": "static-html-semantic", "assertions": [
+        { "id": "live-only", "includes": "Only live currencies will be used on the store" },
+        { "id": "region-groups", "includes": "USD_CIS" },
+        { "id": "minor-units", "includes": "must be expressed using the hundredths value" },
+        { "id": "clp-increment", "includes": "CLP Yes Chilean Peso" },
+        { "id": "krw-increment", "includes": "increments of 1000 jeon" },
+        { "id": "vnd-increment", "includes": "increments of 50000 xu" }
+      ] }
+    },
+    {
+      "id": "steam-pricing-csv",
+      "url": "https://partner.steamgames.com/doc/store/pricing/csv?l=english&language=english",
+      "role": "official-preview-decimal-and-package-id-boundary",
+      "observation": { "mode": "static-html-semantic", "assertions": [
+        { "id": "package-id", "includes": "That's the packageID and is critical for importing back into Steam" },
+        { "id": "decimals", "includes": "Decimals are important" },
+        { "id": "preview", "includes": "a preview of your changes before submitting" }
+      ] }
+    },
+    {
+      "id": "steam-discounting",
+      "url": "https://partner.steamgames.com/doc/marketing/discounts?l=english&language=english",
+      "role": "official-base-price-and-discount-separation-boundary",
+      "observation": { "mode": "static-html-semantic", "assertions": [
+        { "id": "separate-launch-discount", "includes": "Launch Discounts are configured in a different location" },
+        { "id": "price-change-conflict", "includes": "not possible to increase or decrease the base price of a product during an active discount" },
+        { "id": "minimum-threshold", "includes": "Steam's Minimum Price Thresholds" }
+      ] }
+    }
+  ]
+}

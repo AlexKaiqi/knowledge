@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "steam-content-survey-revision",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/steam/prepare-content-survey-review-revision.md"],
+  "execution": { "kind": "deterministic", "runtime": "node >=22.19", "entrypoint": "connectors/steam-content-survey-revision/src/index.mjs" },
+  "configSchema": "repo:/connectors/steam-content-survey-revision/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [{ "capabilityRef": "/capabilities/steam/prepare-content-survey-review-revision.md", "operation": "prepareSteamContentSurveyReviewRevision" }],
+  "conformance": { "status": "verified", "probeReportRef": "/verifications/steam/content-survey-review-revision/report.json" }
+}

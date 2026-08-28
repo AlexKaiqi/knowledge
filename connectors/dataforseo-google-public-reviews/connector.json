@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "dataforseo-google-public-reviews",
+  "version": "0.1.0",
+  "capabilityRefs": ["/capabilities/research/read-public-place-review-snapshot.md"],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19 with a suspend/resume task executor",
+    "entrypoint": "connectors/dataforseo-google-public-reviews/src/index.mjs"
+  },
+  "configSchema": "repo:/connectors/dataforseo-google-public-reviews/config.schema.json",
+  "credentialSlots": [
+    {
+      "name": "dataforseo-api-basic-auth",
+      "required": true,
+      "purpose": "Resolve an approved DataForSEO API login and API password outside Git; the account password is not accepted."
+    }
+  ],
+  "handlers": [
+    {
+      "capabilityRef": "/capabilities/research/read-public-place-review-snapshot.md",
+      "operation": "readPublicPlaceReviewSnapshot"
+    }
+  ],
+  "conformance": {
+    "status": "candidate",
+    "probeDefinitionRef": "repo:/probes/definitions/dataforseo-google-public-reviews-live.json"
+  }
+}

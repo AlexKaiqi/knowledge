@@ -1,0 +1,282 @@
+{
+  "schemaVersion": "dsh.probe-snapshot/research-evidence-backed/v1",
+  "fixture": "personal-assistant-memory-academic-frontier",
+  "scenario": "academic-frontier",
+  "question": "长期记忆研究前沿中，哪一个未被当前个人助理能力覆盖的切片最值得先做 effect-free 验证？",
+  "decision": "在已有 current projection、有界上下文读取、记忆到动作 grounding 和持久记忆变更审阅之后，下一步应先验证哪一种记忆能力",
+  "answer": "五篇论文与当前本地闭环共同表明，‘能保存和检索一段历史’不足以证明个人助理记忆可靠。LongMemEval 把 knowledge update、temporal reasoning 和 unknown-information abstention 分成独立能力；EverMemBench 进一步显示仅按时间戳或相似度检索无法处理被覆盖的版本、隐式相关性和多人归因；IFCMemoryBench 则反证通用 benchmark 或主题相关检索不能直接代表真实工作流，部署式 ingestion 下最强系统答案准确率只有 32.4%，且常缺关键事实。Mem2ActBench 的参数 grounding 已由本仓库 memory-action slice 部分覆盖，不应作为重复建设理由。因此最小、独立的下一能力是无副作用的 memory-use eval：输入冻结的跨 session 事件、版本关系、当前任务和 expected evidence/action/abstention，分别评估 ingestion、retrieval、current-version resolution、unknown abstention 与 utilization。多人协作和长期陪伴分别需要不同 fixture 与纵向用户研究，不能塞进第一版。",
+  "confidence": "high",
+  "findings": [
+    {
+      "id": "version-and-abstention-first",
+      "claim": "版本更新、时间推理与未知信息 abstention 应成为下一记忆评测的独立一等维度，而不是只测相关片段是否被召回。",
+      "status": "supported",
+      "confidence": "high",
+      "evidenceIds": [
+        "longmem-capabilities",
+        "evermem-versioning"
+      ],
+      "counterEvidenceIds": [
+        "domain-transfer-gap"
+      ],
+      "applicability": "适用于当前个人助理跨 session 工作事实与偏好；首版不覆盖多人群聊身份关系。",
+      "inference": true
+    },
+    {
+      "id": "retrieval-is-not-utilization",
+      "claim": "评测必须把 ingestion、retrieval 和 utilization 分开，因为主题相关的返回仍可能缺少关键事实或无法形成正确行动。",
+      "status": "supported",
+      "confidence": "high",
+      "evidenceIds": [
+        "domain-transfer-gap",
+        "memory-to-action-benchmark",
+        "evermem-versioning"
+      ],
+      "counterEvidenceIds": [],
+      "applicability": "适用于需要把长期事实与当前结构化项目状态组合的助理任务；不声称 IFC 数字可直接迁移到本产品。",
+      "inference": true
+    },
+    {
+      "id": "do-not-duplicate-action-grounding",
+      "claim": "Mem2ActBench 证明 memory-to-tool parameter grounding 是独立问题，但当前仓库已有窄 memory-action grounding；下一切片应评测其上游记忆版本和下游使用结果，而不是复制同义 Connector。",
+      "status": "supported",
+      "confidence": "high",
+      "evidenceIds": [
+        "memory-to-action-benchmark",
+        "current-local-slices"
+      ],
+      "counterEvidenceIds": [
+        "current-local-slices"
+      ],
+      "applicability": "只说明本仓库已覆盖结构化 claim 到参数候选的确定性绑定，不证明端到端记忆系统达到 Mem2ActBench 水平。",
+      "inference": true
+    },
+    {
+      "id": "multi-party-is-separate-profile",
+      "claim": "多人、多群组、角色归因和隐式 profile 理解是单主人记忆之外的独立评测 profile，不应被第一版单 owner fixture 假覆盖。",
+      "status": "supported",
+      "confidence": "high",
+      "evidenceIds": [
+        "evermem-versioning"
+      ],
+      "counterEvidenceIds": [
+        "current-local-slices"
+      ],
+      "applicability": "未来进入团队助理或跨群协作时激活；当前个人助理首版明确排除。",
+      "inference": true
+    },
+    {
+      "id": "memory-score-is-not-companionship",
+      "claim": "QA、检索或 action-grounding benchmark 的改善不能证明长期陪伴感、有益性或关系质量。",
+      "status": "supported",
+      "confidence": "high",
+      "evidenceIds": [
+        "companionship-longitudinal"
+      ],
+      "counterEvidenceIds": [
+        "longmem-capabilities",
+        "memory-to-action-benchmark"
+      ],
+      "applicability": "陪伴结果需要获同意的纵向用户研究；本地能力只能验证版本一致、abstention、可控性和故障恢复。",
+      "inference": true
+    }
+  ],
+  "evidence": [
+    {
+      "id": "evermem-versioning",
+      "role": "research-claim",
+      "sourceType": "paper",
+      "weight": "primary",
+      "title": "EverMemBench / Evaluating Long-Horizon Memory for Multi-Party Collaborative Dialogues",
+      "resource": "https://arxiv.org/html/2602.01313",
+      "claim": "作者报告多人多群组记忆在归因、版本语义和隐式相关检索上存在结构性失败；即使 oracle evidence 下 temporal best 也只有 60%。",
+      "locator": "arXiv:2602.01313v3 §4.2–4.4, Table 5, §5",
+      "publishedAt": "2026-03-11T14:38:53Z",
+      "observedAt": "2026-08-27T07:30:00Z",
+      "digest": "3a08c9ace6d889fbcb4a843505150a3d581954996763c6450d471ed8e37b602c"
+    },
+    {
+      "id": "longmem-capabilities",
+      "role": "benchmark",
+      "sourceType": "paper",
+      "weight": "primary",
+      "title": "LongMemEval",
+      "resource": "https://arxiv.org/html/2410.10813",
+      "claim": "500 个问题分别评估 extraction、multi-session reasoning、temporal reasoning、knowledge updates 和 abstention，并报告持续交互下约 30% accuracy drop。",
+      "locator": "arXiv:2410.10813v2 §2.2, Table 1, §3, Appendix B",
+      "publishedAt": "2025-03-04T22:19:41Z",
+      "observedAt": "2026-08-27T07:30:00Z",
+      "digest": "6e4e4ca9bd1a60416346541a212d84f5a30f707e054c16918ebfd04b2d6aeadc"
+    },
+    {
+      "id": "memory-to-action-benchmark",
+      "role": "benchmark",
+      "sourceType": "paper",
+      "weight": "primary",
+      "title": "Mem2ActBench",
+      "resource": "https://arxiv.org/html/2601.19935",
+      "claim": "400 个 tool-use task 来自 2,029 个 session，人工抽检中 91.3% 强依赖长期记忆；七种 framework 仍有 retrieval 和 parameter grounding 瓶颈。",
+      "locator": "arXiv:2601.19935v1 §3, Tables 1–2, §4",
+      "publishedAt": "2026-01-13T06:22:32Z",
+      "observedAt": "2026-08-27T07:30:00Z",
+      "digest": "bd23bf38c25dc72430b4b4b2eb22efe0a92f00ad6d4a97eb504f5ca42818efc3"
+    },
+    {
+      "id": "domain-transfer-gap",
+      "role": "counter-evidence",
+      "sourceType": "paper",
+      "weight": "primary",
+      "title": "IFCMemoryBench",
+      "resource": "https://arxiv.org/html/2607.26072",
+      "claim": "在需要结合历史对话与 live IFC model 的 143 个任务中，部署式 ingestion 下最强系统答案准确率为 32.4%；相关记忆常不完整或碎片化。",
+      "locator": "arXiv:2607.26072v1 §4.3–4.5, Tables 2–3",
+      "publishedAt": "2026-07-13T08:45:00Z",
+      "observedAt": "2026-08-27T07:30:00Z",
+      "digest": "1c8b359e8c172cbb93d705402831652c779b8afd3e298d1aeb0bb4b42372befb"
+    },
+    {
+      "id": "companionship-longitudinal",
+      "role": "counter-evidence",
+      "sourceType": "paper",
+      "weight": "primary",
+      "title": "How AI Companionship Develops",
+      "resource": "https://arxiv.org/abs/2510.10079",
+      "claim": "陪伴由 agency、parasocial interaction 和 engagement 等相互关联变量随时间形成；作者以 N=303 survey 和 N=110 longitudinal subset 研究，而非一次记忆测试。",
+      "locator": "arXiv:2510.10079v1 Abstract; Studies 1–2",
+      "publishedAt": "2025-10-11T07:36:47Z",
+      "observedAt": "2026-08-27T07:30:00Z",
+      "digest": "232cff8f71fcefb3429442f7e60854761e934f320152538c8792873b8bd536c7"
+    },
+    {
+      "id": "current-local-slices",
+      "role": "counter-evidence",
+      "sourceType": "experiment",
+      "weight": "primary",
+      "title": "Current verified assistant memory slices",
+      "resource": "repo:/knowledge/verifications/assistant/",
+      "claim": "本地已分别验证 current maintenance、bounded read、memory-to-action grounding 和 durable-memory change review；它们不包含一个统一的版本更新、abstention、retrieval/utilization eval。",
+      "locator": "connector implementations and verification snapshots listed in repository manifest",
+      "observedAt": "2026-08-27T07:30:00Z",
+      "digest": "8729e7eee0ecadac631c7de9c9796e1e1af97b327a857a4d61c5a953a06b7340"
+    }
+  ],
+  "conflicts": [
+    {
+      "claim": "公开 benchmark 分数是否足以决定当前产品的记忆架构。",
+      "evidenceIds": [
+        "longmem-capabilities",
+        "domain-transfer-gap",
+        "current-local-slices"
+      ],
+      "resolution": "benchmark 用来确定维度与反例，不用来选择生产后端；首个 probe 必须使用本仓库跨 session、版本更新和结构化任务 fixture。"
+    },
+    {
+      "claim": "下一切片是否应继续实现 memory-to-action grounding。",
+      "evidenceIds": [
+        "memory-to-action-benchmark",
+        "current-local-slices"
+      ],
+      "resolution": "论文证明该问题重要，但本仓库已有窄结构化 grounding；新增能力应测上游记忆选择、版本解析、abstention 与下游 utilization，而不是复制现有映射。"
+    },
+    {
+      "claim": "更高记忆 QA 准确率是否意味着更好的宠物陪伴。",
+      "evidenceIds": [
+        "longmem-capabilities",
+        "companionship-longitudinal"
+      ],
+      "resolution": "两者是不同结果层；陪伴需要纵向、获同意的人类研究，本地 memory eval 只证明工程可靠性。"
+    }
+  ],
+  "gaps": [
+    "本轮没有复跑四个公开 benchmark，也没有比较其数据许可、运行成本或 judge repeatability。",
+    "EverMemBench 多人/多群组任务与当前单 owner 个人助理的直接适用性尚未实测。",
+    "当前本地能力尚无冻结的跨 session 更新、撤销、冲突、未知信息和错误检索 adversarial corpus。",
+    "论文结果来自特定模型、retrieval 配置和合成或专业领域数据，不能推断真实用户频率或产品价值。"
+  ],
+  "counterEvidenceSearch": {
+    "performed": true,
+    "queries": [
+      "long term memory benchmark knowledge update abstention chat assistant",
+      "multi party collaborative memory version semantics benchmark",
+      "agent memory benchmark tool parameter grounding",
+      "long term memory domain transfer structured environment benchmark",
+      "retrieval relevance incomplete facts agent memory",
+      "AI companionship longitudinal outcomes memory counter evidence",
+      "current local assistant memory capabilities overlap"
+    ],
+    "outcome": "found",
+    "evidenceIds": [
+      "domain-transfer-gap",
+      "companionship-longitudinal",
+      "current-local-slices"
+    ]
+  },
+  "nextProbes": [
+    {
+      "hypothesis": "一个 effect-free、版本感知的 memory-use eval 能分别暴露 stale-value selection、unknown hallucination、retrieval omission 和 correct-evidence-wrong-utilization，而不依赖特定 memory backend。",
+      "method": "构造带 owner-bound opaque session refs、明确 supersedes/revokes/expiry、冲突、未知字段和结构化 action target 的冻结 fixture；接收候选系统的 selected evidence 与 answer/action candidate，分别计算 ingestion、retrieval、current-version resolution、abstention 和 utilization 结果。",
+      "success": "同一输入稳定重放；旧值、撤销值和未证实值不进入答案或动作；未知信息明确 abstain；每个失败归因到一个阶段且无平台/知识写入。",
+      "failure": "只返回总分、从时间戳猜版本、把检索相关性冒充正确使用、未知信息被补全，或 eval 接受 transcript/identity/hidden route。",
+      "effect": "none"
+    },
+    {
+      "hypothesis": "多人归因、跨群组传播和隐式 profile 理解需要与单 owner memory-use eval 不兼容的证据图与身份边界。",
+      "method": "先设计不含真实身份的多参与者 synthetic fixture，要求 speaker/group/role attribution、跨组 dependency 和 explicit version chain；只做 schema/probe proposal，不合并到首版能力。",
+      "success": "能证明需要不同输入 Concept、身份规则和 eval 生命周期，并形成独立 proposal。",
+      "failure": "只是在单 owner fixture 增加 participant 字段，无法测归因错误或跨组传播。",
+      "effect": "none"
+    }
+  ],
+  "coverage": {
+    "queryCount": 7,
+    "stoppedBecause": "decision-sufficient",
+    "complete": true,
+    "requiredRoles": [
+      "research-claim",
+      "benchmark",
+      "counter-evidence"
+    ],
+    "coveredRoles": [
+      "benchmark",
+      "counter-evidence",
+      "research-claim"
+    ],
+    "sourceCount": 6,
+    "cutoffAt": "2026-08-27T07:30:00Z"
+  },
+  "observedAt": "2026-08-27T11:07:28.917Z",
+  "resultDigest": "efb04c84faf9417070a08e92476a9972824f8270386c8c2816b51cd6f844fdbe",
+  "conformance": {
+    "status": "passed",
+    "assertions": [
+      {
+        "id": "scenario-matched",
+        "passed": true
+      },
+      {
+        "id": "evidence-identities-unique",
+        "passed": true
+      },
+      {
+        "id": "findings-traceable",
+        "passed": true
+      },
+      {
+        "id": "required-roles-covered",
+        "passed": true
+      },
+      {
+        "id": "counter-evidence-searched",
+        "passed": true
+      },
+      {
+        "id": "inference-explicit",
+        "passed": true
+      },
+      {
+        "id": "next-probe-present",
+        "passed": true
+      }
+    ]
+  }
+}

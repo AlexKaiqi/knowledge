@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "memory-action-grounding-local",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/assistant/ground-memory-into-action-candidate.md",
+  "connectorId": "memory-action-grounding",
+  "environment": "local",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "verify-production-boundaries", "operation": "verifyPinnedProductionSources" },
+    { "id": "ground-action-candidate", "operation": "groundMemoryIntoActionCandidate", "inputRef": "repo:/probes/fixtures/assistant/memory-action-grounding.json#grounded" },
+    { "id": "replay-conflict", "operation": "groundMemoryIntoActionCandidate", "inputRef": "repo:/probes/fixtures/assistant/memory-action-grounding.json#conflicted" },
+    { "id": "validate-public-schema", "operation": "validateOutputSchema" }
+  ],
+  "assertions": [
+    "The pinned Personal Knowledge implementation returns bounded projections with source references.",
+    "The pinned Pet Assistant treats projections as untrusted data and independently gates delegation.",
+    "Only exact-action, exact-scope, active, non-stale and sufficiently authoritative claims bind fields.",
+    "Explicit-only fields, conflicting memory, stale memory and inferred memory remain unresolved.",
+    "Every memory binding retains claim and provenance references.",
+    "The result never authorizes or executes the action."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 30, "maxCost": 0, "currency": "CNY" }
+}

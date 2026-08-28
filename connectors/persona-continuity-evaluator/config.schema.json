@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/connectors/persona-continuity-evaluator/config.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["evaluatorProfiles"],
+  "properties": {
+    "evaluatorProfiles": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["evaluatorRef", "revisionRef", "familyRef"],
+        "properties": {
+          "evaluatorRef": { "type": "string", "minLength": 1, "maxLength": 500 },
+          "revisionRef": { "type": "string", "minLength": 1, "maxLength": 500 },
+          "familyRef": { "type": "string", "minLength": 1, "maxLength": 500 }
+        }
+      }
+    }
+  }
+}

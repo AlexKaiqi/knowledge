@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "steam-public-game-reviews",
+  "version": "1.1.0",
+  "capabilityRefs": [
+    "/capabilities/steam/read-public-game-review-page.md",
+    "/capabilities/steam/project-review-page-to-observation-window.md"
+  ],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "connectors/steam-public-game-reviews/src/index.mjs"
+  },
+  "configSchema": "repo:/connectors/steam-public-game-reviews/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [
+    { "capabilityRef": "/capabilities/steam/read-public-game-review-page.md", "operation": "readPublicGameReviewPage" },
+    {
+      "capabilityRef": "/capabilities/steam/project-review-page-to-observation-window.md",
+      "operation": "projectReviewPageToFeedbackObservationWindow",
+      "conformance": {
+        "status": "verified",
+        "probeReportRef": "/verifications/steam/review-observation-projection/report.json"
+      }
+    }
+  ],
+  "conformance": {
+    "status": "verified",
+    "probeReportRef": "/verifications/steam/public-game-reviews/report.json"
+  }
+}

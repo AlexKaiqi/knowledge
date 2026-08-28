@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "feedback-intake-local-withdrawal",
+  "sources": [
+    {
+      "id": "node-filesystem-api",
+      "url": "https://nodejs.org/api/fs.html",
+      "role": "unlink-and-durability-semantics",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "unlink-primitive", "includes": "fsPromises.unlink(path)" },
+          { "id": "file-deletion-semantics", "includes": "file is deleted" },
+          { "id": "sync-primitive", "includes": "filehandle.sync()" }
+        ]
+      }
+    },
+    {
+      "id": "w3c-privacy-principles",
+      "url": "https://www.w3.org/TR/privacy-principles/",
+      "role": "withdrawal-and-erasure-product-boundary",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "erasure-right", "includes": "right to erase" },
+          { "id": "withdrawal-parity", "includes": "Principle 2.12.3" },
+          { "id": "withdrawal-as-easy", "includes": "as to give consent" }
+        ]
+      }
+    },
+    {
+      "id": "nist-media-sanitization",
+      "url": "https://csrc.nist.gov/pubs/sp/800/88/r2/final",
+      "role": "logical-delete-versus-media-sanitization-boundary",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "current-revision", "includes": "SP 800-88 Rev. 2" },
+          { "id": "sanitization-definition", "includes": "renders access to target data on the media infeasible for a given level of effort" },
+          { "id": "publication-date", "includes": "September 2025" }
+        ]
+      }
+    }
+  ]
+}

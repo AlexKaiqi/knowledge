@@ -1,0 +1,91 @@
+{
+  "schemaVersion": "dsh.probe-report/v1",
+  "id": "duplex-turn-policy-local-20260827",
+  "capabilityRef": "/capabilities/voice/project-duplex-turn-events-to-actions.md",
+  "connectorId": "duplex-turn-policy-projector",
+  "probeDefinitionRef": "repo:/probes/definitions/duplex-turn-policy-local.json",
+  "environment": "local",
+  "level": "local",
+  "outcome": "passed",
+  "startedAt": "2026-08-27T06:05:02.828Z",
+  "finishedAt": "2026-08-27T06:05:04.767Z",
+  "expiresAt": "2026-09-10T06:05:04.767Z",
+  "checks": [
+    {
+      "id": "production-source-readable",
+      "status": "passed"
+    },
+    {
+      "id": "production-source-digest",
+      "status": "passed"
+    },
+    {
+      "id": "production-direct-cancel-observed",
+      "status": "passed"
+    },
+    {
+      "id": "problem-evidence-semantics",
+      "status": "passed"
+    },
+    {
+      "id": "benchmark-semantics",
+      "status": "passed"
+    },
+    {
+      "id": "reversible-release",
+      "status": "passed"
+    },
+    {
+      "id": "backchannel-preserves-output",
+      "status": "passed"
+    },
+    {
+      "id": "confirmed-take-turn-only-cancel",
+      "status": "passed"
+    },
+    {
+      "id": "deterministic-replay",
+      "status": "passed"
+    },
+    {
+      "id": "input-output-schema",
+      "status": "passed"
+    },
+    {
+      "id": "private-surface-rejected",
+      "status": "passed"
+    },
+    {
+      "id": "hidden-execution-boundary",
+      "status": "passed"
+    }
+  ],
+  "evidence": [
+    {
+      "kind": "artifact",
+      "ref": "https://raw.githubusercontent.com/AlexKaiqi/dsh-realtime-voice/1cfddba6ad39d4b8ef075b66870ab533068a7d78/client/client.js",
+      "sha256": "f5055565a4df7d95a6fc5b5afc8414e57f071f7fe846e659a2159175dba8af25"
+    },
+    {
+      "kind": "artifact",
+      "ref": "https://github.com/huggingface/speech-to-speech/issues/433",
+      "sha256": "336d796cc28e77ebaf1f0a6437b0229ac64d1b35c084486aea4fc8a716e864ce"
+    },
+    {
+      "kind": "artifact",
+      "ref": "https://arxiv.org/abs/2607.20460",
+      "sha256": "2e063ca32058ece78f63fd30ece419f15fec7f493bbb434830e81494ee10a91a"
+    },
+    {
+      "kind": "snapshot",
+      "ref": "repo:/knowledge/verifications/voice/duplex-turn-policy/snapshot.json",
+      "sha256": "9e3838f449750a5a22fd4a7cabea1d8b74edd46af5786540efbbe9638fac4f11"
+    }
+  ],
+  "sideEffects": [
+    {
+      "effect": "none",
+      "status": "none"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "steam-store-tag-revision",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/steam/prepare-store-tag-review-revision.md"],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "connectors/steam-store-tag-revision/src/index.mjs"
+  },
+  "configSchema": "repo:/connectors/steam-store-tag-revision/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [
+    {
+      "capabilityRef": "/capabilities/steam/prepare-store-tag-review-revision.md",
+      "operation": "prepareSteamStoreTagReviewRevision"
+    }
+  ],
+  "conformance": {
+    "status": "verified",
+    "probeReportRef": "/verifications/steam/store-tag-review-revision/report.json"
+  }
+}

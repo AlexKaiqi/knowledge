@@ -1,0 +1,5 @@
+{
+  "currentSessionRef": "session:current-live",
+  "workspaceRef": "workspace:primary",
+  "acceptUnconfirmedKnowledgeProposals": true
+}

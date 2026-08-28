@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "dsh.collector-definition/v1",
+  "id": "steam-initial-base-price-revision-maintainer",
+  "version": "1.0.0",
+  "scope": {
+    "knowledgeGlobs": [
+      "knowledge/tools/steam-initial-base-price-revision.md",
+      "knowledge/concepts/steam/initial-base-price-review-revision.md",
+      "knowledge/capabilities/steam/prepare-initial-base-price-review-revision.md",
+      "knowledge/schemas/steam/prepare-initial-base-price-review-revision-*.schema.json",
+      "knowledge/verifications/steam/initial-base-price-review-revision/*.json"
+    ],
+    "connectorIds": ["steam-initial-base-price-revision"],
+    "capabilityRefs": ["/capabilities/steam/prepare-initial-base-price-review-revision.md"]
+  },
+  "triggers": [{ "kind": "schedule", "schedule": "15 10 * * 3" }, { "kind": "source-change" }, { "kind": "schema-change" }, { "kind": "connector-change" }, { "kind": "failed-execution" }, { "kind": "manual" }],
+  "execution": { "kind": "deterministic", "runtime": "node >=22.19", "entrypoint": "collectors/steam-initial-base-price-revision-maintainer/src/index.mjs" },
+  "outputs": ["knowledge-proposal", "connector-change-proposal", "verification-report"],
+  "writePolicy": { "mode": "proposal-only", "requiresApprovalFor": ["knowledge", "connector", "live-probe"] },
+  "probePolicy": { "allowedEnvironments": ["local", "production-public"], "identityPoolRefs": [], "maximumEffect": "none" },
+  "budgets": { "maxRunsPerDay": 2, "maxCostPerDay": 0, "currency": "CNY" }
+}

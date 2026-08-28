@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "steam-supported-feature-revision",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/steam/prepare-supported-feature-review-revision.md"],
+  "execution": { "kind": "deterministic", "runtime": "node >=22.19", "entrypoint": "connectors/steam-supported-feature-revision/src/index.mjs" },
+  "configSchema": "repo:/connectors/steam-supported-feature-revision/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [{ "capabilityRef": "/capabilities/steam/prepare-supported-feature-review-revision.md", "operation": "prepareSteamSupportedFeatureReviewRevision" }],
+  "conformance": { "status": "verified", "probeReportRef": "/verifications/steam/supported-feature-review-revision/report.json" }
+}

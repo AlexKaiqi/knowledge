@@ -1,0 +1,84 @@
+{
+  "schemaVersion": "dsh.probe-report/v1",
+  "id": "persona-continuity-evaluation-local-20260827",
+  "capabilityRef": "/capabilities/assistant/evaluate-persona-continuity-suite.md",
+  "connectorId": "persona-continuity-evaluator",
+  "probeDefinitionRef": "repo:/probes/definitions/persona-continuity-evaluation-local.json",
+  "environment": "local",
+  "level": "local",
+  "outcome": "passed",
+  "startedAt": "2026-08-27T08:23:39.106Z",
+  "finishedAt": "2026-08-27T08:23:39.488Z",
+  "expiresAt": "2026-09-10T08:23:39.488Z",
+  "checks": [
+    {
+      "id": "pinned-source-semantics",
+      "status": "passed"
+    },
+    {
+      "id": "seven-scenario-contract",
+      "status": "passed"
+    },
+    {
+      "id": "four-axis-separation",
+      "status": "passed"
+    },
+    {
+      "id": "system-truth-separation",
+      "status": "passed"
+    },
+    {
+      "id": "evaluator-provenance-and-disagreement",
+      "status": "passed"
+    },
+    {
+      "id": "no-composite-score",
+      "status": "passed"
+    },
+    {
+      "id": "input-output-schema",
+      "status": "passed"
+    },
+    {
+      "id": "digest-and-locator-only-retention",
+      "status": "passed"
+    },
+    {
+      "id": "no-persona-memory-platform-action-or-authorization-effect",
+      "status": "passed"
+    },
+    {
+      "id": "real-agent-l3-quality",
+      "status": "skipped",
+      "detail": "Scripted evaluator observations validate the contract only; semantic judge quality, calibration, multilingual stability and longitudinal companion outcomes remain unverified."
+    }
+  ],
+  "evidence": [
+    {
+      "kind": "artifact",
+      "ref": "https://raw.githubusercontent.com/cskwork/pet-mochi/efa76839cb31ecf7c126ec0a833d514ac94a92e2/src-tauri/src/llm/prompts.rs",
+      "sha256": "d7e5e01b4239a60cf433b4c848592fa9c9ebadf02ccf29e561a5a42eaff68964"
+    },
+    {
+      "kind": "artifact",
+      "ref": "https://raw.githubusercontent.com/yuri-os/YuriOS/c131bb7776c8c961d462e30dacc69c4023497aa8/yurios/app/core/soul.py",
+      "sha256": "7e2a833f53da8b3a3f744f46a46b3282b7b6c8da52365e17e2e24ed143bb5cb3"
+    },
+    {
+      "kind": "artifact",
+      "ref": "https://raw.githubusercontent.com/SalesforceAIResearch/AnchorBench/41bd0e20b9524ce484db301ac15dc14121bf06ad/README.md",
+      "sha256": "f8d78016f2d96b54040e13818dbf9c4f64f77070db00d8d104a50d3ae1eed0b9"
+    },
+    {
+      "kind": "snapshot",
+      "ref": "repo:/knowledge/verifications/assistant/persona-continuity-evaluation/snapshot.json",
+      "sha256": "8c98c498b5c274a97e7ae5218171bb95e45d80f497c3f8c7c723e10763328232"
+    }
+  ],
+  "sideEffects": [
+    {
+      "effect": "none",
+      "status": "none"
+    }
+  ]
+}

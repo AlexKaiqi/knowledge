@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "feedback-intake-local-retention-expiry",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/feedback/expire-consented-intake-record.md"],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "connectors/feedback-intake-local-retention-expiry/src/index.mjs"
+  },
+  "configSchema": "repo:/connectors/feedback-intake-local-retention-expiry/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [
+    {
+      "capabilityRef": "/capabilities/feedback/expire-consented-intake-record.md",
+      "operation": "expireConsentedFeedbackIntakeRecord"
+    }
+  ],
+  "conformance": {
+    "status": "verified",
+    "probeReportRef": "/verifications/feedback/intake-local-retention-expiry/report.json"
+  }
+}

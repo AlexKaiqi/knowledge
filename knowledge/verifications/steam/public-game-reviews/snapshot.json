@@ -1,0 +1,160 @@
+{
+  "schemaVersion": "dsh.probe-snapshot/steam-public-game-reviews/v1",
+  "fixture": {
+    "appId": 620,
+    "title": "Portal 2",
+    "purpose": "stable public review endpoint conformance"
+  },
+  "source": {
+    "id": "steam-public-game-reviews",
+    "endpoint": "https://store.steampowered.com/appreviews/620",
+    "documentation": "https://partner.steamgames.com/doc/store/getreviews"
+  },
+  "query": {
+    "appId": 620,
+    "filter": "updated",
+    "language": "english",
+    "reviewType": "all",
+    "purchaseType": "all",
+    "cursor": "*",
+    "perPage": 5,
+    "includeOfftopic": false
+  },
+  "coverage": {
+    "representation": "cursor-page",
+    "returnedCount": 5,
+    "nextCursor": "AoJws+H9n6ADfpDk+wY=",
+    "pageExhausted": false,
+    "corpusComplete": false,
+    "offtopicIncluded": false,
+    "authorIdentityRetained": false,
+    "reviewTextRetention": "redacted"
+  },
+  "summary": {
+    "returnedCount": 5,
+    "reviewScore": 9,
+    "reviewScoreDescription": "Overwhelmingly Positive",
+    "totalPositive": 208402,
+    "totalNegative": 2460,
+    "totalReviews": 210862
+  },
+  "reviews": [
+    {
+      "recommendationId": "224224116",
+      "language": "english",
+      "text": {
+        "retained": false,
+        "length": 70,
+        "sha256": "f704a6a17eb0e7779cf0a86253f14181cefce0bde857a139ffbb77c84568dbe3",
+        "truncated": false
+      },
+      "createdAt": "2026-04-27T16:25:09.000Z",
+      "updatedAt": "2026-08-27T00:00:17.000Z",
+      "recommended": true,
+      "playtimeAtReviewMinutes": 45553,
+      "steamPurchase": false,
+      "receivedForFree": false,
+      "writtenDuringEarlyAccess": false,
+      "primarilySteamDeck": false
+    },
+    {
+      "recommendationId": "232702850",
+      "language": "english",
+      "text": {
+        "retained": false,
+        "length": 502,
+        "sha256": "f8aeea8898c634fb8cee8a36638f5a022f692df87c31ca0720ce5695dc4dfb31",
+        "truncated": false
+      },
+      "createdAt": "2026-08-13T03:35:22.000Z",
+      "updatedAt": "2026-08-26T23:59:12.000Z",
+      "recommended": true,
+      "playtimeAtReviewMinutes": 1772,
+      "steamPurchase": true,
+      "receivedForFree": false,
+      "writtenDuringEarlyAccess": false,
+      "primarilySteamDeck": false
+    },
+    {
+      "recommendationId": "118010291",
+      "language": "english",
+      "text": {
+        "retained": false,
+        "length": 219,
+        "sha256": "2ef700a07eb1c5fcc47dccd68412efefae018d55c27eff82c18dcc94e9b2372d",
+        "truncated": false
+      },
+      "createdAt": "2022-07-01T18:11:18.000Z",
+      "updatedAt": "2026-08-26T22:56:04.000Z",
+      "recommended": true,
+      "playtimeAtReviewMinutes": 1569,
+      "steamPurchase": true,
+      "receivedForFree": false,
+      "writtenDuringEarlyAccess": false,
+      "primarilySteamDeck": false
+    },
+    {
+      "recommendationId": "232753985",
+      "language": "english",
+      "text": {
+        "retained": false,
+        "length": 20,
+        "sha256": "319224272354057d0239dd117ae7ca4abc6cf9af364780a996cb4d3006184d60",
+        "truncated": false
+      },
+      "createdAt": "2026-08-13T19:47:02.000Z",
+      "updatedAt": "2026-08-26T21:51:09.000Z",
+      "recommended": true,
+      "playtimeAtReviewMinutes": 2534,
+      "steamPurchase": false,
+      "receivedForFree": false,
+      "writtenDuringEarlyAccess": false,
+      "primarilySteamDeck": false
+    },
+    {
+      "recommendationId": "233775374",
+      "language": "english",
+      "text": {
+        "retained": false,
+        "length": 21,
+        "sha256": "dd430c384d6b737b5f45995df699ef03dd7ed755191d90474dcd78239c9da882",
+        "truncated": false
+      },
+      "createdAt": "2026-08-26T21:25:50.000Z",
+      "updatedAt": "2026-08-26T21:25:50.000Z",
+      "recommended": true,
+      "playtimeAtReviewMinutes": 23913,
+      "steamPurchase": true,
+      "receivedForFree": false,
+      "writtenDuringEarlyAccess": false,
+      "primarilySteamDeck": false
+    }
+  ],
+  "observedAt": "2026-08-27T01:02:20.752Z",
+  "resultDigest": "472e670445c606ca74cb5479e8ebc07c116cf81adb7621b2b3b5a8876a159f71",
+  "conformance": {
+    "status": "passed",
+    "assertions": [
+      {
+        "id": "response-shape",
+        "passed": true
+      },
+      {
+        "id": "page-bound",
+        "passed": true
+      },
+      {
+        "id": "summary-count",
+        "passed": true
+      },
+      {
+        "id": "author-identity-removed",
+        "passed": true
+      },
+      {
+        "id": "cursor-present",
+        "passed": true
+      }
+    ]
+  }
+}

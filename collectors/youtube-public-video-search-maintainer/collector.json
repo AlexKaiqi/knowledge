@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "dsh.collector-definition/v1",
+  "id": "youtube-public-video-search-maintainer",
+  "version": "0.1.0",
+  "scope": { "knowledgeGlobs": [], "connectorIds": ["youtube-public-video-search"], "capabilityRefs": ["/capabilities/youtube/search-public-videos.md"] },
+  "triggers": [{ "kind": "schedule", "schedule": "35 6 * * 1" }, { "kind": "source-change" }, { "kind": "connector-change" }, { "kind": "failed-execution" }, { "kind": "manual" }],
+  "execution": { "kind": "deterministic", "runtime": "node >=22.19", "entrypoint": "collectors/youtube-public-video-search-maintainer/src/index.mjs" },
+  "outputs": ["knowledge-proposal", "connector-change-proposal", "verification-report"],
+  "writePolicy": { "mode": "proposal-only", "requiresApprovalFor": ["knowledge", "connector", "live-probe", "identity"] },
+  "probePolicy": { "allowedEnvironments": ["production-public"], "identityPoolRefs": ["identity-pool:youtube-data-api-probes"], "maximumEffect": "none" },
+  "budgets": { "maxRunsPerDay": 2, "maxCostPerDay": 0, "currency": "USD" }
+}

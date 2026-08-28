@@ -1,0 +1,66 @@
+{
+  "schemaVersion": "dsh.probe-report/v1",
+  "id": "memory-action-grounding-local-20260827",
+  "capabilityRef": "/capabilities/assistant/ground-memory-into-action-candidate.md",
+  "connectorId": "memory-action-grounding",
+  "probeDefinitionRef": "repo:/probes/definitions/memory-action-grounding-local.json",
+  "environment": "local",
+  "level": "local",
+  "outcome": "passed",
+  "startedAt": "2026-08-27T02:11:28.576Z",
+  "finishedAt": "2026-08-27T02:11:29.874Z",
+  "expiresAt": "2026-09-26T02:11:29.874Z",
+  "checks": [
+    {
+      "id": "production-projection-boundary",
+      "status": "passed"
+    },
+    {
+      "id": "production-authorization-boundary",
+      "status": "passed"
+    },
+    {
+      "id": "authoritative-exact-scope-binding",
+      "status": "passed"
+    },
+    {
+      "id": "conflict-preservation",
+      "status": "passed"
+    },
+    {
+      "id": "deterministic-replay",
+      "status": "passed"
+    },
+    {
+      "id": "output-schema",
+      "status": "passed"
+    },
+    {
+      "id": "non-execution-boundary",
+      "status": "passed"
+    }
+  ],
+  "evidence": [
+    {
+      "kind": "artifact",
+      "ref": "https://raw.githubusercontent.com/AlexKaiqi/dsh-personal-knowledge-base/c8e181adcf3904f47fd33b85ffc1e97126cbbd66/dsh/service.js",
+      "sha256": "b849ae068d99070181b14f80eb2b0385a0f996253b8717d2331682d60a0e4bbf"
+    },
+    {
+      "kind": "artifact",
+      "ref": "https://raw.githubusercontent.com/AlexKaiqi/dsh-pet-assistant/77ea504f5267ac0f929d4fc81301f999899f270b/dsh/core.js",
+      "sha256": "ba5a0797aabcb0f7cdd1cef1585dc5974bd335e52ee98040fdb9d647d2c5fe46"
+    },
+    {
+      "kind": "snapshot",
+      "ref": "repo:/knowledge/verifications/assistant/memory-action-grounding/snapshot.json",
+      "sha256": "29d85ae86bf2f737782d41a0bf48960b9951799ce91110c358c17d59b6c6c898"
+    }
+  ],
+  "sideEffects": [
+    {
+      "effect": "none",
+      "status": "none"
+    }
+  ]
+}

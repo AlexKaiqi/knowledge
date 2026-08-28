@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "dsh.collector-definition/v1",
+  "id": "feedback-intake-local-retention-expiry-maintainer",
+  "version": "1.0.0",
+  "scope": {
+    "knowledgeGlobs": [
+      "knowledge/tools/feedback-intake-local-retention-expiry.md",
+      "knowledge/concepts/feedback/feedback-intake-retention-deletion-receipt.md",
+      "knowledge/capabilities/feedback/expire-consented-intake-record.md",
+      "knowledge/schemas/feedback/expire-consented-intake-record-*.schema.json",
+      "knowledge/verifications/feedback/intake-local-retention-expiry/*.json"
+    ],
+    "connectorIds": ["feedback-intake-local-retention-expiry"],
+    "capabilityRefs": ["/capabilities/feedback/expire-consented-intake-record.md"]
+  },
+  "triggers": [
+    { "kind": "schedule", "schedule": "20 10 * * *" },
+    { "kind": "source-change" },
+    { "kind": "schema-change" },
+    { "kind": "connector-change" },
+    { "kind": "failed-execution" },
+    { "kind": "manual" }
+  ],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "collectors/feedback-intake-local-retention-expiry-maintainer/src/index.mjs"
+  },
+  "outputs": ["knowledge-proposal", "connector-change-proposal", "verification-report"],
+  "writePolicy": {
+    "mode": "proposal-only",
+    "requiresApprovalFor": ["knowledge", "connector", "live-probe"]
+  },
+  "probePolicy": {
+    "allowedEnvironments": ["local", "production-public"],
+    "identityPoolRefs": [],
+    "maximumEffect": "local-write"
+  },
+  "budgets": { "maxRunsPerDay": 4, "maxCostPerDay": 0, "currency": "CNY" }
+}

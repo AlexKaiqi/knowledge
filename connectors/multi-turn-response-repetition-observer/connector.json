@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "multi-turn-response-repetition-observer",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/assistant/observe-multi-turn-response-repetition.md"],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "connectors/multi-turn-response-repetition-observer/src/index.mjs",
+    "toolRefs": [],
+    "evalRefs": ["repo:/connectors/multi-turn-response-repetition-observer/test/connector.test.mjs"]
+  },
+  "configSchema": "repo:/connectors/multi-turn-response-repetition-observer/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [
+    {
+      "capabilityRef": "/capabilities/assistant/observe-multi-turn-response-repetition.md",
+      "operation": "observeMultiTurnResponseRepetition"
+    }
+  ],
+  "conformance": {
+    "status": "verified",
+    "probeReportRef": "/verifications/assistant/multi-turn-response-repetition/report.json"
+  }
+}

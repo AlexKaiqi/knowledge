@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "dsh.source-watch-list/v1",
+  "subject": "steam-store-tag-review-revision",
+  "sources": [
+    {
+      "id": "steam-tags",
+      "url": "https://partner.steamgames.com/doc/store/tags?l=english&language=english",
+      "role": "official-tag-and-discovery-rules",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "minimum-five", "includes": "requiring at least 5 tags" },
+          { "id": "recommend-twenty", "includes": "recommend you add up to 20" },
+          { "id": "top-five-picture", "includes": "top 5 tags should paint a fairly clear picture" },
+          { "id": "visibility-impact", "includes": "impact where and how it appears on Steam" }
+        ]
+      }
+    },
+    {
+      "id": "steam-review-process",
+      "url": "https://partner.steamgames.com/doc/store/review_process?l=english&language=english",
+      "role": "official-launch-truth-and-review-boundary",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "implemented-features", "includes": "All supported features listed on the store page will need to be implemented in the current build" },
+          { "id": "remove-future-features", "includes": "remove the selected feature in the Basic Info tab until it is implemented and released" },
+          { "id": "review-action", "includes": "Mark as ready for review" }
+        ]
+      }
+    },
+    {
+      "id": "steam-store-page",
+      "url": "https://partner.steamgames.com/doc/store/page?l=english&language=english",
+      "role": "official-preview-and-publish-boundary",
+      "observation": {
+        "mode": "static-html-semantic",
+        "assertions": [
+          { "id": "required-sections", "includes": "sections marked with a (*)" },
+          { "id": "beta-preview", "includes": "Store Beta Mode" },
+          { "id": "prepare-publishing", "includes": "Prepare for Publishing" },
+          { "id": "public-data-warning", "includes": "move ALL store page data and assets" }
+        ]
+      }
+    }
+  ]
+}
