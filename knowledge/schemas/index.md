@@ -1,6 +1,6 @@
 # 产品 Schema
 
-当前：89。
+当前：91。
 
 - [arXiv 公开预印本元数据搜索输入](arxiv/search-public-eprint-metadata-input.schema.json)
 - [arXiv 公开预印本元数据搜索输出](arxiv/search-public-eprint-metadata-output.schema.json)
@@ -26,6 +26,8 @@
 - [有界工作上下文输出](assistant/read-bounded-work-context-output.schema.json)
 - [传播影响观察集评测输入](distribution/evaluate-impact-observation-set-input.schema.json)
 - [传播影响观察集评测输出](distribution/evaluate-impact-observation-set-output.schema.json)
+- [公开商店 AI readiness 审计输入](distribution/audit-store-ai-readiness-input.schema.json)
+- [公开商店 AI readiness 审计输出](distribution/audit-store-ai-readiness-output.schema.json)
 - [抖音开放平台接口面输入](douyin/open-platform-surface-input.schema.json)
 - [抖音开放平台接口面输出](douyin/open-platform-surface-output.schema.json)
 - [抖音公开视频输入](douyin/read-public-video-embed-input.schema.json)

@@ -1,6 +1,6 @@
 # 能力
 
-当前：46。
+当前：47。
 
 - [搜索 arXiv 公开预印本元数据](arxiv/search-public-eprint-metadata.md)
 - [评测版本化记忆使用 Suite](assistant/evaluate-versioned-memory-use-suite.md)
@@ -14,6 +14,7 @@
 - [准备主动联系审阅 Revision](assistant/prepare-proactive-contact-review-revision.md)
 - [读取有界工作上下文](assistant/read-bounded-work-context.md)
 - [评测传播影响观察集](distribution/evaluate-impact-observation-set.md)
+- [审计公开商店 AI readiness](distribution/audit-store-ai-readiness.md)
 - [读取抖音开放平台官方能力接口面](douyin/read-open-platform-surface.md)
 - [读取抖音公开视频嵌入描述](douyin/read-public-video-embed.md)
 - [清理到期的反馈接收记录](feedback/expire-consented-intake-record.md)

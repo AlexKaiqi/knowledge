@@ -1,6 +1,6 @@
 # 验证
 
-当前：15 份通过的 live report，30 份通过的 local report。
+当前：16 份通过的 live report，30 份通过的 local report。
 
 - [Apple 公开应用目录搜索](apple/public-app-search/report.json)
 - [arXiv 公开预印本元数据搜索](arxiv/public-metadata-search/report.json)
@@ -15,6 +15,7 @@
 - [当前工作投影维护](assistant/current-work-projection-maintenance/report.json)
 - [当前工作投影对账](assistant/current-work-projection-reconciliation/report.json)
 - [传播影响观察集评测](distribution/impact-observation-evaluation/report.json)
+- [Optifeed Radar AI readiness 审计](distribution/ai-readiness-audit/report.json)
 - [抖音开放平台文档](douyin/open-platform/report.json)
 - [抖音公开视频描述](douyin/public-video-embed/report.json)
 - [经同意反馈接收审阅 Revision](feedback/consented-intake-review-revision/report.json)

@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "dsh.reviewed-upstream/v1",
+  "repository": "https://github.com/optifeed/optifeed-radar.git",
+  "acceptedCommit": "2e0af8990de6914eefe4665bfe98f5d5c5e9e81b",
+  "packageName": "optifeed-radar",
+  "packageVersion": "0.3.0",
+  "license": "MIT",
+  "reviewedSurface": [
+    "src/core/run/audit.ts",
+    "src/core/audit/audit.ts",
+    "src/core/audit/gather.ts",
+    "src/core/fetcher/fetcher.ts"
+  ],
+  "excludedCapabilities": [
+    "provider-backed visibility checks",
+    "buyer-query generation",
+    "shopping checks",
+    "saved snapshot diff"
+  ]
+}

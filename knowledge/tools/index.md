@@ -1,6 +1,6 @@
 # 工具
 
-当前：31。内部读取器、validator 和维护脚本不自动成为公开 Tool。
+当前：32。内部读取器、validator 和维护脚本不自动成为公开 Tool。
 
 - [动作影响审阅 Revision 准备器](action-impact-review-revision.md)
 - [有界工作上下文投影器](bounded-work-context-projection.md)
@@ -18,6 +18,7 @@
 - [反馈主题证据归纳器](feedback-theme-synthesis.md)
 - [记忆到动作参数绑定器](memory-action-grounding.md)
 - [多轮回复重复观测器](multi-turn-response-repetition-observer.md)
+- [Optifeed Radar](optifeed-radar.md)
 - [主动联系审阅 Revision 准备器](proactive-contact-review-revision.md)
 - [Persona 连续性评测器](persona-continuity-evaluator.md)
 - [本地游戏构建 Revision 准备器](local-game-build-revision.md)

@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "dsh.probe-definition/v1",
+  "id": "optifeed-radar-ai-readiness-live",
+  "version": "1.0.0",
+  "capabilityRef": "/capabilities/distribution/audit-store-ai-readiness.md",
+  "connectorId": "optifeed-radar-ai-readiness",
+  "environment": "production-public",
+  "identity": { "required": false },
+  "effect": "none",
+  "steps": [
+    { "id": "audit-public-site", "operation": "auditStoreAiReadiness", "inputRef": "fixture:optifeed.com" },
+    { "id": "validate-public-result", "operation": "validateCapabilityOutput" }
+  ],
+  "assertions": [
+    "The reviewed local Optifeed Radar commit loads without package or build drift.",
+    "The public target resolves only to public addresses for every request and redirect.",
+    "The audit returns the exact domain, a bounded readiness score, five weighted categories, findings, and crawler access.",
+    "No provider key, AI engine call, financial effect, runtime path, or visibility claim is present.",
+    "The public output validates against its product schema."
+  ],
+  "cleanup": [],
+  "budget": { "timeoutSeconds": 60, "maxCost": 0, "currency": "USD" }
+}

@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "dsh.probe-report/v1",
+  "id": "optifeed-radar-ai-readiness-live-20260831",
+  "capabilityRef": "/capabilities/distribution/audit-store-ai-readiness.md",
+  "connectorId": "optifeed-radar-ai-readiness",
+  "probeDefinitionRef": "repo:/probes/definitions/optifeed-radar-ai-readiness-live.json",
+  "environment": "production-public",
+  "level": "live",
+  "outcome": "passed",
+  "startedAt": "2026-08-31T15:57:06.708Z",
+  "finishedAt": "2026-08-31T15:57:28.081Z",
+  "expiresAt": "2026-09-07T15:57:28.081Z",
+  "checks": [
+    { "id": "upstream-schema-version", "status": "passed" },
+    { "id": "exact-domain", "status": "passed" },
+    { "id": "bounded-score", "status": "passed" },
+    { "id": "complete-category-weights", "status": "passed" },
+    { "id": "zero-provider-calls", "status": "passed" },
+    { "id": "zero-cost", "status": "passed" },
+    { "id": "visibility-not-claimed", "status": "passed" },
+    { "id": "hidden-runtime-details", "status": "passed" },
+    { "id": "public-output-schema", "status": "passed" },
+    { "id": "fixture-domain", "status": "passed" },
+    { "id": "zero-financial-effect", "status": "passed" },
+    { "id": "readiness-not-visibility", "status": "passed" },
+    { "id": "secret-and-runtime-minimization", "status": "passed" }
+  ],
+  "evidence": [
+    {
+      "kind": "snapshot",
+      "ref": "repo:/knowledge/verifications/distribution/ai-readiness-audit/snapshot.json",
+      "sha256": "2807f7ea04df85f50877dc299f04f0d87894cbccd2ef4e58e74b61837d496bad"
+    }
+  ],
+  "sideEffects": [{ "effect": "none", "status": "none" }]
+}

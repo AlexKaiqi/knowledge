@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dsh.dev/knowledge/connectors/optifeed-radar-ai-readiness/config.schema.json",
+  "title": "Optifeed Radar AI readiness connector configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["radarRoot"],
+  "properties": {
+    "radarRoot": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Hidden absolute path to the separately reviewed Optifeed Radar clone."
+    }
+  }
+}

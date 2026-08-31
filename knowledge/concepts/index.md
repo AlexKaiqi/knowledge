@@ -1,6 +1,6 @@
 # 概念
 
-当前：46。
+当前：47。
 
 - [Public arXiv E-print Metadata Page](arxiv/public-eprint-metadata-page.md)
 - [Action Impact Review Revision](assistant/action-impact-review-revision.md)
@@ -14,6 +14,7 @@
 - [Proactive Contact Review Revision](assistant/proactive-contact-review-revision.md)
 - [Versioned Memory Use Evaluation Suite](assistant/versioned-memory-use-evaluation-suite.md)
 - [Distribution Impact Observation Evaluation](distribution/impact-observation-evaluation.md)
+- [AI Readiness Audit](distribution/ai-readiness-audit.md)
 - [抖音开放平台能力接口面](douyin/open-platform-capability-surface.md)
 - [抖音公开视频嵌入描述](douyin/public-video-embed-descriptor.md)
 - [Consented Feedback Intake Review Revision](feedback/consented-feedback-intake-review-revision.md)

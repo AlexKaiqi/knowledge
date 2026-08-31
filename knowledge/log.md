@@ -5,6 +5,11 @@ title: Knowledge bundle history
 
 # Bundle history
 
+## 2026-08-31
+
+- 补齐 Optifeed Radar 的远程可复现接入链：新增 pinned runtime bootstrap 与正式 domain audit CLI，默认只使用 Git 忽略的 `.runtime/optifeed-radar`，调用前后验证产品 Schema，不再依赖开发机兄弟目录。
+- 实验准入 `distribution.audit-store-ai-readiness`：固定 Optifeed Radar `0.3.0` 源码 commit，以独立 clone 的已构建 core 对 bare public hostname 执行零密钥、零 AI 调用、零费用 readiness audit。隐藏 Connector 在每次请求与重定向前重新解析 DNS、拒绝内网/本地/保留地址并把连接固定到已验证公网 IP；公共结果只保留 readiness 分数、五类分项、发现项、crawler root access 和测量边界。`optifeed.com` live probe 返回 100/100、五个分项和九个 crawler 项；付费 visibility、shopping、buyer-query generation 和 snapshot diff 均未准入，100 分不冒充品牌/商品被 AI 推荐。
+
 ## 2026-08-27
 
 - 实验准入 `assistant.observe-multi-turn-response-repetition`：按 case 与 locale 对有界助手回复执行规范化原样重复和 2/3-gram 历史重叠观测；确认复述、按请求重复、纠错、安全边界和口头禅仅保留调用方 provenance，不删除原始计数。中英文 9 条回复 fixture、公开 Schema、输入原文不留存和零副作用已通过真实本地 probe。能力没有阈值或质量分，不推断语义重复、Persona 连续性或长期陪伴结果；五源 proposal-only Collector 持续观察参考实现、论文语义与反证。

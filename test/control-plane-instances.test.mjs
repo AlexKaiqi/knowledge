@@ -78,6 +78,9 @@ test('control-plane instances match their schemas', async () => {
     ['../spec/collector-definition.schema.json', '../collectors/distribution-impact-observation-evaluation-maintainer/collector.json'],
     ['../spec/source-watch-list.schema.json', '../collectors/distribution-impact-observation-evaluation-maintainer/sources.json'],
     ['../spec/probe-definition.schema.json', '../probes/definitions/distribution-impact-observation-evaluation-local.json'],
+    ['../spec/connector-definition.schema.json', '../connectors/optifeed-radar-ai-readiness/connector.json'],
+    ['../spec/collector-definition.schema.json', '../collectors/optifeed-radar-ai-readiness-maintainer/collector.json'],
+    ['../spec/probe-definition.schema.json', '../probes/definitions/optifeed-radar-ai-readiness-live.json'],
     ['../spec/connector-definition.schema.json', '../connectors/public-state-pet-behavior-projector/connector.json'],
     ['../spec/collector-definition.schema.json', '../collectors/public-state-pet-behavior-maintainer/collector.json'],
     ['../spec/source-watch-list.schema.json', '../collectors/public-state-pet-behavior-maintainer/sources.json'],
@@ -553,6 +556,20 @@ test('Distribution impact observation evaluation preserves native uncertainty an
   assert.equal(snapshot.comparisons.find((item) => item.comparisonRef === 'steam:total-visits-temporal').reasons.includes('causality-not-established'), true)
   assert.equal(snapshot.noCrossPlatformScore, true)
   assert.equal(snapshot.causalClaimGenerated || snapshot.platformDataRead || snapshot.knowledgeWritten || snapshot.actionExecuted || snapshot.executionAuthorized, false)
+})
+
+test('Optifeed Radar live snapshot matches its public readiness contract', async () => {
+  const validate = await validator('../knowledge/schemas/distribution/audit-store-ai-readiness-output.schema.json')
+  const snapshot = JSON.parse(await readFile(new URL('../knowledge/verifications/distribution/ai-readiness-audit/snapshot.json', import.meta.url), 'utf8'))
+  const { schemaVersion: _schemaVersion, fixture: _fixture, ...payload } = snapshot
+  assert.equal(validate(payload), true, JSON.stringify(validate.errors))
+  assert.equal(snapshot.domain, 'optifeed.com')
+  assert.equal(snapshot.categories.length, 5)
+  assert.equal(snapshot.measurement.aiEngineCalls, false)
+  assert.equal(snapshot.measurement.apiCost, 0)
+  assert.equal(snapshot.measurement.recommendationVisibilityMeasured, false)
+  assert.equal(snapshot.conformance.status, 'passed')
+  assert.equal(/api[_-]?key|credential|token|radarRoot|\/Users\/|acceptedCommit/i.test(JSON.stringify(snapshot)), false)
 })
 
 test('Public-state pet behavior local snapshot matches its product output schema', async () => {

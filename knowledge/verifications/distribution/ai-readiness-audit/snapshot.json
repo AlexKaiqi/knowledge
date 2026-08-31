@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "dsh.optifeed-radar-ai-readiness-snapshot/v1",
+  "fixture": { "domain": "optifeed.com" },
+  "source": { "tool": "optifeed-radar", "version": "0.3.0", "upstreamSchemaVersion": "0.3" },
+  "domain": "optifeed.com",
+  "readiness": { "score": 100, "minimum": 0, "maximum": 100, "scoreKind": "site-ai-readiness" },
+  "categories": [
+    { "id": "robots", "label": "AI crawler access", "weight": 40, "earned": 40 },
+    { "id": "structured", "label": "Structured data", "weight": 25, "earned": 25 },
+    { "id": "llms", "label": "llms.txt", "weight": 15, "earned": 15 },
+    { "id": "meta", "label": "Meta basics", "weight": 15, "earned": 15 },
+    { "id": "sitemap", "label": "Sitemap", "weight": 5, "earned": 5 }
+  ],
+  "findings": [
+    { "id": "llms.full", "severity": "info", "message": "llms-full.txt is present (good for AI ingestion)." }
+  ],
+  "crawlerAccess": [
+    { "bot": "GPTBot", "vendor": "OpenAI", "access": "allowed", "via": "wildcard" },
+    { "bot": "OAI-SearchBot", "vendor": "OpenAI", "access": "allowed", "via": "wildcard" },
+    { "bot": "ClaudeBot", "vendor": "Anthropic", "access": "allowed", "via": "wildcard" },
+    { "bot": "anthropic-ai", "vendor": "Anthropic", "access": "allowed", "via": "wildcard" },
+    { "bot": "PerplexityBot", "vendor": "Perplexity", "access": "allowed", "via": "wildcard" },
+    { "bot": "Google-Extended", "vendor": "Google", "access": "allowed", "via": "wildcard" },
+    { "bot": "GoogleOther", "vendor": "Google", "access": "allowed", "via": "wildcard" },
+    { "bot": "CCBot", "vendor": "Common Crawl", "access": "allowed", "via": "wildcard" },
+    { "bot": "meta-externalagent", "vendor": "Meta", "access": "allowed", "via": "wildcard" }
+  ],
+  "measurement": {
+    "kind": "point-in-time-public-site-readiness",
+    "aiEngineCalls": false,
+    "apiCost": 0,
+    "currency": "USD",
+    "recommendationVisibilityMeasured": false,
+    "sampledSitemapPagesMaximum": 3,
+    "conclusionsRequireHumanReview": true
+  },
+  "observedAt": "2026-08-31T15:57:28.080Z",
+  "resultDigest": "2446b3ee1348032ee36d26d379740884affea7b4be624cd33d0f3459b009cf73",
+  "conformance": {
+    "status": "passed",
+    "assertions": [
+      { "id": "upstream-schema-version", "passed": true },
+      { "id": "exact-domain", "passed": true },
+      { "id": "bounded-score", "passed": true },
+      { "id": "complete-category-weights", "passed": true },
+      { "id": "zero-provider-calls", "passed": true },
+      { "id": "zero-cost", "passed": true },
+      { "id": "visibility-not-claimed", "passed": true },
+      { "id": "hidden-runtime-details", "passed": true }
+    ]
+  }
+}

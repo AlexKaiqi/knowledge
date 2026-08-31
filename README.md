@@ -43,11 +43,11 @@ outcome-aligned Subject
 ## 当前状态
 
 ```text
-OKF 文档：147
-已准入 Subject：42
-已准入 Capability：46
-Connector：44 个 verified，8 个 candidate（含 mixed 的 xiaohongshu-browser 顶层状态）
-维护 Collector：55
+OKF 文档：150
+已准入 Subject：43
+已准入 Capability：47
+Connector：45 个 verified，9 个 candidate（含 mixed 的 xiaohongshu-browser 顶层状态）
+维护 Collector：57
 ```
 
 当前保留：
@@ -60,6 +60,7 @@ Connector：44 个 verified，8 个 candidate（含 mixed 的 xiaohongshu-browse
 - Hugging Face：仅作为前沿模型、数据集和评测研究的证据底座；当前只验证了精确模型 revision 清单。
 - arXiv：已验证官方 Metadata API 的纯 phrase/category 小页检索，遵守三秒/单连接限制；只保留描述性元数据，不下载论文内容，offset 不作为 delta checkpoint。
 - Apple App Store：已验证文档化 Search API 的无账号小页检索；按 storefront/surface 返回最小应用元数据，明确不提供榜单、完整语料、历史或排名语义。官方文档已归档，因此七天复验并保持 experimental。
+- Optifeed Radar：已验证固定源码 revision 的免费公开站点 AI readiness audit；Connector 对每次请求与重定向执行公网 DNS/IP 门，结果区分 readiness 与品牌/商品 recommendation visibility。付费 `check`、`shopping` 和 buyer-query generation 未准入。
 - 证据化调研：本地实验能力，统一六类研究场景的公共 Research Dossier；六类均已有真实 Agent 样本。首个市场/竞品样本用 Apple 公开目录、固定 GitHub 实现、独立长程 benchmark 与本地边界裁决个人助理/宠物下一切片，拒绝从目录顺序/评分推市场规模，也拒绝 companion quality 总分；跨 runtime 重复性仍待验证。
 - 传播影响评测：已准入 effect-free 的 source-native observation evaluator；只对同平台/数据源/指标定义/scope/unit、等长完整且最终化的窗口计算 delta。阈值抑制、不完整、未最终化、定义漂移和 Not attributed 保持未知或 pending；平台归因、时间关联与因果严格分离。平台自有数据读取仍未准入。
 - 个人助理/宠物：已准入相互分离的有界工作上下文读取、single-Session current 维护、最近持久 Session 的 startup/offline 增量对账、版本化记忆使用评测、experimental Persona 连续性评测、多轮助手回复词法重复观测与公开状态到宠物行为投影。对账真实验证逐 Session cursor、精确重放和中途失败续跑，但固定声明最近 12 个上限、来源失败不可完整观察、非全量重建且不重置 cursor。Persona 评测冻结 revision 与七类情境，分别保留 role/boundary/value/style、系统事实、unknown 和 evaluator disagreement；没有 companion-quality 总分，scripted probe 不冒充真实模型判断或长期陪伴结果。重复观测仅保留原样重复、2/3-gram 历史重叠及调用方语境证据，不设阈值、不生成质量分，也不推断语义重复或长期陪伴结果。记忆评测以摘要和显式 supersession/revocation/contest/expiry/scope 派生真值，分别报告 ingestion、retrieval、版本解析、abstention/action decision 与 utilization；这些能力都不暴露内部 route。
@@ -115,4 +116,11 @@ source ~/.nvm/nvm.sh
 nvm use 24.17.0
 npm install
 npm run check
+```
+
+Optifeed Radar 的可重复本地接入可以从 Git 忽略的空 runtime 完成 bootstrap，并通过正式 Capability CLI 调用：
+
+```sh
+npm run distribution:ai-readiness:bootstrap
+npm run distribution:ai-readiness:audit -- optifeed.com
 ```

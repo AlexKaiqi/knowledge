@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "dsh.connector-definition/v1",
+  "id": "optifeed-radar-ai-readiness",
+  "version": "1.0.0",
+  "capabilityRefs": ["/capabilities/distribution/audit-store-ai-readiness.md"],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "connectors/optifeed-radar-ai-readiness/src/index.mjs"
+  },
+  "configSchema": "repo:/connectors/optifeed-radar-ai-readiness/config.schema.json",
+  "credentialSlots": [],
+  "handlers": [
+    {
+      "capabilityRef": "/capabilities/distribution/audit-store-ai-readiness.md",
+      "operation": "auditStoreAiReadiness"
+    }
+  ],
+  "conformance": {
+    "status": "verified",
+    "probeReportRef": "/verifications/distribution/ai-readiness-audit/report.json"
+  }
+}

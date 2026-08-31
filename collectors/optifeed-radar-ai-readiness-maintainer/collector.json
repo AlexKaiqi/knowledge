@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "dsh.collector-definition/v1",
+  "id": "optifeed-radar-ai-readiness-maintainer",
+  "version": "1.0.0",
+  "scope": {
+    "knowledgeGlobs": [
+      "knowledge/tools/optifeed-radar.md",
+      "knowledge/concepts/distribution/ai-readiness-audit.md",
+      "knowledge/capabilities/distribution/audit-store-ai-readiness.md",
+      "knowledge/schemas/distribution/audit-store-ai-readiness-*.schema.json",
+      "knowledge/verifications/distribution/ai-readiness-audit/*.json"
+    ],
+    "connectorIds": ["optifeed-radar-ai-readiness"],
+    "capabilityRefs": ["/capabilities/distribution/audit-store-ai-readiness.md"]
+  },
+  "triggers": [
+    { "kind": "schedule", "schedule": "15 9 * * 1" },
+    { "kind": "source-change" },
+    { "kind": "schema-change" },
+    { "kind": "connector-change" },
+    { "kind": "failed-execution" },
+    { "kind": "manual" }
+  ],
+  "execution": {
+    "kind": "deterministic",
+    "runtime": "node >=22.19",
+    "entrypoint": "collectors/optifeed-radar-ai-readiness-maintainer/src/index.mjs"
+  },
+  "outputs": ["knowledge-proposal", "connector-change-proposal", "verification-report"],
+  "writePolicy": { "mode": "proposal-only", "requiresApprovalFor": ["knowledge", "connector", "live-probe"] },
+  "probePolicy": { "allowedEnvironments": ["production-public"], "identityPoolRefs": [], "maximumEffect": "none" },
+  "budgets": { "maxRunsPerDay": 2, "maxCostPerDay": 0, "currency": "USD" }
+}
